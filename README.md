@@ -1,10 +1,10 @@
-#### GEX 
+![alt text](https://github.com/ronjonsilver/GEX/blob/master/public/logo.png "GEX Logo")
 
 ### TO USE THE GEX GITHUB
 
 For a list of helpful git commands use the git cheetsheet: https://services.github.com/on-demand/downloads/github-git-cheat-sheet/
 
-## 1. Forking from GEX and bringing the code to your local machine
+#### 1. Forking from GEX and bringing the code to your local machine
 
 Begin by forking the GEX code by pressing the fork button located at http://github.com/ronjonsilver/GEX. Forking will allow you to have a copy of the GEX code in your personal github and will give you a way to request GEX to pull your changes. 
 
@@ -20,7 +20,7 @@ c. Open a commandline in the location you would like your code to be saved and u
  git clone https://github.com/YOUR-GITHUB_USERNAME/GEX
 ```
 
-## 2. Saving your changes to your repository
+#### 2. Saving your changes to your repository
 
 In order to push your code to your repository you will have to stage your files to commit. You can stage your files by using the following commands:
 
@@ -45,7 +45,7 @@ or
 git push https://github.com/YOUR-GITHUB_USERNAME/GEX master
 ```
 
-## 4. Configuring a remote for a fork (Do this only once!)
+#### 4. Configuring a remote for a fork (Do this only once!)
 
 You must configure a remote that points to the upstream repository in Git to sync changes you make in a fork with the original repository. This also allows you to sync changes made in the original repository with the fork. Be sure to be in the correct directory of your local GEX project, and follow these steps to configure a remote for the fork, you only have to do these steps once: 
 
@@ -81,7 +81,7 @@ upstream  https://github.com/ronjonsilver/GEX.git (push)
 Now you have created a remote Configuration that you will use when merging files, only do the above steps once.
 
 
-## 5. Pulling and merging changes from GEX into your local machine
+#### 5. Pulling and merging changes from GEX into your local machine
 
 When changes have been made to the code https://github.com/ronjonsilver/GEX, your github will be behind. So you will have to pull the changes to your local machine, merge them, and then push them to your repository. To pull changes from GEX, after onfiguring a remote, follow these steps:
 
@@ -108,6 +108,6 @@ $ git merge upstream/master
 	 1 file changed, 3 insertions(+), 2 deletions(-)
 ```
 
-## 6. Getting your code onto GEX
+#### 6. Getting your code onto GEX
 
 Once you have made changes to your personal repository you can request for GEX to pull your changes into the original repository. To do this you have to create a pull request. One way of creating a pull request is to go to http:/github.com/YOUR-GITHUB-USERNAME/GEX and there is a button labeled "New Pull Request". After creating a pull request your changes have to be reviewed and then either accepted or denied.
