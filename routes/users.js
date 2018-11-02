@@ -1,3 +1,4 @@
+/*
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -6,7 +7,7 @@ const config = require('../config/database');
 const User = require('../models/user');
 
 //Register
-router.post('/register',(req,res,next) => {
+router.post('/buyer/register',(req,res,next) => {
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -66,3 +67,4 @@ router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res,
   });
 
 module.exports = router;
+*/

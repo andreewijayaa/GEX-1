@@ -1,49 +1,45 @@
+/*
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../config/database');
 
-//User Schema
-const UserSchema = mongoose.Schema({
-    name: {
-        type: String
-    },
-    email: {
+//Buyer Schema
+const BuyerSchema = mongoose.Schema({
+    first_name: {
         type: String,
         required: true
     },
-    username: {
+    last_name: {
+        type: String,
+        required: true
+    },
+    email: {
         type: String,
         required: true
     },
     password: {
         type: String,
         required: true
-    },
-    status: {
-        //0 = Seller
-        //1 = Buyer
-        type: Number,
-        required: true
     }
 });
 
-const User = module.exports = mongoose.model('User', UserSchema);
+const Buyer = module.exports = mongoose.model('Buyer', BuyerSchema);
 
-module.exports.getUserbyId = function(id, callback){
-    User.findById(id, callback);
+module.exports.getBuyerbyId = function(id, callback){
+    Buyer.findById(id, callback);
 }
 
-module.exports.getUserbyEmail = function(email, callback){
+module.exports.getBuyerbyEmail = function(email, callback){
     const query = {email: email}
-    User.findOne(query, callback);
+    Buyer.findOne(query, callback);
 }
 
-module.exports.addUser = function(newUser, callback){
+module.exports.addBuyer = function(newBuyer, callback){
     bcrypt.genSalt(10,(err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
+        bcrypt.hash(newBuyer.password, salt, (err, hash) => {
             if(err) throw err;
-            newUser.password = hash;
-            newUser.save(callback);
+            newBuyer.password = hash;
+            newBuyer.save(callback);
         });
     });
 }
@@ -53,3 +49,4 @@ module.exports.comparePassword = function (inputtedPassword, hash, callback){
             callback(null, isMatch);
         });
 }
+*/
