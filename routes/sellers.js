@@ -6,14 +6,14 @@ const config = require('../config/database');
 const Seller = require('../models/seller');
 
 //Seller Register
-router.post('/sellers/register',(req,res,next) => {
+router.post('/register',(req,res,next) => {
     let newSeller = new Seller({
-        name: req.body.name,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         email: req.body.email,
-        username: req.body.username,
         password: req.body.password,
     });
-    Seller.addSeller(newSeller, (err, buyer) => {
+    Seller.addSeller(newSeller, (err, seller) => {
         if(err){
             res.json({success: false, msg:"Failed to register Buyer!"})
         }
@@ -23,7 +23,7 @@ router.post('/sellers/register',(req,res,next) => {
     });
 });
 //Authenticate
-router.post('/sellers/authenticate', (req, res, next) => {
+router.post('/authenticate', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -43,12 +43,11 @@ router.post('/sellers/authenticate', (req, res, next) => {
           res.json({
             success: true,
             token: `Bearer ${token}`,
-            user: {
+            seller: {
               id: seller._id,
-              name: seller.name,
-              username: seller.username,
+              first_name: seller.first_name,
+              last_name: seller.last_name,
               email: seller.email,
-              status: seller.status
             }
           });
         } else {
@@ -58,8 +57,8 @@ router.post('/sellers/authenticate', (req, res, next) => {
     });
   });
 // Profile
-router.get('/sellers/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-    res.json({seller: req.seller});
+router.get('/profile', passport.authenticate('seller-rule', {session:false}), (req, res, next) => {
+    res.json({seller: req.first_name});
   });
 
 module.exports = router;

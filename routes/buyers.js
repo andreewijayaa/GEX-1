@@ -8,11 +8,11 @@ const Buyer = require('../models/buyer');
 //Buyer Register
 router.post('/register',(req,res/*,next*/) => {
     let newBuyer = new Buyer({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        email: req.body.email,
-        password: req.body.password
-    });
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      password: req.body.password,
+  });
     Buyer.addBuyer(newBuyer, (err, buyer) => {
         if(err){
             res.json({success: false, msg:"Failed to register Buyer!"})
@@ -43,12 +43,11 @@ router.post('/authenticate', (req, res, next) => {
           res.json({
             success: true,
             token: `Bearer ${token}`,
-            user: {
+            buyer: {
               id: buyer._id,
-              name: buyer.name,
-              username: buyer.username,
+              first_name: buyer.first_name,
+              last_name: buyer.last_name,
               email: buyer.email,
-              status: buyer.status
             }
           });
         } else {
@@ -58,8 +57,8 @@ router.post('/authenticate', (req, res, next) => {
     });
   });
 // Profile
-router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-    res.json({user: req.user});
+router.get('/profile', passport.authenticate('buyer-rule', {session:false}), (req, res, next) => {
+    res.json({buyer: req.first_name});
   });
 
 module.exports = router;
