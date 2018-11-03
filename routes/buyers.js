@@ -6,12 +6,12 @@ const config = require('../config/database');
 const Buyer = require('../models/buyer');
 
 //Buyer Register
-router.post('/buyers/register',(req,res,next) => {
+router.post('/register',(req,res/*,next*/) => {
     let newBuyer = new Buyer({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
-        password: req.body.password,
+        password: req.body.password
     });
     Buyer.addBuyer(newBuyer, (err, buyer) => {
         if(err){
@@ -23,7 +23,7 @@ router.post('/buyers/register',(req,res,next) => {
     });
 });
 //Authenticate
-router.post('/buyers/authenticate', (req, res, next) => {
+router.post('/authenticate', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -58,7 +58,7 @@ router.post('/buyers/authenticate', (req, res, next) => {
     });
   });
 // Profile
-router.get('/buyers/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     res.json({user: req.user});
   });
 
