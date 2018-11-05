@@ -36,7 +36,7 @@ module.exports.getBuyerbyEmail = function(email, callback){
 module.exports.addBuyer = function(newBuyer, callback){
     bcrypt.genSalt(10,(err, salt) => {
         bcrypt.hash(newBuyer.password, salt, (err, hash) => {
-            if(err) throw err;
+            if(err) {throw err;}
             newBuyer.password = hash;
             newBuyer.save(callback);
         });
@@ -44,7 +44,10 @@ module.exports.addBuyer = function(newBuyer, callback){
 }
 module.exports.comparePassword = function (inputtedPassword, hash, callback){
     bcrypt.compare(inputtedPassword, hash, (err, isMatch) => {
-            if(err) throw err;
-            callback(null, isMatch);
+            if(isMatch) {
+                return callback(null, isMatch);
+            } else {
+                return callback();
+            }
         });
 }
