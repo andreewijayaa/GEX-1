@@ -19,6 +19,7 @@ const appRoutes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'buyer', component: BuyerComponent},
+  {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'seller', component: SellerComponent}
 ];
 
