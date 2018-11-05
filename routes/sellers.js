@@ -42,7 +42,7 @@ router.post('/authenticate', (req, res, next) => {
   
           res.json({
             success: true,
-            token: `Bearer ${token}`,
+            token: `${token}`,
             seller: {
               id: seller._id,
               first_name: seller.first_name,
@@ -57,8 +57,15 @@ router.post('/authenticate', (req, res, next) => {
     });
   });
 // Profile
-router.get('/profile', passport.authenticate('seller-rule', {session:false}), (req, res, next) => {
-    res.json({seller: req.first_name});
+  router.get('/profile', (req, res) => {
+    var token = req.headers['x-access-token'];
+    if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+
+     jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      delete decoded.data.password;
+      res.status(200).send(decoded);
+     });
   });
 
 module.exports = router;

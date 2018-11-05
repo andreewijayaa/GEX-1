@@ -19,7 +19,7 @@ const SellerSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
@@ -36,7 +36,7 @@ module.exports.getSellerbyEmail = function(email, callback){
 module.exports.addSeller = function(newSeller, callback){
     bcrypt.genSalt(10,(err, salt) => {
         bcrypt.hash(newSeller.password, salt, (err, hash) => {
-            if(err) throw err;
+            if(err) {throw err};
             newSeller.password = hash;
             newSeller.save(callback);
         });
@@ -44,7 +44,11 @@ module.exports.addSeller = function(newSeller, callback){
 }
 module.exports.comparePassword = function (inputtedPassword, hash, callback){
     bcrypt.compare(inputtedPassword, hash, (err, isMatch) => {
-            if(err) throw err;
-            callback(null, isMatch);
+            if(err) {throw err};
+            if(isMatch) {
+                return callback(null, isMatch);
+            } else {
+                return callback();
+            }
         });
 }
