@@ -4,6 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Seller = require('../models/seller');
+const Request = require('../models/request');
 
 //Register
 router.post('/register',(req,res,next) => {
@@ -14,15 +15,16 @@ router.post('/register',(req,res,next) => {
         last_name: req.body.last_name,
         email: req.body.email,
         password: req.body.password,
+        codes: req.body.codes
     });
 
     //add seller to db
     Seller.addSeller(newSeller, (err, seller) => {
         if(err){
-            res.json({success: false, msg:"Failed to register Buyer!"})
+            res.json({success: false, msg:"Failed to register Seller!"})
         }
         else {
-            res.json({success: true, msg:"Buyer Registered!"})
+            res.json({success: true, msg:"Seller Registered!"})
         }
     });
 });
@@ -82,6 +84,22 @@ router.get('/profile', (req, res) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       delete decoded.data.password;
       res.status(200).send(decoded);
+     });
+  });
+
+router.get('/view', (req, res) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view requests.' });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+
+      Request.findOne( {'code':decoded.data.codes}, (err, requests) => {
+        if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
+        res.status(200).send(requests);
+      })
+      
      });
   });
 
