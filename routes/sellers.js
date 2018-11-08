@@ -22,14 +22,23 @@ router.post('/register',(req,res,next) => {
       }
       else{//end of seller email detection
         console.log('New email used, %s',req.body.email);
-        Seller.addSeller(newSeller, (err, seller) => {
-            if(err){
-                res.json({success: false, msg:"Failed to register Seller!"})
-            }
-            else {
-                res.json({success: true, msg:"Seller Registered!"})
-            }
-        });
+        //email format checking
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email))
+        {
+          console.log('New email address %s passed format checking.', req.body.email);
+          Seller.addSeller(newSeller, (err, seller) => {
+              if(err){
+                  res.json({success: false, msg:"Failed to register Seller!"})
+              }
+              else {
+                  res.json({success: true, msg:"Seller Registered!"})
+              }
+          });
+        }
+        else{
+          console.log('New email address %s failed format checking.', req.body.email);
+          res.json({success: false, msg:"Failed to register Seller! Email is not valid format."})
+        }
       }
     });
 });
