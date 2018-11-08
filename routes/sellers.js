@@ -8,7 +8,7 @@ const Request = require('../models/request');
 
 //Register
 router.post('/register',(req,res,next) => {
-    
+
     //create seller object
     let newSeller = new Seller({
         first_name: req.body.first_name,
@@ -42,13 +42,6 @@ router.post('/register',(req,res,next) => {
         else{
           console.log('New email address %s failed format checking.', req.body.email);
           res.json({success: false, msg:"Failed to register Seller! Email is not valid format."})
-    //add seller to db
-    Seller.addSeller(newSeller, (err, seller) => {
-        if(err){
-            res.json({success: false, msg:"Failed to register Seller!"})
-        }
-        else {
-            res.json({success: true, msg:"Seller Registered!"})
         }
       }
     });
@@ -56,7 +49,7 @@ router.post('/register',(req,res,next) => {
 
 //Authenticate
 router.post('/login', (req, res, next) => {
-    
+
     //get email and password from request
     const email = req.body.email;
     const password = req.body.password;
@@ -64,14 +57,14 @@ router.post('/login', (req, res, next) => {
     //search for seller in database
     Seller.getSellerbyEmail(email, (err, seller) => {
       if(err) throw err;
-      
+
       if(!seller){
         return res.json({success: false, msg: 'Seller not found'});
       }
     //check password
       Seller.comparePassword(password, seller.password, (err, isMatch) => {
         if(err) throw err;
-        
+
         //provide token in response is login is valid
         if(isMatch){
           const token = jwt.sign({data: seller}, config.secret, {
@@ -123,9 +116,8 @@ router.get('/view', (req, res) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
       })
-      
+
      });
   });
 
 module.exports = router;
-
