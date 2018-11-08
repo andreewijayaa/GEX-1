@@ -1,20 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 import { map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class RegisterService {
   RegisterToken: any;
   buyer: any;
+  seller: any;
 
-  constructor(private http: Http) { }
-
+  constructor(private http: HttpClient) { }
+  // Buyer Register Service
   RegisterBuyer(buyer) {
-    let headers = new Headers();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
+    .pipe(map(res => res));
+  }
 
-    headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/buyers/register', buyer, {headers: headers})
-    .pipe(map(res => res.json()));
+  // Seller Register Service
+  RegisterSeller(seller) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
+    .pipe(map(res => res));
   }
 
 }

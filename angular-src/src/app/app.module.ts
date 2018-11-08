@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -16,9 +16,9 @@ import { SellerRegisterComponent } from './components/SellerRegister/SellerRegis
 import { FooterComponent } from './components/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
-import {ValidateService} from './services/validate.service';
-import {RegisterService} from './services/register.service';
-
+import { ValidateService } from './services/validate.service';
+import { RegisterService } from './services/register.service';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -29,7 +29,6 @@ const appRoutes: Routes = [
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},
   {path: 'seller', component: SellerComponent}
-
 ];
 
 @NgModule({
@@ -51,7 +50,8 @@ const appRoutes: Routes = [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    FlashMessagesModule.forRoot()
+    FlashMessagesModule.forRoot(),
+    HttpClientModule
   ],
   providers: [ValidateService, RegisterService],
   bootstrap: [AppComponent]

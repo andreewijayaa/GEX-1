@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   constructor( private validateService: ValidateService,
               private flashMessage: FlashMessagesService,
               private router: Router,
-              private registerService: RegisterService,) { }
+              private registerService: RegisterService) { }
 
   ngOnInit() {
   }
@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
 
     // Register Buyer
     this.registerService.RegisterBuyer(buyer).subscribe(data => {
-      if (data.success) {
+      if (data) { // must know if its a successful register or not FIX THIS LATER
         this.flashMessage.show('You are now Register', {cssClass: 'alert-success', timeout: 3000});
         this.router.navigate(['/login']);
       } else {
