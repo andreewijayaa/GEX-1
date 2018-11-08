@@ -14,6 +14,10 @@ import { BuyerAccountComponent } from './components/buyer/buyer-account/buyer-ac
 import { SellerAccountComponent } from './components/seller/seller-account/seller-account.component';
 import { SellerRegisterComponent } from './components/SellerRegister/SellerRegister.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { FormsModule } from '@angular/forms';
+import { FlashMessagesModule } from 'angular2-flash-messages';
+import {ValidateService} from './services/validate.service';
+import {RegisterService} from './services/register.service';
 
 
 const appRoutes: Routes = [
@@ -43,9 +47,12 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    FlashMessagesModule.forRoot()
   ],
-  providers: [],
+  providers: [ValidateService, RegisterService],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }
