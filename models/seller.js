@@ -20,6 +20,7 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    codes: [Number] 
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
@@ -28,8 +29,8 @@ module.exports.getSellerbyId = function(id, callback){
     Seller.findById(id, callback);
 }
 
-module.exports.getSellerbyEmail = function(email, callback){
-    const query = {email: email}
+module.exports.getSellerbyEmail = function(passedEmail, callback){
+    const query = {email: passedEmail}
     Seller.findOne(query, callback);
 }
 

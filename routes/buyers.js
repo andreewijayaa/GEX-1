@@ -4,8 +4,9 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Buyer = require('../models/buyer');
+const Request = require('../models/request');
 
-//Buyer Register
+//Register
 router.post('/register',(req,res/*,next*/) => {
     let newBuyer = new Buyer({
       first_name: req.body.first_name,
@@ -40,8 +41,9 @@ router.post('/register',(req,res/*,next*/) => {
     }
   })
 });
+
 //Authenticate
-router.post('/authenticate', (req, res, next) => {
+router.post('/login', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -74,7 +76,8 @@ router.post('/authenticate', (req, res, next) => {
       });
     });
   });
-// Profile
+
+//Profile
 router.get('/profile', (req, res) => {
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
@@ -86,5 +89,22 @@ router.get('/profile', (req, res) => {
 
     });
   });
+
+//Create Request
+router.post('/request', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'Must login to create request.' });
+
+  var request = new Request({
+    code: req.body.code,
+    title: req.body.title,
+    body: req.body.body
+  });
+
+  request.save( (err,post) => {
+      if (err) { return next(err); }
+      res.status(201).json(post);
+  });
+})
 
 module.exports = router;

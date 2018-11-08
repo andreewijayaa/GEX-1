@@ -15,7 +15,7 @@ mongoose.connect(config.database, { useNewUrlParser: true, promiseLibrary: requi
 const app = express();
 
 const buyers = require('./routes/buyers');
-const sellers = require('./routes/sellers')
+const sellers = require('./routes/sellers');
 
 // Port Number
 const port = 3000;
@@ -35,15 +35,14 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
+//buyers route
 app.use('/buyers', buyers);
-app.use('/sellers', sellers)
 
-// Index Route
+//sellers route
+app.use('/sellers', sellers);
+
+//Homepage route
 app.get('/', (req, res) => {
-  res.send('Invalid Endpoint');
-});
-
-app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
