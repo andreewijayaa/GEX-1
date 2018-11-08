@@ -17,7 +17,31 @@ router.post('/register',(req,res,next) => {
         password: req.body.password,
         codes: req.body.codes
     });
-
+    //code for detecting seller with same email by John
+    Seller.findOne({email: req.body.email}, (err, foundSeller) => {
+      if (err) return handleError(err);
+      if(foundSeller != null){
+        console.log ('Found seller with email %s', foundSeller.email);
+        res.json({success: false, msg:"Failed to register Seller! Email already used for another account."})
+      }
+      else{//end of seller email detection
+        console.log('New email used, %s',req.body.email);
+        //email format checking
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email))
+        {
+          console.log('New email address %s passed format checking.', req.body.email);
+          Seller.addSeller(newSeller, (err, seller) => {
+              if(err){
+                  res.json({success: false, msg:"Failed to register Seller!"})
+              }
+              else {
+                  res.json({success: true, msg:"Seller Registered!"})
+              }
+          });
+        }
+        else{
+          console.log('New email address %s failed format checking.', req.body.email);
+          res.json({success: false, msg:"Failed to register Seller! Email is not valid format."})
     //add seller to db
     Seller.addSeller(newSeller, (err, seller) => {
         if(err){
@@ -26,6 +50,7 @@ router.post('/register',(req,res,next) => {
         else {
             res.json({success: true, msg:"Seller Registered!"})
         }
+      }
     });
 });
 
@@ -43,8 +68,7 @@ router.post('/login', (req, res, next) => {
       if(!seller){
         return res.json({success: false, msg: 'Seller not found'});
       }
- 
-      //check password
+    //check password
       Seller.comparePassword(password, seller.password, (err, isMatch) => {
         if(err) throw err;
         
@@ -86,7 +110,7 @@ router.get('/profile', (req, res) => {
       res.status(200).send(decoded);
      });
   });
-
+// View request
 router.get('/view', (req, res) => {
   var token = req.headers['x-access-token'];
 
@@ -104,3 +128,4 @@ router.get('/view', (req, res) => {
   });
 
 module.exports = router;
+
