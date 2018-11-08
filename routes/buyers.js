@@ -13,14 +13,25 @@ router.post('/register',(req,res/*,next*/) => {
       email: req.body.email,
       password: req.body.password,
   });
-    Buyer.addBuyer(newBuyer, (err, buyer) => {
-        if(err){
-            res.json({success: false, msg:"Failed to register Buyer!"})
-        }
-        else {
-            res.json({success: true, msg:"Buyer Registered!"})
-        }
-    });
+  //code for detecting registering buyer with the same email. By John
+  Buyer.findOne({email: req.body.email}, (err, foundBuyer) => {
+    if (err) return handleError(err); //if err is encountered while searching for buyer
+    if(foundBuyer != null){
+      console.log ('Found buyer with email %s', foundBuyer.email);
+      res.json({success: false, msg:"Failed to register Buyer! Email already used for another account."})
+    }
+    else{ //end of code for email detection by John
+      console.log('New email used, %s',req.body.email);
+      Buyer.addBuyer(newBuyer, (err, buyer) => {
+          if(err){
+              res.json({success: false, msg:"Failed to register Buyer!"})
+          }
+          else {
+              res.json({success: true, msg:"Buyer Registered!"})
+          }
+      });
+    }
+  })
 });
 //Authenticate
 router.post('/authenticate', (req, res, next) => {
@@ -32,14 +43,14 @@ router.post('/authenticate', (req, res, next) => {
       if(!buyer){
         return res.json({success: false, msg: 'Buyer not found'});
       }
-  
+
       Buyer.comparePassword(password, buyer.password, (err, isMatch) => {
         if(err) throw err;
         if(isMatch){
           const token = jwt.sign({data: buyer}, config.secret, {
             expiresIn: 604800 // 1 week
           });
-  
+
           res.json({
             success: true,
             token: `${token}`,
