@@ -8,7 +8,7 @@ const Request = require('../models/request');
 
 //Register
 router.post('/register',(req,res,next) => {
-    
+
     //create seller object
     let newSeller = new Seller({
         first_name: req.body.first_name,
@@ -17,21 +17,39 @@ router.post('/register',(req,res,next) => {
         password: req.body.password,
         codes: req.body.codes
     });
-
-    //add seller to db
-    Seller.addSeller(newSeller, (err, seller) => {
-        if(err){
-            res.json({success: false, msg:"Failed to register Seller!"})
+    //code for detecting seller with same email by John
+    Seller.findOne({email: req.body.email}, (err, foundSeller) => {
+      if (err) return handleError(err);
+      if(foundSeller != null){
+        console.log ('Found seller with email %s', foundSeller.email);
+        res.json({success: false, msg:"Failed to register Seller! Email already used for another account."})
+      }
+      else{//end of seller email detection
+        console.log('New email used, %s',req.body.email);
+        //email format checking
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email))
+        {
+          console.log('New email address %s passed format checking.', req.body.email);
+          Seller.addSeller(newSeller, (err, seller) => {
+              if(err){
+                  res.json({success: false, msg:"Failed to register Seller!"})
+              }
+              else {
+                  res.json({success: true, msg:"Seller Registered!"})
+              }
+          });
         }
-        else {
-            res.json({success: true, msg:"Seller Registered!"})
+        else{
+          console.log('New email address %s failed format checking.', req.body.email);
+          res.json({success: false, msg:"Failed to register Seller! Email is not valid format."})
         }
+      }
     });
 });
 
 //Authenticate
 router.post('/login', (req, res, next) => {
-    
+
     //get email and password from request
     const email = req.body.email;
     const password = req.body.password;
@@ -39,15 +57,14 @@ router.post('/login', (req, res, next) => {
     //search for seller in database
     Seller.getSellerbyEmail(email, (err, seller) => {
       if(err) throw err;
-      
+
       if(!seller){
         return res.json({success: false, msg: 'Seller not found'});
       }
- 
-      //check password
+    //check password
       Seller.comparePassword(password, seller.password, (err, isMatch) => {
         if(err) throw err;
-        
+
         //provide token in response is login is valid
         if(isMatch){
           const token = jwt.sign({data: seller}, config.secret, {
@@ -86,7 +103,7 @@ router.get('/profile', (req, res) => {
       res.status(200).send(decoded);
      });
   });
-
+// View request
 router.get('/view', (req, res) => {
   var token = req.headers['x-access-token'];
 
@@ -99,7 +116,7 @@ router.get('/view', (req, res) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
       })
-      
+
      });
   });
 

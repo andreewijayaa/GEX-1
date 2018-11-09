@@ -29,7 +29,7 @@ module.exports.getBuyerbyId = function(id, callback){
 }
 
 module.exports.getBuyerbyEmail = function(email, callback){
-    const query = {email: email}
+    const query = {email: email};
     Buyer.findOne(query, callback);
 }
 
