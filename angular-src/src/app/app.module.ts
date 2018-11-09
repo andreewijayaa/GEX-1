@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -14,7 +14,11 @@ import { BuyerAccountComponent } from './components/buyer/buyer-account/buyer-ac
 import { SellerAccountComponent } from './components/seller/seller-account/seller-account.component';
 import { SellerRegisterComponent } from './components/SellerRegister/SellerRegister.component';
 import { FooterComponent } from './components/footer/footer.component';
-
+import { FormsModule } from '@angular/forms';
+import { FlashMessagesModule } from 'angular2-flash-messages';
+import { ValidateService } from './services/validate.service';
+import { RegisterService } from './services/register.service';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -25,7 +29,6 @@ const appRoutes: Routes = [
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},
   {path: 'seller', component: SellerComponent}
-
 ];
 
 @NgModule({
@@ -45,9 +48,13 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    FlashMessagesModule.forRoot(),
+    HttpClientModule
   ],
-  providers: [],
+  providers: [ValidateService, RegisterService],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }
