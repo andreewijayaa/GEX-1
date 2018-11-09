@@ -32,7 +32,7 @@ export class SellerLoginComponent implements OnInit {
 
     this.registerService.AuthenticateSeller(seller).subscribe((data:any) => {
       if (data.success) {
-        this.registerService.storeBuyerData(data.token, data.seller);
+        this.registerService.storeSellerData(data.token, data.seller);
         this.flashMessage.show('You are now logged in.', {cssClass: 'alert-success', timeout: 5000});
         this.router.navigate(['/seller']);
         document.getElementById("userType").innerHTML = userType;

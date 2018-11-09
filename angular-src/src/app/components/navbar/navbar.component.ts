@@ -11,12 +11,16 @@ import { Config } from 'protractor';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  buyer: Object;
+  seller: Object;
+  user: String;
 
   constructor(private registerService:RegisterService,
               private router:Router,
               private flashMessage:FlashMessagesService) { }
 
   ngOnInit() {
+
   }
 
   onLogoutClick() {
@@ -26,6 +30,7 @@ export class NavbarComponent implements OnInit {
       timeout:3000
     });
 
+    /*
     var userType = document.getElementById("userType").innerHTML;
     if (userType == "Buyer") {
       this.router.navigate(['/login']);
@@ -34,7 +39,7 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/sellerLogin']);
     }
     userType = "";
-    document.getElementById("userType").innerHTML = userType;
+    document.getElementById("userType").innerHTML = userType; */
     return false;
   }
 }
