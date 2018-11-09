@@ -5,6 +5,7 @@ import {RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
+import { SellerLoginComponent } from './components/login/sellerLogin.component';
 import { RegisterComponent } from './components/BuyerRegister/BuyerRegister.component';
 import { BuyerComponent } from './components/buyer/buyer.component';
 import { SellerComponent } from './components/seller/seller.component';
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
   {path: 'BuyerRegister', component: RegisterComponent},
   {path: 'SellerRegister', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'sellerLogin', component: SellerLoginComponent},
   {path: 'buyer', component: BuyerComponent},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},
@@ -44,7 +46,8 @@ const appRoutes: Routes = [
     BuyerAccountComponent,
     SellerAccountComponent,
     SellerRegisterComponent,
-    FooterComponent
+    FooterComponent,
+    SellerLoginComponent
   ],
   imports: [
     BrowserModule,

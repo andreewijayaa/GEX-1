@@ -8,10 +8,10 @@ import { Config } from 'protractor';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './SellerLogin.component.html',
+  styleUrls: ['./SellerLogin.component.css']
 })
-export class LoginComponent implements OnInit {
+export class SellerLoginComponent implements OnInit {
   email: String;
   password: String;
 
@@ -23,18 +23,18 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit() {
-    const buyer = {
+    const seller = {
       email: this.email,
       password: this.password
     }
 
-    var userType = "Buyer";
+    var userType = "Seller";
 
-    this.registerService.AuthenticateBuyer(buyer).subscribe((data:any) => {
+    this.registerService.AuthenticateSeller(seller).subscribe((data:any) => {
       if (data.success) {
-        this.registerService.storeBuyerData(data.token, data.buyer);
+        this.registerService.storeBuyerData(data.token, data.seller);
         this.flashMessage.show('You are now logged in.', {cssClass: 'alert-success', timeout: 5000});
-        this.router.navigate(['/buyer']);
+        this.router.navigate(['/seller']);
         document.getElementById("userType").innerHTML = userType;
       } 
       else {
@@ -42,5 +42,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/login']);
       }
     });
+    
   }
 }
