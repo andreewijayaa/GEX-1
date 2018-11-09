@@ -6,8 +6,8 @@ import { RegisterService } from '../../services/register.service';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './SellerRegister.component.html',
-  styleUrls: ['./SellerRegister.component.css']
+  templateUrl: './sellerRegister.component.html',
+  styleUrls: ['./sellerRegister.component.css']
 })
 export class SellerRegisterComponent implements OnInit {
   first_name: String;
@@ -45,13 +45,13 @@ export class SellerRegisterComponent implements OnInit {
     }
 
     // Register Buyer
-    this.registerService.RegisterSeller(seller).subscribe(data => {
-      if (data) { // must know if its a successful register or not
+    this.registerService.RegisterSeller(seller).subscribe((data:any) => {
+      if (data.success) { 
         this.flashMessage.show('You are now Register', {cssClass: 'alert-success', timeout: 3000});
-        this.router.navigate(['/login']);
+        this.router.navigate(['/sellerLogin']);
       } else {
         this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
-        this.router.navigate(['/BuyerRegister']);
+        this.router.navigate(['/SellerRegister']);
       }
     });
 

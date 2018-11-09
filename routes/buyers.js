@@ -96,9 +96,12 @@ router.post('/request', (req, res, next) => {
   if (!token) return res.status(401).send({ success: false, message:'Must login to create request.' });
 
   var request = new Request({
+    buyer_ID: req.body.buyer_ID,
     code: req.body.code,
+    buyer_first_name: req.body.buyer_first_name,
+    buyer_last_name: req.body.buyer_last_name,
     title: req.body.title,
-    body: req.body.body
+    description:req.body.description
   });
 
   request.save( (err,post) => {

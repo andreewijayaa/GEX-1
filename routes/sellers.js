@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Seller = require('../models/seller');
 const Request = require('../models/request');
+const Offer = require('../models/offer');
 
 //Register
 router.post('/register',(req,res,next) => {
@@ -118,6 +119,25 @@ router.get('/view', (req, res) => {
       })
 
      });
+  });
+
+  router.post('/makeOffer', (req,res) =>{
+    var token = req.headers['x-access-token'];
+    if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
+
+    let newOffer = new Offer({
+      seller_first_name:req.body.seller_first_name,
+      seller_last_name:req.body.seller_last_name,
+      seller_ID:req.body.seller_ID,
+      code:req.body.code,
+      request_ID:req.body.request_ID
+    });
+
+    newOffer.save( (err,post) => {
+        if (err) { return next(err); }
+        res.status(201).json(post);
+    });
+
   });
 
 module.exports = router;

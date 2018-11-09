@@ -45,8 +45,8 @@ export class RegisterComponent implements OnInit {
     }
 
     // Register Buyer
-    this.registerService.RegisterBuyer(buyer).subscribe(data => {
-      if (data) { // must know if its a successful register or not FIX THIS LATER
+    this.registerService.RegisterBuyer(buyer).subscribe((data:any) => {
+      if (data.success) { 
         this.flashMessage.show('You are now Register', {cssClass: 'alert-success', timeout: 3000});
         this.router.navigate(['/login']);
       } else {
