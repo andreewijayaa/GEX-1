@@ -20,7 +20,7 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    codes: [Number] 
+    codes: [Number]
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
