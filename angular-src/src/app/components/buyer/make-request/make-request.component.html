@@ -6,129 +6,26 @@
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Request Title:</label>
         <div class="col-sm-10">
-          <input type="text" name="request-title" value="">
+          <input class="form-control mr-sm-2" type="text" name="request-title" value="">
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Request Category:</label>
         <div class="col-sm-10">
-          <input type="text" name="request-category" value="">
+          <input class="form-control mr-sm-2" type="text" name="request-category" value="">
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Enter description of desired product:</label>
         <div class="col-sm-10">
-          <textarea name="desc" rows="8" cols="80"></textarea>
+          <textarea class="form-control" name="desc" rows="8" cols="80"></textarea>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Set offer deadline:</label>
-        <div class="form-row">
-          <div class="form-group col-md-3">
-            <select class="form-control" id="month-select">
-              <option>Month</option>
-              <option>Jan</option>
-              <option>Feb</option>
-              <option>Mar</option>
-              <option>Apr</option>
-              <option>May</option>
-              <option>Jun</option>
-              <option>Jul</option>
-              <option>Aug</option>
-              <option>Sep</option>
-              <option>Oct</option>
-              <option>Nov</option>
-              <option>Dec</option>
-            </select>
-          </div>
-          <div class="form-group col-md-4">
-            <input class= "col-md-5" type="text" name="day" placeholder="Day">
-            <input class="col-md-5" type="text" name="year" placeholder="Year">
-
-          </div>
-          <div class="form-group row col-md-4">
-            <select class="form-control col-md-3" id="hour-select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-              <option>11</option>
-              <option>12</option>
-            </select>
-            <select class="form-control col-md-3" id="min-select">
-              <option>00</option>
-              <option>01</option>
-              <option>02</option>
-              <option>03</option>
-              <option>04</option>
-              <option>05</option>
-              <option>06</option>
-              <option>07</option>
-              <option>08</option>
-              <option>09</option>
-              <option>10</option>
-              <option>11</option>
-              <option>12</option>
-              <option>13</option>
-              <option>14</option>
-              <option>15</option>
-              <option>16</option>
-              <option>17</option>
-              <option>18</option>
-              <option>19</option>
-              <option>20</option>
-              <option>21</option>
-              <option>22</option>
-              <option>23</option>
-              <option>24</option>
-              <option>25</option>
-              <option>26</option>
-              <option>27</option>
-              <option>28</option>
-              <option>29</option>
-              <option>30</option>
-              <option>31</option>
-              <option>32</option>
-              <option>33</option>
-              <option>34</option>
-              <option>35</option>
-              <option>36</option>
-              <option>37</option>
-              <option>38</option>
-              <option>39</option>
-              <option>40</option>
-              <option>41</option>
-              <option>42</option>
-              <option>43</option>
-              <option>44</option>
-              <option>45</option>
-              <option>46</option>
-              <option>47</option>
-              <option>48</option>
-              <option>49</option>
-              <option>50</option>
-              <option>51</option>
-              <option>52</option>
-              <option>53</option>
-              <option>54</option>
-              <option>55</option>
-              <option>56</option>
-              <option>57</option>
-              <option>58</option>
-              <option>59</option>
-            </select>
-            <select class="form-control col-md-3" id="am-pm-select">
-              <option>AM</option>
-              <option>PM</option>
-            </select>
-          </div>
-
+        <div class="row col-sm-10">
+            <input class="form-control col-sm-3" type="date" name="deadline-date">
+            <input class="form-control col-sm-3" type="time" name="deadline-time">
         </div>
       </div>
       <div class="form-group row">
