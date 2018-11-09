@@ -41,6 +41,7 @@ app.use('/buyers', buyers);
 //sellers route
 app.use('/sellers', sellers);
 
+
 //Homepage route
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'public/index.html'));
