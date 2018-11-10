@@ -4,6 +4,10 @@ const config = require('../config/database');
 
 //Seller Schema
 const SellerSchema = mongoose.Schema({
+    account_type:{
+      type: Number,
+      default: 1
+    },
     first_name: {
         type: String,
         required: true
