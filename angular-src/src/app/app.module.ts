@@ -30,7 +30,8 @@ const appRoutes: Routes = [
   {path: 'buyer', component: BuyerComponent},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},
-  {path: 'seller', component: SellerComponent}
+  {path: 'seller', component: SellerComponent},
+  {path: 'seller/seller-account', component: SellerAccountComponent}
 ];
 
 @NgModule({
