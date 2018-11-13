@@ -4,6 +4,10 @@ const config = require('../config/database');
 
 //Buyer Schema
 const BuyerSchema = mongoose.Schema({
+    account_type:{
+      type: Number,
+      default: 0
+    },
     first_name: {
         type: String,
         required: true
@@ -29,7 +33,7 @@ module.exports.getBuyerbyId = function(id, callback){
 }
 
 module.exports.getBuyerbyEmail = function(email, callback){
-    const query = {email: email}
+    const query = {email: email};
     Buyer.findOne(query, callback);
 }
 

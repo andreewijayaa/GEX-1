@@ -1,4 +1,4 @@
-<form >
+<form (submit)="OnSellerRegisterSubmit()" class="col-md-8 col-md-offset-8">
     <div class="container">
       <div class ="container header">
       <h1>Seller's Register</h1>
@@ -8,20 +8,20 @@
       <hr>
 
       <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
+      <input type="text" placeholder="Enter Email" [(ngModel)]="email" name="email" required>
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <input type="password" placeholder="Enter Password" [(ngModel)]="password" name="psw" required>
 
       <label for="psw-repeat"><b>Repeat Password</b></label>
       <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
       <hr>
 
       <label for="firstName"><b>First Name</b></label>
-      <input type="text" placeholder="Enter First Name" name="firstName" required>
+      <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
 
       <label for="lastName"><b>Last Name</b></label>
-      <input type="text" placeholder="Enter Last Name" name="lastName" required>
+      <input type="text" placeholder="Enter Last Name" [(ngModel)]="last_name" name="last_name" required>
 
       <label for="organizationName"><b>Organization Name</b></label>
       <input type="text" placeholder="Enter Organization Name" name="organizationName" required>

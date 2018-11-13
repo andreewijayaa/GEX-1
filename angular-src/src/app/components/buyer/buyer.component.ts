@@ -12,4 +12,14 @@ export class BuyerComponent implements OnInit {
   ngOnInit() {
   }
 
+currentTab = 'requests';
+
+requests(currentTab){
+  this.currentTab = currentTab;
+}
+
+history(currentTab){
+  this.currentTab = currentTab;
+}
+
 }

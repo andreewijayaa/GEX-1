@@ -14,14 +14,32 @@ router.post('/register',(req,res/*,next*/) => {
       email: req.body.email,
       password: req.body.password,
   });
-    Buyer.addBuyer(newBuyer, (err, buyer) => {
-        if(err){
-            res.json({success: false, msg:"Failed to register Buyer!"})
-        }
-        else {
-            res.json({success: true, msg:"Buyer Registered!"})
-        }
-    });
+  //code for detecting registering buyer with the same email. By John
+  Buyer.findOne({email: req.body.email}, (err, foundBuyer) => {
+    if (err) return handleError(err); //if err is encountered while searching for buyer
+    if(foundBuyer != null){
+      console.log ('Found buyer with email %s', foundBuyer.email);
+      res.json({success: false, msg:"Failed to register Buyer! Email already used for another account."})
+    }
+    else{ //end of code for email detection by John
+      console.log('New email used, %s',req.body.email);
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)){
+        console.log('New email address %s passed format checking.', req.body.email);
+        Buyer.addBuyer(newBuyer, (err, buyer) => {
+            if(err){
+                res.json({success: false, msg:"Failed to register Buyer!"})
+            }
+            else {
+                res.json({success: true, msg:"Buyer Registered!"})
+            }
+        });
+      }
+      else{
+        console.log('New email address %s failed format checking.', req.body.email);
+        res.json({success: false, msg:"Failed to register Buyer! Email is not valid format."})
+      }
+    }
+  })
 });
 
 //Authenticate
@@ -34,14 +52,14 @@ router.post('/login', (req, res, next) => {
       if(!buyer){
         return res.json({success: false, msg: 'Buyer not found'});
       }
-  
+
       Buyer.comparePassword(password, buyer.password, (err, isMatch) => {
         if(err) throw err;
         if(isMatch){
           const token = jwt.sign({data: buyer}, config.secret, {
             expiresIn: 604800 // 1 week
           });
-  
+
           res.json({
             success: true,
             token: `${token}`,
@@ -78,9 +96,12 @@ router.post('/request', (req, res, next) => {
   if (!token) return res.status(401).send({ success: false, message:'Must login to create request.' });
 
   var request = new Request({
+    buyer_ID: req.body.buyer_ID,
     code: req.body.code,
+    buyer_first_name: req.body.buyer_first_name,
+    buyer_last_name: req.body.buyer_last_name,
     title: req.body.title,
-    body: req.body.body
+    description:req.body.description
   });
 
   request.save( (err,post) => {
