@@ -1,0 +1,14 @@
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+.ex1 {
+  margin-top: 1.5%;
+}
+.editBtn{
+  background-color: darkorange;
+}
+.saveBtn{
+  background-color: #e60000;
+}

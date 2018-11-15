@@ -12,6 +12,7 @@ import { SellerComponent } from './components/seller/seller.component';
 import { HomeComponent } from './components/home/home.component';
 import { MakeRequestComponent } from './components/buyer/make-request/make-request.component';
 import { BuyerAccountComponent } from './components/buyer/buyer-account/buyer-account.component';
+import { SubmitOfferComponent } from './components/seller/submit-offer/submit-offer.component';
 import { SellerAccountComponent } from './components/seller/seller-account/seller-account.component';
 import { SellerRegisterComponent } from './components/SellerRegister/SellerRegister.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -30,7 +31,9 @@ const appRoutes: Routes = [
   {path: 'buyer', component: BuyerComponent},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},
-  {path: 'seller', component: SellerComponent}
+  {path: 'seller', component: SellerComponent},
+  {path: 'seller/seller-account', component: SellerAccountComponent},
+  {path: 'seller/submit-offer', component: SubmitOfferComponent}
 ];
 
 @NgModule({
@@ -44,6 +47,7 @@ const appRoutes: Routes = [
     HomeComponent,
     MakeRequestComponent,
     BuyerAccountComponent,
+    SubmitOfferComponent,
     SellerAccountComponent,
     SellerRegisterComponent,
     FooterComponent,
