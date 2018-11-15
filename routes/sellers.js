@@ -133,10 +133,31 @@ router.get('/view', (req, res) => {
       request_ID:req.body.request_ID
     });
 
-    newOffer.save( (err,post) => {
+    Seller.findById(req.body.seller_ID, (err, seller_making_offer) => {
+      if (err) return handleError(err);
+      newOffer.save( (err,post) => {
+          if (err) { return next(err); }
+          seller_making_offer.seller_offers_byID.push(post._id);
+          seller_making_offer.save((err) =>{
+            if (err) { return next(err); }
+            console.log('New Offer made tied to Seller %s', req.body.seller_ID);
+            Request.findById(req.body.request_ID, (err, request_with_offer) => {
+              if (err) return handleError(err);
+              request_with_offer.request_offers_byID.push(post._id);
+              request_with_offer.save((err) =>{
+                if (err){return next(err);}
+                console.log('New Offer made tied to Request %s ', request_with_offer._id);
+              });
+            });
+          });
+          res.status(201).json(post);
+      });
+    });
+
+    /*newOffer.save( (err,post) => {
         if (err) { return next(err); }
         res.status(201).json(post);
-    });
+    });*/
 
   });
 

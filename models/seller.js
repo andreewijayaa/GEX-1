@@ -24,7 +24,12 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    codes: [Number]
+    codes: {
+      type: [Number]
+    },
+    seller_offers_byID: {
+      type: [String]
+    }
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
