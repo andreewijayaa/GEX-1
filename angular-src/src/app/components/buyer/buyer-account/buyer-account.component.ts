@@ -13,7 +13,7 @@ export class BuyerAccountComponent implements OnInit {
   constructor(private registerService:RegisterService, private router:Router) { }
 
   ngOnInit() {
-
+    
   }
 
 }

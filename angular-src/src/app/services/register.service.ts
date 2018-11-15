@@ -33,6 +33,7 @@ export class RegisterService {
 
   // Get Buyer Profile Service
   getBuyerProfile(){
+    this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.RegisterToken,
@@ -49,6 +50,11 @@ export class RegisterService {
     localStorage.setItem('buyer', JSON.stringify(buyer)); // can only store stings not objects
     this.RegisterToken = token;
     this.buyer = buyer;
+  }
+
+  loadToken() {
+    const token = localStorage.getItem('id_token');
+    this.RegisterToken = token;
   }
 
   // User Logout Service
