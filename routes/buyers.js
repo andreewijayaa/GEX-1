@@ -103,11 +103,25 @@ router.post('/request', (req, res, next) => {
     title: req.body.title,
     description:req.body.description
   });
-
-  request.save( (err,post) => {
+  //console.log('before find by id');
+  Buyer.findById(req.body.buyer_ID, (err, buyer_making_request) => {
+    //console.log('inside the find by id function');
+    if (err) return handleError(err);
+    request.save( (err,post) => {
+        if (err) { return next(err); }
+        //console.log('inside save function');
+        buyer_making_request.buyer_requests_byID.push(post._id);
+        buyer_making_request.save((err) =>{
+          if (err) { return next(err); }
+          console.log('New Reuqest made tied to Buyer %s', req.body.buyer_ID);
+        });
+        res.status(201).json(post);
+    });
+  });
+  /*request.save( (err,post) => {
       if (err) { return next(err); }
       res.status(201).json(post);
-  });
+  });*/
 })
 
 module.exports = router;

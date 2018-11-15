@@ -23,6 +23,9 @@ const BuyerSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    buyer_requests_byID: {
+      type : [String]
     }
 });
 
