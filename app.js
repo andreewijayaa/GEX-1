@@ -16,6 +16,7 @@ const app = express();
 
 const buyers = require('./routes/buyers');
 const sellers = require('./routes/sellers');
+const codes = require('./routes/codes');
 
 // Port Number
 const port = 3000;
@@ -40,6 +41,9 @@ app.use('/buyers', buyers);
 
 //sellers route
 app.use('/sellers', sellers);
+
+// Code route
+app.use('/codes', codes);
 
 
 //Homepage route
