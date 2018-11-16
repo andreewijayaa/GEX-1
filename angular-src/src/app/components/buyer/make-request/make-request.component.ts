@@ -18,7 +18,11 @@ export class MakeRequestComponent implements OnInit {
   }
 
   onRequestSubmit() {
-    
+    const request = {
+      title: this.title,
+      description: this.description,
+      deadline: this.deadline
+    }
   }
 
 }
