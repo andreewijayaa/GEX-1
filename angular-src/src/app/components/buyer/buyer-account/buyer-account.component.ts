@@ -11,9 +11,15 @@ export class BuyerAccountComponent implements OnInit {
   buyer:Object;
 
   constructor(private buyerService:BuyerService, private router:Router) { }
-  
-  ngOnInit() {
 
+  ngOnInit() {
+    this.buyerService.getBuyerProfile().subscribe(profile => {
+      this.buyer = profile.buyer;
+    },
+  err => {
+    console.log(err);
+    return false;
+  });
   }
 
 }
