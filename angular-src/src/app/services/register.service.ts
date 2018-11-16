@@ -31,18 +31,7 @@ export class RegisterService {
     .pipe(map(res => res));
   }
 
-  // Get Buyer Profile Service
-  getBuyerProfile(){
-    this.loadToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.RegisterToken,
-        'Content-Type': 'application/json'
-      })
-    };
-    return this.http.get('http://localhost:3000/buyers/buyer-account', httpOptions)
-    .pipe(map(res => res));
-  }
+
 
   // Store Buyer Data Locally Service
   storeBuyerData(token, buyer) {
@@ -52,10 +41,7 @@ export class RegisterService {
     this.buyer = buyer;
   }
 
-  loadToken() {
-    const token = localStorage.getItem('id_token');
-    this.RegisterToken = token;
-  }
+
 
   // User Logout Service
   userLogout() {

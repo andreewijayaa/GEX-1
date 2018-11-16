@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {RegisterService} from '../../../services/register.service';
+import {BuyerService} from '../../../services/buyer.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -10,10 +10,10 @@ import {Router} from '@angular/router';
 export class BuyerAccountComponent implements OnInit {
   buyer:Object;
 
-  constructor(private registerService:RegisterService, private router:Router) { }
-
+  constructor(private buyerService:BuyerService, private router:Router) { }
+  
   ngOnInit() {
-    
+
   }
 
 }
