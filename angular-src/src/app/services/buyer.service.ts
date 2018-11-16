@@ -20,7 +20,7 @@ export class BuyerService {
         'Content-Type': 'application/json'
       })
     };
-    return this.http.get('http://localhost:3000/buyers/buyer-account', httpOptions)
+    return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
     .pipe(map(res => res));
   }
 
