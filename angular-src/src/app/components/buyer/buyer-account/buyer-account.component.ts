@@ -13,15 +13,14 @@ export class BuyerAccountComponent implements OnInit {
   constructor(private buyerService:BuyerService, private router:Router) { }
 
   ngOnInit() {
-    /* This is what I have so far, but it's not working
     this.buyerService.getBuyerProfile().subscribe(profile => {
-      this.buyer = profile.buyer;
+      this.buyer = profile["buyer"];
     },
   err => {
     console.log(err);
     return false;
   });
-  */
+
   }
 
 }
