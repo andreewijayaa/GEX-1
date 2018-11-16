@@ -22,13 +22,17 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="requests" [ngClass]="{'active':currentTab === 'requests'}" role="tabpanel" aria-labelledby="requests-tab">
     &nbsp;
-    <div class="list-group">
+
+    <ul class="list-group">
       <li class="list-group-item">
         <div class="row">
           <div class="col"><h3>Request Title</h3></div><div class="col">Submitted: </div><div class="col">Offer count:</div>
         </div>
+        <p>Deadline:</p>
+        <p>Description:</p>
       </li>
-    </div>
+    </ul>
+
   </div>
   <div class="tab-pane fade show" id="history" [ngClass]="{'active':currentTab === 'history'}" role="tabpanel" aria-labelledby="history-tab">
     &nbsp;
