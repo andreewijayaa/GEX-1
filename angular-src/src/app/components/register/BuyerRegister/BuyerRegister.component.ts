@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ValidateService } from '../../services/validate.service';
+import { ValidateService } from '../../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-import { RegisterService } from '../../services/register.service';
+import { RegisterService } from '../../../services/register.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './BuyerRegister.component.html',
   styleUrls: ['./BuyerRegister.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class BuyerRegisterComponent implements OnInit {
   first_name: String;
   last_name: String;
   email: String;
