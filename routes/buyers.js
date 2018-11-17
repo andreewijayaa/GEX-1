@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Buyer = require('../models/buyer');
 const Request = require('../models/request');
+var nodemailer = require('nodemailer');
 
 //Register
 router.post('/register',(req,res/*,next*/) => {
@@ -30,6 +31,12 @@ router.post('/register',(req,res/*,next*/) => {
                 res.json({success: false, msg:"Failed to register Buyer!"})
             }
             else {
+              var transporter = nodemailer.createTransport({ service: 'Sendgrid', auth: { user: process.env.ronjonsilver, pass: process.env.GEXTeamrocks2018 } });
+              var mailOptions = { from: 'no-reply@yourwebapplication.com', to: buyer.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
+                transporter.sendMail(mailOptions, function (err) {
+              if (err) { return res.status(500).send({ msg: err.message }); }
+                res.status(200).send('A verification email has been sent to ' + user.email + '.');
+            });
                 res.json({success: true, msg:"Buyer Registered!"})
             }
         });
