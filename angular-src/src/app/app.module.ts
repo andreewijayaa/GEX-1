@@ -23,7 +23,6 @@ import { RegisterService } from './services/register.service';
 import { AuthService } from './services/auth.service';
 import { StoreFetchService } from './services/storeFetch.service';
 import { HttpClientModule } from '@angular/common/http';
-import { HeaderComponent } from './components/header/header.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -55,7 +54,6 @@ const appRoutes: Routes = [
     SellerRegisterComponent,
     FooterComponent,
     SellerLoginComponent,
-    HeaderComponent
   ],
   imports: [
     BrowserModule,
