@@ -14,7 +14,7 @@ export class BuyerAccountComponent implements OnInit {
 
   ngOnInit() {
     this.buyerService.getBuyerProfile().subscribe(profile => {
-      this.buyer = profile.data;
+      this.buyer = profile["buyer"];
     },
   err => {
     console.log(err);
