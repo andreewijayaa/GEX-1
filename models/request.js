@@ -1,29 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('../config/database');
 
-const offerSchema = mongoose.Schema({
-  seller_first_name:{
-    type: String,
-    required: true
-  },
-  seller_last_name:{
-    type: String,
-    required: true
-  },
-  seller_ID:{
-    type: String,
-    required: true
-  },
-  code:{
-    type:String,
-    required: true
-  },
-  request_ID:{
-    type:String,
-    required:true
-  }
-});
-
 const RequestSchema = mongoose.Schema({
   buyer_ID:{
     type: String,
@@ -49,8 +26,8 @@ const RequestSchema = mongoose.Schema({
     type:String,
     required: true
   },
-  offers_array:{
-    type:[offerSchema]
+  request_offers_byID:{
+    type:[String]
   }
 });
 
