@@ -1,9 +1,13 @@
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#"><img src="assets\gexLogo.png" style="max-width: 150px; margin-top: -14px;" class="img-responsive"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <label id="userType"></label>
+  
+  <ng-container *ngIf="user == 0; else second">
+  
+  <label id="userType">Buyer</label>
 
   <div class="collapse navbar-collapse" id="navbarColor03">
     <ul class="navbar-nav mr-auto">
@@ -24,5 +28,3 @@
 
   </div>
 </nav>
-
-

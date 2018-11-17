@@ -1,43 +1,19 @@
 <div class = "container">
 &nbsp;
-<div class="row">
-  <div class="col">
-    <h1>Welcome, buyer!</h1>
-  </div>
-  <div class="col-md-auto">
-  </div>
-  <div class="col col-lg-2">
-    <button class="btn btn-primary" [routerLink]="['/buyer/make-request']">Submit a new request</button>
-  </div>
-</div>
-<div class="tabbable">
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" [ngClass]="{'active':currentTab === 'requests'}" data-target="#requests" role="tab" aria-controls="requests" aria-selected="true" (click)="requests('requests')">Requests</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'history'}" data-target="#history" role="tab" aria-controls="history" aria-selected="false" (click)="history('history')">History</a>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="requests" [ngClass]="{'active':currentTab === 'requests'}" role="tabpanel" aria-labelledby="requests-tab">
-    &nbsp;
-
-    <ul class="list-group">
-      <li class="list-group-item">
-        <div class="row">
-          <div class="col"><h3>Request Title</h3></div><div class="col">Submitted: </div><div class="col">Offer count:</div>
-        </div>
-        <p>Deadline:</p>
-        <p>Description:</p>
+<div *ngIf="buyer">
+    <h1 class="page-header">Welcome {{buyer.first_name}}!</h1>
+    <div class="tabbable">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" [ngClass]="{'active':currentTab === 'requests'}" data-target="#requests" role="tab" aria-controls="requests" aria-selected="true" (click)="requests('requests')">Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'history'}" data-target="#history" role="tab" aria-controls="history" aria-selected="false" (click)="history('history')">History</a>
       </li>
     </ul>
-
-  </div>
-  <div class="tab-pane fade show" id="history" [ngClass]="{'active':currentTab === 'history'}" role="tabpanel" aria-labelledby="history-tab">
-    &nbsp;
-    <p>History goes here</p>
-  </div>
-</div>
-</div>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="requests" [ngClass]="{'active':currentTab === 'requests'}" role="tabpanel" aria-labelledby="requests-tab">Requests go here</div>
+      <div class="tab-pane fade show" id="history" [ngClass]="{'active':currentTab === 'history'}" role="tabpanel" aria-labelledby="history-tab">History goes here</div>
+    </div>
+    </div>
 </div>
