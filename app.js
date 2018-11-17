@@ -5,6 +5,7 @@ const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database');
+var nodemailer = require("nodemailer");
 
 // Connect To Database
 mongoose.Promise = require('bluebird');

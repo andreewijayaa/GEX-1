@@ -14,8 +14,10 @@
     "express": "*",
     "jsonwebtoken": "*",
     "mongoose": "*",
-    "passport-jwt": "*",
-    "passport": "*"
+    "nodemailer": "*",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "passport": "*",
+    "passport-jwt": "*"
   },
   "repository": {
     "type": "git",

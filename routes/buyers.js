@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Buyer = require('../models/buyer');
 const Request = require('../models/request');
+const sendEmail = require('../models/sendEmail');
 
 //Register
 router.post('/register',(req,res/*,next*/) => {
@@ -13,6 +14,8 @@ router.post('/register',(req,res/*,next*/) => {
       last_name: req.body.last_name,
       email: req.body.email,
       password: req.body.password,
+      confirmationToken: jwt.sign({data: 'buyer'}, config.secret, {
+        expiresIn: '24h'}) // 1 day
   });
   //code for detecting registering buyer with the same email. By John
   Buyer.findOne({email: req.body.email}, (err, foundBuyer) => {
@@ -30,7 +33,8 @@ router.post('/register',(req,res/*,next*/) => {
                 res.json({success: false, msg:"Failed to register Buyer!"})
             }
             else {
-                res.json({success: true, msg:"Buyer Registered!"})
+              sendEmail.sendVerificationEmail(buyer);
+              res.json({success: true, msg:"Buyer Registered!"})
             }
         });
       }
@@ -124,4 +128,62 @@ router.post('/request', (req, res, next) => {
   });*/
 })
 
+//Email Verification
+router.post('/confirmEmail/:token', (req, res, next) => {
+  console.log(req.params.token);
+  Buyer.findOne({confirmationToken: req.params.token}, (err, buyer) => {
+    if(err) throw err;
+    var token = req.params.token;
+
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if(err)
+      {
+        res.json({success:false, msg: 'Activation link has expired.1'});
+
+      } else if (!buyer) {
+        res.json({success:false, msg: 'Activation link has expired'});
+      } else {
+        buyer.temptoken = false;
+        buyer.userConfirmed = true;
+        buyer.save((err) => {
+          if(err)
+          {
+            console.log(err);
+          } else {
+              //If account Registred Send Email for Email Verification
+          sendEmail.emailVerified(buyer);
+          }
+        })
+        res.json({success:true, msg:'Account Activated.'})
+      }
+    })
+  });
+})
+
+// Resend Email Verification --NOT TESTED YET
+router.post('/resend', (req,res, next) =>
+{
+  const email = req.body.email;
+
+    Buyer.getBuyerbyEmail(email, (err, buyer) => {
+    if(err) throw err;
+    if(!buyer){
+      return res.json({success: false, msg: 'Buyer not found'});
+    }
+    buyer.confirmationToken = jwt.sign({data: 'buyer'}, config.secret, {
+      expiresIn: '24h'});
+    buyer.save((err) => {
+      if(err)
+      {
+        console.log(err);
+      } else {
+          //If account Registred Send Email for Email Verification
+        sendEmail.sendVerificationEmail(buyer);
+      }
+    });
+  });
+})
+
 module.exports = router;
+
+

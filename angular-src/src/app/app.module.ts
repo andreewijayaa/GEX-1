@@ -23,6 +23,8 @@ import { RegisterService } from './services/register.service';
 import { AuthService } from './services/auth.service';
 import { StoreFetchService } from './services/storeFetch.service';
 import { HttpClientModule } from '@angular/common/http';
+import { PreactivationComponent } from './components/activation/preactivation/preactivation.component';
+import { PostactivationComponent } from './components/activation/postactivation/postactivation.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -35,7 +37,9 @@ const appRoutes: Routes = [
   {path: 'buyer/make-request', component: MakeRequestComponent},
   {path: 'seller', component: SellerComponent},
   {path: 'seller/seller-account', component: SellerAccountComponent},
-  {path: 'seller/submit-offer', component: SubmitOfferComponent}
+  {path: 'seller/submit-offer', component: SubmitOfferComponent},
+  {path: 'preactivation', component: PreactivationComponent },
+  {path: 'postactivation', component: PostactivationComponent }
 ];
 
 @NgModule({
@@ -54,6 +58,8 @@ const appRoutes: Routes = [
     SellerRegisterComponent,
     FooterComponent,
     SellerLoginComponent,
+    PreactivationComponent,
+    PostactivationComponent,
   ],
   imports: [
     BrowserModule,
