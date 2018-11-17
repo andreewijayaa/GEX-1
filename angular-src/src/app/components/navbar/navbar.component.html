@@ -1,13 +1,13 @@
 
-<nav onload="" class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#"><img src="assets\gexLogo.png" style="max-width: 150px; margin-top: -14px;" class="img-responsive"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   
-  <ng-container *ngIf="user == Buyer; else second">
+  <ng-container *ngIf="user == 0; else second">
   
-  <label id="userType"></label>
+  <label id="userType">Buyer</label>
 
   <div class="collapse navbar-collapse" id="navbarColor03">
     <ul class="navbar-nav mr-auto">
@@ -34,8 +34,8 @@
   </div>
 </ng-container>
 <ng-template #second>
-  <ng-container *ngIf="seller; else third">
-      <label id="userType"></label>
+  <ng-container *ngIf="user == 1; else third">
+      <label id="userType">Seller</label>
 
       <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
@@ -79,6 +79,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#">About</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)="onLogoutClick()" href="#">Logout</a>
+          </li>
 
       </ul>
       <form class="form-inline my-2 my-lg-0">

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../../services/register.service';
+import { StoreFetchService } from '../../services/storeFetch.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { ConditionFunc } from 'rxjs/internal/observable/generate';
 import { Config } from 'protractor';
+import { InputType } from 'zlib';
 
 @Component({
   selector: 'app-navbar',
@@ -13,33 +15,25 @@ import { Config } from 'protractor';
 export class NavbarComponent implements OnInit {
   buyer: Object;
   seller: Object;
-  user: String;
+  user: Number;
 
-  constructor(private registerService:RegisterService,
-              private router:Router,
-              private flashMessage:FlashMessagesService) { }
+  constructor(private registerService: RegisterService,
+    private storeFetchService: StoreFetchService,
+    private router: Router,
+    private flashMessage: FlashMessagesService) {
+      this.user = this.storeFetchService.user;
+      console.log(this.user);
+    }
 
   ngOnInit() {
-
   }
 
   onLogoutClick() {
-    this.registerService.userLogout();
+    this.storeFetchService.userLogout();
     this.flashMessage.show('You are logged out', {
-      cssClass:'alert-success',
-      timeout:3000
+      cssClass: 'alert-success',
+      timeout: 3000
     });
-
-    /*
-    var userType = document.getElementById("userType").innerHTML;
-    if (userType == "Buyer") {
-      this.router.navigate(['/login']);
-    }
-    else if (userType == "Seller") {
-      this.router.navigate(['/sellerLogin']);
-    }
-    userType = "";
-    document.getElementById("userType").innerHTML = userType; */
     return false;
   }
 }

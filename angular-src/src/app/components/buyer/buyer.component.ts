@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../../services/register.service';
+import { StoreFetchService } from '../../services/storeFetch.service'
 import { Router } from '@angular/router';
 
 
@@ -9,29 +10,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./buyer.component.css']
 })
 export class BuyerComponent implements OnInit {
-  buyer:Object;
+  buyer: Object;
 
-  constructor(private registerService:RegisterService,
-              private router:Router) { }
+  constructor(private registerService: RegisterService,
+    private storeFetchService: StoreFetchService,
+    private router: Router) { }
 
   ngOnInit() {
-    this.registerService.getBuyerProfile().subscribe((profile: any) => {
+    this.storeFetchService.getBuyerProfile().subscribe((profile: any) => {
       this.buyer = profile.data;
-      console.log(profile);
+      console.log(profile.data.account_type);
     },
-    err => {
-      console.log(err);
-      return false;
-    });
+      err => {
+        console.log(err);
+        return false;
+      });
   }
 
   currentTab = 'requests';
 
-  requests(currentTab){
+  requests(currentTab) {
     this.currentTab = currentTab;
   }
 
-  history(currentTab){
+  history(currentTab) {
     this.currentTab = currentTab;
   }
 
