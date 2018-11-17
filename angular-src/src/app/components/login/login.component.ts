@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../../services/register.service';
+import { AuthService } from '../../services/auth.service';
+import { StoreFetchService } from '../../services/storeFetch.service';
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { ConditionFunc } from 'rxjs/internal/observable/generate';
 import { Config } from 'protractor';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({
@@ -15,9 +18,11 @@ export class LoginComponent implements OnInit {
   email: String;
   password: String;
 
-  constructor(private registerService:RegisterService,
-              private router:Router,
-              private flashMessage:FlashMessagesService) { }
+  constructor(private registerService: RegisterService,
+    private authService: AuthService,
+    private storeFetchService: StoreFetchService,
+    private router: Router,
+    private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
   }
@@ -27,18 +32,17 @@ export class LoginComponent implements OnInit {
       email: this.email,
       password: this.password
     }
-
-    var userType = "Buyer";
-
-    this.registerService.AuthenticateBuyer(buyer).subscribe((data:any) => {
+    this.storeFetchService.user = 0;
+    this.authService.AuthenticateBuyer(buyer).subscribe((data: any) => {
       if (data.success) {
-        this.registerService.storeBuyerData(data.token, data.buyer);
-        this.flashMessage.show('You are now logged in.', {cssClass: 'alert-success', timeout: 5000});
-        this.router.navigate(['/buyer']);
-        document.getElementById("userType").innerHTML = userType;
-      } 
+        this.storeFetchService.storeBuyerData(data.token, data.buyer);
+        this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
+        this.router.navigateByUrl('./navbar.component.html', { skipLocationChange: true }).then(() =>
+        this.router.navigate(["/buyer"]));
+        //this.router.navigate(['/buyer']);
+      }
       else {
-        this.flashMessage.show('User not found', {cssClass: 'alert-danger', timeout: 5000});
+        this.flashMessage.show('User not found', { cssClass: 'alert-danger', timeout: 5000 });
         this.router.navigate(['/login']);
       }
     });

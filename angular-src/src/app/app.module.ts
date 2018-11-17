@@ -20,6 +20,8 @@ import { FormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { ValidateService } from './services/validate.service';
 import { RegisterService } from './services/register.service';
+import { AuthService } from './services/auth.service';
+import { StoreFetchService } from './services/storeFetch.service';
 import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
@@ -51,7 +53,7 @@ const appRoutes: Routes = [
     SellerAccountComponent,
     SellerRegisterComponent,
     FooterComponent,
-    SellerLoginComponent
+    SellerLoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,7 @@ const appRoutes: Routes = [
     FlashMessagesModule.forRoot(),
     HttpClientModule
   ],
-  providers: [ValidateService, RegisterService],
+  providers: [ValidateService, RegisterService, AuthService, StoreFetchService],
   bootstrap: [AppComponent]
 
 })
