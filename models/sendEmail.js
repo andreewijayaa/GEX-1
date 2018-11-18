@@ -17,7 +17,7 @@ module.exports.sendVerificationEmail = function(user, callback){
         to: user.email,
         subject: 'Email Activation',
         text: 'Random',
-        html: "<b>Click here to confirm</b><a href="+"http://http://localhost:4200/" + user.confirmationToken +">Click here</a>."
+        html: "<b>Click here to confirm</b><a href="+"http://localhost:4200/postactivation/" + user.confirmationToken +">Click here</a>."
       };
       
       client.sendMail(email, function(err, info){

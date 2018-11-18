@@ -39,7 +39,7 @@ const appRoutes: Routes = [
   {path: 'seller/seller-account', component: SellerAccountComponent},
   {path: 'seller/submit-offer', component: SubmitOfferComponent},
   {path: 'preactivation', component: PreactivationComponent },
-  {path: 'postactivation', component: PostactivationComponent }
+  {path: 'postactivation/:token', component: PostactivationComponent }
 ];
 
 @NgModule({

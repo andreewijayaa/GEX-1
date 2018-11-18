@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         //this.router.navigate(['/buyer']);
       }
       else {
-        this.flashMessage.show('User not found', { cssClass: 'alert-danger', timeout: 5000 });
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
         this.router.navigate(['/login']);
       }
     });

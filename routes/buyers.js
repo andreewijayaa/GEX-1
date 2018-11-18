@@ -46,6 +46,7 @@ router.post('/register',(req,res/*,next*/) => {
   })
 });
 
+
 //Authenticate
 router.post('/login', (req, res, next) => {
     const email = req.body.email;
@@ -55,6 +56,10 @@ router.post('/login', (req, res, next) => {
       if(err) throw err;
       if(!buyer){
         return res.json({success: false, msg: 'Buyer not found'});
+      }
+      if(!buyer.userConfirmed)
+      {
+        return res.json({success: false, msg: 'Please Activate your account first.'});
       }
 
       Buyer.comparePassword(password, buyer.password, (err, isMatch) => {
@@ -138,10 +143,12 @@ router.post('/confirmEmail/:token', (req, res, next) => {
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {
-        res.json({success:false, msg: 'Activation link has expired.1'});
+        res.json({success:false, msg: 'Activation link has expired.'});
 
       } else if (!buyer) {
-        res.json({success:false, msg: 'Activation link has expired'});
+        res.json({success:false, msg: 'Activation link has expired.'});
+      } else if (buyer.userConfirmed) {
+        res.json({success:false, msg: 'Acount already activated!'});
       } else {
         buyer.temptoken = false;
         buyer.userConfirmed = true;
@@ -168,7 +175,11 @@ router.post('/resend', (req,res, next) =>
     Buyer.getBuyerbyEmail(email, (err, buyer) => {
     if(err) throw err;
     if(!buyer){
-      return res.json({success: false, msg: 'Buyer not found'});
+      return res.json({success: false, msg: 'User not found.'});
+    }
+    if(buyer.userConfirmed)
+    {
+      return res.json({success: false, msg: 'Acount is Activated.'});
     }
     buyer.confirmationToken = jwt.sign({data: 'buyer'}, config.secret, {
       expiresIn: '24h'});
