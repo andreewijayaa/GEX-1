@@ -8,6 +8,7 @@
     "start": "node app"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
@@ -17,7 +18,10 @@
     "nodemailer": "*",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "*",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "sendgrid": "^5.2.3",
+    "sendgrid-web": "0.0.5",
+    "xmlhttprequest": "^1.8.0"
   },
   "repository": {
     "type": "git",
