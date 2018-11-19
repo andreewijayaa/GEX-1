@@ -113,7 +113,7 @@ router.post('/request', (req, res, next) => {
       title: req.body.title,
       description:req.body.description
     });
-    console.log('before find by id');
+    console.log('buyers id is %s', decoded.data._id);
     Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
       console.log('inside the find by id function');
       if (err) return handleError(err);
@@ -123,7 +123,7 @@ router.post('/request', (req, res, next) => {
           buyer_making_request.buyer_requests_byID.push(post._id);
           buyer_making_request.save((err) =>{
             if (err) { return next(err); }
-            console.log('New Reuqest made tied to Buyer %s', req.body.buyer_ID);
+            console.log('New Reuqest made tied to Buyer %s', buyer_making_request._id);
           });
           res.status(201).json(post);
       });
