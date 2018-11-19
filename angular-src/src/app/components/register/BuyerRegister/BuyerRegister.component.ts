@@ -14,6 +14,7 @@ export class BuyerRegisterComponent implements OnInit {
   last_name: String;
   email: String;
   password: String;
+  confirmPassword: String;
 
   constructor( private validateService: ValidateService,
               private flashMessage: FlashMessagesService,
@@ -36,6 +37,12 @@ export class BuyerRegisterComponent implements OnInit {
       this.flashMessage.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 10000});
       return false;
 
+    }
+
+    // Password Confirmation
+    if (buyer.password != this.confirmPassword) {
+      this.flashMessage.show('Passwords do not match', {cssClass: 'alert-danger', timeout: 10000});
+      return false;
     }
 
     // ValidateEmail

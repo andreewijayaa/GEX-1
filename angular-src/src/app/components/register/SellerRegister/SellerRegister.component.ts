@@ -14,6 +14,7 @@ export class SellerRegisterComponent implements OnInit {
   last_name: String;
   email: String;
   password: String;
+  confirmPassword: String;
 
   constructor( private validateService: ValidateService,
               private flashMessage: FlashMessagesService,
@@ -28,14 +29,19 @@ export class SellerRegisterComponent implements OnInit {
       first_name: this.first_name,
       last_name: this.last_name,
       email: this.email,
-      password: this.password
+      password: this.password,
     };
 
     // RequiredFields
     if (!this.validateService.ValidateBuyerRegister(seller)) {
       this.flashMessage.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 10000});
       return false;
+    }
 
+    // Password Confirmation
+    if (seller.password != this.confirmPassword) {
+      this.flashMessage.show('Passwords do not match', {cssClass: 'alert-danger', timeout: 10000});
+      return false;
     }
 
     // ValidateEmail
