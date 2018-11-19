@@ -7,22 +7,24 @@
 
   <!--<ng-container *ngIf="user == 0; else second">-->
 
-  <label id="userType">Buyer</label>
+  <label id="userType"></label>
 
   <div class="collapse navbar-collapse" id="navbarColor03">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
       </li>
+      <!---
       <li class="nav-item">
           <a class="nav-link" (click)="onLogoutClick()" href="#">Logout</a>
         </li>
+      -->
     </ul>
     <ul class = "logForm">
         <li class="nav-item2">
-            <a class="nav-link" routerLink="/login" routerLinkActive="active">Sign In</a>
+            <a class="nav-link" href="login">Sign In</a>
           </li>
           <li class="nav-item2">
-            <a class="nav-link" routerLink="/BuyerRegister" routerLinkActive="active">Register</a>
+            <a class="nav-link" href="register">Register</a>
           </li>
         </ul>
   </div>
