@@ -1,5 +1,35 @@
 * {box-sizing: border-box}
 
+.navbar-brand {
+  max-height: 30px;
+  max-width: 30%;
+  overflow: visible;
+  padding: 0;
+
+}
+
+.logForm {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
+.nav-item2 {
+
+  float: left;
+  list-style-type: none;
+  font-size: 18px;
+  padding-top: 0;
+
+}
+
+.nav-item2 a:hover {
+  background-color: lightgray;
+}
+
+
 form {
   border: 5px solid #f1f1f1;
   width: 650px;
@@ -13,6 +43,36 @@ form {
 form:hover {
     opacity: 2;
 }
+.navbar-brand{
+  max-height: 30px;
+  max-width: 30%;
+  overflow: visible;
+  padding: 0;
+
+}
+
+.logForm {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
+.nav-item2{
+
+  float: left;
+  list-style-type: none;
+  font-size: 18px;
+  padding-top: 0;
+
+}
+
+.nav-item2 a:hover {
+  background-color: lightgray;
+}
+
+
 /* Add padding to containers */
 .container {
   padding: 16px;
