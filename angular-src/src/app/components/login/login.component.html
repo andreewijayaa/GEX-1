@@ -1,4 +1,4 @@
-
+<app-navbar></app-navbar>
 
   <form (submit)="onLoginSubmit()" class="col-md-4 col-md-offset-4">
     <div class="imgcontainer">
@@ -20,12 +20,12 @@
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
-      <button type="button" class="cancelbtn">Cancel</button>
-      <span class="psw">Forgot <a href="#">password?</a></span>
+      <button type="button" class="cancelbtn" routerLink="" routerLinkActive="active">Cancel</button>
+      <span class="psw"><a href="#">Forgot password?</a></span>
     </div>
 
     <div class="container signin">
-        <p>Are you a seller? <a href="/sellerLogin">Sign in here</a>.</p>
+        <p>Are you a seller? <a routerLink="/sellerLogin" routerLinkActive="active">Sign in here</a>.</p>
       </div>
   </form>
 

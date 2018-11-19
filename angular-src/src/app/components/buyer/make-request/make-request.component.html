@@ -1,31 +1,35 @@
+<app-buyer-navbar></app-buyer-navbar>
+
+  <br>
+  <br>
+<div class="container">
 <h1>Submit Product Request</h1>
 &nbsp;
 <div class="card">
   <div class="card-body">
-    <form>
+    <form (submit)="onRequestSubmit()">
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Request Title:</label>
         <div class="col-sm-10">
-          <input class="form-control mr-sm-2" type="text" name="request-title" value="">
+          <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="">
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Request Category:</label>
         <div class="col-sm-10">
-          <input class="form-control mr-sm-2" type="text" name="request-category" value="">
+          <input class="form-control mr-sm-2" type="text" name="category" value="">
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Enter description of desired product:</label>
         <div class="col-sm-10">
-          <textarea class="form-control" name="desc" rows="8" cols="80"></textarea>
+          <textarea class="form-control" [(ngModel)]="description" name="description" rows="8" cols="80"></textarea>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Set offer deadline:</label>
         <div class="row col-sm-10">
-            <input class="form-control col-sm-3" type="date" name="deadline-date">
-            <input class="form-control col-sm-3" type="time" name="deadline-time">
+            <input class="form-control col-sm-3" type="date" [(ngModel)]="deadline" name="deadline">
         </div>
       </div>
       <div class="form-group row">
@@ -36,3 +40,75 @@
     </form>
   </div>
 </div>
+</div>
+<!--
+<html>
+ <head>
+  <title>Webslesson Tutorial | Search HTML Table Data by using JQuery</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+  #result {
+   position: absolute;
+   width: 100%;
+   max-width:870px;
+   cursor: pointer;
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+  </style>
+ </head>
+ <body>
+  <br /><br />
+  <div class="container" style="width:900px;">
+   <h2 align="center">JSON Live Data Search using Ajax JQuery</h2>
+   <h3 align="center">Employee Data</h3>
+   <br /><br />
+   <div align="center">
+    <input type="text" name="search" id="search" placeholder="Search Employee Details" class="form-control" />
+   </div>
+   <ul class="list-group" id="result"></ul>
+   <br />
+  </div>
+ </body>
+</html>
+<script>
+
+$(document).ready(function(){
+  const Http = new XMLHttpRequest();
+  const url='http://localhost:3000/codes/getCodes';
+  Http.open("GET", url);
+  Http.send();
+  Http.onreadystatechange=(e)=>{
+    console.log(Http.responseText)
+ $.ajaxSetup({ cache: false });
+ $('#search').keyup(function(){
+  $('#result').html('');
+  $('#state').val('');
+  var searchField = $('#search').val();
+  var expression = new RegExp(searchField, "i");
+  var file = Http.responseText;
+  $.getJSON('file', function(data) {
+   $.each(data, function(key, value){
+    if (value.code_description.search(expression) != -1)
+    {
+     $('#result').append('<li class="list-group-item link-class">'+value.code_description+' | <span class="text-muted">'+value.code_number+'</span></li>');
+    }
+   });
+  });
+ });
+}
+ $('#result').on('click', 'li', function() {
+  var click_text = $(this).text().split('|');
+  $('#search').val($.trim(click_text[0]));
+  $("#result").html('');
+ });
+});
+</script>
+-->

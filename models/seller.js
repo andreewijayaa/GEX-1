@@ -4,6 +4,10 @@ const config = require('../config/database');
 
 //Seller Schema
 const SellerSchema = mongoose.Schema({
+    account_type:{
+      type: Number,
+      default: 1
+    },
     first_name: {
         type: String,
         required: true
@@ -20,7 +24,12 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    codes: [Number]
+    codes: {
+      type: [Number]
+    },
+    seller_offers_byID: {
+      type: [String]
+    }
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);

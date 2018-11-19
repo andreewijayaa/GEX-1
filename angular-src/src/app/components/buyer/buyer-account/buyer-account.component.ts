@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {BuyerService} from '../../../services/buyer.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-buyer-account',
@@ -6,10 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./buyer-account.component.css']
 })
 export class BuyerAccountComponent implements OnInit {
+  buyer:Object;
 
-  constructor() { }
+  constructor(private buyerService:BuyerService, private router:Router) { }
 
   ngOnInit() {
+    this.buyerService.getBuyerProfile().subscribe(profile => {
+      this.buyer = profile["buyer"];
+    },
+  err => {
+    console.log(err);
+    return false;
+  });
+
   }
 
 }
