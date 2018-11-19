@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { ConditionFunc } from 'rxjs/internal/observable/generate';
 import { Config } from 'protractor';
-import { InputType } from 'zlib';
 
 @Component({
   selector: 'app-navbar',
