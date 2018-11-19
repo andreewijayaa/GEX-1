@@ -25,9 +25,10 @@ import { StoreFetchService } from './services/storeFetch.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SellerNavbarComponent } from './components/navbar/seller-navbar/seller-navbar.component';
 import { BuyerNavbarComponent } from './components/navbar/buyer-navbar/buyer-navbar.component';
-import { RegisterComponent } from './components/register/register.component'
+import { RegisterComponent } from './components/register/register.component';
 import { PreactivationComponent } from './components/activation/preactivation/preactivation.component';
 import { PostactivationComponent } from './components/activation/postactivation/postactivation.component';
+import { SellerService } from './services/seller.service';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -75,7 +76,7 @@ const appRoutes: Routes = [
     FlashMessagesModule.forRoot(),
     HttpClientModule
   ],
-  providers: [ValidateService, RegisterService, AuthService, StoreFetchService],
+  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService],
   bootstrap: [AppComponent]
 
 })
