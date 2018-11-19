@@ -10,14 +10,6 @@ const RequestSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  buyer_first_name:{
-    type: String,
-    required: true
-  },
-  buyer_last_name:{
-    type: String,
-    required: true
-  },
   title:{
     type:String,
     required: true
