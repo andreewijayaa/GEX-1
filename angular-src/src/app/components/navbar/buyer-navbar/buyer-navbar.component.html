@@ -1,0 +1,39 @@
+<!---Buyer NavBar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><img src="assets\gexLogo.png" style="max-width: 150px; margin-top: -14px;" class="img-responsive"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!--<ng-container *ngIf="user == 0; else second">-->
+
+  <label id="userType">Buyer</label>
+
+  <div class="collapse navbar-collapse" id="navbarColor03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+      </li>
+      <!---
+        <li class="nav-item">
+          <a class="nav-link" (click)="onLogoutClick()" href="#">Logout</a>
+        </li>
+      -->
+    </ul>
+    <ul class="logForm">
+      <li class="nav-item2">
+        <a class="nav-link" href="buyer/make-request">Submit Request</a>
+      </li>
+      <li class="nav-item2">
+        <a class="nav-link" href="buyer">My Portal</a>
+      </li>
+      <li class="nav-item2">
+        <a class="nav-link" href="buyer/buyer-account">My Account</a>
+      </li>
+      <li class="nav-item2">
+        <a class="nav-link" (click)="onLogoutClick()" href="#">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!---------->
