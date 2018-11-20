@@ -19,7 +19,7 @@ export class BuyerComponent implements OnInit {
   ngOnInit() {
     this.storeFetchService.getBuyerProfile().subscribe((profile: any) => {
       this.buyer = profile.data;
-      console.log(profile.data.account_type);
+      //console.log(profile.data.account_type);
     },
       err => {
         console.log(err);
