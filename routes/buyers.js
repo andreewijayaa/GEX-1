@@ -57,6 +57,7 @@ router.post('/login', (req, res, next) => {
       if(!buyer){
         return res.json({success: false, msg: 'Buyer not found'});
       }
+      //Check email verification
       if(!buyer.userConfirmed)
       {
         return res.json({success: false, msg: 'Please Activate your account first.'});
