@@ -29,7 +29,16 @@ const SellerSchema = mongoose.Schema({
     },
     seller_offers_byID: {
       type: [String]
-    }
+    },
+    userConfirmed: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    confirmationToken: {
+        type: String,
+        required: true
+    },
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
