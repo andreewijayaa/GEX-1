@@ -11,7 +11,7 @@ export class SellerService {
 
   constructor(private http: HttpClient) { }
 
-  // Get Buyer Profile Service
+  // Get Seller Profile Service
   getSellerProfile() {
     this.loadToken();
     const httpOptions = {
