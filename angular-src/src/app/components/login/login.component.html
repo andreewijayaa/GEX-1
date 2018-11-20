@@ -13,7 +13,7 @@
       <label for="password"><b>Password</b></label>
       <input type="password" class="form-control" [(ngModel)]="password" placeholder="Enter Password" name="password" required>
 
-      <button type="submit">Login</button>
+      <a routerLink="/buyer"><button type="submit">Login</button></a>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -25,7 +25,7 @@
     </div>
 
     <div class="container signin">
-        <p>Are you a seller? <a routerLink="/sellerLogin" routerLinkActive="active">Sign in here</a>.</p>
+        <p>Are you a seller? <a routerLink="/seller-login" routerLinkActive="active">Sign in here</a>.</p>
       </div>
   </form>
 
