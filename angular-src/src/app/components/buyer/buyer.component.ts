@@ -25,21 +25,26 @@ export class BuyerComponent implements OnInit {
         console.log(err);
         return false;
       });
-      // const currentTab = 'requests';
+    */
 
-      // requests(currentTab) {
-      //   this.currentTab = currentTab;
-      // }
-    
-      // history(currentTab) {
-      //   this.currentTab = currentTab;
-      // }
-      */
+
+
+
     console.log("hew");
     setTimeout(() => {
       this.refreshBuyer()
     }, 500);
   }
+
+  currentTab = 'requests';
+
+   requests(currentTab) {
+     this.currentTab = currentTab;
+   }
+
+   history(currentTab) {
+     this.currentTab = currentTab;
+   }
 
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
