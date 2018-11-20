@@ -66,7 +66,7 @@ router.post('/login', (req, res, next) => {
         return res.json({success: false, msg: 'Seller not found'});
       }
       //Check email verification
-      if(!buyer.userConfirmed)
+      if(!seller.userConfirmed)
       {
         return res.json({success: false, msg: 'Please Activate your account first.'});
       }
@@ -121,7 +121,7 @@ router.get('/view', (req, res) => {
   jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
 
-      Request.findOne( {'code':decoded.data.codes}, (err, requests) => {
+      Request.find( {'code':decoded.data.codes[1]}, (err, requests) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
       })
