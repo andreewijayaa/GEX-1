@@ -3,7 +3,6 @@ import { RegisterService } from '../../services/register.service';
 import { BuyerService } from '../../services/buyer.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-buyer',
   templateUrl: './buyer.component.html',
@@ -17,10 +16,10 @@ export class BuyerComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    console.log(this.buyerService.getBuyerProfile());
+    /*console.log(this.buyerService.getBuyerProfile());
     this.buyerService.getBuyerProfile().subscribe((profile: any) => {
       this.buyer = profile.data;
-      console.log(profile.data.account_type);
+      //console.log(profile.data.account_type);
     },
       err => {
         console.log(err);
@@ -35,8 +34,23 @@ export class BuyerComponent implements OnInit {
       // history(currentTab) {
       //   this.currentTab = currentTab;
       // }
-
+      */
+    console.log("hew");
+    setTimeout(() => {
+      this.refreshBuyer()
+    }, 500);
   }
+
+  refreshBuyer() {
+    this.buyer = JSON.parse(localStorage.getItem('buyer'));
+    if (this.buyer == null) {
+      window.location.reload();
+    }
+    else {
+      console.log(this.buyer);
+    }
+  }
+
 
 
 

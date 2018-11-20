@@ -46,6 +46,7 @@ export class StoreFetchService {
     localStorage.setItem('buyer', JSON.stringify(buyer)); // can only store stings not objects
     this.RegisterToken = token;
     this.buyer = buyer;
+    console.log("here");
   }
 
   // Store Seller Data Locally Service
