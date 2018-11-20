@@ -41,47 +41,10 @@
             <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword" required>
         </div>
         <p class="text-danger" id="errorMessage" hidden>Password did not match!</p>
-        <button type="button" class="btn editBtn btn-lg" id="editBtn" onClick="editFunction()">Edit</button>
-        <button type="button" class="btn saveBtn btn-lg" id="saveBtn" onClick="saveFunction()" disabled=true>Save</button>
+        <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
+        <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
       </form>
 
     </div>
   </div>
 </div>
-
-<script>
-    function editFunction() {
-        document.getElementById("fName").disabled = false;
-        document.getElementById("lName").disabled = false;
-        document.getElementById("eAddress").disabled = false;
-        document.getElementById("saveBtn").disabled = false;
-        document.getElementById("editBtn").disabled = true;
-        document.getElementById("verify").hidden = false;
-        document.getElementById("newPass").hidden = false;
-    }
-
-    function saveFunction() {
-      if((document.getElementById("newPwd").value === document.getElementById("verifyPwd").value) && (document.getElementById("verifyPwd").value != ""))
-      {
-        document.getElementById("pwd").value = document.getElementById("newPwd").value;
-        document.getElementById("fName").disabled = true;
-        document.getElementById("lName").disabled = true;
-        document.getElementById("eAddress").disabled = true;
-        document.getElementById("pwd").disabled = true;
-        document.getElementById("saveBtn").disabled = true;
-        document.getElementById("editBtn").disabled = false;
-        document.getElementById("verify").hidden = true;
-        document.getElementById("newPass").hidden = true;
-        document.getElementById("newPwd").value = "";
-        document.getElementById("verifyPwd").value = "";
-        document.getElementById("errorMessage").hidden = true;
-        document.getElementById("verifyPwd").style.backgroundColor = "White";
-        document.getElementById("newPwd").style.backgroundColor = "White";
-      }
-      else{
-        document.getElementById("errorMessage").hidden = false;
-        document.getElementById("verifyPwd").style.backgroundColor = "Red";
-        document.getElementById("newPwd").style.backgroundColor = "Red";
-      }
-    }
-</script>

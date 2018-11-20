@@ -20,5 +20,22 @@ export class BuyerAccountComponent implements OnInit {
         console.log(err);
         return false;
       });
+      console.log("hew");
+      setTimeout(() => {
+        this.refreshBuyer()
+      }, 500);
   }
+<<<<<<< HEAD
 }
+=======
+
+  refreshBuyer() {
+      this.buyer = JSON.parse(localStorage.getItem('buyer'));
+      if (this.buyer == null) {
+        window.location.reload();
+      }
+      else {
+        console.log(this.buyer);
+      }
+  }
+>>>>>>> upstream/master
