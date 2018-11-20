@@ -124,10 +124,32 @@ router.get('/view', (req, res) => {
       Request.find( {'code':decoded.data.codes[1]}, (err, requests) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
-      })
+      });
 
-     });
-  });
+    });
+});
+
+//route to view offers that a seller has made
+router.get('/viewoffers', (req,res) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view offers.' });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      Seller.findById(decoded.data._id, (err, seller_viewing_offers) => {
+        if (seller_viewing_offers.seller_offers_byID != []){
+          Offer.find({'seller_ID':decoded.data._id} , (err,offers) =>{
+            if (err) return res.status(500).send({ success: false, message: 'Could not find offers with ID' });
+            res.status(200).send(offers);
+          });
+        }
+        else{
+          res.status(500).send({scuees: false, message: 'There are no offers to view'});
+        }
+      });
+    });
+});
 
   router.post('/makeOffer', (req,res,next) =>{
     var token = req.headers['x-access-token'];
@@ -152,14 +174,14 @@ router.get('/view', (req, res) => {
             seller_making_offer.seller_offers_byID.push(post._id);
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
-              //console.log('New Offer made tied to Seller %s', decoded.data._id);
+              console.log('New Offer made tied to Seller %s', decoded.data._id);
               Request.findById(req.body.request_ID, (err, request_with_offer) => {
                 if (err) return handleError(err);
-                //console.log('Found request\n' + request_with_offer);
+                console.log('Found request\n' + request_with_offer);
                 request_with_offer.request_offers_byID.push(post._id);
                 request_with_offer.save((err) =>{
                   if (err){return next(err);}
-                  //console.log('New Offer made tied to Request %s ', request_with_offer._id);
+                  console.log('New Offer made tied to Request %s ', request_with_offer._id);
                 });
               });
             });
