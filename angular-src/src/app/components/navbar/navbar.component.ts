@@ -12,27 +12,14 @@ import { Config } from 'protractor';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  buyer: Object;
-  seller: Object;
-  user: Number;
 
   constructor(private registerService: RegisterService,
     private storeFetchService: StoreFetchService,
     private router: Router,
-    private flashMessage: FlashMessagesService) {
-      this.user = this.storeFetchService.user;
-      console.log(this.user);
-    }
+    private flashMessage: FlashMessagesService) { }
+    
 
   ngOnInit() {
   }
 
-  onLogoutClick() {
-    this.storeFetchService.userLogout();
-    this.flashMessage.show('You are logged out', {
-      cssClass: 'alert-success',
-      timeout: 3000
-    });
-    return false;
-  }
 }

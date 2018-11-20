@@ -28,4 +28,9 @@ export class SellerService {
     const token = localStorage.getItem('id_token');
     this.sellerToken = token;
   }
+
+  sellerLogout() {
+    this.sellerToken = null;
+    this.seller = null;
+  }
 }
