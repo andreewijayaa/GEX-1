@@ -21,30 +21,32 @@ export class StoreFetchService {
       localStorage.clear();
     }
 
+
+
+//   getBuyerProfile() {
+//     this.loadUserToken();
+//     const httpOptions = {
+//       headers: new HttpHeaders({
+//         'Content-Type':  'application/json',
+//         'x-access-token': this.RegisterToken
+//       })
+//     };
+//     return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
+//     .pipe(map(res => res));
+// }
+
+  // Fetches the Buyer token from local storage to use with getBuyerToken()
+  loadUserToken() {
+    const token = localStorage.getItem('id_token');
+    this.RegisterToken = token;
+  }
   // Store Buyer Data Locally Service
   storeBuyerData(token, buyer) {
     localStorage.setItem('id_token', token);
     localStorage.setItem('buyer', JSON.stringify(buyer)); // can only store stings not objects
     this.RegisterToken = token;
     this.buyer = buyer;
-  }
-
-  getBuyerProfile() {
-    this.loadUserToken();
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'x-access-token': this.RegisterToken
-      })
-    };
-    return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
-    .pipe(map(res => res));
-}
-
-  // Fetches the Buyer token from local storage to use with getBuyerToken()
-  loadUserToken() {
-    const token = localStorage.getItem('id_token');
-    this.RegisterToken = token;
+    console.log("here");
   }
 
   // Store Seller Data Locally Service

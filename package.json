@@ -5,10 +5,19 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app"
+    "start": "node app",
+    "styles": [
+      "src/styles.css",
+      "./node_modules/bootstrap/dist/css/bootstrap.min.css"
+    ],
+    "scripts": [
+      "./node_modules/jquery/dist/jquery.min.js",
+      "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+    ]
   },
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
+    "@types/jquery": "^3.3.22",
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",

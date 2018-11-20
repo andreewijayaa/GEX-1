@@ -33,10 +33,10 @@ import { SellerService } from './services/seller.service';
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'BuyerRegister', component: BuyerRegisterComponent},
-  {path: 'SellerRegister', component: SellerRegisterComponent},
+  {path: 'buyer-register', component: BuyerRegisterComponent},
+  {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'sellerLogin', component: SellerLoginComponent},
+  {path: 'seller-login', component: SellerLoginComponent},
   {path: 'buyer', component: BuyerComponent},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},

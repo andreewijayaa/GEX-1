@@ -30,7 +30,7 @@ export class SellerLoginComponent implements OnInit {
     const seller = {
       email: this.email,
       password: this.password
-    }
+    };
 
     var userType = "Seller";
 

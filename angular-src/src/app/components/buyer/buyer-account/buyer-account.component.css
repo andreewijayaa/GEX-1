@@ -1,0 +1,28 @@
+.submitBtn{
+    margin-top: 0px;
+    margin-left: 923px;
+    position: absolute;
+    background-color: #e60000;
+    border-color: black;
+    border-width: 0.5px;
+  }
+  .dropDownBtn{
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 982px;
+  }
+  .dDownBtn{
+    background-color: #0066ff;
+    border-color: black;
+    border-width: 0.5px;
+  }
+  .submitSearchBtn{
+    background-color: #e60000;
+    border-color: black;
+    border-width: 0.5px;
+  }
+  .searchBox{
+    position: absolute;
+    margin-top: 60px;
+    width: 1080px;
+  }
