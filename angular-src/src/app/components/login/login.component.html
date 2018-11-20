@@ -14,7 +14,7 @@
       <label for="password"><b>Password</b></label>
       <input type="password" class="form-control" [(ngModel)]="password" placeholder="Enter Password" name="password" required>
 
-      <a routerLink="/buyer"><button type="submit">Login</button></a>
+      <a routerLink="/buyer" (click)="onLoginSubmit()"><button type="submit">Login</button></a>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
