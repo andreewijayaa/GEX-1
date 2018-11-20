@@ -37,4 +37,8 @@ export class RegisterService {
     return this.http.post('http://localhost:3000/buyers/confirmEmail/' + token, token)
       .pipe(map(res => res));
   }
+  selleractivateAccount(token) {
+    return this.http.post('http://localhost:3000/sellers/confirmEmail/' + token, token)
+      .pipe(map(res => res));
+  }
 }

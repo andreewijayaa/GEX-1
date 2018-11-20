@@ -23,6 +23,7 @@ export class BuyerNavbarComponent implements OnInit {
       cssClass: 'alert-success',
       timeout: 3000
     });
+    this.router.navigate[''];
     return false;
   }
 }

@@ -25,7 +25,7 @@ module.exports.sendVerificationEmail = function(user, callback){
             console.log(error);
           }
           else {
-            console.log('Message sent to: ' + user.email + '\nwith token : ' + user.confirmationToken);
+            //console.log('Message sent to: ' + user.email + '\nwith token : ' + user.confirmationToken);
           }
       });
 }
@@ -44,7 +44,7 @@ module.exports.emailVerified = function(user, callback){
             console.log(error);
           }
           else {
-            console.log('Message sent to: ' + user.email);
+            //console.log('Message sent to: ' + user.email);
           }
       });
 }

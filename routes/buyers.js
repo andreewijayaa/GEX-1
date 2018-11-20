@@ -57,6 +57,7 @@ router.post('/login', (req, res, next) => {
       if(!buyer){
         return res.json({success: false, msg: 'Buyer not found'});
       }
+      //Check email verification
       if(!buyer.userConfirmed)
       {
         return res.json({success: false, msg: 'Please Activate your account first.'});
@@ -159,8 +160,8 @@ router.post('/confirmEmail/:token', (req, res, next) => {
           {
             console.log(err);
           } else {
-              //If account Registred Send Email for Email Verification
-          sendEmail.emailVerified(buyer);
+            //If account Registred Send Email for Email Verification
+            sendEmail.emailVerified(buyer);
           }
         })
         res.json({success:true, msg:'Account Activated.'})
@@ -176,12 +177,11 @@ router.post('/resend', (req,res, next) =>
 
     Buyer.getBuyerbyEmail(email, (err, buyer) => {
     if(err) throw err;
-    if(!buyer){
+    if(!buyer) {
       return res.json({success: false, msg: 'User not found.'});
     }
-    if(buyer.userConfirmed)
-    {
-      return res.json({success: false, msg: 'Acount is Activated.'});
+    if(buyer.userConfirmed) {
+      return res.json({success: false, msg: 'Acount is already Activated.'});
     }
     buyer.confirmationToken = jwt.sign({data: 'buyer'}, config.secret, {
       expiresIn: '24h'});
@@ -190,7 +190,7 @@ router.post('/resend', (req,res, next) =>
       {
         console.log(err);
       } else {
-          //If account Registred Send Email for Email Verification
+        // If account Registred Send Email for Email Verification
         sendEmail.sendVerificationEmail(buyer);
       }
     });

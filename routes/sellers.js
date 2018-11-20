@@ -6,7 +6,7 @@ const config = require('../config/database');
 const Seller = require('../models/seller');
 const Request = require('../models/request');
 const Offer = require('../models/offer');
-
+const sendEmail = require('../models/sendEmail');
 //Register
 router.post('/register',(req,res,next) => {
 
@@ -16,7 +16,9 @@ router.post('/register',(req,res,next) => {
         last_name: req.body.last_name,
         email: req.body.email,
         password: req.body.password,
-        codes: req.body.codes
+        codes: req.body.codes,
+        confirmationToken: jwt.sign({data: 'seller'}, config.secret, {
+          expiresIn: '24h'}) // 1 day
     });
     //code for detecting seller with same email by John
     Seller.findOne({email: req.body.email}, (err, foundSeller) => {
@@ -36,6 +38,7 @@ router.post('/register',(req,res,next) => {
                   res.json({success: false, msg:"Failed to register Seller!"})
               }
               else {
+                  sendEmail.sendVerificationEmail(seller);
                   res.json({success: true, msg:"Seller Registered!"})
               }
           });
@@ -61,6 +64,11 @@ router.post('/login', (req, res, next) => {
 
       if(!seller){
         return res.json({success: false, msg: 'Seller not found'});
+      }
+      //Check email verification
+      if(!buyer.userConfirmed)
+      {
+        return res.json({success: false, msg: 'Please Activate your account first.'});
       }
     //check password
       Seller.comparePassword(password, seller.password, (err, isMatch) => {
@@ -189,5 +197,66 @@ router.post('/addCode', (req, res) => {
       });
   });
 });
+
+//Email Verification
+router.post('/confirmEmail/:token', (req, res, next) => {
+  console.log(req.params.token);
+  Seller.findOne({confirmationToken: req.params.token}, (err, seller) => {
+    if(err) throw err;
+    var token = req.params.token;
+
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if(err)
+      {
+        res.json({success:false, msg: 'Activation link has expired.'});
+
+      } else if (!seller) {
+        res.json({success:false, msg: 'Activation link has expired.'});
+      } else if (seller.userConfirmed) {
+        res.json({success:false, msg: 'Acount already activated!'});
+      } else {
+        seller.temptoken = false;
+        seller.userConfirmed = true;
+        seller.save((err) => {
+          if(err)
+          {
+            console.log(err);
+          } else {
+            //If account Registred Send Email for Email Verification
+            sendEmail.emailVerified(seller);
+          }
+        })
+        res.json({success:true, msg:'Account Activated.'})
+      }
+    })
+  });
+})
+
+// Resend Email Verification --NOT TESTED YET
+router.post('/resend', (req,res, next) =>
+{
+  const email = req.body.email;
+
+    Seller.getSellerbyEmail(email, (err, seller) => {
+    if(err) throw err;
+    if(!seller) {
+      return res.json({success: false, msg: 'User not found.'});
+    }
+    if(seller.userConfirmed) {
+      return res.json({success: false, msg: 'Acount is already Activated.'});
+    }
+    seller.confirmationToken = jwt.sign({data: 'seller'}, config.secret, {
+      expiresIn: '24h'});
+    seller.save((err) => {
+      if(err)
+      {
+        console.log(err);
+      } else {
+        // If account Registred Send Email for Email Verification
+        sendEmail.sendVerificationEmail(seller);
+      }
+    });
+  });
+})
 
 module.exports = router;
