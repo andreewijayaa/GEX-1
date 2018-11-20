@@ -16,7 +16,8 @@ router.post('/register',(req,res,next) => {
         last_name: req.body.last_name,
         email: req.body.email,
         password: req.body.password,
-        codes: req.body.codes
+        codes: req.body.codes,
+        confirmationToken
     });
     //code for detecting seller with same email by John
     Seller.findOne({email: req.body.email}, (err, foundSeller) => {
@@ -189,5 +190,66 @@ router.post('/addCode', (req, res) => {
       });
   });
 });
+
+//Email Verification
+router.post('/confirmEmail/:token', (req, res, next) => {
+  console.log(req.params.token);
+  Seller.findOne({confirmationToken: req.params.token}, (err, buyer) => {
+    if(err) throw err;
+    var token = req.params.token;
+
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if(err)
+      {
+        res.json({success:false, msg: 'Activation link has expired.'});
+
+      } else if (!buyer) {
+        res.json({success:false, msg: 'Activation link has expired.'});
+      } else if (buyer.userConfirmed) {
+        res.json({success:false, msg: 'Acount already activated!'});
+      } else {
+        buyer.temptoken = false;
+        buyer.userConfirmed = true;
+        buyer.save((err) => {
+          if(err)
+          {
+            console.log(err);
+          } else {
+            //If account Registred Send Email for Email Verification
+            sendEmail.emailVerified(buyer);
+          }
+        })
+        res.json({success:true, msg:'Account Activated.'})
+      }
+    })
+  });
+})
+
+// Resend Email Verification --NOT TESTED YET
+router.post('/resend', (req,res, next) =>
+{
+  const email = req.body.email;
+
+    Buyer.getBuyerbyEmail(email, (err, buyer) => {
+    if(err) throw err;
+    if(!buyer) {
+      return res.json({success: false, msg: 'User not found.'});
+    }
+    if(buyer.userConfirmed) {
+      return res.json({success: false, msg: 'Acount is already Activated.'});
+    }
+    buyer.confirmationToken = jwt.sign({data: 'buyer'}, config.secret, {
+      expiresIn: '24h'});
+    buyer.save((err) => {
+      if(err)
+      {
+        console.log(err);
+      } else {
+        // If account Registred Send Email for Email Verification
+        sendEmail.sendVerificationEmail(buyer);
+      }
+    });
+  });
+})
 
 module.exports = router;
