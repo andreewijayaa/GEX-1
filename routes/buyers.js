@@ -104,29 +104,31 @@ router.post('/request', (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message:'Must login to create request.' });
 
-  var request = new Request({
-    buyer_ID: req.body.buyer_ID,
-    code: req.body.code,
-    buyer_first_name: req.body.buyer_first_name,
-    buyer_last_name: req.body.buyer_last_name,
-    title: req.body.title,
-    description:req.body.description
-  });
-  //console.log('before find by id');
-  Buyer.findById(req.body.buyer_ID, (err, buyer_making_request) => {
-    //console.log('inside the find by id function');
-    if (err) return handleError(err);
-    request.save( (err,post) => {
-        if (err) { return next(err); }
-        //console.log('inside save function');
-        buyer_making_request.buyer_requests_byID.push(post._id);
-        buyer_making_request.save((err) =>{
-          if (err) { return next(err); }
-          console.log('New Reuqest made tied to Buyer %s', req.body.buyer_ID);
-        });
-        res.status(201).json(post);
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+    delete decoded.data.password;
+    var request = new Request({
+      buyer_ID: decoded.data._id,
+      code: req.body.code,
+      title: req.body.title,
+      description:req.body.description
     });
-  });
+    console.log('buyers id is %s', decoded.data._id);
+    Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
+      console.log('inside the find by id function');
+      if (err) return handleError(err);
+      request.save( (err,post) => {
+          if (err) { return next(err); }
+          //console.log('inside save function');
+          buyer_making_request.buyer_requests_byID.push(post._id);
+          buyer_making_request.save((err) =>{
+            if (err) { return next(err); }
+            console.log('New Reuqest made tied to Buyer %s', buyer_making_request._id);
+          });
+          res.status(201).json(post);
+      });
+    });
+});
   /*request.save( (err,post) => {
       if (err) { return next(err); }
       res.status(201).json(post);
@@ -196,5 +198,3 @@ router.post('/resend', (req,res, next) =>
 })
 
 module.exports = router;
-
-

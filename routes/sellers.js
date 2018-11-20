@@ -102,7 +102,7 @@ router.get('/profile', (req, res) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       delete decoded.data.password;
       res.status(200).send(decoded);
-     });
+     });  
   });
 // View request
 router.get('/view', (req, res) => {
@@ -121,44 +121,73 @@ router.get('/view', (req, res) => {
      });
   });
 
-  router.post('/makeOffer', (req,res) =>{
+  router.post('/makeOffer', (req,res,next) =>{
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
 
-    let newOffer = new Offer({
-      seller_first_name:req.body.seller_first_name,
-      seller_last_name:req.body.seller_last_name,
-      seller_ID:req.body.seller_ID,
-      code:req.body.code,
-      request_ID:req.body.request_ID
-    });
-
-    Seller.findById(req.body.seller_ID, (err, seller_making_offer) => {
-      if (err) return handleError(err);
-      newOffer.save( (err,post) => {
-          if (err) { return next(err); }
-          seller_making_offer.seller_offers_byID.push(post._id);
-          seller_making_offer.save((err) =>{
-            if (err) { return next(err); }
-            console.log('New Offer made tied to Seller %s', req.body.seller_ID);
-            Request.findById(req.body.request_ID, (err, request_with_offer) => {
-              if (err) return handleError(err);
-              request_with_offer.request_offers_byID.push(post._id);
-              request_with_offer.save((err) =>{
-                if (err){return next(err);}
-                console.log('New Offer made tied to Request %s ', request_with_offer._id);
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) return res.status(500).send({success: false, message: 'Failed to authenticate token.'});
+      delete decoded.data.password;
+      let newOffer = new Offer({
+        seller_ID:decoded.data._id,
+        code:req.body.code,
+        request_ID:req.body.request_ID,
+        title:req.body.title,
+        description:req.body.description,
+        price:req.body.price
+      });
+      //console.log('created the offer with no problems \n' + newOffer);
+      Seller.findById(decoded.data._id, (err, seller_making_offer) => {
+        if (err) return handleError(err);
+        newOffer.save( (err,post) => {
+            if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
+            seller_making_offer.seller_offers_byID.push(post._id);
+            seller_making_offer.save((err) =>{
+              if (err) { return next(err); }
+              //console.log('New Offer made tied to Seller %s', decoded.data._id);
+              Request.findById(req.body.request_ID, (err, request_with_offer) => {
+                if (err) return handleError(err);
+                //console.log('Found request\n' + request_with_offer);
+                request_with_offer.request_offers_byID.push(post._id);
+                request_with_offer.save((err) =>{
+                  if (err){return next(err);}
+                  //console.log('New Offer made tied to Request %s ', request_with_offer._id);
+                });
               });
             });
-          });
-          res.status(201).json(post);
+            res.status(201).json(post);
+        });
       });
-    });
 
     /*newOffer.save( (err,post) => {
         if (err) { return next(err); }
         res.status(201).json(post);
     });*/
-
   });
+});
+
+router.post('/addCode', (req, res) => {
+  var token = req.headers['x-access-token'];
+
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      delete decoded.data.password;
+      if (req.body.codes == null){
+        return res.status(500).send({ success: false, message: "Code is null"});
+      }
+      Seller.findById(decoded.data._id, (err, seller_adding_codes) => {
+        if (err) return handleError(err);
+        seller_adding_codes.codes.push(req.body.codes);
+        seller_adding_codes.save((err) =>{
+          if (err) { return next(err); }
+          res.json({success: true, msg:"Succesfully added code to account!"});
+        });
+      });
+  });
+});
 
 module.exports = router;
