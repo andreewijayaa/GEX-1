@@ -102,7 +102,7 @@ router.get('/profile', (req, res) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       delete decoded.data.password;
       res.status(200).send(decoded);
-     });
+     });  
   });
 // View request
 router.get('/view', (req, res) => {
