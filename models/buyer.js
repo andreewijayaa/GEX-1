@@ -23,6 +23,18 @@ const BuyerSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    userConfirmed: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    confirmationToken: {
+        type: String,
+        required: true
+    },
+    buyer_requests_byID: {
+      type : [String]
     }
 });
 

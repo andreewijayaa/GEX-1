@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Buyer = require('../models/buyer');
 const Request = require('../models/request');
+const sendEmail = require('../models/sendEmail');
 
 //Register
 router.post('/register',(req,res/*,next*/) => {
@@ -13,6 +14,8 @@ router.post('/register',(req,res/*,next*/) => {
       last_name: req.body.last_name,
       email: req.body.email,
       password: req.body.password,
+      confirmationToken: jwt.sign({data: 'buyer'}, config.secret, {
+        expiresIn: '24h'}) // 1 day
   });
   //code for detecting registering buyer with the same email. By John
   Buyer.findOne({email: req.body.email}, (err, foundBuyer) => {
@@ -30,7 +33,8 @@ router.post('/register',(req,res/*,next*/) => {
                 res.json({success: false, msg:"Failed to register Buyer!"})
             }
             else {
-                res.json({success: true, msg:"Buyer Registered!"})
+              sendEmail.sendVerificationEmail(buyer);
+              res.json({success: true, msg:"Buyer Registered!"})
             }
         });
       }
@@ -42,6 +46,7 @@ router.post('/register',(req,res/*,next*/) => {
   })
 });
 
+
 //Authenticate
 router.post('/login', (req, res, next) => {
     const email = req.body.email;
@@ -51,6 +56,10 @@ router.post('/login', (req, res, next) => {
       if(err) throw err;
       if(!buyer){
         return res.json({success: false, msg: 'Buyer not found'});
+      }
+      if(!buyer.userConfirmed)
+      {
+        return res.json({success: false, msg: 'Please Activate your account first.'});
       }
 
       Buyer.comparePassword(password, buyer.password, (err, isMatch) => {
@@ -95,18 +104,96 @@ router.post('/request', (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message:'Must login to create request.' });
 
-  var request = new Request({
-    buyer_ID: req.body.buyer_ID,
-    code: req.body.code,
-    buyer_first_name: req.body.buyer_first_name,
-    buyer_last_name: req.body.buyer_last_name,
-    title: req.body.title,
-    description:req.body.description
-  });
-
-  request.save( (err,post) => {
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+    delete decoded.data.password;
+    var request = new Request({
+      buyer_ID: decoded.data._id,
+      code: req.body.code,
+      title: req.body.title,
+      description:req.body.description
+    });
+    console.log('buyers id is %s', decoded.data._id);
+    Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
+      console.log('inside the find by id function');
+      if (err) return handleError(err);
+      request.save( (err,post) => {
+          if (err) { return next(err); }
+          //console.log('inside save function');
+          buyer_making_request.buyer_requests_byID.push(post._id);
+          buyer_making_request.save((err) =>{
+            if (err) { return next(err); }
+            console.log('New Reuqest made tied to Buyer %s', buyer_making_request._id);
+          });
+          res.status(201).json(post);
+      });
+    });
+});
+  /*request.save( (err,post) => {
       if (err) { return next(err); }
       res.status(201).json(post);
+  });*/
+})
+
+//Email Verification
+router.post('/confirmEmail/:token', (req, res, next) => {
+  console.log(req.params.token);
+  Buyer.findOne({confirmationToken: req.params.token}, (err, buyer) => {
+    if(err) throw err;
+    var token = req.params.token;
+
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if(err)
+      {
+        res.json({success:false, msg: 'Activation link has expired.'});
+
+      } else if (!buyer) {
+        res.json({success:false, msg: 'Activation link has expired.'});
+      } else if (buyer.userConfirmed) {
+        res.json({success:false, msg: 'Acount already activated!'});
+      } else {
+        buyer.temptoken = false;
+        buyer.userConfirmed = true;
+        buyer.save((err) => {
+          if(err)
+          {
+            console.log(err);
+          } else {
+              //If account Registred Send Email for Email Verification
+          sendEmail.emailVerified(buyer);
+          }
+        })
+        res.json({success:true, msg:'Account Activated.'})
+      }
+    })
+  });
+})
+
+// Resend Email Verification --NOT TESTED YET
+router.post('/resend', (req,res, next) =>
+{
+  const email = req.body.email;
+
+    Buyer.getBuyerbyEmail(email, (err, buyer) => {
+    if(err) throw err;
+    if(!buyer){
+      return res.json({success: false, msg: 'User not found.'});
+    }
+    if(buyer.userConfirmed)
+    {
+      return res.json({success: false, msg: 'Acount is Activated.'});
+    }
+    buyer.confirmationToken = jwt.sign({data: 'buyer'}, config.secret, {
+      expiresIn: '24h'});
+    buyer.save((err) => {
+      if(err)
+      {
+        console.log(err);
+      } else {
+          //If account Registred Send Email for Email Verification
+        sendEmail.sendVerificationEmail(buyer);
+      }
+    });
   });
 })
 

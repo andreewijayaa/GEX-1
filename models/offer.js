@@ -3,14 +3,6 @@ const config = require('../config/database');
 
 //offer schema
 const offerSchema = mongoose.Schema({
-  seller_first_name:{
-    type: String,
-    required: true
-  },
-  seller_last_name:{
-    type: String,
-    required: true
-  },
   seller_ID:{
     type: String,
     required: true
@@ -21,6 +13,17 @@ const offerSchema = mongoose.Schema({
   },
   request_ID:{
     type:String,
+    required:true
+  },
+  title:{
+    type:String,
+    required:true
+  },
+  description:{
+    type:String
+  },
+  price:{
+    type:Number,
     required:true
   }
 });

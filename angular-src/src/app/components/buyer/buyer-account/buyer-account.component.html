@@ -1,3 +1,6 @@
+<app-buyer-navbar></app-buyer-navbar>
+
+<div class="container">
 &nbsp;
 <h1>My Account</h1>
 &nbsp;
@@ -5,29 +8,29 @@
   <div class="card-body">
     <h4>Personal Information</h4>
     &nbsp;
-    <form>
+    <form *ngIf="buyer">
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">First Name:</label>
         <div class="col-sm-10">
-          <input class="form-control" type="text" name="first_name" value="First">
+          <input class="form-control" type="text" name="first_name" value={{buyer.first_name}}>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Last Name:</label>
         <div class="col-sm-10">
-          <input class="form-control" type="text" name="last_name" value="Last">
+          <input class="form-control" type="text" name="last_name" value={{buyer.last_name}}>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Email Address:</label>
         <div class="col-sm-10">
-          <input class="form-control" type="text" name="email" value="email@email.com">
+          <input class="form-control" type="text" name="email" value={{buyer.email}}>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Password:</label>
         <div class="col-sm-10">
-          <input class="form-control" type="password" name="password" value="password">
+          <input class="form-control" type="password" name="password" value={{buyer.password}}>
         </div>
       </div>
       <div class="form-group row">
@@ -38,4 +41,5 @@
     </form>
 
   </div>
+</div>
 </div>
