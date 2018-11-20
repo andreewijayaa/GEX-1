@@ -17,7 +17,6 @@ export class BuyerComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    console.log(this.storeFetchService.getBuyerProfile());
     this.storeFetchService.getBuyerProfile().subscribe((profile: any) => {
       this.buyer = profile.data;
       //console.log(profile.data.account_type);
