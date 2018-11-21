@@ -24,8 +24,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
-      .pipe(map(res => res));
+    return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
   }
 
   loadToken() {

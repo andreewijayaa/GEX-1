@@ -18,6 +18,7 @@ export class SellerNavbarComponent implements OnInit {
   }
 
   onLogoutClick() {
+    window.location.reload();
     this.sellerService.sellerLogout();
     this.storeFetchService.userLogout();
     this.flashMessage.show('You are logged out', {

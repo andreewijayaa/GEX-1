@@ -1,31 +1,35 @@
-<div *ngIf='loadContent==false' class="app-loading">
-    <div class="logo"></div>
-    <svg class="spinner" viewBox="25 25 50 50">
-      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
-    </svg>
-  </div>
-  
-<div *ngIf='loadContent'>
 <app-buyer-navbar></app-buyer-navbar>
 <flash-messages></flash-messages>
 
-<div class = "container">
-&nbsp;
-<div>
-    <h1 class="page-header">Welcome {{buyer.first_name}}!</h1>
-    <div class="tabbable">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" [ngClass]="{'active':currentTab === 'requests'}" data-target="#requests" role="tab" aria-controls="requests" aria-selected="true" (click)="requests('requests')">Requests</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'history'}" data-target="#history" role="tab" aria-controls="history" aria-selected="false" (click)="history('history')">History</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="requests" [ngClass]="{'active':currentTab === 'requests'}" role="tabpanel" aria-labelledby="requests-tab">Requests go here</div>
-      <div class="tab-pane fade show" id="history" [ngClass]="{'active':currentTab === 'history'}" role="tabpanel" aria-labelledby="history-tab">History goes here</div>
-    </div>
-    </div>
+<div *ngIf='loading == false' class="app-loading">
+  <div class="logo"></div>
+  <svg class="spinner" viewBox="25 25 50 50">
+    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+  </svg>
 </div>
-</div>
+
+<div *ngIf='loading'>
+  <div class="container">
+    &nbsp;
+    <div>
+      <h1 class="page-header">Welcome {{buyer.first_name}}!</h1>
+      <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" [ngClass]="{'active':currentTab === 'requests'}" data-target="#requests"
+              role="tab" aria-controls="requests" aria-selected="true" (click)="requests('requests')">Requests</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'history'}" data-target="#history"
+              role="tab" aria-controls="history" aria-selected="false" (click)="history('history')">History</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="requests" [ngClass]="{'active':currentTab === 'requests'}" role="tabpanel"
+            aria-labelledby="requests-tab">Requests go here</div>
+          <div class="tab-pane fade show" id="history" [ngClass]="{'active':currentTab === 'history'}" role="tabpanel"
+            aria-labelledby="history-tab">History goes here</div>
+        </div>
+      </div>
+    </div>
+  </div>

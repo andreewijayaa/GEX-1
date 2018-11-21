@@ -20,6 +20,7 @@ export class BuyerNavbarComponent implements OnInit {
   }
 
   onLogoutClick() {
+    window.location.reload();
     this.buyerService.buyerLogout();
     this.storeFetchService.userLogout();
     this.flashMessage.show('You are logged out', {
