@@ -1,13 +1,12 @@
 <app-buyer-navbar></app-buyer-navbar>
 <flash-messages></flash-messages>
-  <br>
-  <br>
+
+<form (submit)="onRequestSubmit()">
 <div class="container">
 <h1>Submit Product Request</h1>
 &nbsp;
 <div class="card">
   <div class="card-body">
-    <form (submit)="onRequestSubmit()">
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Request Title:</label>
         <div class="col-sm-10">
@@ -15,9 +14,9 @@
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Request Category:</label>
+        <label class="col-sm-2 col-form-label"  >Request Category:</label>
         <div class="col-sm-10">
-          <input class="form-control mr-sm-2" type="text" name="category" value="">
+          <input class="form-control mr-sm-2" [(ngModel)]="code" type="text" name="category" value="">
         </div>
       </div>
       <div class="form-group row">
@@ -29,7 +28,7 @@
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Set offer deadline:</label>
         <div class="row col-sm-10">
-            <input class="form-control col-sm-3" type="date" [(ngModel)]="deadline" name="deadline">
+            <input class="form-control col-sm-3" type="date" name="deadline">
         </div>
       </div>
       <div class="form-group row">
@@ -37,10 +36,10 @@
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
-    </form>
   </div>
 </div>
 </div>
+</form>
 <!--
 <html>
  <head>

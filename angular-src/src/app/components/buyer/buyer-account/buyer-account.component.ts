@@ -31,8 +31,8 @@ export class BuyerAccountComponent implements OnInit {
       this.buyer = JSON.parse(localStorage.getItem('buyer'));
       if (this.buyer == null) {
         window.location.reload();
-      }
-      else {
+      } else {
         console.log(this.buyer);
       }
   }
+}

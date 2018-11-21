@@ -11,6 +11,7 @@ import { AuthService } from '../services/auth.service';
 export class BuyerService {
   buyerToken: any;
   buyer: any;
+  request: any;
 
   constructor(private http: HttpClient,
     private router: Router,
@@ -23,7 +24,7 @@ export class BuyerService {
       const httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
-          'Authorization': this.buyerToken
+          'x-access-token': this.buyerToken
         })
       };
       return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
@@ -31,14 +32,30 @@ export class BuyerService {
     }
   }
 
+  postBuyerRequest(request) {
+    this.loadToken();
+    if (this.buyerToken != null) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'x-access-token': this.buyerToken
+        })
+      };
+      console.log(this.buyerToken);
+      return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
   loadToken() {
     this.buyerToken = localStorage.getItem('id_token');
 
     if (this.buyerToken == null) {
-      //return this.router.navigate(['/login']);
-      console.log("token not found");
-    } 
-    else {
+      // return this.router.navigate(['/login']);
+      console.log('token not found');
+    } else {
       const token = localStorage.getItem('id_token');
       this.buyerToken = token;
       console.log('my token: ' + this.buyerToken);
