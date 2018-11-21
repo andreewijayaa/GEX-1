@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../../services/register.service';
 import { BuyerService } from '../../services/buyer.service';
 import { Router } from '@angular/router';
-import { promise } from 'protractor';
 
 @Component({
   selector: 'app-buyer',
@@ -11,27 +10,54 @@ import { promise } from 'protractor';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
-  loaded: Promise<boolean>;
-  loading: Boolean;
-
+  requestlist: [Object];
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router) { }
 
   ngOnInit() {
-    this.loading = false;
+    /*console.log(this.buyerService.getBuyerProfile());
+    this.buyerService.getBuyerProfile().subscribe((profile: any) => {
+      this.buyer = profile.data;
+      //console.log(profile.data.account_type);
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+    */
+
+
+
+
+    console.log("hew");
     setTimeout(() => {
-      this.loading = false;
-      this.buyerService.getBuyerProfile().subscribe((profile: any) => {
-        this.buyer = profile.data;
-        this.loaded = Promise.resolve(true);
-        this.loading = true;
-      },
-        err => {
-          console.log(err);
-          return false;
-        });
-    }, 1000);
+      this.refreshBuyer()
+    }, 500);
   }
+
+  currentTab = 'requests';
+
+   requests(currentTab) {
+     this.currentTab = currentTab;
+   }
+
+   history(currentTab) {
+     this.currentTab = currentTab;
+   }
+
+  refreshBuyer() {
+    this.buyer = JSON.parse(localStorage.getItem('buyer'));
+    if (this.buyer == null) {
+      window.location.reload();
+    }
+    else {
+      console.log(this.buyer);
+    }
+  }
+
+
+
+
 }
