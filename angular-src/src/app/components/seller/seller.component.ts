@@ -124,16 +124,4 @@ requests(currentTab) {
 history(currentTab) {
   this.currentTab = currentTab;
 }
-
-checkEmpty1(x: any) {
-  if (x === null) {
-    document.getElementById('id1').innerHTML = '';
-  }
-}
-
-checkEmpty3(x: any) {
-  if (x === null) {
-    document.getElementById('id3').innerHTML = '';
-  }
-}
 }
