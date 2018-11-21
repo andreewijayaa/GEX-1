@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -10,6 +10,11 @@ export class SellerService {
   seller: any;
 
   constructor(private http: HttpClient) { }
+
+  loadToken() {
+    const token = localStorage.getItem('id_token');
+    this.sellerToken = token;
+  }
 
   // Get Seller Profile Service
   getSellerProfile() {
@@ -24,8 +29,42 @@ export class SellerService {
     .pipe(map(res => res));
   }
 
-  loadToken() {
-    const token = localStorage.getItem('id_token');
-    this.sellerToken = token;
+  // Get Seller Requests List
+  getSellerRequestsList() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    return this.http.get('http://localhost:3000/sellers/view', httpOptions)
+    .pipe(map(res => res));
+  }
+
+  // Get Seller Offers History not yet implemented!!
+  getSellerOffersHistory() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    return this.http.get('http://localhost:3000/sellers/view', httpOptions)
+    .pipe(map(res => res));
+  }
+
+  // Post offers not yet implemented
+  postOffer() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    return this.http.get('http://localhost:3000/sellers/view', httpOptions)
+    .pipe(map(res => res));
   }
 }
