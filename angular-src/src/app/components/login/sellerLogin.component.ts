@@ -32,14 +32,11 @@ export class SellerLoginComponent implements OnInit {
       password: this.password
     };
 
-    var userType = "Seller";
-
     this.authService.AuthenticateSeller(seller).subscribe((data: any) => {
       if (data.success) {
         this.storeFetchService.storeSellerData(data.token, data.seller);
         this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
         this.router.navigate(['/seller']);
-        document.getElementById("userType").innerHTML = userType;
       }
       else {
         this.flashMessage.show('User not found', { cssClass: 'alert-danger', timeout: 5000 });
