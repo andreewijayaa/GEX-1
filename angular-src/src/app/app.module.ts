@@ -25,14 +25,12 @@ import { StoreFetchService } from './services/storeFetch.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SellerNavbarComponent } from './components/navbar/seller-navbar/seller-navbar.component';
 import { BuyerNavbarComponent } from './components/navbar/buyer-navbar/buyer-navbar.component';
-import { RegisterComponent } from './components/register/register.component';
 import { PreactivationComponent } from './components/activation/preactivation/preactivation.component';
 import { PostactivationComponent } from './components/activation/postactivation/postactivation.component';
 import { SellerService } from './services/seller.service';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'register', component: RegisterComponent},
   {path: 'buyer-register', component: BuyerRegisterComponent},
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
@@ -52,7 +50,6 @@ const appRoutes: Routes = [
     AppComponent,
     NavbarComponent,
     LoginComponent,
-    RegisterComponent,
     BuyerComponent,
     SellerComponent,
     HomeComponent,

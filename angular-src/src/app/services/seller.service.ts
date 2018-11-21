@@ -25,8 +25,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    return this.http.get('http://localhost:3000/sellers/profile', httpOptions)
-    .pipe(map(res => res));
+    return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(map(res => res));
   }
 
   // Get Seller Offers
@@ -53,5 +52,10 @@ export class SellerService {
     };
     return this.http.get('http://localhost:3000/sellers/view', httpOptions)
     .pipe(map(res => res));
+  }
+
+  sellerLogout() {
+    this.sellerToken = null;
+    this.seller = null;
   }
 }
