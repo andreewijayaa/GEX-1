@@ -10,31 +10,27 @@ import { Router } from '@angular/router';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
-  requestlist: [Object];
+  loaded: Promise<boolean>;
+  loading: Boolean;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router) { }
 
   ngOnInit() {
-    /*console.log(this.buyerService.getBuyerProfile());
-    this.buyerService.getBuyerProfile().subscribe((profile: any) => {
-      this.buyer = profile.data;
-      //console.log(profile.data.account_type);
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
-    */
-
-
-
-
-    console.log("hew");
+    this.loading = false;
     setTimeout(() => {
-      this.refreshBuyer()
-    }, 500);
+      this.loading = false;
+      this.buyerService.getBuyerProfile().subscribe((profile: any) => {
+        this.buyer = profile.data;
+        this.loaded = Promise.resolve(true);
+        this.loading = true;
+      },
+        err => {
+          console.log(err);
+          return false;
+        });
+    }, 1000);
   }
 
   currentTab = 'requests';
