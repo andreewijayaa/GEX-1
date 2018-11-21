@@ -2,9 +2,9 @@
 body{
 
   background-color: rgb(5, 53, 42);
-  background-image: url("angular-src\src\assets\gexRegBackground.jpg");
-  background-repeat: repeat-x;
-  opacity: .88;
+  background-image: url("../../../../../src/assets/gexRegBackground.jpg");
+
+
 }
 
 
