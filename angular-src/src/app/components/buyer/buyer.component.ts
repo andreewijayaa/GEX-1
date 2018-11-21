@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
+  requestlist: [Object];
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,

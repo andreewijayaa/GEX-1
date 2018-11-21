@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 })
 export class MakeRequestComponent implements OnInit {
   title: String;
+  code: String;
   description: String;
   deadline: Date;
 
@@ -20,6 +21,7 @@ export class MakeRequestComponent implements OnInit {
   onRequestSubmit() {
     const request = {
       title: this.title,
+      code: this.code,
       description: this.description,
       deadline: this.deadline
     }
