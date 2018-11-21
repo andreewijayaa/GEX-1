@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BuyerService } from '../../../services/buyer.service';
+import { SellerAccountComponent } from '../../seller/seller-account/seller-account.component';
 
 @Component({
   selector: 'app-buyer-account',
@@ -7,7 +8,6 @@ import { BuyerService } from '../../../services/buyer.service';
   styleUrls: ['./buyer-account.component.css']
 })
 export class BuyerAccountComponent implements OnInit {
-
   buyer: Object;
 
   constructor(private buyerService: BuyerService) { }
@@ -15,17 +15,17 @@ export class BuyerAccountComponent implements OnInit {
   ngOnInit() {
     this.buyerService.getBuyerProfile().subscribe((profile: any) => {
       this.buyer = profile.data;
-      console.log(profile.data.account_type);
     },
       err => {
         console.log(err);
         return false;
       });
-      console.log("hew");
+
       setTimeout(() => {
-        this.refreshBuyer()
       }, 500);
   }
+<<<<<<< HEAD
+=======
 
   refreshBuyer() {
       this.buyer = JSON.parse(localStorage.getItem('buyer'));
@@ -35,4 +35,5 @@ export class BuyerAccountComponent implements OnInit {
         console.log(this.buyer);
       }
   }
+>>>>>>> upstream/master
 }

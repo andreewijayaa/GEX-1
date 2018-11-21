@@ -12,28 +12,14 @@ export class StoreFetchService {
 
   constructor(private http: HttpClient) { }
 
-    // User Logout Service
-    userLogout() {
-      this.RegisterToken = null;
-      this.buyer = null;
-      this.seller = null;
-      this.user = null;
-      localStorage.clear();
-    }
-
-
-
-//   getBuyerProfile() {
-//     this.loadUserToken();
-//     const httpOptions = {
-//       headers: new HttpHeaders({
-//         'Content-Type':  'application/json',
-//         'x-access-token': this.RegisterToken
-//       })
-//     };
-//     return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
-//     .pipe(map(res => res));
-// }
+  // User Logout Service
+  userLogout() {
+    this.RegisterToken = null;
+    this.buyer = null;
+    this.seller = null;
+    this.user = null;
+    localStorage.clear();
+  }
 
   // Fetches the Buyer token from local storage to use with getBuyerToken()
   loadUserToken() {
@@ -46,7 +32,6 @@ export class StoreFetchService {
     localStorage.setItem('buyer', JSON.stringify(buyer)); // can only store stings not objects
     this.RegisterToken = token;
     this.buyer = buyer;
-    console.log("here");
   }
 
   // Store Seller Data Locally Service

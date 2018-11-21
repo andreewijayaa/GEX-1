@@ -14,22 +14,18 @@ export class BuyerService {
   request: any;
 
   constructor(private http: HttpClient,
-    private router: Router,
-    private authService: AuthService) { }
+    private router: Router) { }
 
   // Get Buyer Profile Service
   getBuyerProfile() {
     this.loadToken();
-    if (this.buyerToken != null) {
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'x-access-token': this.buyerToken
-        })
-      };
-      return this.http.get('http://localhost:3000/buyers/profile', httpOptions)
-        .pipe(map(res => res));
-    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
   }
 
   postBuyerRequest(request) {
@@ -50,16 +46,8 @@ export class BuyerService {
   }
 
   loadToken() {
-    this.buyerToken = localStorage.getItem('id_token');
-
-    if (this.buyerToken == null) {
-      // return this.router.navigate(['/login']);
-      console.log('token not found');
-    } else {
-      const token = localStorage.getItem('id_token');
-      this.buyerToken = token;
-      console.log('my token: ' + this.buyerToken);
-    }
+    const token = localStorage.getItem('id_token');
+    this.buyerToken = token;
   }
 
   buyerLogout() {
