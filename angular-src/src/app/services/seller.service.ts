@@ -28,20 +28,7 @@ export class SellerService {
     return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(map(res => res));
   }
 
-  // Get Seller Requests List
-  getSellerRequestsList() {
-    this.loadToken();
-    const httpOptions = {
-      headers: new HttpHeaders ({
-        'Content-Type':  'application/json',
-        'x-access-token': this.sellerToken
-      })
-    };
-    return this.http.get('http://localhost:3000/sellers/view', httpOptions)
-    .pipe(map(res => res));
-  }
-
-  // Get Seller Offers History not yet implemented!!
+  // Get Seller Offers
   getSellerOffersHistory() {
     this.loadToken();
     const httpOptions = {
@@ -50,7 +37,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    return this.http.get('http://localhost:3000/sellers/view', httpOptions)
+    return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions)
     .pipe(map(res => res));
   }
 

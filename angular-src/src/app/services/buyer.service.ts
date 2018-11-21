@@ -11,6 +11,7 @@ import { AuthService } from '../services/auth.service';
 export class BuyerService {
   buyerToken: any;
   buyer: any;
+  request: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -25,6 +26,23 @@ export class BuyerService {
       })
     };
     return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
+  }
+
+  postBuyerRequest(request) {
+    this.loadToken();
+    if (this.buyerToken != null) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'x-access-token': this.buyerToken
+        })
+      };
+      console.log(this.buyerToken);
+      return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   loadToken() {
