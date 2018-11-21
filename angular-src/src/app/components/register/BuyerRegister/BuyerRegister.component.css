@@ -1,22 +1,40 @@
-* {box-sizing: border-box}
+
+body{
+
+  background-color: rgb(5, 53, 42);
+  background-image: url("angular-src\src\assets\gexRegBackground.jpg");
+  background-repeat: repeat-x;
+  opacity: .88;
+}
+
+
+
 
 form {
+  color: white;
   border: 3px solid #f1f1f1;
-  width: 650px;
-  height: 1240px;
-  position: absolute;
-  top: 85%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  width: 35rem;
+  height: 55rem;
+  position: relative;
+  text-align: left;
+  margin: auto;
 
 }
+
 /* Add padding to containers */
 .container {
-  padding: 16px;
+  padding: 1rem;
+
+}
+.innerform {
+  padding: 20px;
 }
 
 .header {
-  background-color: lightgray;
+  text-align: center;
+  padding: 0rem;
+  width: 100%;
+  margin: 0;
 }
 
 /* Full-width input fields */
@@ -26,25 +44,26 @@ input[type=text], input[type=password] , input[type=tel] {
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
-  background: #f1f1f1;
+  background: #bbbaba;
 }
 
 input[type=text]:focus, input[type=password]:focus {
-  background-color: #ddd;
+  background-color: rgb(221, 221, 221);
   outline: none;
 }
 
 /* Overwrite default styles of hr */
 hr {
-  border: 1px solid #f1f1f1;
+  border: 1px solid #a9abfa;
   margin-bottom: 25px;
 }
 
 /* Set a style for the submit/register button */
-.registerbtn {
-  background-color: #4CAF50;
+.btn {
+  background-color: rgb(187, 138, 75);
   color: white;
-  padding: 16px 20px;
+  font-size: 16px;
+  padding: 14px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
@@ -52,7 +71,8 @@ hr {
   opacity: 0.9;
 }
 
-.registerbtn:hover {
+
+.btn:hover {
   opacity:1;
 }
 
