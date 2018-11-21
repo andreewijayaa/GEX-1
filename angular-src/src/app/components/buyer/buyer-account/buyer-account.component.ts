@@ -36,3 +36,4 @@ export class BuyerAccountComponent implements OnInit {
         console.log(this.buyer);
       }
   }
+}
