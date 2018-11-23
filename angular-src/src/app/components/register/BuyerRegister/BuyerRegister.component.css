@@ -1,29 +1,31 @@
 
 body{
-
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-user-select: node;
+  height: 100vh;
+  background-image: url("../../../../../src/assets/grandCanyonGex.jpg");
   background-color: rgb(5, 53, 42);
-  background-image: url("../../../../../src/assets/gexRegBackground.jpg");
-
+  background-repeat:no-repeat;
+  background-size:cover;
 
 }
 
-
-
-
 form {
+
   color: white;
-  border: 3px solid #f1f1f1;
-  width: 35rem;
-  height: 55rem;
+  border: none;
+  width: 433px;
+  height: 600px;
   position: relative;
   text-align: left;
-  margin: auto;
+  margin-top: 35px;
 
 }
 
 /* Add padding to containers */
 .container {
-  padding: 1rem;
+  padding: 16px;
 
 }
 .innerform {
@@ -32,42 +34,47 @@ form {
 
 .header {
   text-align: center;
-  padding: 0rem;
+  padding: 0;
   width: 100%;
   margin: 0;
 }
 
 /* Full-width input fields */
 input[type=text], input[type=password] , input[type=tel] {
-  width: 100%;
+  width: 400px;
+  height: 50px;
   padding: 15px;
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
-  background: #bbbaba;
+  background: #6aa5e7;
+  opacity: .65;
 }
 
 input[type=text]:focus, input[type=password]:focus {
-  background-color: rgb(221, 221, 221);
+  background-color: rgb(231, 161, 176);
   outline: none;
 }
 
 /* Overwrite default styles of hr */
 hr {
-  border: 1px solid #a9abfa;
+  border: 1px solid #d3d3e6;
   margin-bottom: 25px;
 }
 
 /* Set a style for the submit/register button */
 .btn {
-  background-color: rgb(187, 138, 75);
+  background-color: rgb(177, 53, 5);
   color: white;
   font-size: 16px;
-  padding: 14px;
+  text-align: center;
+  padding: 16px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: 400px;
+  height: 50px;
+  padding: 15px;
   opacity: 0.9;
 }
 
@@ -78,11 +85,29 @@ hr {
 
 /* Add a blue text color to links */
 a {
-  color: dodgerblue;
+  color: white;
+  font-size: 18px;
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
 .signin {
   background-color: #f1f1f1;
   text-align: center;
+}
+
+::placeholder {
+  color: whitesmoke;
+  opacity: 1; /* Firefox */
+  font-size: 15px;
+
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: whitesmoke;
+ font-size: 15px;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: whitesmoke;
+ font-size: 15px;
 }
