@@ -30,6 +30,7 @@ export class SellerRegisterComponent implements OnInit {
       last_name: this.last_name,
       email: this.email,
       password: this.password,
+      confirmPassword: this.confirmPassword,
     };
 
     // RequiredFields
@@ -54,7 +55,7 @@ export class SellerRegisterComponent implements OnInit {
     this.registerService.RegisterSeller(seller).subscribe(data => {
       if (data) { // must know if its a successful register or not FIX THIS LATER
         // this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
-        this.router.navigate(['/preactivation']);
+        this.router.navigate(['/seller']);
       } else {
         this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
         this.router.navigate(['/SellerRegister']);

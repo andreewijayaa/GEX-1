@@ -12,14 +12,14 @@ export class StoreFetchService {
 
   constructor(private http: HttpClient) { }
 
-    // User Logout Service
-    userLogout() {
-      this.RegisterToken = null;
-      this.buyer = null;
-      this.seller = null;
-      this.user = null;
-      localStorage.clear();
-    }
+  // User Logout Service
+  userLogout() {
+    this.RegisterToken = null;
+    this.buyer = null;
+    this.seller = null;
+    this.user = null;
+    localStorage.clear();
+  }
 
   // Fetches the Buyer token from local storage to use with getBuyerToken()
   loadUserToken() {
