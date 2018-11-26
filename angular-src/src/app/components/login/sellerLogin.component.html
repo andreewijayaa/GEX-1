@@ -13,7 +13,7 @@
 
         <input type="password" [(ngModel)]="password" placeholder="Enter Password" name="password" required>
 
-        <a routerLink="/buyer" (click)="onLoginSubmit()"><button type="submit">Login</button></a><br><br>
+        <a routerLink="/seller" (click)="onLoginSubmit()"><button type="submit">Login</button></a><br><br>
         <label>
           <input type="checkbox" checked="checked" name="remember"> Remember me
         </label>
@@ -22,6 +22,7 @@
       <div class="container">
 
         <p><a href="#">Forgot password?</a></p>
+        <p><a routerLink="/login">Buyer? Log in here.</a></p>
       </div>
 
 
