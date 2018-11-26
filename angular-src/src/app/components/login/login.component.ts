@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/buyer']);
         this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
       } else {
-        this.router.navigate(['/login']);
         this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
       }
     });

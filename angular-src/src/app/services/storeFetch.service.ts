@@ -41,4 +41,20 @@ export class StoreFetchService {
     this.RegisterToken = token;
     this.seller = seller;
   }
+
+  // Check if buyer is logged in
+  buyerIsLoggedIn() {
+  if (localStorage.getItem('buyer'))
+    return true;
+  else
+    return false;
+  }
+
+  //Check if seller is logged in
+  sellerIsLoggedIn() {
+    if (localStorage.getItem('seller'))
+      return true;
+    else
+      return false;
+  }
 }

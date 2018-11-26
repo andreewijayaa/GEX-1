@@ -17,15 +17,15 @@
 <div class="center">
   <div class="w3-container">
     <div class="container" style="margin-top:70px; height:750px; width: 1500px;">
-      <button type="button" class="btn submitBtn text-white" onclick="location.href='http://localhost:4200/seller/submit-offer'">Submit
-        New Offer</button>
+      <a routerLink="/seller/submit-offer"><button type="button" class="btn submitBtn text-white">Submit
+        New Offer</button></a>
 
       <h4>Welcome, {{seller.first_name}}</h4>
       <div class="tabbable">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" [ngClass]="{'active':currentTab === 'requests'}" data-target="#requests"
-              role="tab" aria-controls="requests" aria-selected="true" (click)="requests('requests')">My Offers</a>
+              role="tab" aria-controls="requests" aria-selected="true" (click)="requests('requests')">Open Requests</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'history'}" data-target="#history"
@@ -37,7 +37,7 @@
           <div class="tab-pane fade show active" id="requests" [ngClass]="{'active':currentTab === 'requests'}" role="tabpanel"
             aria-labelledby="requests-tab">
             <br>
-            <h3>My Offers</h3>
+            <h3>Open Requests</h3>
             <div class="dropdown dropDownBtn">
               <button type="button" class="btn dDownBtn dropdown-toggle text-white" data-toggle="dropdown">
                 Sort By:
@@ -72,7 +72,7 @@
             <br>
             <br>
             <br>
-            <div class="card" id="card0">
+            <!-- <div class="card" id="card0">
               <div class="card-body">
                 <h5>{{offerList[0].title}}</h5>
                 <h4>$ {{offerList[0].price}}</h4>
@@ -151,7 +151,7 @@
                 {{offerList[9].description}}
                 <h6>Seller ID: {{offerList[9].seller_ID}}</h6>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
