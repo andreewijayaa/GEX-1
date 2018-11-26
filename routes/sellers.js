@@ -66,10 +66,10 @@ router.post('/login', (req, res, next) => {
         return res.json({success: false, msg: 'Seller not found'});
       }
       //Check email verification
-      /*if(!seller.userConfirmed)
+      if(!seller.userConfirmed)
       {
         return res.json({success: false, msg: 'Please Activate your account first.'});
-      } */
+      }
     //check password
       Seller.comparePassword(password, seller.password, (err, isMatch) => {
         if(err) throw err;
