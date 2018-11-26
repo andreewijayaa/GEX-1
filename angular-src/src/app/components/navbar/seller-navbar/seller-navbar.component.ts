@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SellerService } from '../../../services/seller.service';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-seller-navbar',
@@ -12,19 +13,20 @@ export class SellerNavbarComponent implements OnInit {
 
   constructor(private sellerService: SellerService,
     private storeFetchService: StoreFetchService,
-    private flashMessage: FlashMessagesService) { }
+    private flashMessage: FlashMessagesService,
+    private router: Router) { }
 
   ngOnInit() {
   }
 
   onLogoutClick() {
-    window.location.reload();
     this.sellerService.sellerLogout();
     this.storeFetchService.userLogout();
     this.flashMessage.show('You are logged out', {
       cssClass: 'alert-success',
       timeout: 3000
     });
+    this.router.navigate(['/seller-login']);
     return false;
   }
 }

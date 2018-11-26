@@ -1,9 +1,9 @@
-
+<app-navbar></app-navbar>
    <body>
 <form (submit)="OnSellerRegisterSubmit()" class="col-md-8 col-md-offset-8">
     <div class="container">
-      <div class ="container header">
-      <h1>Seller's Register</h1>
+      <div class ="header">
+        <h1>Seller's Register</h1>
       </div>
       <hr>
 
@@ -15,7 +15,7 @@
 
 
       <input type="text" placeholder="Legal Name of Entity" name="organizationName" required>
-      <input type="text" placeholder="Doing business as..." name="dba" optional>
+      <!--<input type="text" placeholder="Doing business as..." name="dba" optional>-->
       <input type="text" placeholder="Your position" name="position" optional>
 
       <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>

@@ -16,10 +16,10 @@ router.post('/register',(req,res,next) => {
         last_name: req.body.last_name,
         email: req.body.email,
         password: req.body.password,
-        codes: req.body.codes,
         confirmationToken: jwt.sign({data: 'seller'}, config.secret, {
           expiresIn: '24h'}) // 1 day
     });
+
     //code for detecting seller with same email by John
     Seller.findOne({email: req.body.email}, (err, foundSeller) => {
       if (err) return handleError(err);
