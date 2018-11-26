@@ -25,7 +25,6 @@ export class SellerComponent implements OnInit {
   title7: Object;
   title8: Object;
   title9: Object;
-  firstName: string;
 
   constructor(private sellerService: SellerService) { }
 
@@ -40,7 +39,7 @@ export class SellerComponent implements OnInit {
           return false;
         });
 
-      this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
+      /* this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
         this.offerList = offers;
 
         //checking if the title is null
@@ -117,7 +116,7 @@ export class SellerComponent implements OnInit {
         err => {
           console.log(err);
           return false;
-        });
+        });  */
 
   }
 

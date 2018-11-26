@@ -30,6 +30,7 @@ import { PostactivationComponent } from './components/activation/postactivation/
 import { SellerService } from './services/seller.service';
 import { BuyerAuthGuard } from './buyerAuth.guard';
 import { SellerAuthGuard } from './sellerAuth.guard';
+import { SellerServicesComponent } from './components/seller/seller-services/seller-services/seller-services.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -38,11 +39,12 @@ const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'seller-login', component: SellerLoginComponent},
   {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard]},
-  {path: 'buyer/buyer-account', component: BuyerAccountComponent},
-  {path: 'buyer/make-request', component: MakeRequestComponent},
+  {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
-  {path: 'seller/seller-account', component: SellerAccountComponent},
-  {path: 'seller/submit-offer', component: SubmitOfferComponent},
+  {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/submit-offer', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent }
 ];
@@ -67,6 +69,7 @@ const appRoutes: Routes = [
     BuyerRegisterComponent,
     PreactivationComponent,
     PostactivationComponent,
+    SellerServicesComponent,
   ],
   imports: [
     BrowserModule,

@@ -26,7 +26,7 @@ export class SellerNavbarComponent implements OnInit {
       cssClass: 'alert-success',
       timeout: 3000
     });
-    this.router.navigate(['/seller-login']);
+    this.router.navigate(['']);
     return false;
   }
 }
