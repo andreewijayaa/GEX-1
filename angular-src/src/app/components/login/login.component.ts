@@ -40,11 +40,11 @@ export class LoginComponent implements OnInit {
     this.authService.AuthenticateBuyer(buyer).subscribe((data: any) => {
       if (data.success) {
         this.storeFetchService.storeBuyerData(data.token, data.buyer);
+        this.router.navigate(['/buyer']);
         this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
-        this.router.navigate['/buyer'];
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
         this.router.navigate(['/login']);
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
       }
     });
   }

@@ -20,13 +20,13 @@ export class BuyerNavbarComponent implements OnInit {
   }
 
   onLogoutClick() {
-    window.location.reload();
     this.buyerService.buyerLogout();
     this.storeFetchService.userLogout();
     this.flashMessage.show('You are logged out', {
       cssClass: 'alert-success',
       timeout: 3000
     });
+    this.router.navigate(['/login']);
     return false;
   }
 }

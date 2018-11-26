@@ -28,6 +28,8 @@ import { BuyerNavbarComponent } from './components/navbar/buyer-navbar/buyer-nav
 import { PreactivationComponent } from './components/activation/preactivation/preactivation.component';
 import { PostactivationComponent } from './components/activation/postactivation/postactivation.component';
 import { SellerService } from './services/seller.service';
+import { BuyerAuthGuard } from './buyerAuth.guard';
+import { SellerAuthGuard } from './sellerAuth.guard';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -35,10 +37,10 @@ const appRoutes: Routes = [
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'seller-login', component: SellerLoginComponent},
-  {path: 'buyer', component: BuyerComponent},
+  {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent},
   {path: 'buyer/make-request', component: MakeRequestComponent},
-  {path: 'seller', component: SellerComponent},
+  {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-account', component: SellerAccountComponent},
   {path: 'seller/submit-offer', component: SubmitOfferComponent},
   {path: 'preactivation', component: PreactivationComponent },

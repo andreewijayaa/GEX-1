@@ -140,6 +140,8 @@ router.post('/request', (req, res, next) => {
 
 
 
+
+
 //Email Verification
 router.post('/confirmEmail/:token', (req, res, next) => {
   console.log(req.params.token);
