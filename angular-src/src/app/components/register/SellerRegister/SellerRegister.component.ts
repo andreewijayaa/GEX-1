@@ -25,11 +25,14 @@ export class SellerRegisterComponent implements OnInit {
   }
 
   OnSellerRegisterSubmit() {
+    console.log("On Seller Register Submit Called.");
+
     const seller = {
       first_name: this.first_name,
       last_name: this.last_name,
       email: this.email,
       password: this.password,
+      confirmPassword: this.confirmPassword,
     };
 
     // RequiredFields
@@ -51,13 +54,13 @@ export class SellerRegisterComponent implements OnInit {
     }
 
     // Register Buyer
-    this.registerService.RegisterSeller(seller).subscribe(data => {
-      if (data) { // must know if its a successful register or not FIX THIS LATER
+    this.registerService.RegisterSeller(seller).subscribe((data: any) => {
+      if (data.success == 'true') { // must know if its a successful register or not FIX THIS LATER
         // this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
-        this.router.navigate(['/preactivation']);
+        this.router.navigate(['/seller-login']);
       } else {
-        this.flashMessage.show('Something went wrong', {cssClass: 'alert-danger', timeout: 3000});
-        this.router.navigate(['/SellerRegister']);
+        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 10000});
+        this.router.navigate(['/seller-register']);
       }
     });
 

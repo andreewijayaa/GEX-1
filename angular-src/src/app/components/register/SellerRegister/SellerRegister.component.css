@@ -1,68 +1,123 @@
-* {box-sizing: border-box}
 
-form {
-  border: 3px solid #f1f1f1;
-  width: 650px;
-  height: 1240px;
-  position: absolute;
-  top: 85%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+body{
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-user-select: node;
+  height: 110vh;
+  background-image: url("../../../../../src/assets/grandCanyonGex.jpg");
+  background-color: rgb(5, 53, 42);
+  background-repeat:no-repeat;
+  background-size:cover;
+  margin: 0;
+  padding: 0;
+  overflow: scroll;
 
 }
+
+form {
+
+  color: white;
+  opacity: 1;
+  border: none;
+  width: 450px;
+  height: 600px;
+  position: relative;
+  text-align: left;
+  margin-top: 35px;
+  margin: auto;
+
+}
+
 /* Add padding to containers */
 .container {
   padding: 16px;
+  margin: auto;
+  min-width: 450px;
+  background-color: rgba(169, 169, 169, 0.9);
+  width: auto;
+}
+
+.innerform {
+  padding: 20px;
 }
 
 .header {
-  background-color: lightgray;
+  text-align: left;
+  padding: 0;
+  max-width: 450px;
+  margin: 0;
 }
 
 /* Full-width input fields */
 input[type=text], input[type=password] , input[type=tel] {
-  width: 100%;
+  width: 400px;
+  height: 50px;
   padding: 15px;
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
-  background: #f1f1f1;
+  background: #6aa5e7;
+  opacity: .65;
 }
 
-input[type=text]:focus, input[type=password]:focus {
-  background-color: #ddd;
+input[type=text]:focus, input[type=password]:focus , input[type=tel]:focus {
+  background-color: rgb(231, 161, 176);
   outline: none;
 }
 
 /* Overwrite default styles of hr */
 hr {
-  border: 1px solid #f1f1f1;
+  border: 1px solid #d3d3e6;
   margin-bottom: 25px;
 }
 
 /* Set a style for the submit/register button */
-.registerbtn {
-  background-color: #4CAF50;
+.btn {
+  background-color: rgb(177, 53, 5);
   color: white;
-  padding: 16px 20px;
+  font-size: 16px;
+  text-align: center;
+  padding: 16px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: 400px;
+  height: 50px;
+  padding: 15px;
   opacity: 0.9;
 }
 
-.registerbtn:hover {
+
+.btn:hover {
   opacity:1;
 }
 
 /* Add a blue text color to links */
 a {
-  color: dodgerblue;
+  color: white;
+  font-size: 18px;
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
 .signin {
   background-color: #f1f1f1;
   text-align: center;
+}
+
+::placeholder {
+  color: white;
+  opacity: 1; /* Firefox */
+  font-size: 15px;
+  font-weight: 400;
+
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: white;
+ font-size: 15px;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: white;
+ font-size: 15px;
 }

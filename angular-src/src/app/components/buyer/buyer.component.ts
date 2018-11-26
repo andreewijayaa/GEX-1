@@ -10,36 +10,38 @@ import { Router } from '@angular/router';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
+  loaded: Promise<boolean>;
+  loading: Boolean;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router) { }
 
   ngOnInit() {
-    /*console.log(this.buyerService.getBuyerProfile());
-    this.buyerService.getBuyerProfile().subscribe((profile: any) => {
-      this.buyer = profile.data;
-      //console.log(profile.data.account_type);
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
-      // const currentTab = 'requests';
-
-      // requests(currentTab) {
-      //   this.currentTab = currentTab;
-      // }
-    
-      // history(currentTab) {
-      //   this.currentTab = currentTab;
-      // }
-      */
-    console.log("hew");
+    this.loading = false;
     setTimeout(() => {
-      this.refreshBuyer()
-    }, 500);
+      this.loading = false;
+      this.buyerService.getBuyerProfile().subscribe((profile: any) => {
+        this.buyer = profile.data;
+        this.loaded = Promise.resolve(true);
+        this.loading = true;
+      },
+        err => {
+          console.log(err);
+          return false;
+        });
+    }, 1000);
   }
+
+  currentTab = 'requests';
+
+   requests(currentTab) {
+     this.currentTab = currentTab;
+   }
+
+   history(currentTab) {
+     this.currentTab = currentTab;
+   }
 
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));

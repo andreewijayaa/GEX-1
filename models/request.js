@@ -19,8 +19,7 @@ const RequestSchema = mongoose.Schema({
     required: true
   },
   deadline:{
-    type:Date,
-    required:true
+    type:Date
   },
   request_offers_byID:{
     type:[String]

@@ -44,15 +44,16 @@ h6 {
 header.masthead {
   position: relative;
 
-  content: url(/angular-src/src/assets/gexGrand.jpg) no-repeat center center;
-  background-size: cover;
   padding-top: 8rem;
   padding-bottom: 8rem;
+  background-color: #0a2846;
 }
 
 header.masthead .overlay {
+  background-image: url("../../../../src/assets/gexGrand.jpg");
   position: absolute;
-  background-color: #0a2846;
+  background-size: cover;
+  background-repeat:no-repeat;
   height: 100%;
   width: 100%;
   top: 0;
@@ -148,6 +149,22 @@ header.masthead h1 {
 footer.footer {
   padding-top: 4rem;
   padding-bottom: 4rem;
+}
+
+.item1 {
+  background-image: url("../../../../src/assets/donatGex.jpg");
+}
+
+.item2 {
+  background-image: url("../../../../src/assets/codeImage.jpg");
+}
+
+.item3 {
+  background-image: url("../../../../src/assets/gexBusiness1.jpg");
+}
+
+.item4 {
+  background-image: url("../../../../src/assets/mobile.jpg");
 }
 
 

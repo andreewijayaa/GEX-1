@@ -24,6 +24,10 @@ export class SellerLoginComponent implements OnInit {
     private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
+    if (this.storeFetchService.buyerIsLoggedIn())
+      this.router.navigate(['/buyer']);
+    else if (this.storeFetchService.sellerIsLoggedIn())
+      this.router.navigate(['/seller']);
   }
 
   onLoginSubmit() {
@@ -32,18 +36,15 @@ export class SellerLoginComponent implements OnInit {
       password: this.password
     };
 
-    var userType = "Seller";
-
     this.authService.AuthenticateSeller(seller).subscribe((data: any) => {
       if (data.success) {
         this.storeFetchService.storeSellerData(data.token, data.seller);
-        this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
         this.router.navigate(['/seller']);
-        document.getElementById("userType").innerHTML = userType;
+        this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
       }
       else {
-        this.flashMessage.show('User not found', { cssClass: 'alert-danger', timeout: 5000 });
-        this.router.navigate(['/login']);
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 10000 });
+        //this.router.navigate(['/seller-login']);
       }
     });
 

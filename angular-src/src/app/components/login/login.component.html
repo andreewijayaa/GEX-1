@@ -1,32 +1,31 @@
 <app-navbar></app-navbar>
-<flash-messages></flash-messages>
-
-  <form (submit)="onLoginSubmit()" class="col-md-4 col-md-offset-4">
+<body>
+  <form (submit)="onLoginSubmit()" class=" col-md-4 col-md-offset-4">
     <div class="imgcontainer">
-      <img src="assets\gexLogo.png" alt="Avatar" class="avatar">
+     <!-- <img src="assets\gexLogo.png" alt="Avatar" class="avatar">-->
+      <h1>Log In</h1>
       <label><b>Buyer</b></label>
     </div>
-
+     <hr>
     <div class="container">
-      <label for="email"><b>Email</b></label>
-      <input type="text" class="form-control" [(ngModel)]="email" placeholder="Enter Email" name="email" required>
 
-      <label for="password"><b>Password</b></label>
-      <input type="password" class="form-control" [(ngModel)]="password" placeholder="Enter Password" name="password" required>
+      <input type="text" [(ngModel)]="email" placeholder="Enter Email" name="email" required>
 
-      <a routerLink="/buyer" (click)="onLoginSubmit()"><button type="submit">Login</button></a>
+
+      <input type="password" [(ngModel)]="password" placeholder="Enter Password" name="password" required>
+
+      <a routerLink="/buyer" (click)="onLoginSubmit()"><button type="submit">Login</button></a><br><br>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
     </div>
 
-    <div class="container" style="background-color:#f1f1f1">
-      <button type="button" class="cancelbtn" routerLink="" routerLinkActive="active">Cancel</button>
-      <span class="psw"><a href="#">Forgot password?</a></span>
+    <div class="container">
+
+      <p><a href="#">Forgot password?</a></p>
+      <p><a routerLink="/seller-login">Seller? Log in here.</a></p>
     </div>
 
-    <div class="container signin">
-        <p>Are you a seller? <a routerLink="/seller-login" routerLinkActive="active">Sign in here</a>.</p>
-      </div>
-  </form>
 
+  </form>
+</body>

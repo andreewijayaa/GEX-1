@@ -25,24 +25,26 @@ import { StoreFetchService } from './services/storeFetch.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SellerNavbarComponent } from './components/navbar/seller-navbar/seller-navbar.component';
 import { BuyerNavbarComponent } from './components/navbar/buyer-navbar/buyer-navbar.component';
-import { RegisterComponent } from './components/register/register.component';
 import { PreactivationComponent } from './components/activation/preactivation/preactivation.component';
 import { PostactivationComponent } from './components/activation/postactivation/postactivation.component';
 import { SellerService } from './services/seller.service';
+import { BuyerAuthGuard } from './buyerAuth.guard';
+import { SellerAuthGuard } from './sellerAuth.guard';
+import { SellerServicesComponent } from './components/seller/seller-services/seller-services/seller-services.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'register', component: RegisterComponent},
   {path: 'buyer-register', component: BuyerRegisterComponent},
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'seller-login', component: SellerLoginComponent},
-  {path: 'buyer', component: BuyerComponent},
-  {path: 'buyer/buyer-account', component: BuyerAccountComponent},
-  {path: 'buyer/make-request', component: MakeRequestComponent},
-  {path: 'seller', component: SellerComponent},
-  {path: 'seller/seller-account', component: SellerAccountComponent},
-  {path: 'seller/submit-offer', component: SubmitOfferComponent},
+  {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/submit-offer', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent }
 ];
@@ -52,7 +54,6 @@ const appRoutes: Routes = [
     AppComponent,
     NavbarComponent,
     LoginComponent,
-    RegisterComponent,
     BuyerComponent,
     SellerComponent,
     HomeComponent,
@@ -68,6 +69,7 @@ const appRoutes: Routes = [
     BuyerRegisterComponent,
     PreactivationComponent,
     PostactivationComponent,
+    SellerServicesComponent,
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ const app = express();
 
 const buyers = require('./routes/buyers');
 const sellers = require('./routes/sellers');
+const requests = require('./routes/requests');
 const codes = require('./routes/codes');
 
 // Port Number
@@ -43,8 +44,11 @@ app.use('/buyers', buyers);
 //sellers route
 app.use('/sellers', sellers);
 
-// Code route
+//codes route
 app.use('/codes', codes);
+
+//requests route
+app.use('/requests', requests);
 
 
 //Homepage route
