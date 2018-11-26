@@ -41,7 +41,7 @@ export class BuyerService {
       return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
         .pipe(map(res => res));
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/buyer']);
     }
   }
 
