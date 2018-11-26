@@ -24,6 +24,10 @@ export class SellerLoginComponent implements OnInit {
     private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
+    if (this.storeFetchService.buyerIsLoggedIn())
+      this.router.navigate(['/buyer']);
+    else if (this.storeFetchService.sellerIsLoggedIn())
+      this.router.navigate(['/seller']);
   }
 
   onLoginSubmit() {
