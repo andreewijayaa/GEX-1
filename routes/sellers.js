@@ -120,8 +120,8 @@ router.get('/view', (req, res) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
-
-      Request.find( {'code':decoded.data.codes[1]}, (err, requests) => {
+      console.log('codes associated with seller' + decoded.data.codes);
+      Request.find( {'code' :{$in:decoded.data.codes}}, (err, requests) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
       });
@@ -201,7 +201,7 @@ router.post('/addCode', (req, res) => {
 
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-
+  console.log('add code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
