@@ -43,8 +43,19 @@ export class StoreFetchService {
     this.seller = seller;
   }
 
-  //return seller data
-  getSellerData() {
-    return this.seller;
+  //check if buyer is logged in
+  buyerIsLoggedIn() {
+    if (localStorage.getItem('buyer'))
+      return true;
+    else
+      return false;
+  }
+
+  //check if buyer is logged in
+  sellerIsLoggedIn() {
+    if (localStorage.getItem('seller'))
+      return true;
+    else
+      return false;
   }
 }
