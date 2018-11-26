@@ -40,7 +40,7 @@ export class SellerLoginComponent implements OnInit {
       }
       else {
         this.flashMessage.show('User not found', { cssClass: 'alert-danger', timeout: 5000 });
-        this.router.navigate(['/login']);
+        this.router.navigate(['/seller-login']);
       }
     });
 

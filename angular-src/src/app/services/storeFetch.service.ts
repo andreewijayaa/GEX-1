@@ -26,6 +26,7 @@ export class StoreFetchService {
     const token = localStorage.getItem('id_token');
     this.RegisterToken = token;
   }
+
   // Store Buyer Data Locally Service
   storeBuyerData(token, buyer) {
     localStorage.setItem('id_token', token);
@@ -40,5 +41,10 @@ export class StoreFetchService {
     localStorage.setItem('seller', JSON.stringify(seller)); // can only store stings not objects
     this.RegisterToken = token;
     this.seller = seller;
+  }
+
+  //return seller data
+  getSellerData() {
+    return this.seller;
   }
 }
