@@ -28,7 +28,7 @@ router.post('/:id', (req, res, next) => {
       if (err) return res.status(404).send({ success: false, msg: 'Request not found.' });
       var buyer_ID = request.buyer_ID;
       console.log(buyer_ID);
-      //We need to make sure other buys are not able to access their requests
+      //We need to make sure other buyers are not able to access their requests
       if(buyer_ID == decoded.data._id)
       {
         Offer.find({'request_ID':request._id} , (err,offers) =>{
