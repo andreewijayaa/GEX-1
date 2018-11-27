@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./seller-services.component.css']
 })
 export class SellerServicesComponent implements OnInit {
-	codes = [
+	/* var codes = [
 		{ code: 95141601, name: 'House' },
 		{ code: 95141602, name: 'Mobile Home' },
 		{ code: 91111603, name: 'Cooking/Food Prep'},
@@ -16,8 +16,8 @@ export class SellerServicesComponent implements OnInit {
 		{ code: 50443200, name: 'Frozen Corn'},
 		{ code: 42131700, name: 'Surgical Textiles'},
 		{ code: 30111700, name: 'Plasters'},
-		{ code: 23241600, name: 'Metal Cutting Tools'}
-	];
+		{ code: 23241600, name: 'Metal Cutting Tools'},
+	]; */
 
   constructor() { }
 
