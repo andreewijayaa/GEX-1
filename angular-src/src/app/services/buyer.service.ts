@@ -45,6 +45,18 @@ export class BuyerService {
     }
   }
 
+  getBuyerRequests() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    return this.http.get('http://localhost:3000/buyers/request', httpOptions)
+    .pipe(map(res => res));
+  }
+
   loadToken() {
     const token = localStorage.getItem('id_token');
     this.buyerToken = token;
