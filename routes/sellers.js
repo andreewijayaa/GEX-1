@@ -145,7 +145,7 @@ router.get('/viewoffers', (req,res) => {
           });
         }
         else{
-          res.status(500).send({scuees: false, message: 'There are no offers to view'});
+          res.status(500).send({success: false, message: 'There are no offers to view'});
         }
       });
     });

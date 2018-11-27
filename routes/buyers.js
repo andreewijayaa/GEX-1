@@ -137,6 +137,29 @@ router.post('/request', (req, res, next) => {
   });*/
 })
 
+// Get Requests 
+router.get('/request', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view requests.' });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      Buyer.findById(decoded.data._id, (err, buyer_viewing_requests) => {
+        if (err) return handleError(err);
+
+        if (buyer_viewing_requests.buyer_requests_byID != []){
+          Request.find({'buyer_ID':decoded.data._id} , (err,requests) =>{
+            if (err) return res.status(500).send({ success: false, message: 'Could not find requests with ID' });
+            res.status(200).send(requests);
+          });
+        }
+        else{
+          res.status(500).send({success: false, message: 'There are no requests to view'});
+        }
+      });
+    });
+})
 
 
 
