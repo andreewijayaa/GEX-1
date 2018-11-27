@@ -29,6 +29,10 @@ export class LoginComponent implements OnInit {
     private buyerComp: BuyerComponent) { }
 
   ngOnInit() {
+    if (this.storeFetchService.buyerIsLoggedIn())
+      this.router.navigate(['/buyer']);
+    else if (this.storeFetchService.sellerIsLoggedIn())
+      this.router.navigate(['/seller']);
   }
 
   onLoginSubmit() {
