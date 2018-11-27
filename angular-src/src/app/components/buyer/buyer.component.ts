@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
-  requestList: Object[];
+  requestList: Object;
   loaded: Promise<boolean>;
   loading: Boolean;
 
