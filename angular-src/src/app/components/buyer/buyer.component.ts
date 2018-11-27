@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
+  requestList: Object[];
   loaded: Promise<boolean>;
   loading: Boolean;
 
@@ -31,6 +32,10 @@ export class BuyerComponent implements OnInit {
           return false;
         });
     }, 1000);
+
+    this.buyerService.getBuyerRequests().subscribe((requests: any) => {
+      this.requestList = requests;
+    });
   }
 
   currentTab = 'requests';
