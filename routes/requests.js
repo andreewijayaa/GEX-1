@@ -26,15 +26,18 @@ router.post('/:id', (req, res, next) => {
 
     Request.findById(id, (err, request) => {
       if (err) return res.status(404).send({ success: false, msg: 'Request not found.' });
-      console.log(request);
       var buyer_ID = request.buyer_ID;
       console.log(buyer_ID);
+      //We need to make sure other buyers are not able to access their requests
       if(buyer_ID == decoded.data._id)
       {
-        return res.status(200).send({status: 0, request }); //Buyer viewing the request
-
+        Offer.find({'request_ID':request._id} , (err,offers) =>{
+          return res.status(200).send({status: 0, request, offers }); //Buyer viewing the request
+        });
       } else if (buyer_ID != decoded.data._id){
-        return res.status(200).send({ status: 1, request }); // Seller viewing the request
+          Offer.find({'request_ID':request._id} , (err,offers) =>{
+          return res.status(200).send({status: 1, request, offers }); // Seller viewing the request
+        });
       } else {
         return res.status(500).send({ success: false, msg: 'You are not authorized to view this request.' });
       }

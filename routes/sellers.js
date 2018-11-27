@@ -15,6 +15,9 @@ router.post('/register',(req,res,next) => {
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
+        entity_name: req.body.entity_name,
+        position: req.body.position,
+        phone_number: req.body.phone_number,
         password: req.body.password,
         confirmationToken: jwt.sign({data: 'seller'}, config.secret, {
           expiresIn: '24h'}) // 1 day

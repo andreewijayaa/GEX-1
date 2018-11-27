@@ -12,6 +12,9 @@ import { RegisterService } from '../../../services/register.service';
 export class SellerRegisterComponent implements OnInit {
   first_name: String;
   last_name: String;
+  entity_name: String;
+  position: String;
+  phone_number: String;
   email: String;
   password: String;
   confirmPassword: String;
@@ -31,12 +34,15 @@ export class SellerRegisterComponent implements OnInit {
       first_name: this.first_name,
       last_name: this.last_name,
       email: this.email,
+      entity_name: this.entity_name,
+      position: this.position,
+      phone_number: this.phone_number,
       password: this.password,
       confirmPassword: this.confirmPassword,
     };
 
     // RequiredFields
-    if (!this.validateService.ValidateBuyerRegister(seller)) {
+    if (!this.validateService.ValidateSellerRegister(seller)) {
       this.flashMessage.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 10000});
       return false;
     }
