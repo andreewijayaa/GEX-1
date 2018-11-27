@@ -14,4 +14,32 @@ router.get('/:code', function (req, res, next) {
     });
   });
 
+//Email Verification
+router.post('/:id', (req, res, next) => { 
+  var id = req.params.id;
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, msg:'Must login to view request.' });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) return res.status(500).send({ success: false, msg: 'Failed to authenticate token.' });
+
+    Request.findById(id, (err, request) => {
+      if (err) return res.status(404).send({ success: false, msg: 'Request not found.' });
+      console.log(request);
+      var buyer_ID = request.buyer_ID;
+      console.log(buyer_ID);
+      if(buyer_ID == decoded.data._id)
+      {
+        return res.status(200).send({status: 0, request }); //Buyer viewing the request
+
+      } else if (buyer_ID != decoded.data._id){
+        return res.status(200).send({ status: 1, request }); // Seller viewing the request
+      } else {
+        return res.status(500).send({ success: false, msg: 'You are not authorized to view this request.' });
+      }
+      });
+    });
+})
+
 module.exports = router;
