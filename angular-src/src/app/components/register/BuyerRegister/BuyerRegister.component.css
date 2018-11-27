@@ -47,12 +47,12 @@ input[type=text], input[type=password] , input[type=tel] {
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
-  background: #6aa5e7;
+  background: #0d0f11;
   opacity: .65;
 }
 
 input[type=text]:focus, input[type=password]:focus {
-  background-color: rgb(231, 161, 176);
+  background-color: rgb(112, 58, 70);
   outline: none;
 }
 
@@ -80,8 +80,10 @@ hr {
 
 
 .btn:hover {
-  opacity:1;
+  opacity:.75;
+  background-color: darkgreen;
 }
+
 
 /* Add a blue text color to links */
 a {
