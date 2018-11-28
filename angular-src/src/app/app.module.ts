@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -78,7 +78,7 @@ const appRoutes: Routes = [
     FlashMessagesModule.forRoot(),
     HttpClientModule
   ],
-  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService],
+  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title],
   bootstrap: [AppComponent]
 
 })

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-seller',
@@ -29,7 +30,6 @@ export class SellerComponent implements OnInit {
   constructor(private sellerService: SellerService) { }
 
   ngOnInit() {
-
       this.sellerService.getSellerProfile().subscribe((profile: any) => {
         this.seller = profile.data;
         //this.loaded_seller = Promise.resolve(true);

@@ -3,6 +3,7 @@ import { StoreFetchService } from '../../../services/storeFetch.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { BuyerService } from '../../../services/buyer.service';
+import { Title } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-buyer-navbar',
@@ -14,9 +15,11 @@ export class BuyerNavbarComponent implements OnInit {
   constructor(private storeFetchService: StoreFetchService,
     private router: Router,
     private flashMessage: FlashMessagesService,
-    private buyerService: BuyerService) { }
+    private buyerService: BuyerService,
+    private titleService: Title) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Buyer | GEX");
   }
 
   onLogoutClick() {
@@ -27,6 +30,7 @@ export class BuyerNavbarComponent implements OnInit {
       timeout: 3000
     });
     this.router.navigate(['/login']);
+    window.location.reload();
     return false;
   }
 }
