@@ -14,9 +14,9 @@
       <input type="password" placeholder="Confirm Password" [(ngModel)]="confirmPassword" name="psw" required>
 
 
-      <input type="text" placeholder="Legal Name of Entity" name="organizationName" required>
+      <input type="text" placeholder="Legal Name of Entity" [(ngModel)]="entity_name" name="entity_name" required>
       <!--<input type="text" placeholder="Doing business as..." name="dba" optional>-->
-      <input type="text" placeholder="Your position" name="position" optional>
+      <input type="text" placeholder="Your position" [(ngModel)]="position" name="position" optional>
 
       <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
 
@@ -24,7 +24,7 @@
 
 
 
-      <input type="tel" placeholder="Enter phone number" name="phoneNum" required>
+      <input type="tel" placeholder="Enter phone number" [(ngModel)]="phone_number" name="phone_number" required>
 
       <hr>
 
