@@ -1,0 +1,23 @@
+
+<div class = "container">
+<div class="tab-content">
+  &nbsp;
+<ul class="container">
+  <li class="card container" *ngFor="let offer of offerList">
+    &nbsp;
+
+    <div class="row">
+      <div class="col-md-auto">
+        <h4>{{offer.title}}</h4>
+      </div>
+      <div class="col">
+        <b>Offer count:</b>
+      </div>
+    </div>
+
+    <p><b>Description:</b> {{offer.description}}</p>
+    <!--<button type="button" routerLink="/request/{{request._id}}" class="btn btn-block btn-lg btn-primary">View Offers</button>-->
+  </li>
+</ul>
+</div>
+</div>

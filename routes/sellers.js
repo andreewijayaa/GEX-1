@@ -154,17 +154,22 @@ router.get('/viewoffers', (req,res) => {
     });
 });
 
-  router.post('/makeOffer', (req,res,next) =>{
+
+
+//This function needs to only be avaible to sellers who are within that code catagory
+//also buyers are not allowed to make offers
+//also the request id has to be valid 
+  router.post('/makeOffer/:id', (req,res,next) =>{
+    var id = req.params.id;
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
-
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({success: false, message: 'Failed to authenticate token.'});
-      delete decoded.data.password;
+      delete decoded.data.password; //Why are we deleting password here ??
       let newOffer = new Offer({
         seller_ID:decoded.data._id,
-        code:req.body.code,
-        request_ID:req.body.request_ID,
+        //code:req.body.code, //I DONT THINK OFFER NEEDS CODE
+        request_ID: id,
         title:req.body.title,
         description:req.body.description,
         price:req.body.price
@@ -173,12 +178,14 @@ router.get('/viewoffers', (req,res) => {
       Seller.findById(decoded.data._id, (err, seller_making_offer) => {
         if (err) return handleError(err);
         newOffer.save( (err,post) => {
+          console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
               console.log('New Offer made tied to Seller %s', decoded.data._id);
-              Request.findById(req.body.request_ID, (err, request_with_offer) => {
+              console.log('Request ID is: ' + id);
+              Request.findById(id, (err, request_with_offer) => {
                 if (err) return handleError(err);
                 console.log('Found request\n' + request_with_offer);
                 request_with_offer.request_offers_byID.push(post._id);

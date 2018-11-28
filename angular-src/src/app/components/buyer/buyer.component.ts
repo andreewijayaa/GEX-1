@@ -38,6 +38,7 @@ export class BuyerComponent implements OnInit {
     });
   }
 
+  // tslint:disable-next-line:member-ordering
   currentTab = 'requests';
 
    requests(currentTab) {
@@ -52,8 +53,7 @@ export class BuyerComponent implements OnInit {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
     if (this.buyer == null) {
       window.location.reload();
-    }
-    else {
+    } else {
       console.log(this.buyer);
     }
   }

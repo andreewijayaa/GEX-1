@@ -31,6 +31,7 @@ import { SellerService } from './services/seller.service';
 import { BuyerAuthGuard } from './buyerAuth.guard';
 import { SellerAuthGuard } from './sellerAuth.guard';
 import { SellerServicesComponent } from './components/seller/seller-services/seller-services/seller-services.component';
+import { RequestComponent } from './components/request/request.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -46,7 +47,8 @@ const appRoutes: Routes = [
   {path: 'seller/submit-offer', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
-  {path: 'postactivation/:token', component: PostactivationComponent }
+  {path: 'postactivation/:token', component: PostactivationComponent },
+  {path: 'request/:id', component: RequestComponent}
 ];
 
 @NgModule({
@@ -70,6 +72,7 @@ const appRoutes: Routes = [
     PreactivationComponent,
     PostactivationComponent,
     SellerServicesComponent,
+    RequestComponent,
   ],
   imports: [
     BrowserModule,
