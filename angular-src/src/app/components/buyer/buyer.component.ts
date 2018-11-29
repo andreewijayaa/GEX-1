@@ -9,8 +9,10 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./buyer.component.css']
 })
 export class BuyerComponent implements OnInit {
-  buyer: any;
-  requestList: Object[];
+  buyer: Object;
+  requestList: Object;
+  loaded: Promise<boolean>;
+  loading: Boolean;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
