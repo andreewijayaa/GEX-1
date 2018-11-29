@@ -42,6 +42,9 @@ const SellerSchema = mongoose.Schema({
     seller_offers_byID: {
       type: [String]
     },
+    open_requests: {
+        type: [String]
+    },
     userConfirmed: {
         type: Boolean,
         required: true,

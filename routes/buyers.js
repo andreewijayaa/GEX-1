@@ -129,11 +129,15 @@ router.post('/request', (req, res, next) => {
             console.log('Post Code: ' + post.code)
 
             Seller.find({'codes': post.code}, (err, applicableSeller) => {
-            for(i = 0; i < applicableSeller.length; i++ )
-            {
-             console.log(applicableSeller[i]);
-             sendEmail.NotifySeller(applicableSeller[i], post._id);
-            }
+              if (err) { return next(err); }
+              for(i = 0; i < applicableSeller.length; i++ )
+              {
+                applicableSeller[i].open_requests.push(post._id);
+                applicableSeller[i].save((err) =>{
+                if (err) { return next(err); }     
+                });
+                sendEmail.NotifySeller(applicableSeller[i], post._id);
+              }
           });
 
 
@@ -185,7 +189,10 @@ router.post('/confirmEmail/:token', (req, res, next) => {
   Buyer.findOne({confirmationToken: req.params.token}, (err, buyer) => {
     if(err) throw err;
     var token = req.params.token;
-
+    if(buyer.userConfirmed)
+    {
+      return res.json({success: false, msg: 'Your account is already active.'});
+    }
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {
