@@ -36,7 +36,6 @@ export class MakeRequestComponent implements OnInit {
               private router: Router ) { }
 
   ngOnInit() {
-    
   }
   onRequestSubmit() {
     const request = {
