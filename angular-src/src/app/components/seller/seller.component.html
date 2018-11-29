@@ -19,7 +19,7 @@
       <a routerLink="/seller/submit-offer"><button type="button" class="btn submitBtn text-white">Submit
         New Offer</button></a>
 
-      <h4>Welcome, {{seller.data.first_name}}</h4>
+      <h4>Welcome, {{seller.first_name}}</h4>
       <div class="tabbable">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
@@ -71,90 +71,21 @@
             <br>
             <br>
             <br>
-            <!-- <div class="card" id="card0">
-              <div class="card-body">
-                <h5>{{offerList[0].title}}</h5>
-                <h4>$ {{offerList[0].price}}</h4>
-                {{offerList[0].description}}
-                <h6>Seller ID: {{offerList[0].seller_ID}}</h6>
+
+            <ul class="container">
+              <div class="card container" *ngFor="let offer of offerList">
+                <div class="card-body">
+                  <h4 style="align-self:right">$ {{offer.price}}</h4>
+                  <h5>{{offer.title}}</h5>
+                  <p><b>Description:</b> {{offer.description}}</p>
+                  <h6>Seller ID: {{offer.seller_ID}}</h6>
+                  <button type="button" routerLink="/offer/{{offer._id}}" class="btn btn-block btn-lg btn-primary">View Offer</button>
+                </div>
               </div>
-            </div>
-            <div class="card" id="card1">
-              <div class="card-body">
-                <h5>{{offerList[1].title}}</h5>
-                <h4>$ {{offerList[1].price}}</h4>
-                {{offerList[1].description}}
-                <h6>Seller ID: {{offerList[1].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card2">
-              <div class="card-body">
-                <h5>{{offerList[2].title}}</h5>
-                <h4>$ {{offerList[2].price}}</h4>
-                {{offerList[2].description}}
-                <h6>Seller ID: {{offerList[2].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card3">
-              <div class="card-body">
-                <h5>{{offerList[3].title}}</h5>
-                <h4>$ {{offerList[3].price}}</h4>
-                {{offerList[3].description}}
-                <h6>Seller ID: {{offerList[3].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card4">
-              <div class="card-body">
-                <h5>{{offerList[4].title}}</h5>
-                <h4>$ {{offerList[4].price}}</h4>
-                {{offerList[4].description}}
-                <h6>Seller ID: {{offerList[4].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card5">
-              <div class="card-body">
-                <h5>{{offerList[5].title}}</h5>
-                <h4>$ {{offerList[5].price}}</h4>
-                {{offerList[5].description}}
-                <h6>Seller ID: {{offerList[5].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card6">
-              <div class="card-body">
-                <h5>{{offerList[6].title}}</h5>
-                <h4>$ {{offerList[6].price}}</h4>
-                {{offerList[6].description}}
-                <h6>Seller ID: {{offerList[6].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card7">
-              <div class="card-body">
-                <h5>{{offerList[7].title}}</h5>
-                <h4>$ {{offerList[7].price}}</h4>
-                {{offerList[7].description}}
-                <h6>Seller ID: {{offerList[7].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card8">
-              <div class="card-body">
-                <h5>{{offerList[8].title}}</h5>
-                <h4>$ {{offerList[8].price}}</h4>
-                {{offerList[8].description}}
-                <h6>Seller ID: {{offerList[8].seller_ID}}</h6>
-              </div>
-            </div>
-            <div class="card" id="card9">
-              <div class="card-body">
-                <h5>{{offerList[9].title}}</h5>
-                <h4>$ {{offerList[9].price}}</h4>
-                {{offerList[9].description}}
-                <h6>Seller ID: {{offerList[9].seller_ID}}</h6>
-              </div>
-            </div>-->
+            </ul>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
