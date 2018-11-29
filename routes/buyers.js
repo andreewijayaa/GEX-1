@@ -6,6 +6,7 @@ const config = require('../config/database');
 const Buyer = require('../models/buyer');
 const Request = require('../models/request');
 const sendEmail = require('../models/sendEmail');
+const Seller = require('../models/seller');
 
 //Register
 router.post('/register',(req,res/*,next*/) => {
@@ -124,6 +125,19 @@ router.post('/request', (req, res, next) => {
           buyer_making_request.buyer_requests_byID.push(post._id);
           buyer_making_request.save((err) =>{
             if (err) { return next(err); }
+            console.log('Post ID: ' + post.id)
+            console.log('Post Code: ' + post.code)
+
+            Seller.find({'codes': post.code}, (err, applicableSeller) => {
+            for(i = 0; i < applicableSeller.length; i++ )
+            {
+             console.log(applicableSeller[i]);
+             sendEmail.NotifySeller(applicableSeller[i], post._id);
+            }
+          });
+
+
+           // sendEmail.NotifySeller()
             return res.json({success: true, msg: 'Your request was submitted!'});
             //console.log('New Reuqest made tied to Buyer %s', buyer_making_request._id);
           });
