@@ -14,12 +14,29 @@ export class SellerComponent implements OnInit {
 
   seller: any;
   requestList: Object;
+  offerList: Object;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.seller = this.route.snapshot.data['seller'];
+
+      this.sellerService.getSellerProfile().subscribe((profile: any) => {
+        this.seller = profile.data;
+        //this.loaded_seller = Promise.resolve(true);
+      },
+        err => {
+          console.log(err);
+          return false;
+        });
+
+      this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
+        this.offerList = offers;
+      },
+        err => {
+          console.log(err);
+          return false;
+        });
   }
 
   currentTab = 'requests';
