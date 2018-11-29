@@ -833,7 +833,6 @@ var LoginComponent = /** @class */ (function () {
                 _this.router.navigateByUrl('./navbar.component.html', { skipLocationChange: true }).then(function () {
                     return _this.router.navigate(["/buyer"]);
                 });
-                //this.router.navigate(['/buyer']);
             }
             else {
                 _this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
@@ -913,8 +912,9 @@ var SellerLoginComponent = /** @class */ (function () {
             if (data.success) {
                 _this.storeFetchService.storeSellerData(data.token, data.seller);
                 _this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
-                _this.router.navigate(['/seller']);
-                document.getElementById("userType").innerHTML = userType;
+                _this.router.navigateByUrl('./navbar.component.html', { skipLocationChange: true }).then(function () {
+                    return _this.router.navigate(["/seller"]);
+                });
             }
             else {
                 _this.flashMessage.show('User not found', { cssClass: 'alert-danger', timeout: 5000 });

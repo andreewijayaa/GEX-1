@@ -3,6 +3,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class BuyerService {
     private router: Router) { }
 
   // Get Buyer Profile Service
-  getBuyerProfile() {
+  getBuyerProfile() : Observable<any> {
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
