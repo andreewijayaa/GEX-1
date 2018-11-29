@@ -26,3 +26,10 @@
     margin-top: 60px;
     width: 1080px;
   }
+  
+  .editBtn{
+    background-color: darkorange;
+  }
+  .saveBtn{
+    background-color: #e60000;
+  }

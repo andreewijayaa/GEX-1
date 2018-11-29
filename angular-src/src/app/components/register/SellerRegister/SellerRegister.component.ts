@@ -59,11 +59,11 @@ export class SellerRegisterComponent implements OnInit {
       return false;
     }
 
-    // Register Buyer
+    // Register Seller
     this.registerService.RegisterSeller(seller).subscribe((data: any) => {
-      if (data.success == 'true') { // must know if its a successful register or not FIX THIS LATER
+      if (data.success) { // must know if its a successful register or not FIX THIS LATER
         // this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
-        this.router.navigate(['/seller-login']);
+        this.router.navigate(['/preactivation']);
       } else {
         this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 10000});
         this.router.navigate(['/seller-register']);
