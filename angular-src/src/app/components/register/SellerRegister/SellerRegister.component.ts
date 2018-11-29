@@ -28,7 +28,7 @@ export class SellerRegisterComponent implements OnInit {
   }
 
   OnSellerRegisterSubmit() {
-    console.log("On Seller Register Submit Called.");
+    console.log('On Seller Register Submit Called.');
 
     const seller = {
       first_name: this.first_name,
@@ -48,6 +48,7 @@ export class SellerRegisterComponent implements OnInit {
     }
 
     // Password Confirmation
+    // tslint:disable-next-line:triple-equals
     if (seller.password != this.confirmPassword) {
       this.flashMessage.show('Passwords do not match', {cssClass: 'alert-danger', timeout: 10000});
       return false;

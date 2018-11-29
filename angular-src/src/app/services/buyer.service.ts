@@ -18,7 +18,7 @@ export class BuyerService {
     private router: Router) { }
 
   // Get Buyer Profile Service
-  getBuyerProfile() : Observable<any> {
+  getBuyerProfile(): Observable<any> {
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
@@ -38,7 +38,7 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      console.log(this.buyerToken);
+      // console.log(this.buyerToken);
       return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
         .pipe(map(res => res));
     } else {

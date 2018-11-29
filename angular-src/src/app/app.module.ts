@@ -32,8 +32,8 @@ import { BuyerAuthGuard } from './buyerAuth.guard';
 import { SellerAuthGuard } from './sellerAuth.guard';
 import { SellerServicesComponent } from './components/seller/seller-services/seller-services/seller-services.component';
 import { RequestComponent } from './components/request/request.component';
-import { BuyerResolve } from './services/buyer.resolve'
-import { SellerResolve } from './services/seller.resolve'
+import { BuyerResolve } from './services/buyer.resolve';
+import { SellerResolve } from './services/seller.resolve';
 
 
 const appRoutes: Routes = [
