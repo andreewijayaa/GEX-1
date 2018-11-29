@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
+import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-seller',
@@ -9,24 +12,11 @@ import { Variable } from '@angular/compiler/src/render3/r3_ast';
 })
 export class SellerComponent implements OnInit {
 
-  seller: Object;
+  seller: any;
   requestList: Object;
-  //loaded_seller: Promise<boolean>;
-  //loaded_list: Promise<boolean>;
-  //loading: Boolean;
-  offerList: Object;
-  title0: Object;
-  title1: Object;
-  title2: Object;
-  title3: Object;
-  title4: Object;
-  title5: Object;
-  title6: Object;
-  title7: Object;
-  title8: Object;
-  title9: Object;
 
-  constructor(private sellerService: SellerService) { }
+  constructor(private sellerService: SellerService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
 
