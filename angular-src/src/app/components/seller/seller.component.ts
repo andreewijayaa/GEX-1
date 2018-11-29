@@ -39,9 +39,15 @@ export class SellerComponent implements OnInit {
           return false;
         });
 
-      /* this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
+      this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
         this.offerList = offers;
+      },
+        err => {
+          console.log(err);
+          return false;
+        });
 
+        /*
         //checking if the title is null
         try {
           this.title0 = offers[0].title;
