@@ -14,6 +14,7 @@ export class SellerComponent implements OnInit {
 
   seller: any;
   requestList: Object;
+  offerList: Object;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
