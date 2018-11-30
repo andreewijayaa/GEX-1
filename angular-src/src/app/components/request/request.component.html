@@ -1,4 +1,5 @@
-<app-buyer-navbar></app-buyer-navbar>
+<app-buyer-navbar *ngIf="status" ></app-buyer-navbar>
+<app-seller-navbar *ngIf="!status"></app-seller-navbar>
 
 <body>
   <div class="container">
