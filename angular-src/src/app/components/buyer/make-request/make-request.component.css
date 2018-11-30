@@ -1,13 +1,49 @@
-html, body {
-    height: 100%;
+ body {
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-user-select: node;
+  background-image: url(../../../../../src/assets/logistics2.jpg);
+  padding: 0;
+  background-repeat:no-repeat;
+  background-size:cover;
   }
+
+  form{
+
+    width: 900px;
+    text-align: left;
+    margin: auto;
+    opacity: .90;
+
+
+  }
+  .form-control {
+    padding: 6px;
+
+    position: relative;
+
+  }
+  .btn {
+    width: 100px;
+    background-color: rgb(218, 64, 26);
+    color: white;
+    font-weight: bold;
+}
+
+/* Add a hover effect for buttons */
+.btn:hover {
+  opacity:.75;
+  background-color: darkgreen;
+}
+
+
 
   #container {
     min-height: 100%;
     margin-bottom: -330px;
     position: relative;
   }
-  
+
   #footer {
     height: 330px;
     position: relative;
