@@ -1,23 +1,45 @@
+<app-buyer-navbar *ngIf="status" ></app-buyer-navbar>
+<app-seller-navbar *ngIf="!status"></app-seller-navbar>
 
-<div class = "container">
-<div class="tab-content">
-  &nbsp;
-<ul class="container">
-  <li class="card container" *ngFor="let offer of offerList">
+<body>
+  <div class="container">
+    <form>
+      <div>
+        <h1>Request</h1>
+        <hr>
+        <p><b>Title: </b>{{request.title}}</p>
+        <p><b>Description: </b>{{request.description}}</p>
+        <div *ngIf="!status" class="col-sm-12" style="text-align: right;">
+            <button type="button" routerLink="/request/{{request._id}}" class="btn">Submit New Offer</button>
+          </div>
+      </div>  
     &nbsp;
+    <ul class="parent container">
+      <p style="font-size: 20px; font-weight: bold;">Offers</p>
+      <hr>
+      <li class="card container" *ngFor="let offer of offerList">
+        &nbsp;
 
-    <div class="row">
-      <div class="col-md-auto">
-        <h4>{{offer.title}}</h4>
-      </div>
-      <div class="col">
-        <b>Offer count:</b>
-      </div>
-    </div>
+        <div class="row">
+          <div class="col-md-auto">
+            <h4>{{offer.title}}</h4>
+          </div>
+          <div class="col">
+            <b></b>
+          </div>
+        </div>
 
-    <p><b>Description:</b> {{offer.description}}</p>
-    <!--<button type="button" routerLink="/request/{{request._id}}" class="btn btn-block btn-lg btn-primary">View Offers</button>-->
-  </li>
-</ul>
-</div>
-</div>
+        <p><b>Price:</b> {{offer.price}}</p>
+        <p><b>Description:</b> {{offer.description}}</p>
+        <div *ngIf="status" class="col-sm-12" style="text-align: right;">
+          <button type="button" routerLink="/request/{{request._id}}" class="btn">Accept Offer</button>
+        </div>
+        <br>
+
+      </li>
+
+    </ul>
+    <br>
+    </form>
+  </div>
+</body>
