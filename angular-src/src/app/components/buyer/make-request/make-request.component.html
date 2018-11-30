@@ -2,47 +2,48 @@
 <flash-messages></flash-messages>
 
 <form (submit)="onRequestSubmit()">
-<div class="container">
-<h1>Submit Product Request</h1>
-&nbsp;
-<div class="card">
-  <div class="card-body">
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Request Title:</label>
-        <div class="col-sm-10">
-          <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="">
+  <div class="container">
+    <h1>Submit Product Request</h1>
+    &nbsp;
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Request Title:</label>
+          <div class="col-sm-10">
+            <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="">
+          </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label"  >Request Category:</label>
-        <div class="col-sm-10">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Request Category:</label>
+          <div class="col-sm-10">
             <select (change)="onChange($event)">
-                <option *ngFor="let code of codes" value={{code.code}}>
-                  {{code.name}}
-                </option>
-              </select>
+              <option *ngFor="let code of codes" value={{code.code}}>
+                {{code.name}}
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Enter description of desired product:</label>
-        <div class="col-sm-10">
-          <textarea class="form-control" [(ngModel)]="description" name="description" rows="8" cols="80"></textarea>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Enter description of desired product:</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" [(ngModel)]="description" name="description" rows="8" cols="80"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Set offer deadline:</label>
-        <div class="row col-sm-10">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Set offer deadline:</label>
+          <div class="row col-sm-10">
             <input class="form-control col-sm-3" type="date" name="deadline">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary" routerLink="/buyer">Submit</button>
+          </div>
         </div>
       </div>
-      <div class="form-group row">
-        <div class="col-sm-10">
-          <button type="submit" class="btn btn-primary" routerLink="/buyer">Submit</button>
-        </div>
-      </div>
+    </div>
+    <div class="clearfooter"></div>
   </div>
-</div>
-</div>
 </form>
 <!--
 <html>
