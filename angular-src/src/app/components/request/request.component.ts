@@ -15,7 +15,10 @@ export class RequestComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router) { }
   id: any;
-  requestList: Object[];
+  request: Object;
+  offerList: Object;
+  status: Boolean;
+
 
   ngOnInit() {
      // get URL parameters
@@ -23,8 +26,18 @@ export class RequestComponent implements OnInit {
       this.id = params.id; // --> Name must match wanted parameter
       console.log(this.id);
       this.requestService.getRequest(this.id).subscribe((data: any) => {
-        this.requestList = data.offers;
         if (data.success) {
+          this.request = data.request;
+          this.offerList = data.offers;
+          if (data.status === 0) {
+            this.status = true;
+          } else {
+            this.status = false;
+          }
+
+          console.log(this.offerList);
+
+
         } else {
           this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 5000});
         }
