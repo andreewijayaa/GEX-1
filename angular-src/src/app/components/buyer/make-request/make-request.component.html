@@ -1,12 +1,14 @@
 <app-buyer-navbar></app-buyer-navbar>
 <flash-messages></flash-messages>
 
+<body>
 <form (submit)="onRequestSubmit()">
   <div class="container">
-    <h1>Submit Product Request</h1>
+
     &nbsp;
     <div class="card">
       <div class="card-body">
+          <h1>Submit Product Request</h1><br><hr>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Request Title:</label>
           <div class="col-sm-10">
@@ -32,12 +34,13 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Set offer deadline:</label>
           <div class="row col-sm-10">
-            <input class="form-control col-sm-3" type="date" name="deadline">
+            <input class="form-control col-sm-3" type="date" name="deadline" style="margin-left: 13px;">
           </div>
         </div>
+        <hr>
         <div class="form-group row">
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" routerLink="/buyer">Submit</button>
+          <div class="col-sm-12" style="text-align: right;">
+            <button type="submit" class="btn" routerLink="/buyer">Submit</button>
           </div>
         </div>
       </div>
@@ -45,6 +48,7 @@
     <div class="clearfooter"></div>
   </div>
 </form>
+</body>
 <!--
 <html>
  <head>

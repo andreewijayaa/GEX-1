@@ -1,5 +1,7 @@
 <app-buyer-navbar></app-buyer-navbar>
 
+
+
 <div class = "container" *ngIf="buyer">
 &nbsp;
   <div class="row justify-content-md">
@@ -7,7 +9,7 @@
       <h4 class="page-header">Welcome, {{buyer.data.first_name}}</h4>
     </div>
     <div class="col col-lg-auto">
-      <button type="button" routerLink="/buyer/make-request" class="btn btn-block btn-lg btn-primary">Submit New Request</button>
+      <button type="button" routerLink="/buyer/make-request" class="btn btn-block btn-lg">Submit New Request</button>
     </div>
   </div>
   <div class="tabbable">
@@ -26,9 +28,6 @@
 
           <div class="row justify-content-md">
             <div class="col">
-
-
-
             </div>
             <div class="input-group col searchBox">
               <input type="text" class="form-control" placeholder="Search Requests">
@@ -53,11 +52,19 @@
 
               <p><b>Deadline:</b> {{request.deadline}}</p>
               <p><b>Description:</b> {{request.description}}</p>
-              <button type="button" routerLink="/request/{{request._id}}" class="btn btn-block btn-lg btn-primary">View Offers</button>
+              <div class="col-sm-12" style="text-align: right;">
+              <button type="button" routerLink="/request/{{request._id}}" class="btn">View Offers</button>
+               </div>
+              <hr>
+
             </li>
+
           </ul>
+          <br>
 
       </div>
+
+
       <div class="tab-pane fade show" id="history" [ngClass]="{'active':currentTab === 'history'}" role="tabpanel" aria-labelledby="history-tab">
 
         <br>
