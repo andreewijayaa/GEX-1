@@ -6,6 +6,7 @@ const config = require('../config/database');
 const Buyer = require('../models/buyer');
 const Request = require('../models/request');
 const sendEmail = require('../models/sendEmail');
+const Seller = require('../models/seller');
 
 //Register
 router.post('/register',(req,res/*,next*/) => {
@@ -124,6 +125,23 @@ router.post('/request', (req, res, next) => {
           buyer_making_request.buyer_requests_byID.push(post._id);
           buyer_making_request.save((err) =>{
             if (err) { return next(err); }
+            console.log('Post ID: ' + post.id)
+            console.log('Post Code: ' + post.code)
+
+            Seller.find({'codes': post.code}, (err, applicableSeller) => {
+              if (err) { return next(err); }
+              for(i = 0; i < applicableSeller.length; i++ )
+              {
+                applicableSeller[i].open_requests.push(post._id);
+                applicableSeller[i].save((err) =>{
+                if (err) { return next(err); }     
+                });
+                sendEmail.NotifySeller(applicableSeller[i], post._id);
+              }
+          });
+
+
+           // sendEmail.NotifySeller()
             return res.json({success: true, msg: 'Your request was submitted!'});
             //console.log('New Reuqest made tied to Buyer %s', buyer_making_request._id);
           });
@@ -137,6 +155,29 @@ router.post('/request', (req, res, next) => {
   });*/
 })
 
+// Get Requests 
+router.get('/request', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view requests.' });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      Buyer.findById(decoded.data._id, (err, buyer_viewing_requests) => {
+        if (err) return handleError(err);
+
+        if (buyer_viewing_requests.buyer_requests_byID != []){
+          Request.find({'buyer_ID':decoded.data._id} , (err,requests) =>{
+            if (err) return res.status(500).send({ success: false, message: 'Could not find requests with ID' });
+            res.status(200).send(requests);
+          });
+        }
+        else{
+          res.status(500).send({success: false, message: 'There are no requests to view'});
+        }
+      });
+    });
+})
 
 
 
@@ -148,7 +189,10 @@ router.post('/confirmEmail/:token', (req, res, next) => {
   Buyer.findOne({confirmationToken: req.params.token}, (err, buyer) => {
     if(err) throw err;
     var token = req.params.token;
-
+    if(buyer.userConfirmed)
+    {
+      return res.json({success: false, msg: 'Your account is already active.'});
+    }
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {

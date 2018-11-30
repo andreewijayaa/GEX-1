@@ -44,17 +44,19 @@ export class StoreFetchService {
 
   // Check if buyer is logged in
   buyerIsLoggedIn() {
-  if (localStorage.getItem('buyer'))
-    return true;
-  else
-    return false;
+    if (localStorage.getItem('buyer')) {
+        return true;
+    } else {
+      return false;
+    }
   }
 
-  //Check if seller is logged in
+  // Check if seller is logged in
   sellerIsLoggedIn() {
-    if (localStorage.getItem('seller'))
+    if (localStorage.getItem('seller')) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 }

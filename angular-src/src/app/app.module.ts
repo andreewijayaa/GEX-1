@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -31,6 +31,10 @@ import { SellerService } from './services/seller.service';
 import { BuyerAuthGuard } from './buyerAuth.guard';
 import { SellerAuthGuard } from './sellerAuth.guard';
 import { SellerServicesComponent } from './components/seller/seller-services/seller-services/seller-services.component';
+import { RequestComponent } from './components/request/request.component';
+import { BuyerResolve } from './services/buyer.resolve';
+import { SellerResolve } from './services/seller.resolve';
+
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -38,15 +42,16 @@ const appRoutes: Routes = [
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'seller-login', component: SellerLoginComponent},
-  {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard]},
-  {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
+  {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
-  {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
-  {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
+  {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
   {path: 'seller/submit-offer', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
-  {path: 'postactivation/:token', component: PostactivationComponent }
+  {path: 'postactivation/:token', component: PostactivationComponent },
+  {path: 'request/:id', component: RequestComponent}
 ];
 
 @NgModule({
@@ -70,6 +75,7 @@ const appRoutes: Routes = [
     PreactivationComponent,
     PostactivationComponent,
     SellerServicesComponent,
+    RequestComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,7 +84,7 @@ const appRoutes: Routes = [
     FlashMessagesModule.forRoot(),
     HttpClientModule
   ],
-  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService],
+  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
   bootstrap: [AppComponent]
 
 })

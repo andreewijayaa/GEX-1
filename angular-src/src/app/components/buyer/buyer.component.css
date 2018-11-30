@@ -31,6 +31,42 @@ body, html {
   stroke: #ddd;
 }
 
+html, body {
+  height: 100%;
+}
+.btn {
+
+  background-color: rgb(218, 64, 26);
+  color: white;
+  font-weight: bold;
+  opacity: .95;
+}
+
+/* Add a hover effect for buttons */
+.btn:hover {
+opacity:.75;
+background-color: darkgreen;
+}
+hr {
+
+}
+
+#container {
+  min-height: 100%;
+  margin-bottom: -600px;
+  position: relative;
+}
+
+#footer {
+  height: 600px;
+  position: relative;
+}
+
+.clearfooter {
+  height: 600px;
+  clear: both;
+}
+
 @keyframes rotate {
   100% {
     transform: rotate(360deg);
