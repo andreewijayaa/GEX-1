@@ -1,11 +1,10 @@
 <app-buyer-navbar></app-buyer-navbar>
-<flash-messages></flash-messages>
 
-<div class = "container">
+<div class = "container" *ngIf="buyer">
 &nbsp;
   <div class="row justify-content-md">
     <div class="col col">
-      <h4 class="page-header">Welcome, {{buyer.first_name}}</h4>
+      <h4 class="page-header">Welcome, {{buyer.data.first_name}}</h4>
     </div>
     <div class="col col-lg-auto">
       <button type="button" routerLink="/buyer/make-request" class="btn btn-block btn-lg btn-primary">Submit New Request</button>
@@ -54,6 +53,7 @@
 
               <p><b>Deadline:</b> {{request.deadline}}</p>
               <p><b>Description:</b> {{request.description}}</p>
+              <button type="button" routerLink="/request/{{request._id}}" class="btn btn-block btn-lg btn-primary">View Offers</button>
             </li>
           </ul>
 
@@ -76,7 +76,8 @@
               </div>
           </div>
         </div>
-
+        &nbsp;
       </div>
     </div>
+    <div class="clearfooter"></div>
   </div>

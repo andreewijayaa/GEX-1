@@ -24,10 +24,11 @@ export class SellerLoginComponent implements OnInit {
     private flashMessage: FlashMessagesService) { }
 
   ngOnInit() {
-    if (this.storeFetchService.buyerIsLoggedIn())
+    if (this.storeFetchService.buyerIsLoggedIn()) {
       this.router.navigate(['/buyer']);
-    else if (this.storeFetchService.sellerIsLoggedIn())
+    } else if (this.storeFetchService.sellerIsLoggedIn()) {
       this.router.navigate(['/seller']);
+    }
   }
 
   onLoginSubmit() {
@@ -43,7 +44,7 @@ export class SellerLoginComponent implements OnInit {
         this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
       }
       else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 10000 });
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
         //this.router.navigate(['/seller-login']);
       }
     });

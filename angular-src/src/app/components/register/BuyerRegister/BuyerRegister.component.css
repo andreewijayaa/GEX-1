@@ -49,6 +49,9 @@ input[type=text], input[type=password] , input[type=tel] {
   border: none;
   background: #0d0f11;
   opacity: .65;
+  color: white;
+
+
 }
 
 input[type=text]:focus, input[type=password]:focus {

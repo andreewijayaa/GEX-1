@@ -24,11 +24,26 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    entity_name: {
+        type: String,
+        required: true
+    },
+    position: {
+        type: String,
+        required: true
+    },
+    phone_number: {
+        type: String,
+        required: true
+    },
     codes: {
       type: [Number]
     },
     seller_offers_byID: {
       type: [String]
+    },
+    open_requests: {
+        type: [String]
     },
     userConfirmed: {
         type: Boolean,

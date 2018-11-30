@@ -7,10 +7,10 @@ const offerSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  code:{
-    type:String,
-    required: true
-  },
+  // code:{
+  //   type:String,
+  //   required: true
+  // },
   request_ID:{
     type:String,
     required:true
