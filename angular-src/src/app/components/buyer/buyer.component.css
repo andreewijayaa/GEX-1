@@ -45,7 +45,7 @@ html, body {
 /* Add a hover effect for buttons */
 .btn:hover {
 opacity:.75;
-background-color: darkgreen;
+/*background-color: darkgreen;*/
 }
 hr {
 
