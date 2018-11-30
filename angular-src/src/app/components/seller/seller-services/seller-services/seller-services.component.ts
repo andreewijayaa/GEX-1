@@ -21,6 +21,7 @@ export class SellerServicesComponent implements OnInit {
 
 	code: Number;
 
+	
 	public onChange(event): void {  // event will give you full breif of action
     const newVal = event.target.value;
 		this.code = newVal;
