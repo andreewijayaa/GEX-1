@@ -154,6 +154,20 @@ router.get('/viewoffers', (req,res) => {
     });
 });
 
+//route to view active requests
+router.get('/viewactiverequests', (req,res) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view active requests.' });
+  jwt.verify(token, config.secret, (err, decoded) => {
+    Seller.findById(decoded.data._id, (err, seller_viewing_requests) => {
+      Request.find({'_id' :{$in:seller_viewing_requests.open_requests}}, (err, active_requests) => {
+        if (err) return res.status(500).send({ success: false, message: 'Could not find any active requests' });
+        res.status(200).send(active_requests);
+      });
+    });
+  });
+});
 
 
 //This function needs to only be avaible to sellers who are within that code catagory
