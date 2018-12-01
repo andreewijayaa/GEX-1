@@ -174,7 +174,7 @@ router.get('/viewactiverequests', (req,res) => {
 //also buyers are not allowed to make offers
 //also the request id has to be valid 
   router.post('/makeOffer/:id', (req,res,next) =>{
-    var id = req.params.id;
+    var id = req.body.request_ID;
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
     jwt.verify(token, config.secret, (err, decoded) => {
@@ -183,7 +183,7 @@ router.get('/viewactiverequests', (req,res) => {
       let newOffer = new Offer({
         seller_ID:decoded.data._id,
         //code:req.body.code, //I DONT THINK OFFER NEEDS CODE
-        request_ID: id,
+        request_ID: req.body.request_ID,
         title:req.body.title,
         description:req.body.description,
         price:req.body.price
