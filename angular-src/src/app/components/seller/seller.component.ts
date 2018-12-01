@@ -15,6 +15,7 @@ export class SellerComponent implements OnInit {
   seller: any;
   requestList: Object;
   offerList: Object;
+  activeRequests: Object;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
@@ -37,6 +38,14 @@ export class SellerComponent implements OnInit {
           console.log(err);
           return false;
         });
+
+        this.sellerService.getActiveRequests().subscribe((requests: any) => {
+          this.activeRequests = requests;
+        },
+          err => {
+            console.log(err);
+            return false;
+          });
   }
 
   currentTab = 'requests';
