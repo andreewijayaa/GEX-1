@@ -54,6 +54,18 @@ export class SellerService {
     .pipe(map(res => res));
   }
 
+  // Get active requests from buyers associated with seller's code
+  getActiveRequests() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
+  }
+
   sellerLogout() {
     this.sellerToken = null;
     this.seller = null;
