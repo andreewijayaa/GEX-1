@@ -44,10 +44,9 @@ html, body {
 
 /* Add a hover effect for buttons */
 .btn:hover {
-opacity:.75;
-background-color: darkgreen;
+  opacity:.75;
+  background-color: darkgreen;
 }
-
 
 #container {
   min-height: 100%;
