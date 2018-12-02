@@ -8,6 +8,8 @@ import { map } from 'rxjs/operators';
 export class SellerService {
   sellerToken: any;
   seller: any;
+  comingOffer: any;
+  requestID: any;
 
   constructor(private http: HttpClient) { }
 
@@ -42,7 +44,7 @@ export class SellerService {
   }
 
   // Post offers not yet implemented
-  postOffer() {
+  postOffer(comingOffer, requestID) {
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -50,8 +52,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    return this.http.get('http://localhost:3000/sellers/view', httpOptions)
-    .pipe(map(res => res));
+    return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+      .pipe(map(res => res));
   }
 
   // Get active requests from buyers associated with seller's code

@@ -47,7 +47,7 @@ const appRoutes: Routes = [
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
-  {path: 'seller/submit-offer', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
