@@ -24,6 +24,7 @@ export class MakeRequestComponent implements OnInit {
   title: String;
   code: Number;
   description: String;
+  deadline: Date;
 
 
   public onChange(event): void {  // event will give you full breif of action
@@ -41,7 +42,8 @@ export class MakeRequestComponent implements OnInit {
     const request = {
       title: this.title,
       code: this.code,
-      description: this.description
+      description: this.description,
+      deadline: this.deadline
     };
 
     // Register Buyer

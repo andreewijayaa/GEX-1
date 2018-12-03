@@ -24,6 +24,7 @@
             ],
             "styles": [
               "src/styles.css"
+              @import "~bootstrap/dist/css/bootstrap.css";
             ],
             "scripts": []
           },

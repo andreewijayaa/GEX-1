@@ -203,6 +203,7 @@ router.get('/viewactiverequests', (req,res) => {
                 if (err) return handleError(err);
                 console.log('Found request\n' + request_with_offer);
                 request_with_offer.request_offers_byID.push(post._id);
+                request_with_offer.offerCount++;
                 request_with_offer.save((err) =>{
                   if (err){return next(err);}
                   console.log('New Offer made tied to Request %s ', request_with_offer._id);
@@ -242,6 +243,29 @@ router.post('/addCode', (req, res) => {
         });
       });
   });
+});
+
+
+router.get('/getCode', (req, res) => {
+  var token = req.headers['x-access-token'];
+  var codeList = new Array();
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  console.log('view code called');
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      Seller.findById(decoded.data._id, (err, seller_viewing_codes) => {
+        if (err) return handleError(err);
+        console.log(seller_viewing_codes.codes.length)
+        codeList = seller_viewing_codes.codes;
+        if (codeList == 'undefined' && codeList == null)
+        {
+          return res.json({success: true, msg:'None'});
+        }
+        return res.json({success: true, codeList});
+        });
+      });
 });
 
 //Email Verification

@@ -113,7 +113,8 @@ router.post('/request', (req, res, next) => {
       buyer_ID: decoded.data._id,
       code: req.body.code,
       title: req.body.title,
-      description:req.body.description
+      description:req.body.description,
+      deadline: req.body.deadline
     });
     // console.log('buyers id is %s', decoded.data._id);
     Buyer.findById(decoded.data._id, (err, buyer_making_request) => {

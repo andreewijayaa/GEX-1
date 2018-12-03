@@ -23,6 +23,11 @@ const RequestSchema = mongoose.Schema({
   },
   request_offers_byID:{
     type:[String]
+  },
+  offerCount: {
+    type:Number,
+    default: 0,
+    required: true
   }
 });
 
