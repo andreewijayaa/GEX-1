@@ -188,12 +188,12 @@ router.get('/request', (req, res, next) => {
 router.post('/confirmEmail/:token', (req, res, next) => {
   console.log(req.params.token);
   Buyer.findOne({confirmationToken: req.params.token}, (err, buyer) => {
-    if(err) throw err;
+    if(err || buyer == null) return res.json({success: false, msg: 'Not Able to activate'});
     var token = req.params.token;
-    if(buyer.userConfirmed)
-    {
-      return res.json({success: false, msg: 'Your account is already active.'});
-    }
+    // if(buyer.data.userConfirmed || userConfirmed == null)
+    // {
+    //   return res.json({success: false, msg: 'Your account is already active.'});
+    // }
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {

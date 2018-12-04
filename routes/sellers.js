@@ -141,7 +141,7 @@ router.get('/viewoffers', (req,res) => {
   jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       Seller.findById(decoded.data._id, (err, seller_viewing_offers) => {
-        if (seller_viewing_offers.seller_offers_byID != []){
+        if (seller_viewing_offers.seller_offers_byID != [] ){
           Offer.find({'seller_ID':decoded.data._id} , (err,offers) =>{
             if (err) return res.status(500).send({ success: false, message: 'Could not find offers with ID' });
             res.status(200).send(offers);

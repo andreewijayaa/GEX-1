@@ -44,7 +44,7 @@ export class SellerServicesComponent implements OnInit {
     var res;
     this.sellerService.getCode().subscribe((data: any) => {
       if (data.success) {
-        if (data.msg === 'None') {
+        if (data.codeList.length == 0) {
           this.None = true;
         } else {
           this.codeList = data.codeList;
@@ -75,10 +75,11 @@ export class SellerServicesComponent implements OnInit {
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
         this.flashMessage.show('Your New Code was submitted!', { cssClass: 'alert-success', timeout: 4000 });
-        this.router.navigate(['/seller']);
+        this.router.navigate(['/seller/seller-services']);
       } else {
         this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
         this.router.navigate(['/seller/seller-services']);
       }
     });
+  }
 }
