@@ -132,7 +132,8 @@ router.get('/view', (req, res) => {
     });
 });
 
-//route to view offers that a seller has made
+//route to view offers that a seller has made made by John
+//simple method that uses mongoose to find offers that sellers have made
 router.get('/viewoffers', (req,res) => {
   var token = req.headers['x-access-token'];
 
@@ -154,7 +155,8 @@ router.get('/viewoffers', (req,res) => {
     });
 });
 
-//route to view active requests
+//route to view active requests made by John
+//uses mongoose to find active requets
 router.get('/viewactiverequests', (req,res) => {
   var token = req.headers['x-access-token'];
 
@@ -172,7 +174,8 @@ router.get('/viewactiverequests', (req,res) => {
 
 //This function needs to only be avaible to sellers who are within that code catagory
 //also buyers are not allowed to make offers
-//also the request id has to be valid 
+//also the request id has to be valid
+//made by John. Revised by Roni
   router.post('/makeOffer/:id', (req,res,next) =>{
     var id = req.body.request_ID;
     var token = req.headers['x-access-token'];
@@ -221,6 +224,8 @@ router.get('/viewactiverequests', (req,res) => {
   });
 });
 
+//let's sellers add a code to their account by John
+//uses mongoose to add a code and save it to the array of codes for the seller
 router.post('/addCode', (req, res) => {
   var token = req.headers['x-access-token'];
 
