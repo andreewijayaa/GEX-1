@@ -1,3 +1,4 @@
+//By Roni
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../config/database');
@@ -38,17 +39,21 @@ const BuyerSchema = mongoose.Schema({
     }
 });
 
+
 const Buyer = module.exports = mongoose.model('Buyer', BuyerSchema);
 
+// Retrieve buyers from DB by ID
 module.exports.getBuyerbyId = function(id, callback){
     Buyer.findById(id, callback);
 }
 
+// Retrieve buyers from DB by Email
 module.exports.getBuyerbyEmail = function(email, callback){
     const query = {email: email};
     Buyer.findOne(query, callback);
 }
 
+// Add buyer to DB with encrypted password
 module.exports.addBuyer = function(newBuyer, callback){
     bcrypt.genSalt(10,(err, salt) => {
         bcrypt.hash(newBuyer.password, salt, (err, hash) => {
@@ -58,6 +63,8 @@ module.exports.addBuyer = function(newBuyer, callback){
         });
     });
 }
+
+// compare inputted password to the buyer hashed password
 module.exports.comparePassword = function (inputtedPassword, hash, callback){
     bcrypt.compare(inputtedPassword, hash, (err, isMatch) => {
             if(isMatch) {

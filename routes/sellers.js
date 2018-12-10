@@ -7,7 +7,9 @@ const Seller = require('../models/seller');
 const Request = require('../models/request');
 const Offer = require('../models/offer');
 const sendEmail = require('../models/sendEmail');
-//Register
+
+// Seller register route that will take in all required information that is required from seller upon registration
+// By Roni
 router.post('/register',(req,res,next) => {
 
     //create seller object
@@ -35,19 +37,22 @@ router.post('/register',(req,res,next) => {
         //email format checking
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email))
         {
-          console.log('New email address %s passed format checking.', req.body.email);
+          // console.log('New email address %s passed format checking.', req.body.email);
+          // Add seller to DB if no error
           Seller.addSeller(newSeller, (err, seller) => {
               if(err){
                   res.json({success: false, msg:"Failed to register Seller!"})
               }
               else {
+                  // send Seller a verification email
+                  // upon successful registration 
                   sendEmail.sendVerificationEmail(seller);
                   res.json({success: true, msg:"Seller Registered!"})
               }
           });
         }
         else{
-          console.log('New email address %s failed format checking.', req.body.email);
+          // console.log('New email address %s failed format checking.', req.body.email);
           res.json({success: false, msg:"Failed to register Seller! Email is not valid format."})
         }
       }
@@ -115,7 +120,8 @@ router.get('/profile', (req, res) => {
       res.status(200).send(decoded);
      });
   });
-// View request
+
+// View all buyer submitted requests for buyers page
 router.get('/view', (req, res) => {
   var token = req.headers['x-access-token'];
 
@@ -216,11 +222,6 @@ router.get('/viewactiverequests', (req,res) => {
             res.status(201).json(post);
         });
       });
-
-    /*newOffer.save( (err,post) => {
-        if (err) { return next(err); }
-        res.status(201).json(post);
-    });*/
   });
 });
 
@@ -250,7 +251,9 @@ router.post('/addCode', (req, res) => {
   });
 });
 
-
+// A route to get the seller codes that have been added by the sellers
+// used to view to sellers what Goods/Services they are offering 
+// By Roni
 router.get('/getCode', (req, res) => {
   var token = req.headers['x-access-token'];
   var codeList = new Array();
@@ -264,6 +267,7 @@ router.get('/getCode', (req, res) => {
         if (err) return handleError(err);
         console.log(seller_viewing_codes.codes.length)
         codeList = seller_viewing_codes.codes;
+        //if no code were added for the seller
         if (codeList == 'undefined' && codeList == null)
         {
           return res.json({success: true, msg:'None'});
@@ -273,7 +277,9 @@ router.get('/getCode', (req, res) => {
       });
 });
 
-//Email Verification
+//Email Verification - RONI
+//Will check the route for a token and search the DB for a user with that 
+//token to activate their account
 router.post('/confirmEmail/:token', (req, res, next) => {
   console.log(req.params.token);
   Seller.findOne({confirmationToken: req.params.token}, (err, seller) => {
@@ -290,6 +296,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
       } else if (seller.userConfirmed) {
         res.json({success:false, msg: 'Acount already activated!'});
       } else {
+        // Boolean in buyer DB that indicates if user email has been confirmed or not
         seller.temptoken = false;
         seller.userConfirmed = true;
         seller.save((err) => {
@@ -297,7 +304,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
           {
             console.log(err);
           } else {
-            //If account Registred Send Email for Email Verification
+            //If account Registred Send Email for Email Verification Completed
             sendEmail.emailVerified(seller);
           }
         })
@@ -307,7 +314,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
   });
 })
 
-// Resend Email Verification --NOT TESTED YET
+// Resend Email Verification -- NOT YET USED/TESTED - RONI
 router.post('/resend', (req,res, next) =>
 {
   const email = req.body.email;
