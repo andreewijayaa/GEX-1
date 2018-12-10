@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SellerComponent implements OnInit {
 
+  // Variables declaration
   seller: any;
   requestList: Object;
   offerList: Object;
@@ -20,8 +21,9 @@ export class SellerComponent implements OnInit {
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
 
+  // On initialization process of the webpage
   ngOnInit() {
-
+      // Fetching seller profile information from the service to be used in the webpage
       this.sellerService.getSellerProfile().subscribe((profile: any) => {
         this.seller = profile.data;
         //this.loaded_seller = Promise.resolve(true);
@@ -31,6 +33,7 @@ export class SellerComponent implements OnInit {
           return false;
         });
 
+      // Fetching seller offer history from the service to be used in the webpage
       this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
         this.offerList = offers;
       },
@@ -39,6 +42,7 @@ export class SellerComponent implements OnInit {
           return false;
         });
 
+        // Fetching seller active requests from the service to be used in the webpage
         this.sellerService.getActiveRequests().subscribe((requests: any) => {
           this.activeRequests = requests;
         },
@@ -48,8 +52,10 @@ export class SellerComponent implements OnInit {
           });
   }
 
+  // Tab first configuration
   currentTab = 'requests';
 
+  // when the user changes tabs
   requests(currentTab) {
     this.currentTab = currentTab;
   }

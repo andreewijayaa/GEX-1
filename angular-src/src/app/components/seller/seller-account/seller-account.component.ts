@@ -18,6 +18,7 @@ export class SellerAccountComponent implements OnInit {
     this.seller = this.route.snapshot.data['seller'];
   }
 
+  // Function for edit button
   editFunction(): void {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
@@ -28,6 +29,7 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('newPass')).hidden = false;
   }
 
+  // Function for save button
   saveFunction(): void {
     const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
     const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
@@ -46,7 +48,7 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = true;
       (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
-    } else {
+    } else { // if the 2 passwords did not match
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
       (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';

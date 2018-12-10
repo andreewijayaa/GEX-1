@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class SellerService {
+  // Variables declaration
   sellerToken: any;
   seller: any;
   comingOffer: any;
@@ -13,83 +14,99 @@ export class SellerService {
 
   constructor(private http: HttpClient) { }
 
+  // Function to get user token from browser for searching pusposes in database
   loadToken() {
     const token = localStorage.getItem('id_token');
     this.sellerToken = token;
   }
 
-  // Get Seller Profile Service
+  // Service to fetch seller profile from database (front-end to back-end connection)
   getSellerProfile() {
     this.loadToken();
+    // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
         'x-access-token': this.sellerToken
       })
     };
+    // This will return json file fetched from database
     return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(map(res => res));
   }
 
-  // Get Seller Offers
+  // Service to fetch offers history of the logged in user (front-end to back-end connection)
   getSellerOffersHistory() {
     this.loadToken();
+    // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
         'x-access-token': this.sellerToken
       })
     };
-    return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions)
-    .pipe(map(res => res));
+    // This will return json file fetched from database
+    return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions).pipe(map(res => res));
   }
 
-  // Post offers not yet implemented
+  // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
   postOffer(comingOffer, requestID) {
     this.loadToken();
+    // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
         'x-access-token': this.sellerToken
       })
     };
+    // This will return json file fetched from database
     return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
       .pipe(map(res => res));
   }
 
+  // Service to post a new code for a seller to subscribe to a specific product code (front-end to back-end connection)
   setNewCode(code) {
     this.loadToken();
+    // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
         'x-access-token': this.sellerToken
       })
     };
-      return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
-      .pipe(map(res => res));
-  }
-  getCode() {
-    this.loadToken();
-    const httpOptions = {
-      headers: new HttpHeaders ({
-        'x-access-token': this.sellerToken
-      })
-    };
-      return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
+    // This will return json file fetched from database
+    return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
       .pipe(map(res => res));
   }
 
-  // Get active requests from buyers associated with seller's code
+  // Service to fetch the code that a seller subscribed to
+  getCode() {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.sellerToken
+      })
+    };
+    // This will return json file fetched from database
+    return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
+      .pipe(map(res => res));
+  }
+
+  // Service to get active requests from buyers associated with seller's code
   getActiveRequests() {
     this.loadToken();
+    // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
         'x-access-token': this.sellerToken
       })
     };
+    // This will return json file fetched from database
     return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
   }
 
+  // logging out seller
   sellerLogout() {
     this.sellerToken = null;
     this.seller = null;
