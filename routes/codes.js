@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Code = require('../models/code');
 
-//Register
+// Code addition to DB, will be used to populate our DB with UNSPSC codes
+// Takes in the code number, description, catagory, and catagory number.
 router.post('/addCode',(req,res/*,next*/) => {
     let newCode = new Code({
       code_number: req.body.code_number,
@@ -23,7 +24,8 @@ router.post('/addCode',(req,res/*,next*/) => {
     }); 
 });
 
-// Get Codes
+// Get Codes from the DB, this will be changed and modified to be able to search the DB and return
+// JSON file that contains all related codes
 router.get('/getCodes', (req, res, next) => {
     Code.find().exec((err, code) => { res.json(code) });
 });

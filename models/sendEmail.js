@@ -1,15 +1,19 @@
+//By Roni
+//Using SendGrid as our email service
 var nodemailer = require('nodemailer');
 var sgTransport = require('nodemailer-sendgrid-transport');
 
+//SendGrid Login Information
 var options = {
   auth: {
     api_user: 'ronjonsilver',
     api_key: 'GEXTeamrocks2018'
-  }
-}
-
+  }}
+//Connect the nodemailer to the sendgrid client
 var client = nodemailer.createTransport(sgTransport(options));
 
+//Function that will take in a user, and email them their token
+//Used Upon user registration to confirm email
 module.exports.sendVerificationEmail = function(user, callback){
     //If account Registred Send Email for Email Verification
     var email = {
@@ -29,6 +33,8 @@ module.exports.sendVerificationEmail = function(user, callback){
           }
       });
 }
+//Function that will take in a user, and email them account verifcation completed
+//Used Upon user has activated their email
 module.exports.emailVerified = function(user, callback){
     //If account Registred Send Email for Email Verification
     var email = {
@@ -48,7 +54,8 @@ module.exports.emailVerified = function(user, callback){
           }
       });
 }
-
+//Function that will take in a seller, and request ID then email applicable sellers with a link to the request
+//Used Upon buyer submitting a new request
 module.exports.NotifySeller= function(seller, requestID, callback){
   var email = {
     from: 'gex_do_not_reply@gex.com',
@@ -64,6 +71,5 @@ module.exports.NotifySeller= function(seller, requestID, callback){
     else {
       //console.log('Message sent to: ' + user.email);
     }
-});
-  
+}); 
 }
