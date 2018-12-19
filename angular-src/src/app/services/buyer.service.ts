@@ -17,7 +17,7 @@ export class BuyerService {
   constructor(private http: HttpClient,
     private router: Router) { }
 
-  // Get Buyer Profile Service
+  // Get Buyer Profile Service - Bryan Vu
   getBuyerProfile(): Observable<any> {
     this.loadToken();
     const httpOptions = {

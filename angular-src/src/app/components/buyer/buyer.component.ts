@@ -19,6 +19,8 @@ export class BuyerComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute) { }
 
+  // showing buyer info when buyer portal page loads - Bryan Vu
+
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
@@ -27,6 +29,9 @@ export class BuyerComponent implements OnInit {
   }
 
   // tslint:disable-next-line:member-ordering
+
+  // tabbed navigation for viewing current requests and buyer
+  // account history - Bryan Vu
   currentTab = 'requests';
 
   requests(currentTab) {
