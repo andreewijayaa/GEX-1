@@ -1,3 +1,5 @@
+// By Roni
+// Buyer and seller, login services
 import { Injectable, Output } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -34,5 +36,4 @@ export class AuthService {
     return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
     .pipe(map(res => res));
   }
-  
 }

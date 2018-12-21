@@ -1,3 +1,5 @@
+// By Roni
+// Buyer Request Submission
 import { Component, OnInit } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
@@ -9,6 +11,7 @@ import { BuyerService } from '../../../services/buyer.service';
   styleUrls: ['./make-request.component.css']
 })
 export class MakeRequestComponent implements OnInit {
+  // Temp codes for MVP - Kurgan
   codes = [
     { code: 95141601, name: 'House' },
     { code: 95141602, name: 'Mobile Home' },
@@ -26,7 +29,7 @@ export class MakeRequestComponent implements OnInit {
   description: String;
   deadline: Date;
 
-
+  // Used for the dropdown menu
   public onChange(event): void {  // event will give you full breif of action
     const newVal = event.target.value;
     this.code = newVal;
@@ -38,7 +41,9 @@ export class MakeRequestComponent implements OnInit {
 
   ngOnInit() {
   }
+  // Request Submission
   onRequestSubmit() {
+    // Request Generated JSON
     const request = {
       title: this.title,
       code: this.code,
@@ -46,7 +51,7 @@ export class MakeRequestComponent implements OnInit {
       deadline: this.deadline
     };
 
-    // Register Buyer
+    // Register Request
     this.buyerService.postBuyerRequest(request).subscribe((data: any) => {
       if (data.success) {
         this.flashMessage.show('Your Request was submitted!', { cssClass: 'alert-success', timeout: 4000 });

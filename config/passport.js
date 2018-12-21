@@ -1,3 +1,5 @@
+// By Kurgan and Roni
+// Token verification with passport package
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const Buyer = require('../models/buyer');
@@ -8,6 +10,7 @@ module.exports = function(passport){
   let opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
   opts.secretOrKey = config.secret;
+  // Buyer token verification
   passport.use('buyer-rule',new JwtStrategy(opts, (jwt_payload, done) => {
     Buyer.getBuyerbyId(jwt_payload.data._id, (err, buyer) => {
       if(err){
@@ -20,6 +23,7 @@ module.exports = function(passport){
       }
     });
   }));
+  // Seller token verification
   passport.use('seller-rule',new JwtStrategy(opts, (jwt_payload, done) => {
     Seller.getSellerbyId(jwt_payload.data._id, (err, seller) => {
       if(err){

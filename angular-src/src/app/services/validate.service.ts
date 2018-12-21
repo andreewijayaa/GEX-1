@@ -1,3 +1,4 @@
+// By Roni
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -6,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class ValidateService {
 
   constructor() { }
-
+  // All fields must be filled upon buyer registration
   ValidateBuyerRegister(buyer) {
     // tslint:disable-next-line:triple-equals
     if (buyer.first_name == undefined || buyer.last_name == undefined || buyer.email == undefined || buyer.password == undefined) {
@@ -15,6 +16,7 @@ export class ValidateService {
         return true;
       }
   }
+  // All fields must be filled upon seller registration
   ValidateSellerRegister(seller) {
     // tslint:disable-next-line:triple-equals
     if (seller.first_name == undefined || seller.last_name == undefined || seller.email == undefined || seller.password == undefined
@@ -25,6 +27,7 @@ export class ValidateService {
         return true;
       }
   }
+  // Email format validation upon registration
   validateEmail(email) {
     // tslint:disable-next-line:max-line-length
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

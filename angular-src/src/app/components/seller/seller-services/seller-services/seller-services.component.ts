@@ -1,3 +1,5 @@
+// By Roni
+// View & Add offered seller goods/services
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SellerService } from '../../../../services/seller.service';
@@ -10,6 +12,7 @@ import { Local } from 'protractor/built/driverProviders';
   styleUrls: ['./seller-services.component.css']
 })
 export class SellerServicesComponent implements OnInit {
+  // Temp codes for MVP - Kurgan
 	codes = [
     { code: 95141601, name: 'House' },
     { code: 95141602, name: 'Mobile Home' },
@@ -27,8 +30,7 @@ export class SellerServicesComponent implements OnInit {
   None: Boolean;
   codeNames: any[];
 
-
-
+  // Used for the dropdown
 	public onChange(event): void {  // event will give you full breif of action
     const newVal = event.target.value;
 		this.code = newVal;
@@ -38,19 +40,21 @@ export class SellerServicesComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router) { }
 
+  // View seller current codes - Roni
   ngOnInit() {
     var LocalArray = new Array();
     this.None = false;
-    var res;
+    // Get seller codes
     this.sellerService.getCode().subscribe((data: any) => {
       if (data.success) {
-        if (data.codeList.length == 0) {
+        if (data.codeList.length == 0) { // Seller does not have any codes yet
           this.None = true;
         } else {
           this.codeList = data.codeList;
           this.None = false;
           var i, j = 0;
-          // Probably find a better way to this later
+          // Retrieve all seller current codes
+          // FOR MVP ONLY, will find a better and suffiecent way to perform this
           for (i = 0; i < this.codeList.length; i++) {
 
             for (j = 0; j < this.codes.length; j++) {
@@ -60,13 +64,12 @@ export class SellerServicesComponent implements OnInit {
             }
           }
           this.codeNames = LocalArray;
-
         }
       }
     });
   }
 
-
+  // Add new code to seller - Roni
   AddCode() {
     const code = {
       codes: this.code

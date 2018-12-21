@@ -30,22 +30,21 @@ export class SellerLoginComponent implements OnInit {
       this.router.navigate(['/seller']);
     }
   }
-
+  // Login request for seller - Roni
   onLoginSubmit() {
+    // Generated email and password, only needed fields to login
     const seller = {
       email: this.email,
       password: this.password
     };
-
+    // Call the seller login service
     this.authService.AuthenticateSeller(seller).subscribe((data: any) => {
       if (data.success) {
         this.storeFetchService.storeSellerData(data.token, data.seller);
         this.router.navigate(['/seller']);
         this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
-      }
-      else {
+      } else {
         this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
-        //this.router.navigate(['/seller-login']);
       }
     });
 

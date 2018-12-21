@@ -1,3 +1,5 @@
+// By Roni
+// Seller Registration
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from '../../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -29,7 +31,7 @@ export class SellerRegisterComponent implements OnInit {
 
   OnSellerRegisterSubmit() {
     console.log('On Seller Register Submit Called.');
-
+    // JSON with the inputted fields
     const seller = {
       first_name: this.first_name,
       last_name: this.last_name,
@@ -62,9 +64,8 @@ export class SellerRegisterComponent implements OnInit {
 
     // Register Seller
     this.registerService.RegisterSeller(seller).subscribe((data: any) => {
-      if (data.success) { // must know if its a successful register or not FIX THIS LATER
-        // this.flashMessage.show(data.msg, {cssClass: 'alert-success', timeout: 3000});
-        this.router.navigate(['/preactivation']);
+      if (data.success) { // must know if its a successful register **
+        this.router.navigate(['/preactivation']); // Tell buyer to checkemail
       } else {
         this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 10000});
         this.router.navigate(['/seller-register']);

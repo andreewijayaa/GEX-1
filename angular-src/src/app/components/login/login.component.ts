@@ -35,12 +35,15 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/seller']);
   }
 
+  // Login request for buyer - Roni
   onLoginSubmit() {
+    // Generated email and password, only needed fields to login
     const buyer = {
       email: this.email,
       password: this.password
     };
 
+    // Call the buyer login service
     this.authService.AuthenticateBuyer(buyer).subscribe((data: any) => {
       if (data.success) {
         this.storeFetchService.storeBuyerData(data.token, data.buyer);

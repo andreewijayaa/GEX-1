@@ -29,6 +29,7 @@ export class BuyerService {
     return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
   }
 
+  // Buyer Request submission service - Roni
   postBuyerRequest(request) {
     this.loadToken();
     if (this.buyerToken != null) {
@@ -38,7 +39,6 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      // console.log(this.buyerToken);
       return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -46,6 +46,7 @@ export class BuyerService {
     }
   }
 
+  // Retrieve all buyer requests
   getBuyerRequests() {
     this.loadToken();
     const httpOptions = {
@@ -58,11 +59,13 @@ export class BuyerService {
     .pipe(map(res => res));
   }
 
+  // Load local token
   loadToken() {
     const token = localStorage.getItem('id_token');
     this.buyerToken = token;
   }
 
+  // Buyer logout service
   buyerLogout() {
     this.buyerToken = null;
     this.buyer = null;

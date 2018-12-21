@@ -1,3 +1,5 @@
+// By Roni
+// buyer Registration
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from '../../../services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -24,6 +26,7 @@ export class BuyerRegisterComponent implements OnInit {
   }
 
   OnBuyerRegisterSubmit() {
+    // JSON with the inputted fields
     const buyer = {
       first_name: this.first_name,
       last_name: this.last_name,
@@ -35,7 +38,6 @@ export class BuyerRegisterComponent implements OnInit {
     if (!this.validateService.ValidateBuyerRegister(buyer)) {
       this.flashMessage.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 10000});
       return false;
-
     }
 
     // ValidateEmail
@@ -47,9 +49,7 @@ export class BuyerRegisterComponent implements OnInit {
     // Register Buyer
     this.registerService.RegisterBuyer(buyer).subscribe((data: any) => {
       if (data.success) {
-        // this.flashMessage.show('You are now Register', {cssClass: 'alert-success', timeout: 3000});
-        this.router.navigate(['/preactivation']);
-
+        this.router.navigate(['/preactivation']); // Tell buyer to checkemail
       } else {
         this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
         this.router.navigate(['/buyer-register']);
