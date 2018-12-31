@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
     	
     }
 
+  // ngOnInit runs when the home component gets called. This component/function first checks if the current user that is logged in is a buyer or seller account.
+  // It will then navigate the user to the correct page.
   ngOnInit() {
   	if (this.storeFetch.buyerIsLoggedIn())
     {
