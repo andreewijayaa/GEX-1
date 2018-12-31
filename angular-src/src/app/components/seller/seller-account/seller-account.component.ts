@@ -14,11 +14,14 @@ export class SellerAccountComponent implements OnInit {
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
 
+  // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
     this.seller = this.route.snapshot.data['seller'];
   }
 
   // Function for edit button
+  // Function enables users to use the textfields in order to edit their information. 
+  // This only works with the front end so far. This has not been tied in with the backend.
   editFunction(): void {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
@@ -30,6 +33,9 @@ export class SellerAccountComponent implements OnInit {
   }
 
   // Function for save button
+  // Function checks to see if the edited password matches before anything gets saved. A number of textfields are disabled once this function gets executed.
+  // If there is no password inserted or the new password does not match when confirming. An error will be displayed to the user.
+  // This only works with the front end so far. This has not been tied in with the backend.
   saveFunction(): void {
     const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
     const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;

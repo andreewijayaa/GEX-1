@@ -5,11 +5,11 @@ import { BuyerAuthGuard } from './buyerAuth.guard';
 describe('AuthGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AuthGuard]
+      providers: [BuyerAuthGuard]
     });
   });
 
-  it('should ...', inject([AuthGuard], (guard: AuthGuard) => {
+  it('should ...', inject([BuyerAuthGuard], (guard: BuyerAuthGuard) => {
     expect(guard).toBeTruthy();
   }));
 });

@@ -9,15 +9,20 @@ import { SellerAccountComponent } from '../../seller/seller-account/seller-accou
   styleUrls: ['./buyer-account.component.css']
 })
 export class BuyerAccountComponent implements OnInit {
+
+  // Delcared buyer variable.
   buyer: any;
 
   constructor(private buyerService: BuyerService,
     private route: ActivatedRoute) { }
 
+  // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
   }
 
+  // Function enables users to use the textfields in order to edit their information. 
+  // This only works with the front end so far. This has not been tied in with the backend.
   editFunction(): void {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
@@ -28,6 +33,9 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('newPass')).hidden = false;
   }
 
+  // Function checks to see if the edited password matches before anything gets saved. A number of textfields are disabled once this function gets executed.
+  // If there is no password inserted or the new password does not match when confirming. An error will be displayed to the user.
+  // This only works with the front end so far. This has not been tied in with the backend.
   saveFunction(): void {
     const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
     const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
@@ -51,5 +59,9 @@ export class BuyerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
     }
+  }
+  // This function has not been fully implemented yet. Once this gets completed it will help tie the frontend and backend of this page together.
+  updateData() {
+    this.buyer.updateData();
   }
 }
