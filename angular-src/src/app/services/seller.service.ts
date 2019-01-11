@@ -88,7 +88,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
+    return this.http.get('sellers/getCode', httpOptions)
       .pipe(map(res => res));
   }
 
@@ -103,7 +103,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
+    return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
   }
 
   // logging out seller

@@ -22,7 +22,7 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
-    return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
+    return this.http.post('buyers/login', buyer, httpOptions)
     .pipe(map(res => res));
   }
 
@@ -33,7 +33,7 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
-    return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
+    return this.http.post('sellers/login', seller, httpOptions)
     .pipe(map(res => res));
   }
 }
