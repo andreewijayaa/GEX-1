@@ -2313,7 +2313,7 @@ var AuthService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
+        return this.http.post('buyers/login', buyer, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Seller Authenticate Service
@@ -2323,7 +2323,7 @@ var AuthService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
+        return this.http.post('sellers/login', seller, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     AuthService = __decorate([
@@ -2425,7 +2425,7 @@ var BuyerService = /** @class */ (function () {
                 'x-access-token': this.buyerToken
             })
         };
-        return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
+        return this.http.get('https://powerful-taiga-46416.herokuapp.com/buyers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Buyer Request submission service - Roni
     BuyerService.prototype.postBuyerRequest = function (request) {
@@ -2437,7 +2437,7 @@ var BuyerService = /** @class */ (function () {
                     'x-access-token': this.buyerToken
                 })
             };
-            return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
+            return this.http.post('https://powerful-taiga-46416.herokuapp.com/buyers/request', request, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {
@@ -2453,7 +2453,7 @@ var BuyerService = /** @class */ (function () {
                 'x-access-token': this.buyerToken
             })
         };
-        return this.http.get('http://localhost:3000/buyers/request', httpOptions)
+        return this.http.get('https://powerful-taiga-46416.herokuapp.com/buyers/request', httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Load local token
@@ -2517,7 +2517,7 @@ var RegisterService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/buyers/register', buyer, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Seller Register Service
@@ -2527,17 +2527,17 @@ var RegisterService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers/register', seller, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Buyer email activation through link, pass in the token with the function call
     RegisterService.prototype.activateAccount = function (token) {
-        return this.http.post('http://localhost:3000/buyers/confirmEmail/' + token, token)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/buyers/confirmEmail/' + token, token)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Seller email activation through link, pass in the token with the function call
     RegisterService.prototype.selleractivateAccount = function (token) {
-        return this.http.post('http://localhost:3000/sellers/confirmEmail/' + token, token)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers/confirmEmail/' + token, token)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     RegisterService = __decorate([
@@ -2594,7 +2594,7 @@ var RequestService = /** @class */ (function () {
             })
         };
         // Call back-end route to retrieve request data
-        return this.http.post('http://localhost:3000/requests/' + id, id, httpOptions)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/requests/' + id, id, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
     };
     // Load user logged in token
@@ -2708,7 +2708,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
+        return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
     };
     // Service to fetch offers history of the logged in user (front-end to back-end connection)
     SellerService.prototype.getSellerOffersHistory = function () {
@@ -2721,7 +2721,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
+        return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/viewoffers', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
     };
     // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
     SellerService.prototype.postOffer = function (comingOffer, requestID) {
@@ -2734,7 +2734,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
     };
     // Service to post a new code for a seller to subscribe to a specific product code (front-end to back-end connection)
@@ -2748,7 +2748,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
+        return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers//addCode', code, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
     };
     // Service to fetch the code that a seller subscribed to
@@ -2761,7 +2761,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
+        return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/getCode', httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
     };
     // Service to get active requests from buyers associated with seller's code
@@ -2775,7 +2775,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
+        return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/viewactiverequests', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
     };
     // logging out seller
     SellerService.prototype.sellerLogout = function () {
