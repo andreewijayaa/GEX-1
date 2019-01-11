@@ -18,7 +18,7 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post('buyers/register', buyer, httpOptions)
+    return this.http.post('https://powerful-taiga-46416.herokuapp.com/buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
   }
 
@@ -29,18 +29,18 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post('sellers/register', seller, httpOptions)
+    return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers/register', seller, httpOptions)
       .pipe(map(res => res));
   }
 
   // Buyer email activation through link, pass in the token with the function call
   activateAccount(token) {
-    return this.http.post('buyers/confirmEmail/' + token, token)
+    return this.http.post('https://powerful-taiga-46416.herokuapp.com/buyers/confirmEmail/' + token, token)
       .pipe(map(res => res));
   }
   // Seller email activation through link, pass in the token with the function call
   selleractivateAccount(token) {
-    return this.http.post('sellers/confirmEmail/' + token, token)
+    return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers/confirmEmail/' + token, token)
       .pipe(map(res => res));
   }
 }
