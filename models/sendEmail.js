@@ -21,7 +21,7 @@ module.exports.sendVerificationEmail = function(user, callback){
         to: user.email,
         subject: 'Email Activation!',
         text: 'Hello ' + user.first_name + ', Click the link to acitvate account',
-        html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="http://localhost:4200/postactivation/' + user.confirmationToken + '"> Activate Account!</a>'
+        html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken + '"> Activate Account!</a>'
       };
       
       client.sendMail(email, function(err, info){
@@ -62,7 +62,7 @@ module.exports.NotifySeller= function(seller, requestID, callback){
     to: seller.email,
     subject: 'You have a new request!',
     text: 'Random',
-    html: '<h2>Hello ' + seller.first_name + ',</h2> <h4>A new request is available.</h4></br><a href="http://localhost:4200/request/' + requestID + '"> Open Request</a>'
+    html: '<h2>Hello ' + seller.first_name + ',</h2> <h4>A new request is available.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/request/' + requestID + '"> Open Request</a>'
   };
   client.sendMail(email, function(err, info){
     if (err ){
