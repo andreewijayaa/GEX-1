@@ -21,7 +21,7 @@ const requests = require('./routes/requests');
 const codes = require('./routes/codes');
 
 // Port Number
-const port = 3000;
+const port = process.env.port || 5000;
 
 // CORS Middleware
 app.use(cors());
