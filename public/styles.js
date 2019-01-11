@@ -555,7 +555,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Kurgan\Documents\GEX\angular-src\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\ronip\Dropbox\FALL 2018\CSE485\MEAN\GEX\angular-src\src\styles.css */"./src/styles.css");
 
 
 /***/ })
