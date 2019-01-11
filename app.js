@@ -20,14 +20,34 @@ const sellers = require('./routes/sellers');
 const requests = require('./routes/requests');
 const codes = require('./routes/codes');
 
+// If an incoming request uses
+// a protocol other than HTTPS,
+// redirect that request to the
+// same url but with HTTPS
+const forceSSL = function() {
+  return function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(
+       ['https://', req.get('Host'), req.url].join('')
+      );
+    }
+    next();
+  }
+}
+
+// Instruct the app
+// to use the forceSSL
+// middleware
+app.use(forceSSL());
+
 // Port Number
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 // CORS Middleware
 app.use(cors());
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname + '/public'));
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -50,8 +70,6 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
-
-const path = require('path');
 // ...
 // For all GET requests, send back index.html
 // so that PathLocationStrategy can be used
