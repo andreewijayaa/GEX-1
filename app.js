@@ -51,9 +51,12 @@ app.use('/codes', codes);
 app.use('/requests', requests);
 
 
-//Homepage route
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public/index.html'));
+const path = require('path');
+// ...
+// For all GET requests, send back index.html
+// so that PathLocationStrategy can be used
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 // Start Server

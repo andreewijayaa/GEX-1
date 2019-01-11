@@ -33,7 +33,8 @@
     "xmlhttprequest": "^1.8.0"
   },
   "engines": {
-    "node": "8.12.0"
+    "node": "8.12.0",
+    "npm": "6.4.1"
   },
   "repository": {
     "type": "git",
