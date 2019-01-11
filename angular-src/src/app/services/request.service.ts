@@ -23,7 +23,7 @@ export class RequestService {
         })
       };
       // Call back-end route to retrieve request data
-      return this.http.post('https://powerful-taiga-46416.herokuapp.com/requests/' + id, id, httpOptions)
+      return this.http.post('requests/' + id, id, httpOptions)
       .pipe(map(res => res));
     }
 

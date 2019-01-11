@@ -26,7 +26,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    return this.http.get('https://powerful-taiga-46416.herokuapp.com/buyers/profile', httpOptions).pipe(map(res => res));
+    return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
   }
 
   // Buyer Request submission service - Roni
@@ -39,7 +39,7 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      return this.http.post('https://powerful-taiga-46416.herokuapp.com/buyers/request', request, httpOptions)
+      return this.http.post('buyers/request', request, httpOptions)
         .pipe(map(res => res));
     } else {
       this.router.navigate(['/buyer']);
@@ -55,7 +55,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    return this.http.get('https://powerful-taiga-46416.herokuapp.com/buyers/request', httpOptions)
+    return this.http.get('buyers/request', httpOptions)
     .pipe(map(res => res));
   }
 

@@ -31,7 +31,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/profile', httpOptions).pipe(map(res => res));
+    return this.http.get('sellers/profile', httpOptions).pipe(map(res => res));
   }
 
   // Service to fetch offers history of the logged in user (front-end to back-end connection)
@@ -45,7 +45,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/viewoffers', httpOptions).pipe(map(res => res));
+    return this.http.get('sellers/viewoffers', httpOptions).pipe(map(res => res));
   }
 
   // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
@@ -59,7 +59,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+    return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
       .pipe(map(res => res));
   }
 
@@ -74,7 +74,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.post('https://powerful-taiga-46416.herokuapp.com/sellers//addCode', code, httpOptions)
+    return this.http.post('sellers//addCode', code, httpOptions)
       .pipe(map(res => res));
   }
 
@@ -88,7 +88,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/getCode', httpOptions)
+    return this.http.get('sellers/getCode', httpOptions)
       .pipe(map(res => res));
   }
 
@@ -103,7 +103,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    return this.http.get('https://powerful-taiga-46416.herokuapp.com/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
+    return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
   }
 
   // logging out seller
