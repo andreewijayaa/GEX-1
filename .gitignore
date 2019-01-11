@@ -5,6 +5,11 @@
 /tmp
 /out-tsc
 
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+
 # IDEs and editors
 /.idea
 .project
