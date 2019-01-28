@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { runInThisContext } from 'vm';
 import { EventEmitter } from 'protractor';
+import { isDevMode } from '@angular/core';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +23,13 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
+      .pipe(map(res => res));
+    } else {
     return this.http.post('buyers/login', buyer, httpOptions)
     .pipe(map(res => res));
+    }
   }
 
   // Seller Authenticate Service
@@ -33,7 +39,12 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
+      .pipe(map(res => res));
+    } else {
     return this.http.post('sellers/login', seller, httpOptions)
     .pipe(map(res => res));
+    }
   }
 }

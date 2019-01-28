@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { isDevMode } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,8 +23,13 @@ export class RequestService {
         })
       };
       // Call back-end route to retrieve request data
-      return this.http.post('requests/' + id, id, httpOptions)
-      .pipe(map(res => res));
+      if (isDevMode()) {
+        return this.http.post('http://localhost:3000/requests/' + id, id, httpOptions)
+        .pipe(map(res => res));
+      } else {
+        return this.http.post('requests/' + id, id, httpOptions)
+        .pipe(map(res => res));
+      }
     }
 
     // Load user logged in token

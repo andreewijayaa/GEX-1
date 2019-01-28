@@ -10,8 +10,8 @@ import { StoreFetchService } from '../../services/storeFetch.service'
 export class HomeComponent implements OnInit {
 
   constructor(private storeFetch: StoreFetchService,
-    private router: Router) { 
-    	
+    private router: Router) {
+
     }
 
   // ngOnInit runs when the home component gets called. This component/function first checks if the current user that is logged in is a buyer or seller account.
