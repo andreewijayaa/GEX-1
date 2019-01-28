@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const config = require('./config/database');
 var nodemailer = require("nodemailer");
 
+
 // Connect To Database
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.database, { useNewUrlParser: true, promiseLibrary: require('bluebird') })
@@ -20,6 +21,7 @@ const sellers = require('./routes/sellers');
 const requests = require('./routes/requests');
 const codes = require('./routes/codes');
 
+/* Uncomment for deployment
 // If an incoming request uses
 // a protocol other than HTTPS,
 // redirect that request to the
@@ -39,9 +41,10 @@ const forceSSL = function() {
 // to use the forceSSL
 // middleware
 app.use(forceSSL());
+*/
+// Port Number //Change to 8080 for deployment
+const port = process.env.PORT || 3000;
 
-// Port Number
-const port = process.env.PORT || 8080;
 
 // CORS Middleware
 app.use(cors());
@@ -70,12 +73,12 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
-// ...
+// ... uncomment for deployment
 // For all GET requests, send back index.html
 // so that PathLocationStrategy can be used
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
-});
+//app.get('/*', function(req, res) {
+//  res.sendFile(path.join(__dirname + '/public/index.html'));
+//});
 
 // Start Server
 app.listen(port, () => {

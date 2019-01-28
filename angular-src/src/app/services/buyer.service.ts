@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
-
+import { isDevMode } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,11 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
+    if (isDevMode()) {
+      return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
+    }
   }
 
   // Buyer Request submission service - Roni
@@ -39,8 +43,13 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      return this.http.post('buyers/request', request, httpOptions)
+      if (isDevMode()) {
+        return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
         .pipe(map(res => res));
+      } else {
+        return this.http.post('buyers/request', request, httpOptions)
+        .pipe(map(res => res));
+      }
     } else {
       this.router.navigate(['/buyer']);
     }
@@ -55,8 +64,13 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    return this.http.get('buyers/request', httpOptions)
-    .pipe(map(res => res));
+    if (isDevMode()) {
+      return this.http.get('http://localhost:3000/buyers/request', httpOptions)
+      .pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/request', httpOptions)
+     .pipe(map(res => res));
+    }
   }
 
   // Load local token
