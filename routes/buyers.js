@@ -190,15 +190,14 @@ router.get('/request', (req, res, next) => {
 //Will check the route for a token and search the DB for a user with that 
 //token to activate their account
 router.post('/confirmEmail/:token', (req, res, next) => {
-  console.log(req.params.token);
   Buyer.findOne({confirmationToken: req.params.token}, (err, buyer) => {
-    if(err || buyer == null) return res.json({success: false, msg: 'Not Able to activate'});
+    if(err || buyer == null) return res.json({success: false, msg: 'Not able to activate account'});
     var token = req.params.token;
-    //
-    // if(buyer.data.userConfirmed || userConfirmed == null)
-    // {
-    //   return res.json({success: false, msg: 'Your account is already active.'});
-    // }
+    
+     if(buyer.userConfirmed)
+     {
+       return res.json({success: false, msg: 'Your account is already actived.'});
+     }
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {
@@ -212,6 +211,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
         // Boolean in buyer DB that indicates if user email has been confirmed or not
         buyer.temptoken = false;
         buyer.userConfirmed = true;
+        buyer.confirmationToken = undefined;
         buyer.save((err) => {
           if(err)
           {
@@ -219,9 +219,24 @@ router.post('/confirmEmail/:token', (req, res, next) => {
           } else {
             //If account Registred Send Email for Email Verification Completed
             sendEmail.emailVerified(buyer);
+            //Automatically login user after account activation
+            const token = jwt.sign({data: buyer}, config.secret, {
+              expiresIn: 604800 // 1 week
+            });
+
+            res.json({
+              success: true,
+              token: `${token}`,
+              buyer: {
+                id: buyer._id,
+                first_name: buyer.first_name,
+                last_name: buyer.last_name,
+                email: buyer.email,
+                msg:'Account Activate'
+              }
+            });
           }
         })
-        res.json({success:true, msg:'Account Activated.'})
       }
     })
   });

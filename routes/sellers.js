@@ -121,7 +121,7 @@ router.get('/profile', (req, res) => {
      });
   });
 
-// View all buyer submitted requests for buyers page
+// View all buyer submitted requests for sellers page
 router.get('/view', (req, res) => {
   var token = req.headers['x-access-token'];
 
@@ -281,11 +281,13 @@ router.get('/getCode', (req, res) => {
 //Will check the route for a token and search the DB for a user with that 
 //token to activate their account
 router.post('/confirmEmail/:token', (req, res, next) => {
-  console.log(req.params.token);
   Seller.findOne({confirmationToken: req.params.token}, (err, seller) => {
-    if(err) throw err;
+    if(err || seller == null) return res.json({success: false, msg: 'Not able to activate account'});
     var token = req.params.token;
-
+    if(seller.userConfirmed)
+    {
+      return res.json({success: false, msg: 'Your account is already actived.'});
+    }
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {
@@ -296,9 +298,10 @@ router.post('/confirmEmail/:token', (req, res, next) => {
       } else if (seller.userConfirmed) {
         res.json({success:false, msg: 'Acount already activated!'});
       } else {
-        // Boolean in buyer DB that indicates if user email has been confirmed or not
+        // Boolean in seller DB that indicates if user email has been confirmed or not
         seller.temptoken = false;
         seller.userConfirmed = true;
+        seller.confirmationToken = undefined;
         seller.save((err) => {
           if(err)
           {
@@ -306,16 +309,30 @@ router.post('/confirmEmail/:token', (req, res, next) => {
           } else {
             //If account Registred Send Email for Email Verification Completed
             sendEmail.emailVerified(seller);
+            const token = jwt.sign({data: seller}, config.secret, {
+              expiresIn: 604800 // 1 week
+            });
+
+            res.json({
+              success: true,
+              token: `${token}`,
+              seller: {
+                id: seller._id,
+                first_name: seller.first_name,
+                last_name: seller.last_name,
+                email: seller.email,
+                msg:'Account Activated'
+              }
+            });
           }
         })
-        res.json({success:true, msg:'Account Activated.'})
       }
     })
   });
 })
 
 // Resend Email Verification -- NOT YET USED/TESTED - RONI
-router.post('/resend', (req,res, next) =>
+router.post('/resend/:token', (req,res, next) =>
 {
   const email = req.body.email;
 

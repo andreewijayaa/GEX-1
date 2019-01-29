@@ -79,7 +79,9 @@ app.use('/requests', requests);
 //app.get('/*', function(req, res) {
 //  res.sendFile(path.join(__dirname + '/public/index.html'));
 //});
-
+app.all('*', function(req, res) {
+  res.redirect("http://localhost:4200/");
+});
 // Start Server
 app.listen(port, () => {
   console.log('Server started on port '+port);

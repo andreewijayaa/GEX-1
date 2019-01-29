@@ -52,8 +52,7 @@ const SellerSchema = mongoose.Schema({
         default: false
     },
     confirmationToken: {
-        type: String,
-        required: true
+        type: String
     },
 });
 

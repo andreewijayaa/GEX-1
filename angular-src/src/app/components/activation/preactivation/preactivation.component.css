@@ -3,11 +3,11 @@ form {
     position: absolute;
     top: 50%;
     left: 50%;
-    height: 200px;
+    height: 300px;
     transform: translate(-50%,-50%);
-  
+
   }
-  
+
   /* Full-width inputs */
   input[type=text], input[type=password] {
     width: 100%;
@@ -17,7 +17,7 @@ form {
     border: 1px solid #ccc;
     box-sizing: border-box;
   }
-  
+
   /* Set a style for all buttons */
   button {
     background-color: #4CAF50;
@@ -28,24 +28,23 @@ form {
     cursor: pointer;
     width: 100%;
   }
-  
 
-  
 
-  
+
+
+
   /* Center the avatar image inside this container */
   .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
   }
-  
-  
+
+
   /* Add padding to containers */
   .container {
     padding: 16px;
-  
+
   }
 
-  
 
-  
+

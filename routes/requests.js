@@ -45,12 +45,19 @@ router.post('/:id', (req, res, next) => {
       // But that is a quick fix that can be done since each seller has an array of applicable requestIDs
       } else if (buyer_ID != decoded.data._id && decoded.data.account_type == 1){
         Seller.findById(decoded.data._id, (err, seller) => {
-          Offer.find({'request_ID':request._id} , (err,offers) =>{
+          var codesSeller = seller.codes;
+          
+          if(codesSeller.includes(request.code))
+          {
+            Offer.find({'request_ID':request._id} , (err,offers) =>{
             return res.status(200).send({success: true, status: 1, request, offers }); // Seller viewing the request
             });
+          } else {
+            return res.json({ success: false, msg: 'You are not authorized to view this request.' });
+          }
           });
       } else {
-        return res.status(500).send({ success: false, msg: 'You are not authorized to view this request.' });
+        return res.json({ success: false, msg: 'You are not authorized to view this request.' });
       }
       });
     });
