@@ -1,7 +1,7 @@
 <app-buyer-navbar *ngIf="status" ></app-buyer-navbar>
 <app-seller-navbar *ngIf="!status"></app-seller-navbar>
 
-<body>
+<body *ngIf="status != undefined">
   <div class="container">
     <form>
       <div>
