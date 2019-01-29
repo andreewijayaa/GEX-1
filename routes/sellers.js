@@ -188,7 +188,7 @@ router.get('/viewactiverequests', (req,res) => {
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({success: false, message: 'Failed to authenticate token.'});
-      delete decoded.data.password; //Why are we deleting password here ??
+      //delete decoded.data.password; //Why are we deleting password here ?? <-Good question I am not sure. I'll comment it out and see if it explodes
       let newOffer = new Offer({
         seller_ID:decoded.data._id,
         //code:req.body.code, //I DONT THINK OFFER NEEDS CODE
@@ -201,6 +201,7 @@ router.get('/viewactiverequests', (req,res) => {
       Seller.findById(decoded.data._id, (err, seller_making_offer) => {
         if (err) return handleError(err);
         newOffer.save( (err,post) => {
+          //if (err) return handleError(err); //was not sure if this was needed commented it out
           console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
