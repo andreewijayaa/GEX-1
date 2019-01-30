@@ -66,7 +66,11 @@ router.post('/login', (req, res, next) => {
       {
         return res.json({success: false, msg: 'Please Activate your account first.'});
       }
-
+      //if statement added in by John in case a Seller somehow tries to login as a buyer and gets this far
+      if(buyer.account_type != 0)
+      {
+        return res.json({success: false, msg: 'Your account must be a seller to sign in as a seller.'});
+      }//end of statement added in by John
       Buyer.comparePassword(password, buyer.password, (err, isMatch) => {
         if(err) throw err;
         if(isMatch){
