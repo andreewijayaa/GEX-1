@@ -1,8 +1,9 @@
 form {
     border: 3px solid #f1f1f1;
     position: absolute;
-    top: 50%;
+    top: 400%;
     left: 50%;
+    bottom: 50%;
     height: 300px;
     transform: translate(-50%,-50%);
 
@@ -29,21 +30,16 @@ form {
     width: 100%;
   }
 
-
-
-
-
   /* Center the avatar image inside this container */
   .imgcontainer {
     text-align: center;
     margin: 24px 0 12px 0;
   }
 
-
   /* Add padding to containers */
   .container {
     padding: 16px;
-
+    
   }
 
 

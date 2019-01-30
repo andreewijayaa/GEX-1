@@ -20,7 +20,8 @@
           <a class="dropdown-item" routerLink="/buyer" routerLinkActive="active-link">Orders</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" routerLink="/buyer/buyer-account" routerLinkActive="active-link">My Account</a>
-          <a *ngIf="logout == true" class="dropdown-item" (click)="onLogoutClick()" routerLink="/buyer-login" routerLinkActive="active-link">Logout</a>
+          <a class="dropdown-item" (click)="onLogoutClick()" routerLink="/buyer-login" routerLinkActive="active-link" style="color:red">Logout</a>
+          <!----<a *ngIf="logout == true" class="dropdown-item" (click)="onLogoutClick()" routerLink="/buyer-login" routerLinkActive="active-link">Logout</a>-->
         </div>
       </li>
     </ul>

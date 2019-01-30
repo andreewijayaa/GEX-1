@@ -19,7 +19,8 @@
           <a class="dropdown-item" routerLink="/seller" routerLinkActive="active-link">Go to My Portal</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" routerLink="/seller/seller-account" routerLinkActive="active-link">My Account</a>
-          <a *ngIf="logout == true" class="dropdown-item" (click)="onLogoutClick()" routerLink="/seller-login" routerLinkActive="active-link">Logout</a>
+          <a class="dropdown-item" (click)="onLogoutClick()" routerLink="/seller-login" routerLinkActive="active-link" style="color:red">Logout</a>
+          <!----<a *ngIf="logout == true" class="dropdown-item" (click)="onLogoutClick()" routerLink="/seller-login" routerLinkActive="active-link">Logout</a>-->
         </div>
       </li>
     </ul>
