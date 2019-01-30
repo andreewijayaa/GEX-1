@@ -12,6 +12,7 @@ export class BuyerAccountComponent implements OnInit {
 
   // Delcared buyer variable.
   buyer: any;
+  buyerLogout: Boolean;
 
   constructor(private buyerService: BuyerService,
     private route: ActivatedRoute) { }
@@ -19,6 +20,7 @@ export class BuyerAccountComponent implements OnInit {
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
+    this.buyerLogout = true;
   }
 
   // Function enables users to use the textfields in order to edit their information. 

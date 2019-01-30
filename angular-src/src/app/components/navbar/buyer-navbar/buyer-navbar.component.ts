@@ -5,7 +5,7 @@ This component file is the main file that offers the buyer navigation bar functi
 import { Component, OnInit, Input } from '@angular/core';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BuyerService } from '../../../services/buyer.service';
 import { Title } from '@angular/platform-browser'
 
@@ -15,16 +15,20 @@ import { Title } from '@angular/platform-browser'
   styleUrls: ['./buyer-navbar.component.css']
 })
 export class BuyerNavbarComponent implements OnInit {
+  @Input() logout: Boolean;
+  buyerNavbar: Object;
 
   constructor(private storeFetchService: StoreFetchService,
     private router: Router,
     private flashMessage: FlashMessagesService,
     private buyerService: BuyerService,
-    private titleService: Title) { }
+    private titleService: Title,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application buyer related pages.
     this.titleService.setTitle("Buyer | GEX");
+    this.buyerNavbar = this.route.snapshot.data['buyer'];
   }
 
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton 

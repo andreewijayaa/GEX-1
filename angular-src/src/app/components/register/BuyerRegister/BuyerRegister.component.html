@@ -1,19 +1,20 @@
 <app-navbar></app-navbar>
-    <body>
 
-        <div class="container">
-        <form (submit)="OnBuyerRegisterSubmit()" >
+<body>
+
+    <div class="container">
+        <form (submit)="OnBuyerRegisterSubmit()">
             <div class="container">
-              <div class ="container header">
+                <div class="container header">
 
-                <h1>Sign up</h1>
+                    <h1>Sign up</h1>
 
                 </div>
 
                 <hr>
 
 
-                <input type="text" [(ngModel)]="email" name="email" placeholder="Enter Email"  required>
+                <input type="text" [(ngModel)]="email" name="email" placeholder="Enter Email" required>
 
 
                 <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
@@ -35,8 +36,6 @@
 
 
             </div>
-         </form>
-        </div>
-    </body>
-
-
+        </form>
+    </div>
+</body>

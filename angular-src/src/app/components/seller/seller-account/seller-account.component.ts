@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./seller-account.component.css']
 })
 export class SellerAccountComponent implements OnInit {
+  mainLogout: Boolean;
 
   seller: any;
 
@@ -17,6 +18,7 @@ export class SellerAccountComponent implements OnInit {
   // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
     this.seller = this.route.snapshot.data['seller'];
+    this.mainLogout = true;
   }
 
   // Function for edit button

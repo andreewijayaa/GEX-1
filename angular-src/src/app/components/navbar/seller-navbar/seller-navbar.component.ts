@@ -2,11 +2,11 @@
 By: Omar
 This component file is the main file that offers the seller navigation bar functionality in GEX.
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SellerService } from '../../../services/seller.service';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser'
 
 @Component({
@@ -15,16 +15,20 @@ import { Title } from '@angular/platform-browser'
   styleUrls: ['./seller-navbar.component.css']
 })
 export class SellerNavbarComponent implements OnInit {
+  sellerNavbar: Object;
+  @Input() logout: Boolean;
 
   constructor(private sellerService: SellerService,
     private storeFetchService: StoreFetchService,
     private flashMessage: FlashMessagesService,
     private router: Router,
-    private titleService: Title) { }
+    private titleService: Title,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application seller related pages.
     this.titleService.setTitle("Seller | GEX");
+    this.sellerNavbar = this.route.snapshot.data['seller']
   }
 
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton 

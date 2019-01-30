@@ -1,3 +1,4 @@
+/*
 .navbar-brand{
   max-height: 30px;
   max-width: 30%;
@@ -25,4 +26,10 @@
 
 .nav-item2 a:hover {
   background-color: lightgray;
+}
+*/
+
+.navbar-nav > li{
+  padding-left:10px;
+  padding-right:10px;
 }
