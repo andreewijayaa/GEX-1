@@ -13,6 +13,7 @@ export class BuyerService {
   buyerToken: any;
   buyer: any;
   request: any;
+  update: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -70,6 +71,22 @@ export class BuyerService {
     } else {
       return this.http.get('buyers/request', httpOptions)
      .pipe(map(res => res));
+    }
+  }
+
+  // Update current buyers profile
+  updateBuyerProfile(buyer) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
+      .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/register', buyer, httpOptions)
+      .pipe(map(res => res));
     }
   }
 

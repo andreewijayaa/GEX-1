@@ -13,6 +13,10 @@ export class BuyerAccountComponent implements OnInit {
   // Delcared buyer variable.
   buyer: any;
   buyerLogout: Boolean;
+  buyer_id: String;
+  buyer_updatedFirstName: String;
+  buyer_updatedLastName: String;
+  buyer_updatedPassword: String;
 
   constructor(private buyerService: BuyerService,
     private route: ActivatedRoute) { }
@@ -20,6 +24,7 @@ export class BuyerAccountComponent implements OnInit {
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
+    this.buyer_id = this.buyer.data._id;
     this.buyerLogout = true;
   }
 
@@ -28,7 +33,7 @@ export class BuyerAccountComponent implements OnInit {
   editFunction(): void {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
-    (<HTMLInputElement>document.getElementById('eAddress')).disabled = false;
+    (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
     (<HTMLInputElement>document.getElementById('saveBtn')).disabled = false;
     (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
     (<HTMLInputElement>document.getElementById('verify')).hidden = false;
@@ -39,9 +44,10 @@ export class BuyerAccountComponent implements OnInit {
   // If there is no password inserted or the new password does not match when confirming. An error will be displayed to the user.
   // This only works with the front end so far. This has not been tied in with the backend.
   saveFunction(): void {
-    const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
-    const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
-    if ((newPass === confirm) && (<HTMLInputElement>document.getElementById('verifyPwd')).value !== '') {
+
+    var success = this.updateBuyerData();
+
+    if (success) {
       (<HTMLInputElement>document.getElementById('pwd')).value = (<HTMLInputElement>document.getElementById('newPwd')).value;
       (<HTMLInputElement>document.getElementById('fName')).disabled = true;
       (<HTMLInputElement>document.getElementById('lName')).disabled = true;
@@ -62,8 +68,35 @@ export class BuyerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
     }
   }
+  
   // This function has not been fully implemented yet. Once this gets completed it will help tie the frontend and backend of this page together.
-  updateData() {
-    this.buyer.updateData();
+  updateBuyerData(): Boolean {
+    const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
+    const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
+
+    if (newPass === confirm && (<HTMLInputElement>document.getElementById('verifyPwd')).value !== '') {
+      this.buyer_updatedFirstName = (<HTMLInputElement>document.getElementById('fName')).value;
+      this.buyer_updatedLastName = (<HTMLInputElement>document.getElementById('lName')).value;
+      this.buyer_updatedPassword = confirm;
+      const update = {
+        "updater_id" : this.buyer_id,
+        "fName" : this.buyer_updatedFirstName,
+        "lName" : this.buyer_updatedLastName,
+        "pass" : this.buyer_updatedPassword
+      }
+
+      this.buyerService.updateBuyerProfile(update).subscribe((data: any) => {
+        if (data.success) {
+          //console.log("Success");
+        }
+        else {
+          //console.log("Not succssefull");
+        }
+      });
+
+      return true;
+    }
+    else
+      return false;
   }
 }
