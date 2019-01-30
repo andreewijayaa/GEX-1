@@ -31,8 +31,7 @@ const BuyerSchema = mongoose.Schema({
         default: false
     },
     confirmationToken: {
-        type: String,
-        required: true
+        type: String
     },
     buyer_requests_byID: {
       type : [String]

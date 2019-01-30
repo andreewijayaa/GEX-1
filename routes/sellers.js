@@ -121,7 +121,7 @@ router.get('/profile', (req, res) => {
      });
   });
 
-// View all buyer submitted requests for buyers page
+// View all buyer submitted requests for sellers page
 router.get('/view', (req, res) => {
   var token = req.headers['x-access-token'];
 
@@ -184,11 +184,12 @@ router.get('/viewactiverequests', (req,res) => {
 //made by John. Revised by Roni
   router.post('/makeOffer/:id', (req,res,next) =>{
     var id = req.body.request_ID;
+    console.log('Request with an offer being added to: ' + id);
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({success: false, message: 'Failed to authenticate token.'});
-      delete decoded.data.password; //Why are we deleting password here ??
+      //delete decoded.data.password; //Why are we deleting password here ?? <-Good question I am not sure. I'll comment it out and see if it explodes
       let newOffer = new Offer({
         seller_ID:decoded.data._id,
         //code:req.body.code, //I DONT THINK OFFER NEEDS CODE
@@ -197,10 +198,11 @@ router.get('/viewactiverequests', (req,res) => {
         description:req.body.description,
         price:req.body.price
       });
-      //console.log('created the offer with no problems \n' + newOffer);
+      //console.log('created the offer with no problems \n' + newOffer); 
       Seller.findById(decoded.data._id, (err, seller_making_offer) => {
-        if (err) return handleError(err);
+        if (err) return handleError(err);//throws err if search for seller fails
         newOffer.save( (err,post) => {
+          //if (err) return handleError(err); //was not sure if this was needed commented it out
           console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
@@ -281,11 +283,13 @@ router.get('/getCode', (req, res) => {
 //Will check the route for a token and search the DB for a user with that 
 //token to activate their account
 router.post('/confirmEmail/:token', (req, res, next) => {
-  console.log(req.params.token);
   Seller.findOne({confirmationToken: req.params.token}, (err, seller) => {
-    if(err) throw err;
+    if(err || seller == null) return res.json({success: false, msg: 'Not able to activate account'});
     var token = req.params.token;
-
+    if(seller.userConfirmed)
+    {
+      return res.json({success: false, msg: 'Your account is already actived.'});
+    }
     jwt.verify(token, config.secret, (err, decoded) => {
       if(err)
       {
@@ -296,9 +300,10 @@ router.post('/confirmEmail/:token', (req, res, next) => {
       } else if (seller.userConfirmed) {
         res.json({success:false, msg: 'Acount already activated!'});
       } else {
-        // Boolean in buyer DB that indicates if user email has been confirmed or not
+        // Boolean in seller DB that indicates if user email has been confirmed or not
         seller.temptoken = false;
         seller.userConfirmed = true;
+        seller.confirmationToken = undefined;
         seller.save((err) => {
           if(err)
           {
@@ -306,16 +311,30 @@ router.post('/confirmEmail/:token', (req, res, next) => {
           } else {
             //If account Registred Send Email for Email Verification Completed
             sendEmail.emailVerified(seller);
+            const token = jwt.sign({data: seller}, config.secret, {
+              expiresIn: 604800 // 1 week
+            });
+
+            res.json({
+              success: true,
+              token: `${token}`,
+              seller: {
+                id: seller._id,
+                first_name: seller.first_name,
+                last_name: seller.last_name,
+                email: seller.email,
+                msg:'Account Activated'
+              }
+            });
           }
         })
-        res.json({success:true, msg:'Account Activated.'})
       }
     })
   });
 })
 
 // Resend Email Verification -- NOT YET USED/TESTED - RONI
-router.post('/resend', (req,res, next) =>
+router.post('/resend/:token', (req,res, next) =>
 {
   const email = req.body.email;
 

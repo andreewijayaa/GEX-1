@@ -22,9 +22,9 @@ module.exports.sendVerificationEmail = function(user, callback){
         subject: 'Email Activation!',
         text: 'Hello ' + user.first_name + ', Click the link to acitvate account',
         //Development
-        html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="http://localhost:4200/postactivation/' + user.confirmationToken + '"> Activate Account!</a>'
+        html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="http://localhost:4200/postactivation/' + user.confirmationToken + '"> Activate Account!</a> <h6>If the above button does not work, please copy & paste this in your browser:<br> http://localhost:4200/postactivation/' + user.confirmationToken
         //Production
-        //html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken + '"> Activate Account!</a>'
+        //html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken + '"> Activate Account!</a><h6>If the above button does not work, please copy & paste this in your browser:<br> https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken
       };
       client.sendMail(email, function(err, info){
           if (err ){
@@ -59,16 +59,6 @@ module.exports.emailVerified = function(user, callback){
 //Function that will take in a seller, and request ID then email applicable sellers with a link to the request
 //Used Upon buyer submitting a new request
 module.exports.NotifySeller= function(seller, requestID, callback){
-  if(isDevMode())
-  {
-    var email = {
-      from: 'gex_do_not_reply@gex.com',
-      to: seller.email,
-      subject: 'You have a new request!',
-      text: 'Random',
-      
-    };
-  } else {
     var email = {
       from: 'gex_do_not_reply@gex.com',
       to: seller.email,
@@ -79,7 +69,6 @@ module.exports.NotifySeller= function(seller, requestID, callback){
       //Production
       //html: '<h2>Hello ' + seller.first_name + ',</h2> <h4>A new request is available.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/request/' + requestID + '"> Open Request</a>'
     };
-  }
   client.sendMail(email, function(err, info){
     if (err ){
       console.log(error);
