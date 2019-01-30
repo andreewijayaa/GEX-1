@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
       if (data.success) {
         this.storeFetchService.storeBuyerData(data.token, data.buyer);
         this.router.navigate(['/buyer']);
+        window.location.reload();
         this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
       } else {
         this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });

@@ -1,3 +1,4 @@
+/*
 .navbar-brand{
   max-height: 30px;
   max-width: 30%;
@@ -18,8 +19,19 @@
   list-style-type: none;
   font-size: 14px;
   padding-top: 0;
+  nav-down: auto
 }
 
 .nav-item2 a:hover {
   background-color: lightgray;
+}
+*/
+
+.navbar-nav > li{
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.img-circle {
+  border-radius: 50%;
 }

@@ -26,6 +26,7 @@
     "mongoose": "*",
     "nodemailer": "*",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemon": "^1.18.9",
     "passport": "*",
     "passport-jwt": "*",
     "sendgrid": "^5.2.3",
