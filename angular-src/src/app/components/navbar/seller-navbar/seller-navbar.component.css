@@ -1,4 +1,4 @@
-.navbar-brand{
+/*.navbar-brand{
     max-height: 30px;
     max-width: 30%;
     overflow: visible;
@@ -22,4 +22,13 @@
   
   .nav-item2 a:hover {
     background-color: lightgray;
+  }
+*/
+  .navbar-nav > li{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .img-circle {
+    border-radius: 50%;
   }
