@@ -253,6 +253,30 @@ router.post('/addCode', (req, res) => {
   });
 });
 
+//code to remove codes from sellers
+//made by John
+router.post('/removeCode', (req, res) => {
+  var token = req.headers['x-access-token'];
+
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  console.log('remove code called');
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      if (req.body.codes == null){
+        return res.status(500).send({ success: false, message: "No Codes inputted to delete"});
+      }
+      //use the update function to call a pullAll operator to reomve the codes
+      //console.log('before update is called');
+      Seller.findByIdAndUpdate( decoded.data._id, { $pullAll: {codes: [req.body.codes] }}, (error_1, seller_removing_codes) => {
+        if (err) return res.status(500).send({ success: false, message: 'Something went wrong when finding seller.' });
+        res.json({success: true, msg:"Attempted to remove code from account!"});
+      });
+      //console.log('after update is called');
+  });
+});
+
 // A route to get the seller codes that have been added by the sellers
 // used to view to sellers what Goods/Services they are offering 
 // By Roni
