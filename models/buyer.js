@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../config/database');
 const multer = require('multer');
-const fs = require('fs');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream')
+const methodOverride = require('method-override')
 
 //Buyer Schema
 const BuyerSchema = mongoose.Schema({

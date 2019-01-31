@@ -1,3 +1,16 @@
+/* By: Omar
+Will let out app.js file know if we are in development of production. If we are in production we dont want our stripe secret key to be
+public so this will ensure the secret key is hidden. 
+If we are in development mode then it will not hide the stripe secret key.
+*/
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
+
+// Stripe Keys used for testing.
+const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
+const keySecret = process.env.STRIPE_SECRET_KEY;
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -6,7 +19,10 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 var nodemailer = require("nodemailer");
-
+const GridFSStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override')
+const stripe = require('stripe')(keySecret);
 
 // Connect To Database
 mongoose.Promise = require('bluebird');
@@ -61,6 +77,12 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
+// View Engine and pug Middleware
+app.set('view engine', 'pug');
+
+// Init gfs
+let gfs;
+
 //buyers route
 app.use('/buyers', buyers);
 
@@ -72,6 +94,26 @@ app.use('/codes', codes);
 
 //requests route
 app.use('/requests', requests);
+
+app.get("/", (req, res) =>
+  res.render("index.pug", {keyPublishable}));
+
+app.post("/charge", (req, res) => {
+  let amount = 500;
+
+  stripe.customers.create({
+     email: req.body.stripeEmail,
+    source: req.body.stripeToken
+  })
+  .then(customer =>
+    stripe.charges.create({
+      amount,
+      description: "Sample Charge",
+         currency: "usd",
+         customer: customer.id
+    }))
+  .then(charge => res.render("charge.pug"));
+});
 
 // ... uncomment for deployment
 // For all GET requests, send back index.html
