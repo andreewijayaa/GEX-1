@@ -202,7 +202,7 @@ router.get('/viewactiverequests', (req,res) => {
       Seller.findById(decoded.data._id, (err, seller_making_offer) => {
         if (err) return handleError(err);//throws err if search for seller fails
         newOffer.save( (err,post) => {
-          //if (err) return handleError(err); //was not sure if this was needed commented it out
+          if (err) return handleError(err); 
           console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
