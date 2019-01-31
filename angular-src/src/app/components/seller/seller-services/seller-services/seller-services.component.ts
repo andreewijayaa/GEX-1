@@ -24,7 +24,21 @@ export class SellerServicesComponent implements OnInit {
     { code: 42131700, name: 'Surgical Textiles'},
     { code: 30111700, name: 'Plasters'},
     { code: 23241600, name: 'Metal Cutting Tools'},
-	];
+    { code: 78965422, name: 'Jewelry'},
+    { code: 78965423, name: 'Necklaces (Jewelry)'},
+    { code: 78965424, name: 'Rings (Jewelry)'},
+    { code: 78965425, name: 'Earrings (Jewelry)'},
+    { code: 68977451, name: 'Dolls'},
+    { code: 67887941, name: 'Sculptures'},
+    { code: 62145331, name: 'Scarves'},
+    { code: 54887921, name: 'Blankets'},
+    { code: 52871151, name: 'Socks'},
+    { code: 50360051, name: 'Pencils'},
+    { code: 49605401, name: 'Painting'},
+    { code: 49605402, name: 'Oil (Painting)'},
+    { code: 49605403, name: 'Watercolor (Painting)'},
+    { code: 49605404, name: 'Acrlyic (Painting)'}
+  ];
   code: Number;
   codeList: [Number];
   None: Boolean;

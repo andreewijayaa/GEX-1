@@ -35,6 +35,7 @@ import { RequestComponent } from './components/request/request.component';
 import { BuyerResolve } from './services/buyer.resolve';
 import { SellerResolve } from './services/seller.resolve';
 import { resolve } from 'path';
+import { SubmitCategoriesComponent } from './components/seller/submit-categories/submit-categories.component';
 
 
 const appRoutes: Routes = [
@@ -50,6 +51,8 @@ const appRoutes: Routes = [
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
   {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
   {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
+  {path: 'seller/submit-categories', component: SubmitCategoriesComponent, canActivate: [SellerAuthGuard],
+        resolve: { seller: SellerResolve }},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
   {path: 'request/:id', component: RequestComponent, resolve: { buyer: BuyerResolve, seller: SellerResolve }}
@@ -68,6 +71,7 @@ const appRoutes: Routes = [
     SubmitOfferComponent,
     SellerAccountComponent,
     SellerRegisterComponent,
+    SubmitCategoriesComponent,
     FooterComponent,
     SellerLoginComponent,
     SellerNavbarComponent,
