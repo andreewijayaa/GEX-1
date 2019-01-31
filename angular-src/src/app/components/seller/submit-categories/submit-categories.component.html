@@ -1,0 +1,122 @@
+<app-seller-navbar></app-seller-navbar>
+<flash-messages></flash-messages>
+
+<div class="container">
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <div class="tabbable">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item stepTabs">
+          <a class="nav-link active" data-toggle="tab" [ngClass]="{'active':currentTab === 'step1'}" data-target="#step1"
+            role="tab" aria-controls="step1" aria-selected="true" (click)="step1('step1')">Step 1</a>
+        </li>
+        <li class="nav-item stepTabs">
+          <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'step2'}" data-target="#step2"
+            role="tab" aria-controls="step2" aria-selected="false" (click)="step2('step2')">Step 2</a>
+        </li>
+        <li class="nav-item stepTabs">
+          <a class="nav-link" data-toggle="tab" [ngClass]="{'active':currentTab === 'step3'}" data-target="#step3"
+            role="tab" aria-controls="step3" aria-selected="false" (click)="step3('step3')">Step 3</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Content of tabs -->
+    <div class="tab-content" id="myTabContent">
+      <!-- The content for Step 1 tab -->
+      <div class="tab-pane fade show active" id="step1" [ngClass]="{'active':currentTab === 'step1'}" role="tabpanel"
+        aria-labelledby="step1-tab">
+        <div class="card">
+          <div class="card-body">
+            <h3>What goods/services would you like to provide?</h3>
+            &nbsp;
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Category:</label>
+                  <div class="col-sm-10">
+                    <select (change)="onChange($event)">
+                      <option *ngFor="let code of codes" value={{code.code}}>
+                        {{code.name}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <label>This will be checkboxes soon!</label>
+              </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-danger float-right" (click)="step2('step2')">Next</button>
+          </div>
+        </div>
+      </div>
+      <!--End of Step 1-->
+
+      <!-- The content for Step 2 tab -->
+      <div class="tab-pane fade show active" id="step2" [ngClass]="{'active':currentTab === 'step2'}" role="tabpanel"
+        aria-labelledby="step2-tab">
+        <div class="card">
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <h3>Tell us a little bit about you...</h3>
+                &nbsp;
+                <textarea class="form-control" id="description" rows="20"></textarea>
+              </div>
+              <button type="prevBtn" class="btn btn-outline-danger float-left" (click)="step1('step1')">Previous</button>
+              <button type="button" class="btn btn-danger float-right" (click)="step3('step3')">Next</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- The content for Step 3 tab -->
+      <div class="tab-pane fade show active" id="step3" [ngClass]="{'active':currentTab === 'step3'}" role="tabpanel"
+        aria-labelledby="step3-tab">
+        <div class="card">
+          <div class="card-body">
+            <h3>Billing Address</h3>
+            &nbsp;
+            <form>
+              <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <textarea class="form-control" id="firstName" rows="1"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name: </label>
+                <textarea class="form-control" id="lastName" rows="1"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="streetAddress">Street Address:</label>
+                <textarea class="form-control" id="streetAddress" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="city">City: </label>
+                <textarea class="form-control" id="city" rows="1"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="country">Country:</label>
+                <textarea class="form-control" id="country" rows="1"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="state">State/Provice: </label>
+                <textarea class="form-control" id="state" rows="1"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="state">Postal Code: </label>
+                <textarea class="form-control" id="state" rows="1"></textarea>
+              </div>
+              <button type="prevBtn" class="btn btn-outline-danger float-left" (click)="step2('step2')">Previous</button>
+              <button type="submit" class="btn btn-success float-right">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Content tabs -->
+
+		<div class="clearfooter"></div>
+	</div>
