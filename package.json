@@ -16,21 +16,22 @@
     ]
   },
   "dependencies": {
+    "@sendgrid/client": "^6.3.0",
     "@sendgrid/mail": "^6.3.1",
     "@types/jquery": "^3.3.22",
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
+    "cryptiles": ">=4.1.2",
     "express": "*",
+    "hawk": ">=3.1.3",
+    "hoek": ">=4.2.1",
     "jsonwebtoken": "*",
     "mongoose": "*",
     "nodemailer": "*",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^1.18.9",
     "passport": "*",
     "passport-jwt": "*",
-    "sendgrid": "^5.2.3",
-    "sendgrid-web": "0.0.5",
     "xmlhttprequest": "^1.8.0"
   },
   "engines": {

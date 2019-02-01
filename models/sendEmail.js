@@ -1,80 +1,60 @@
 //By Roni
 //Using SendGrid as our email service
-var nodemailer = require('nodemailer');
-var sgTransport = require('nodemailer-sendgrid-transport');
-
-//SendGrid Login Information
-var options = {
-  auth: {
-    api_user: 'ronjonsilver',
-    api_key: 'GEXTeamrocks2018'
-  }}
-//Connect the nodemailer to the sendgrid client
-var client = nodemailer.createTransport(sgTransport(options));
-
+const sgMail = require('@sendgrid/mail');
+const _MYKEY_ = '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';
+sgMail.setApiKey(_MYKEY_);
 //Function that will take in a user, and email them their token
 //Used Upon user registration to confirm email
 module.exports.sendVerificationEmail = function(user, callback){
-    //If account Registred Send Email for Email Verification
-    var email = {
-        from: 'gex_do_not_reply@gex.com',
-        to: user.email,
-        subject: 'Email Activation!',
-        text: 'Hello ' + user.first_name + ', Click the link to acitvate account',
-        //Development
-        html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="http://localhost:4200/postactivation/' + user.confirmationToken + '"> Activate Account!</a> <h6>If the above button does not work, please copy & paste this in your browser:<br> http://localhost:4200/postactivation/' + user.confirmationToken
-        //Production
-        //html: '<h2>Hello ' + user.first_name + ',</h2> <h4>To complete Registration, Click the link below.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken + '"> Activate Account!</a><h6>If the above button does not work, please copy & paste this in your browser:<br> https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken
-      };
-      client.sendMail(email, function(err, info){
-          if (err ){
-            console.log(error);
-          }
-          else {
-            //console.log('Message sent to: ' + user.email + '\nwith token : ' + user.confirmationToken);
-          }
-      });
+  const msg = {
+    to: user.email,
+    from: 'gex_do_not_reply@gex.com',
+    templateId: 'd-479988c021f8483ab911fe7222a9c253',
+    dynamic_template_data: {
+      name: user.first_name,
+      tokenID: 'http://localhost:4200/postactivation/' + user.confirmationToken,
+      //tokenID: '"https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken,
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
 }
+
 //Function that will take in a user, and email them account verifcation completed
 //Used Upon user has activated their email
 module.exports.emailVerified = function(user, callback){
-    //If account Registred Send Email for Email Verification
-    var email = {
-        from: 'gex_do_not_reply@gex.com',
-        to: user.email,
-        subject: 'Account Activated!',
-        text: 'Random',
-        html: '<h2>Hello ' + user.first_name + ',</h2> <h4>Your account has been activated!</h4>'
-      };
-      
-      client.sendMail(email, function(err, info){
-          if (err ){
-            console.log(error);
-          }
-          else {
-            //console.log('Message sent to: ' + user.email);
-          }
-      });
+  const msg = {
+    to: user.email,
+    from: 'gex_do_not_reply@gex.com',
+    templateId: 'd-48ecbc2363a1462985a1e8e5278b39fb',
+    dynamic_template_data: {
+      name: user.first_name,
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
 }
+
+
 //Function that will take in a seller, and request ID then email applicable sellers with a link to the request
 //Used Upon buyer submitting a new request
 module.exports.NotifySeller= function(seller, requestID, callback){
-    var email = {
-      from: 'gex_do_not_reply@gex.com',
-      to: seller.email,
-      subject: 'You have a new request!',
-      text: 'Random',
-      //Development
-      html: '<h2>Hello ' + seller.first_name + ',</h2> <h4>A new request is available.</h4></br><a href="http://localhost:4200/request/' + requestID + '"> Open Request</a>'
-      //Production
-      //html: '<h2>Hello ' + seller.first_name + ',</h2> <h4>A new request is available.</h4></br><a href="https://powerful-taiga-46416.herokuapp.com/request/' + requestID + '"> Open Request</a>'
-    };
-  client.sendMail(email, function(err, info){
-    if (err ){
-      console.log(error);
-    }
-    else {
-      //console.log('Message sent to: ' + user.email);
-    }
-}); 
+  const msg = {
+    to: seller.email,
+    from: 'gex_do_not_reply@gex.com',
+    templateId: 'd-33099325b30c4edc940590551c708f87',
+    dynamic_template_data: {
+      name: seller.first_name,
+      requestID: 'http://localhost:4200/request/' + requestID,
+      //requestID : 'https://powerful-taiga-46416.herokuapp.com/request/' + requestID,
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
 }
