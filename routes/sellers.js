@@ -178,6 +178,20 @@ router.get('/viewactiverequests', (req,res) => {
 });
 
 
+//route to view requests the have catergories that belong to 
+//made by john (NOT NEEDED)
+/*router.get('/viewrequests', (req,res) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view active requests.' });
+  jwt.verify(token, config.secret, (err, decoded) => {
+    Request.find({'code': { $in: decoded.data.codes}}, (err, requests) => {
+      if (err) return handleError(err);
+      return res.status(200).send(requests);
+    });
+  });
+});*/
+
 //This function needs to only be avaible to sellers who are within that code catagory
 //also buyers are not allowed to make offers
 //also the request id has to be valid
@@ -202,10 +216,11 @@ router.get('/viewactiverequests', (req,res) => {
       Seller.findById(decoded.data._id, (err, seller_making_offer) => {
         if (err) return handleError(err);//throws err if search for seller fails
         newOffer.save( (err,post) => {
-          //if (err) return handleError(err); //was not sure if this was needed commented it out
+          if (err) return handleError(err); 
           console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
+            seller_making_offer.open_requests.push(id);//this is the new line added that hopefully fixes the active requests.
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
               console.log('New Offer made tied to Seller %s', decoded.data._id);
@@ -248,6 +263,75 @@ router.post('/addCode', (req, res) => {
         seller_adding_codes.save((err) =>{
           if (err) { return next(err); }
           res.json({success: true, msg:"Succesfully added code to account!"});
+        });
+      });
+  });
+});
+
+
+//let's seller's add a description to their account
+//code by John
+router.post('/addDescription', (req, res) => {
+  console.log('add description called');
+  var token = req.headers['x-access-token'];
+
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      if (req.body.description == null){
+        return res.status(500).send({ success: false, message: "No description added"});
+      }
+      console.log('adding this description: ' + req.body.description);
+      Seller.findById(decoded.data._id, (err, seller_descipt) => {
+        if (err) return handleError(err);
+        seller_descipt.set({description: req.body.description});
+        seller_descipt.save(function (err, updatedSeller) {
+          if (err) return handleError(err);
+          return res.status(500).send({ success: true, message: "Attempted to add desciption"});
+        });
+      });
+  });
+});
+
+//let's seller's add billing addres to account
+//code by John
+router.post('/addBillingAddress', (req, res) => {
+  console.log('add billing address called');
+  var token = req.headers['x-access-token'];
+
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      Seller.update({_id: decoded.data._id}, {$set : {billing_address: [] }}, function (err, something) {
+        if (err) return handleError(err);
+        Seller.findById(decoded.data._id, (err, seller_bill) => {
+          seller_bill.set({user_account_setup : true});
+          if (err) return handleError(err);
+          /*var new_address = 
+          {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            street_address: req.body.street_address,
+            city: req.body.city,
+            country: req.body.country,
+            state_province: req.body.state_province,
+            postal_code: req.body.postal_code
+          };*/
+          seller_bill.billing_address.push(req.body.first_name);
+          seller_bill.billing_address.push(req.body.last_name);
+          seller_bill.billing_address.push(req.body.street_address);
+          seller_bill.billing_address.push(req.body.city);
+          seller_bill.billing_address.push(req.body.country);
+          seller_bill.billing_address.push(req.body.state_province);
+          seller_bill.billing_address.push(req.body.postal_code);
+          seller_bill.save(function (err, updatedSeller) {
+            if (err) return handleError(err);
+            return res.status(500).send({ success: true, message: "Attempted to add billing address "});
+          });
         });
       });
   });
