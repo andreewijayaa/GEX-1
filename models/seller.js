@@ -33,12 +33,18 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+    },
     phone_number: {
         type: String,
         required: true
     },
     codes: {
       type: [Number]
+    },
+    billing_address: {
+        type: [String]
     },
     seller_offers_byID: {
       type: [String]
@@ -89,3 +95,15 @@ module.exports.comparePassword = function (inputtedPassword, hash, callback){
             }
         });
 }
+
+
+/* address schema for later use if we want it
+billing_address: {
+        first_name: String,
+        last_name: String,
+        street_address: String,
+        city: String,
+        country: String,
+        state_province: String,
+        postal_code: Number
+    }*/
