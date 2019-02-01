@@ -178,6 +178,20 @@ router.get('/viewactiverequests', (req,res) => {
 });
 
 
+//route to view requests the have catergories that belong to 
+//made by john (NOT NEEDED)
+/*router.get('/viewrequests', (req,res) => {
+  var token = req.headers['x-access-token'];
+
+  if (!token) return res.status(401).send({ success: false, message:'Must login to view active requests.' });
+  jwt.verify(token, config.secret, (err, decoded) => {
+    Request.find({'code': { $in: decoded.data.codes}}, (err, requests) => {
+      if (err) return handleError(err);
+      return res.status(200).send(requests);
+    });
+  });
+});*/
+
 //This function needs to only be avaible to sellers who are within that code catagory
 //also buyers are not allowed to make offers
 //also the request id has to be valid
@@ -206,6 +220,7 @@ router.get('/viewactiverequests', (req,res) => {
           console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
+            seller_making_offer.open_requests.push(id);//this is the new line added that hopefully fixes the active requests.
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
               console.log('New Offer made tied to Seller %s', decoded.data._id);
@@ -294,6 +309,7 @@ router.post('/addBillingAddress', (req, res) => {
       Seller.update({_id: decoded.data._id}, {$set : {billing_address: [] }}, function (err, something) {
         if (err) return handleError(err);
         Seller.findById(decoded.data._id, (err, seller_bill) => {
+          seller_bill.set({user_account_setup : true});
           if (err) return handleError(err);
           /*var new_address = 
           {
