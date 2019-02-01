@@ -23,6 +23,10 @@ const GridFSStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const methodOverride = require('method-override')
 const stripe = require('stripe')(keySecret);
+const fs = require('fs');
+const Offer = require('./models/offer');
+const ejs = require('ejs')._express;
+
 
 // Connect To Database
 mongoose.Promise = require('bluebird');
@@ -77,8 +81,8 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
-// View Engine and pug Middleware
-app.set('view engine', 'pug');
+// View Engine and ejs Middleware
+app.set('view engine', 'ejs');
 
 // Init gfs
 let gfs;
@@ -95,24 +99,23 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
-app.get("/", (req, res) =>
-  res.render("index.pug", {keyPublishable}));
+app.get('/checkout', function(req, res) {
+  
+  let offer = {
+    
+  };
 
-app.post("/charge", (req, res) => {
-  let amount = 500;
 
-  stripe.customers.create({
-     email: req.body.stripeEmail,
-    source: req.body.stripeToken
-  })
-  .then(customer =>
-    stripe.charges.create({
-      amount,
-      description: "Sample Charge",
-         currency: "usd",
-         customer: customer.id
-    }))
-  .then(charge => res.render("charge.pug"));
+  fs.readFile('items.json', function(error, data) {
+    if (error) {
+      res.status(500).end();
+    }
+    else {
+      res.render('buyer-checkout.component.html', {
+        items: JSON.parse(data)
+      })
+    }
+  });
 });
 
 // ... uncomment for deployment
