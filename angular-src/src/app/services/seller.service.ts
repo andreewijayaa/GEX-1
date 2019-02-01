@@ -76,6 +76,23 @@ export class SellerService {
     }
   }
 
+  // By: Omar
+  // Update current sellers profile
+  updateSellerProfile(seller) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/sellers/update', seller, httpOptions)
+      .pipe(map(res => res));
+    } else {
+      return this.http.post('seller/update', seller, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // Service to post a new code for a seller to subscribe to a specific product code (front-end to back-end connection)
   setNewCode(code) {
     this.loadToken();

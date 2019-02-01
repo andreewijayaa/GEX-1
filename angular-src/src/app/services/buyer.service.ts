@@ -74,6 +74,7 @@ export class BuyerService {
     }
   }
 
+  // By: Omar
   // Update current buyers profile
   updateBuyerProfile(buyer) {
     const httpOptions = {
@@ -85,7 +86,7 @@ export class BuyerService {
       return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
-      return this.http.post('buyers/register', buyer, httpOptions)
+      return this.http.post('buyers/update', buyer, httpOptions)
       .pipe(map(res => res));
     }
   }

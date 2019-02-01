@@ -11,6 +11,11 @@ export class SellerAccountComponent implements OnInit {
   mainLogout: Boolean;
 
   seller: any;
+  seller_id: String;
+  seller_updatedFirstName: String;
+  seller_updatedLastName: String;
+  seller_updatedPassword: String;
+  errorMessage: String;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
@@ -18,6 +23,7 @@ export class SellerAccountComponent implements OnInit {
   // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
     this.seller = this.route.snapshot.data['seller'];
+    this.seller_id = this.seller.data._id;
     this.mainLogout = true;
   }
 
@@ -27,11 +33,13 @@ export class SellerAccountComponent implements OnInit {
   editFunction(): void {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
-    (<HTMLInputElement>document.getElementById('eAddress')).disabled = false;
+    (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
     (<HTMLInputElement>document.getElementById('saveBtn')).disabled = false;
     (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
     (<HTMLInputElement>document.getElementById('verify')).hidden = false;
     (<HTMLInputElement>document.getElementById('newPass')).hidden = false;
+    (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = false;
+
   }
 
   // Function for save button
@@ -39,9 +47,10 @@ export class SellerAccountComponent implements OnInit {
   // If there is no password inserted or the new password does not match when confirming. An error will be displayed to the user.
   // This only works with the front end so far. This has not been tied in with the backend.
   saveFunction(): void {
-    const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
-    const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
-    if ((newPass === confirm) && (<HTMLInputElement>document.getElementById('verifyPwd')).value !== '') {
+
+    var success = this.updateSellerData();
+
+    if (success) {
       (<HTMLInputElement>document.getElementById('pwd')).value = (<HTMLInputElement>document.getElementById('newPwd')).value;
       (<HTMLInputElement>document.getElementById('fName')).disabled = true;
       (<HTMLInputElement>document.getElementById('lName')).disabled = true;
@@ -53,14 +62,83 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('newPass')).hidden = true;
       (<HTMLInputElement>document.getElementById('newPwd')).value = '';
       (<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = true;
       (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
-    } else { // if the 2 passwords did not match
-      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
-      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
+    } 
+    else { 
+      // Could not update profile
     }
   }
 
+  // By: Omar
+  // This function has not been fully implemented yet. Once this gets completed it will help tie the frontend and backend of this page together.
+  updateSellerData(): Boolean {
+    const newFName = (<HTMLInputElement>document.getElementById('fName')).value;
+    const newLName = (<HTMLInputElement>document.getElementById('lName')).value;
+    const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
+    const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
+
+    if (newFName === "" || newLName === "" || newPass === "" || confirm === "") {
+      this.errorMessage = "One of the following fields is empty! Please fill in all highlighted empty fields.";
+      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
+      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
+      (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Red';
+      (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Red';
+      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
+      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
+    }
+    else if (newPass !== confirm) {
+      this.errorMessage = "Passwords do not match!";
+      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
+      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
+      (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
+      (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
+      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
+      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
+    }
+    else {
+      this.seller_updatedFirstName = (<HTMLInputElement>document.getElementById('fName')).value;
+      this.seller_updatedLastName = (<HTMLInputElement>document.getElementById('lName')).value;
+      this.seller_updatedPassword = confirm;
+      const update = {
+        "updater_id": this.seller_id,
+        "fName": this.seller_updatedFirstName,
+        "lName": this.seller_updatedLastName,
+        "pass": this.seller_updatedPassword
+      }
+
+      this.sellerService.updateSellerProfile(update).subscribe((data: any) => {});
+      this.errorMessage = "Profile updated successfully! Please log out and log back in.";
+      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
+      (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
+      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
+      (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
+      (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
+      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
+      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
+      return true;
+    }
+    return false;
+  }
+
+  // By: Omar
+  // Function when cancel button gets pressed
+  cancelButtonPressed() {
+    (<HTMLInputElement>document.getElementById('errorMessage')).hidden = true;
+    (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
+    (<HTMLInputElement>document.getElementById('fName')).disabled = true;
+    (<HTMLInputElement>document.getElementById('lName')).disabled = true;
+    (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
+    (<HTMLInputElement>document.getElementById('pwd')).disabled = true;
+    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
+    (<HTMLInputElement>document.getElementById('editBtn')).disabled = false;
+    (<HTMLInputElement>document.getElementById('verify')).hidden = true;
+    (<HTMLInputElement>document.getElementById('newPass')).hidden = true;
+    (<HTMLInputElement>document.getElementById('newPwd')).value = '';
+    (<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
+    (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
+    (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
+    (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
+    (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';  
+  }
 }
