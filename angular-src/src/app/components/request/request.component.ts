@@ -59,4 +59,10 @@ export class RequestComponent implements OnInit {
       });
 
     }
+
+    //By: Omar
+    //Events that take place after a buyer accepts an offer.
+    offerAcceptedClicked() {
+      this.router.navigate(['/buyer/checkout']);
+    }
 }
