@@ -309,6 +309,7 @@ router.post('/addBillingAddress', (req, res) => {
       Seller.update({_id: decoded.data._id}, {$set : {billing_address: [] }}, function (err, something) {
         if (err) return handleError(err);
         Seller.findById(decoded.data._id, (err, seller_bill) => {
+          seller_bill.set({user_account_setup : true});
           if (err) return handleError(err);
           /*var new_address = 
           {
