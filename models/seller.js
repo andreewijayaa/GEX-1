@@ -52,6 +52,11 @@ const SellerSchema = mongoose.Schema({
     open_requests: {
         type: [String]
     },
+    user_account_setup: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     userConfirmed: {
         type: Boolean,
         required: true,

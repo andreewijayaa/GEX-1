@@ -7,7 +7,7 @@
             <div class="container">
                 <div class="container header">
 
-                    <h1>Sign up</h1>
+                <h1>Register</h1>
 
                 </div>
 
@@ -15,6 +15,8 @@
 
 
                 <input type="text" [(ngModel)]="email" name="email" placeholder="Enter Email" required>
+
+                <p>Seller? <a routerLink="/seller-register" routerLinkActive="active"> Register here.</a></p>
 
 
                 <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
@@ -30,7 +32,7 @@
 
                 <button type="submit" class="btn" routerLink="/buyer-register" routerLinkActive="active">Register</button>
 
-                <p>Already have an account? <a routerLink="/login" routerLinkActive="active">Sign in</a>.</p>
+                <p>Already have an account? <a routerLink="/login" routerLinkActive="active">Login</a>.</p>
 
                 <p>Seller? <a routerLink="/seller-register" routerLinkActive="active">Register Here.</a>.</p>
 
