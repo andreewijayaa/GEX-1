@@ -30,17 +30,6 @@ export class BuyerComponent implements OnInit {
 
   // tslint:disable-next-line:member-ordering
 
-  // tabbed navigation for viewing current requests and buyer
-  // account history - Bryan Vu
-  currentTab = 'requests';
-
-  requests(currentTab) {
-    this.currentTab = currentTab;
-  }
-
-  history(currentTab) {
-    this.currentTab = currentTab;
-  }
 
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
