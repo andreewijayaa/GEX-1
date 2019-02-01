@@ -150,6 +150,45 @@ export class SellerService {
     }
   }
 
+  // Service to post a new description for seller
+  setDescription(description) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/sellers/addDescription', description, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/addDescription', description, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  setBillingAddress(billingAddress) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/addBillingAddress', billingAddress)
+      .pipe(map(res => res));
+    }
+  }
+
   // logging out seller
   sellerLogout() {
     this.sellerToken = null;
