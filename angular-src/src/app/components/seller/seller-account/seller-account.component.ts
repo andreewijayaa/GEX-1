@@ -57,7 +57,7 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
       (<HTMLInputElement>document.getElementById('pwd')).disabled = true;
       (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
-      (<HTMLInputElement>document.getElementById('editBtn')).disabled = false;
+      (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
       (<HTMLInputElement>document.getElementById('verify')).hidden = true;
       (<HTMLInputElement>document.getElementById('newPass')).hidden = true;
       (<HTMLInputElement>document.getElementById('newPwd')).value = '';
@@ -108,7 +108,7 @@ export class SellerAccountComponent implements OnInit {
       }
 
       this.sellerService.updateSellerProfile(update).subscribe((data: any) => {});
-      this.errorMessage = "Profile updated successfully! Please log out and log back in.";
+      this.errorMessage = "Account updated successfully! Please log out and log back in.";
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
       (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
       (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
