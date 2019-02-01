@@ -23,3 +23,18 @@ li {
     list-style-type: none;
     background: #fafafa;
 }
+
+.indent {
+    text-indent: px;
+    justify-content: space-between;
+}
+
+span.price {
+    float: right;
+    color: grey;
+  }
+
+  .col-25 {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+  }
