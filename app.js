@@ -99,6 +99,7 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
+/*
 app.get('/checkout', function(req, res) {
   
   let offer = {
@@ -116,7 +117,7 @@ app.get('/checkout', function(req, res) {
       })
     }
   });
-});
+}); */
 
 // ... uncomment for deployment
 // For all GET requests, send back index.html

@@ -37,11 +37,8 @@ import { SellerResolve } from './services/seller.resolve';
 import { resolve } from 'path';
 import { SubmitCategoriesComponent } from './components/seller/submit-categories/submit-categories.component';
 import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
-<<<<<<< HEAD
 import { OfferService } from './services/offer.service'
-=======
 import { NgxPaginationModule } from 'ngx-pagination';
->>>>>>> upstream/master
 
 
 const appRoutes: Routes = [
