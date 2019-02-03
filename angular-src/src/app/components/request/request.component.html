@@ -32,7 +32,7 @@
         <p><b>Price:</b> {{offer.price}}</p>
         <p><b>Description:</b> {{offer.description}}</p>
         <div *ngIf="status" class="col-sm-12" style="text-align: right;">
-          <button type="button" routerLink="/request/{{request._id}}" (click)="offerAcceptedClicked()" class="btn">Accept Offer</button>
+          <button type="button" routerLink="/buyer/checkout/{{offer._id}}" routerLinkActive="active-link" class="btn">Accept Offer</button>
         </div>
         <br>
 
