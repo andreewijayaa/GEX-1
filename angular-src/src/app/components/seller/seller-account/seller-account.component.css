@@ -15,12 +15,24 @@
 
 html, body {
   height: 100%;
+  background-image: url(../../../../assets/profile.jpg);
+  background-position: center;
+  background-repeat:no-repeat;
+  background-size:cover;
+  position: relative;
+  color:white;
 }
 
 #container {
   min-height: 100%;
   margin-bottom: -330px;
   position: relative;
+}
+
+.contain {
+  opacity: 0.85;
+  color: black;
+  background-color:whitesmoke;
 }
 
 #footer {
