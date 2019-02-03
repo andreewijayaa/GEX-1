@@ -9,7 +9,7 @@ Bryan Vu contributed most of this buyer portal page.
   <div class="row justify-content-md">
     <div>
       <h4 class="page-header">Welcome {{buyer.data.first_name}}!</h4>
-    
+
       <button type="button" routerLink="/buyer/make-request" class="btn btn-block">Submit New Request</button>
     </div>
   </div>
@@ -30,8 +30,7 @@ Bryan Vu contributed most of this buyer portal page.
             </div>
           </div>
           &nbsp;
-          <ul class="container">
-            <li class="card container" *ngFor="let request of requestList">
+            <li class="card container" *ngFor="let request of requestList | paginate: {itemsPerPage: 5, currentPage: p}">
               &nbsp;
 
               <div class="row">
@@ -52,7 +51,15 @@ Bryan Vu contributed most of this buyer portal page.
 
             </li>
 
-          </ul>
+            <br>
+
+            <pagination-controls (pageChange) = "p = $event"
+                     previousLabel = "Previous"
+                     nextLabel = "Next"
+                     directionLinks = "true"
+                     autoHide = "true">
+                   </pagination-controls>
+
 
 
 
