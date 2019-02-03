@@ -4,15 +4,15 @@
 /dist
 /tmp
 /out-tsc
-node_modules/
-/node_modules
+# node_modules/
+# /node_modules
 
 npm-debug.log
 .DS_Store
 .env
 /*.env
 
-/angular-src/node_modules
+# /angular-src/node_modules
 
 # IDEs and editors
 /.idea
