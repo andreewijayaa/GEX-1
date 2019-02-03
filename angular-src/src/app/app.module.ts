@@ -37,6 +37,7 @@ import { SellerResolve } from './services/seller.resolve';
 import { resolve } from 'path';
 import { SubmitCategoriesComponent } from './components/seller/submit-categories/submit-categories.component';
 import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 const appRoutes: Routes = [
@@ -90,7 +91,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     FlashMessagesModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    NgxPaginationModule
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
   bootstrap: [AppComponent]
