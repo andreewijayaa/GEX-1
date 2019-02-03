@@ -26,6 +26,11 @@ const offerSchema = mongoose.Schema({
   price:{
     type:Number,
     required:true
+  },
+  offerAccepted:{
+    type:Boolean,
+    required: true,
+    default: false
   }
 });
 

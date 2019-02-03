@@ -1,0 +1,40 @@
+.clearfooter {
+    height: 200px;
+    clear: both;
+}
+
+.clearheader {
+    height: 100px;
+    clear: both;
+}
+
+ul {
+    display: flex;
+    align-items: stretch; /* Default */
+    justify-content: space-between;
+    width: 100%;
+    background: #cacaca;
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: block;
+    flex: 0 1 auto; /* Default */
+    list-style-type: none;
+    background: #fafafa;
+}
+
+.indent {
+    text-indent: px;
+    justify-content: space-between;
+}
+
+span.price {
+    float: right;
+    color: grey;
+  }
+
+  .col-25 {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+  }

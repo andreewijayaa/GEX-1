@@ -41,9 +41,13 @@
             <label for="verifyPwd">Confirm Password:</label>
             <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword" required>
         </div>
-        <p class="text-danger" id="errorMessage" hidden>Password did not match!</p>
+        <label id="errorMessage" hidden>{{this.errorMessage}}</label>
+        <br>
         <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
+        <div class="divider"></div>
         <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
+        <div class="divider"></div>
+        <button type="button" class="btn saveBtn btn-lg" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: white" hidden>Cancel</button>
       </form>
 
     </div>

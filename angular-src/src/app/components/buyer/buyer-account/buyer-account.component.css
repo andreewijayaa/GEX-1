@@ -53,3 +53,9 @@
   .saveBtn{
     background-color: #e60000;
   }
+
+  .divider{
+    width:10px;
+    height:auto;
+    display:inline-block;
+  }
