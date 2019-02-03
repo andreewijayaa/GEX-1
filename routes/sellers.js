@@ -312,6 +312,7 @@ router.post('/addDescription', (req, res) => {
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       if (req.body.description == null){
+        console.log('No description added');
         return res.status(500).send({ success: false, message: "No description added"});
       }
       console.log('adding this description: ' + req.body.description);
@@ -361,6 +362,7 @@ router.post('/addBillingAddress', (req, res) => {
           seller_bill.billing_address.push(req.body.postal_code);
           seller_bill.save(function (err, updatedSeller) {
             if (err) return handleError(err);
+            console.log('Success billing!');
             return res.status(500).send({ success: true, message: "Attempted to add billing address "});
           });
         });

@@ -1,11 +1,22 @@
 html, body {
     height: 100%;
+    background-image: url(../../../../../assets/sky-building.JPG);
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size:cover;
+    position: relative;
   }
 
   #container {
     min-height: 100%;
     margin-bottom: -600px;
     position: relative;
+  }
+
+  .contain {
+    opacity: 0.85;
+    color: black;
+    background-color:whitesmoke;
   }
 
   #footer {

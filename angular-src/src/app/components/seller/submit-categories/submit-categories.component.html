@@ -1,7 +1,8 @@
 <app-seller-navbar></app-seller-navbar>
 <flash-messages></flash-messages>
 
-<div class="container">
+<body>
+<div class="container contain">
     &nbsp;
     &nbsp;
     &nbsp;
@@ -29,29 +30,46 @@
       <!-- The content for Step 1 tab -->
       <div class="tab-pane fade show active" id="step1" [ngClass]="{'active':currentTab === 'step1'}" role="tabpanel"
         aria-labelledby="step1-tab">
-        <div class="card">
-          <div class="card-body">
-            <h3>What goods/services would you like to provide?</h3>
-            &nbsp;
-            <div class="card">
-              <div class="card-body">
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Category:</label>
-                  <div class="col-sm-10">
-                    <select (change)="onChange($event)">
-                      <option *ngFor="let code of codes" value={{code.code}}>
-                        {{code.name}}
-                      </option>
-                    </select>
+        <form (submit)="AddCode()">
+          <div class="card">
+            <div class="card-body">
+              <h3>What goods/services would you like to provide?</h3>
+              &nbsp;
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Current Good/Service:</label>
+                    <div *ngIf="None" class="col-sm-6">
+                      <label class="col-sm-4 col-form-label">None</label>
+                    </div>
+                    <div *ngIf="!None" class="col-sm-10">
+                      <label class="col-sm-4 col-form-label">{{codeNames}}</label>
+                    </div>
                   </div>
                 </div>
-                <label>This will be checkboxes soon!</label>
               </div>
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Category:</label>
+                    <div class="col-sm-10">
+                      <select (change)="onChange($event)">
+                        <option *ngFor="let code of codes" value={{code.code}}>
+                          {{code.name}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-success float-left">Submit</button>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <button type="button" class="btn btn-danger float-right" (click)="step2('step2')">Next</button>
             </div>
-            <br>
-            <button type="button" class="btn btn-danger float-right" (click)="step2('step2')">Next</button>
           </div>
-        </div>
+        </form>
       </div>
       <!--End of Step 1-->
 
@@ -64,7 +82,7 @@
               <div class="form-group">
                 <h3>Tell us a little bit about you...</h3>
                 &nbsp;
-                <textarea class="form-control" id="description" rows="20"></textarea>
+                <textarea class="form-control" [(ngModel)]="description" name="description" rows="20" required></textarea>
               </div>
               <button type="prevBtn" class="btn btn-outline-danger float-left" (click)="step1('step1')">Previous</button>
               <button type="button" class="btn btn-danger float-right" (click)="step3('step3')">Next</button>
@@ -80,34 +98,34 @@
           <div class="card-body">
             <h3>Billing Address</h3>
             &nbsp;
-            <form>
+            <form (submit)="OnSubmitClickBtn()">
               <div class="form-group">
                 <label for="firstName">First Name:</label>
-                <textarea class="form-control" id="firstName" rows="1"></textarea>
+                <input [(ngModel)]="first_name" placeholder="Enter First Name" class="form-control" name="first_name" rows="1" required>
               </div>
               <div class="form-group">
                 <label for="lastName">Last Name: </label>
-                <textarea class="form-control" id="lastName" rows="1"></textarea>
+                <input [(ngModel)]="last_name" placeholder="Enter Last Name" class="form-control" name="last_name" rows="1" required>
               </div>
               <div class="form-group">
                 <label for="streetAddress">Street Address:</label>
-                <textarea class="form-control" id="streetAddress" rows="3"></textarea>
+                <input [(ngModel)]="street_address" placeholder="Enter Street Address" class="form-control" name="street_address" rows="3" required>
               </div>
               <div class="form-group">
                 <label for="city">City: </label>
-                <textarea class="form-control" id="city" rows="1"></textarea>
+                <input [(ngModel)]="city" placeholder="Enter City" class="form-control" name="city" rows="1" required>
               </div>
               <div class="form-group">
                 <label for="country">Country:</label>
-                <textarea class="form-control" id="country" rows="1"></textarea>
+                <input [(ngModel)]="country" placeholder="Enter Country" class="form-control" name="country" rows="1" required>
               </div>
               <div class="form-group">
-                <label for="state">State/Provice: </label>
-                <textarea class="form-control" id="state" rows="1"></textarea>
+                <label for="state_province">State/Province: </label>
+                <input [(ngModel)]="state_province" placeholder="Enter State/Province" class="form-control" name="state_province" rows="1" required>
               </div>
               <div class="form-group">
-                <label for="state">Postal Code: </label>
-                <textarea class="form-control" id="state" rows="1"></textarea>
+                <label for="postal_code">Postal Code: </label>
+                <input [(ngModel)]="postal_code" placeholder="Enter Postal Code" type="Postal" class="form-control" name="postal_code" rows="1" required>
               </div>
               <button type="prevBtn" class="btn btn-outline-danger float-left" (click)="step2('step2')">Previous</button>
               <button type="submit" class="btn btn-success float-right">Submit</button>
@@ -119,4 +137,5 @@
     <!-- End of Content tabs -->
 
 		<div class="clearfooter"></div>
-	</div>
+  </div>
+</body>
