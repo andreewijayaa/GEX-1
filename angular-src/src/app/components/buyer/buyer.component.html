@@ -23,14 +23,12 @@ Bryan Vu contributed most of this buyer portal page.
               <h3>{{buyer.data.first_name}}'s Requests</h3>
             </div>
             <div class="input-group col searchBox">
-              <input type="text" class="form-control" placeholder="Search Requests">
-              <div class="input-group-append">
-                <button class="btn btn-block btn-dark submitSearchBtn" type="submit">Search</button>
-                </div>
+              <input type="text" class="form-control" placeholder="Search Requests" [(ngModel)]="filter">
+
             </div>
           </div>
           &nbsp;
-            <li class="card container" *ngFor="let request of requestList | paginate: {itemsPerPage: 5, currentPage: p}">
+            <li class="card container" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 5, currentPage: p}">
               &nbsp;
 
               <div class="row">
