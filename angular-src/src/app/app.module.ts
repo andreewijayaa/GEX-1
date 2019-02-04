@@ -36,6 +36,8 @@ import { BuyerResolve } from './services/buyer.resolve';
 import { SellerResolve } from './services/seller.resolve';
 import { resolve } from 'path';
 import { SubmitCategoriesComponent } from './components/seller/submit-categories/submit-categories.component';
+import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 const appRoutes: Routes = [
@@ -46,6 +48,7 @@ const appRoutes: Routes = [
   {path: 'seller-login', component: SellerLoginComponent},
   {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
+  {path: 'buyer/checkout', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve}},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
@@ -81,13 +84,15 @@ const appRoutes: Routes = [
     PostactivationComponent,
     SellerServicesComponent,
     RequestComponent,
+    BuyerCheckoutComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
     FlashMessagesModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    NgxPaginationModule
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
   bootstrap: [AppComponent]

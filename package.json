@@ -21,16 +21,21 @@
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
+    "ejs": "^2.6.1",
     "express": "*",
+    "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "*",
+    "method-override": "^3.0.0",
     "mongoose": "*",
+    "multer": "^1.4.1",
+    "multer-gridfs-storage": "^3.2.3",
     "nodemailer": "*",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "nodemon": "^1.18.9",
     "passport": "*",
     "passport-jwt": "*",
+    "pug": "^2.0.3",
     "sendgrid": "^5.2.3",
-    "sendgrid-web": "0.0.5",
+    "stripe": "^6.23.0",
     "xmlhttprequest": "^1.8.0"
   },
   "engines": {
@@ -46,5 +51,8 @@
   "bugs": {
     "url": "https://github.com/ronjonsilver/gex/issues"
   },
-  "homepage": "https://github.com/ronjonsilver/gex#readme"
+  "homepage": "https://github.com/ronjonsilver/gex#readme",
+  "devDependencies": {
+    "dotenv": "^6.2.0"
+  }
 }

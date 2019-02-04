@@ -32,3 +32,9 @@ html, body {
   height: 330px;
   clear: both;
 }
+
+.divider{
+  width:10px;
+  height:auto;
+  display:inline-block;
+}

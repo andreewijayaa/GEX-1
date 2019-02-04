@@ -4,10 +4,11 @@
 /dist
 /tmp
 /out-tsc
-
+/public
 /node_modules
 npm-debug.log
 .DS_Store
+.env
 /*.env
 
 # IDEs and editors

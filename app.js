@@ -1,3 +1,18 @@
+
+/* By: Omar
+Will let out app.js file know if we are in development of production. If we are in production we dont want our stripe secret key to be
+public so this will ensure the secret key is hidden. 
+If we are in development mode then it will not hide the stripe secret key.
+*/
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
+
+// Stripe Keys used for testing.
+const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
+const keySecret = process.env.STRIPE_SECRET_KEY;
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -6,6 +21,13 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 var nodemailer = require("nodemailer");
+const GridFSStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override')
+const stripe = require('stripe')(keySecret);
+const fs = require('fs');
+const Offer = require('./models/offer');
+const ejs = require('ejs')._express;
 
 
 // Connect To Database
@@ -21,30 +43,33 @@ const sellers = require('./routes/sellers');
 const requests = require('./routes/requests');
 const codes = require('./routes/codes');
 
-/* Uncomment for deployment
-// If an incoming request uses
-// a protocol other than HTTPS,
-// redirect that request to the
-// same url but with HTTPS
-const forceSSL = function() {
-  return function (req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect(
-       ['https://', req.get('Host'), req.url].join('')
-      );
+if (process.env.NODE_ENV == 'production') {
+  // If an incoming request uses
+  // a protocol other than HTTPS,
+  // redirect that request to the
+  // same url but with HTTPS
+  const forceSSL = function() {
+    return function (req, res, next) {
+      if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(
+        ['https://', req.get('Host'), req.url].join('')
+        );
+      }
+      next();
     }
-    next();
   }
+
+  // Instruct the app
+  // to use the forceSSL
+  // middleware
+  app.use(forceSSL());
 }
 
-// Instruct the app
-// to use the forceSSL
-// middleware
-app.use(forceSSL());
-*/
-// Port Number //Change to 8080 for deployment
-const port = process.env.PORT || 3000;
-
+// Port Number 
+const port = 3000;;
+if (process.env.NODE_ENV == 'production') {
+  port = process.env.PORT || 8080;
+}
 
 // CORS Middleware
 app.use(cors());
@@ -61,6 +86,12 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
+// View Engine and ejs Middleware
+app.set('view engine', 'ejs');
+
+// Init gfs
+let gfs;
+
 //buyers route
 app.use('/buyers', buyers);
 
@@ -73,12 +104,31 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
-// ... uncomment for deployment
-// For all GET requests, send back index.html
-// so that PathLocationStrategy can be used
-//app.get('/*', function(req, res) {
-//  res.sendFile(path.join(__dirname + '/public/index.html'));
-//});
+app.get('/checkout', function(req, res) {
+  
+  let offer = {
+    
+  };
+
+
+  fs.readFile('items.json', function(error, data) {
+    if (error) {
+      res.status(500).end();
+    }
+    else {
+      res.render('buyer-checkout.component.html', {
+        items: JSON.parse(data)
+      })
+    }
+  });
+});
+if (process.env.NODE_ENV == 'production') {
+  // For all GET requests, send back index.html
+  // so that PathLocationStrategy can be used
+  app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+  });
+}
 app.all('*', function(req, res) {
   res.redirect("http://localhost:4200/");
 });

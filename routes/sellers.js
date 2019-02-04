@@ -7,6 +7,7 @@ const Seller = require('../models/seller');
 const Request = require('../models/request');
 const Offer = require('../models/offer');
 const sendEmail = require('../models/sendEmail');
+const bcrypt = require('bcryptjs');
 
 // Seller register route that will take in all required information that is required from seller upon registration
 // By Roni
@@ -57,6 +58,36 @@ router.post('/register',(req,res,next) => {
         }
       }
     });
+});
+
+/*
+Profile update - By: Omar
+Will find the seller by using their id number and update their information accordingly.
+*/
+router.post('/update', (req, res /*next*/) => {
+  let update = {
+    first_name: req.body.fName,
+    last_name: req.body.lName,
+    password: req.body.pass,
+    id: req.body.updater_id
+  }
+  
+  Seller.findById(update.id, (err, updated) => {
+    if (!update)
+      return res.status(405).send({ success: false, message: 'could not retrieve seller info to update.' });
+    else {
+      updated.first_name = update.first_name;
+      updated.last_name = update.last_name;
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(update.password, salt, (err, hash) => {
+          if (err) { throw err; }
+          updated.password = hash;
+          updated.save();
+        });
+      });
+      updated.save();
+    }
+  });
 });
 
 //Authenticate
