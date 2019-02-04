@@ -4,7 +4,6 @@ Will let out app.js file know if we are in development of production. If we are 
 public so this will ensure the secret key is hidden. 
 If we are in development mode then it will not hide the stripe secret key.
 */
-
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
@@ -28,7 +27,6 @@ const stripe = require('stripe')(keySecret);
 const fs = require('fs');
 const Offer = require('./models/offer');
 const ejs = require('ejs')._express;
-
 
 // Connect To Database
 mongoose.Promise = require('bluebird');
@@ -104,6 +102,7 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
+/*
 app.get('/checkout', function(req, res) {
   
   let offer = {
@@ -121,7 +120,8 @@ app.get('/checkout', function(req, res) {
       })
     }
   });
-});
+}); */
+
 if (process.env.NODE_ENV == 'production') {
   // For all GET requests, send back index.html
   // so that PathLocationStrategy can be used

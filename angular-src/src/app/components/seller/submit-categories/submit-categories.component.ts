@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { SellerService } from '../../../services/seller.service';
+import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 
 @Component({
   selector: 'app-submit-categories',
@@ -8,6 +10,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./submit-categories.component.css']
 })
 export class SubmitCategoriesComponent implements OnInit {
+
   // Temp codes for MVP - Kurgan
   codes = [
     { code: 95141601, name: 'House' },
@@ -39,6 +42,21 @@ export class SubmitCategoriesComponent implements OnInit {
   codeList: [Number];
   None: Boolean;
   codeNames: any[];
+  first_name: String;
+  last_name: String;
+  street_address: String;
+  city: String;
+  country: String;
+  state_province: String;
+  postal_code: String;
+  description: any;
+  success1: Boolean;
+  success2: Boolean;
+
+  constructor(private sellerService: SellerService,
+    private route: ActivatedRoute,
+    private flashMessage: FlashMessagesService,
+    private router: Router) { }
 
   // Used for the dropdown
   public onChange(event): void {  // event will give you full breif of action
@@ -48,6 +66,91 @@ export class SubmitCategoriesComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+    var LocalArray = new Array();
+    this.None = false;
+    // Get seller codes
+    this.sellerService.getCode().subscribe((data: any) => {
+      if (data.success) {
+        if (data.codeList.length === 0) { // Seller does not have any codes yet
+          this.None = true;
+        } else {
+          this.codeList = data.codeList;
+          this.None = false;
+          var i, j = 0;
+          // Retrieve all seller current codes
+          // FOR MVP ONLY, will find a better and suffiecent way to perform this
+          for (i = 0; i < this.codeList.length; i++) {
+
+            for (j = 0; j < this.codes.length; j++) {
+              if (this.codes[j].code === this.codeList[i]) {
+                LocalArray.push(this.codes[j].name);
+            }
+            }
+          }
+          this.codeNames = LocalArray;
+        }
+      }
+    });
+  }
+
+  // Add new code to seller - Roni
+  AddCode() {
+    const code = {
+      codes: this.code
+    };
+
+    this.sellerService.setNewCode(code).subscribe((data: any) => {
+      if (data.success) {
+        this.flashMessage.show('Your New Code was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.router.navigate(['/seller/submit-categories']);
+      } else {
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.router.navigate(['/seller/submit-categories']);
+      }
+    });
+  }
+
+  OnSubmitClickBtn() {
+    this.success1 = false;
+    this.success2 = false;
+
+    const billingAddress = {
+      first_name: this.first_name,
+      last_name: this.last_name,
+      street_address: this.street_address,
+      city: this.city,
+      country: this.country,
+      state_province: this.state_province,
+      postal_code: this.postal_code,
+    };
+
+    const desc = {
+      description: this.description
+    };
+
+    // setting description
+    this.sellerService.setDescription(desc).subscribe((data: any) => {
+      if (data.success) { // if the data succeed to be posted
+        this.flashMessage.show('Your Description was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.success1 = true;
+      } else { // if it fails
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+      }
+    });
+
+    // setting billing address connect it to the service for back-end process
+    this.sellerService.setBillingAddress(billingAddress).subscribe((data: any) => {
+      if (data.success) { // if the data succeed to be posted
+        this.flashMessage.show('Your Billing Information was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.success2 = true;
+      } else { // if it fails
+        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+      }
+    });
+
+    if (this.success1 === true && this.success2 === true) {
+      this.router.navigate(['/seller']);
+    }
   }
 
     // Tab first configuration
