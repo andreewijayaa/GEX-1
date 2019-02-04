@@ -1,8 +1,10 @@
+
 /* By: Omar
 Will let out app.js file know if we are in development of production. If we are in production we dont want our stripe secret key to be
 public so this will ensure the secret key is hidden. 
 If we are in development mode then it will not hide the stripe secret key.
 */
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
@@ -41,30 +43,33 @@ const sellers = require('./routes/sellers');
 const requests = require('./routes/requests');
 const codes = require('./routes/codes');
 
-/* Uncomment for deployment
-// If an incoming request uses
-// a protocol other than HTTPS,
-// redirect that request to the
-// same url but with HTTPS
-const forceSSL = function() {
-  return function (req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect(
-       ['https://', req.get('Host'), req.url].join('')
-      );
+if (process.env.NODE_ENV == 'production') {
+  // If an incoming request uses
+  // a protocol other than HTTPS,
+  // redirect that request to the
+  // same url but with HTTPS
+  const forceSSL = function() {
+    return function (req, res, next) {
+      if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(
+        ['https://', req.get('Host'), req.url].join('')
+        );
+      }
+      next();
     }
-    next();
   }
+
+  // Instruct the app
+  // to use the forceSSL
+  // middleware
+  app.use(forceSSL());
 }
 
-// Instruct the app
-// to use the forceSSL
-// middleware
-app.use(forceSSL());
-*/
-// Port Number //Change to 8080 for deployment
-const port = process.env.PORT || 3000;
-
+// Port Number 
+const port = 3000;;
+if (process.env.NODE_ENV == 'production') {
+  port = process.env.PORT || 8080;
+}
 
 // CORS Middleware
 app.use(cors());
@@ -117,13 +122,13 @@ app.get('/checkout', function(req, res) {
     }
   });
 });
-
-// ... uncomment for deployment
-// For all GET requests, send back index.html
-// so that PathLocationStrategy can be used
-//app.get('/*', function(req, res) {
-//  res.sendFile(path.join(__dirname + '/public/index.html'));
-//});
+if (process.env.NODE_ENV == 'production') {
+  // For all GET requests, send back index.html
+  // so that PathLocationStrategy can be used
+  app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+  });
+}
 app.all('*', function(req, res) {
   res.redirect("http://localhost:4200/");
 });
