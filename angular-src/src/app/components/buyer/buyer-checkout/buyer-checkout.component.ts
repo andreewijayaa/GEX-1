@@ -1,10 +1,15 @@
 //By: Omar
 //Buyer checkout page
 import { Component, OnInit } from '@angular/core';
-import { OfferService } from '../../../services/offer.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { StoreFetchService } from '../../../services/storeFetch.service';
+
+interface IOffer {
+  title: String,
+  description: String,
+  price: Float32Array
+}
 
 @Component({
   selector: 'app-buyer-checkout',
@@ -13,11 +18,10 @@ import { StoreFetchService } from '../../../services/storeFetch.service';
 })
 export class BuyerCheckoutComponent implements OnInit {
 
-  offer: Object;
+  offer: IOffer;
   currentBuyerId: any;
 
   constructor(private route: ActivatedRoute,
-    private offerService: OfferService,
     private flashMessage: FlashMessagesService,
     private router: Router,
     private storeFetchService: StoreFetchService) { }

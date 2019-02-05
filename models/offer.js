@@ -40,3 +40,7 @@ module.exports.getOfferBySellerID = function(id, callback){
     const query = {seller_ID: id};
     Offer.findById(query, callback);
 }
+
+module.exports.getOfferByID = function(id, callback) {
+  Offer.findById(id, callback);
+}

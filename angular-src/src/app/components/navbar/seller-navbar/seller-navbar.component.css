@@ -31,4 +31,7 @@
 
   .img-circle {
     border-radius: 50%;
+    -ms-transform: translate(0);
+    -webkit-transform: translateZ(10);
+    transform: translateZ(0);
   }
