@@ -20,7 +20,6 @@
     "@types/jquery": "^3.3.22",
     "bcryptjs": "*",
     "body-parser": "*",
-    "bson": "^4.0.1",
     "cors": "*",
     "ejs": "^2.6.1",
     "express": "*",

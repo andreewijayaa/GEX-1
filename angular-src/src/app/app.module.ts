@@ -39,6 +39,7 @@ import { SubmitCategoriesComponent } from './components/seller/submit-categories
 import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
 import { OfferService } from './services/offer.service'
 import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule} from 'ng2-search-filter';
 
 
 const appRoutes: Routes = [
@@ -93,7 +94,8 @@ const appRoutes: Routes = [
     FormsModule,
     FlashMessagesModule.forRoot(),
     HttpClientModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    Ng2SearchPipeModule
   ],
   providers: [ValidateService, RegisterService, OfferService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
   bootstrap: [AppComponent]
