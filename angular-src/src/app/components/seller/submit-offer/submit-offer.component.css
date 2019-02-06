@@ -28,3 +28,8 @@ html, body {
     height: 330px;
     clear: both;
   }
+
+  .clearheader {
+    height: 50px;
+    clear: both;
+  }
