@@ -33,7 +33,7 @@ export class SellerNavbarComponent implements OnInit {
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application seller related pages.
-    this.titleService.setTitle("Seller | GEX");
+    this.titleService.setTitle("Seller | Requiren");
     this.sellerNavbar = this.route.snapshot.data['seller'];
     this.sellerNavbar.firstName = this.sellerNavbar['data']['first_name'];
     this.sellerNavbar.lastName = this.sellerNavbar['data']['last_name'];

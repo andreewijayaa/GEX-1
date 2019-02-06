@@ -10,6 +10,11 @@ body, html {
   height: 100%;
 }
 
+.clearheader {
+  height: 100px;
+  clear: both;
+}
+
 .app-loading .spinner {
   height: 200px;
   width: 200px;
