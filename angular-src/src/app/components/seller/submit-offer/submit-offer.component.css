@@ -1,5 +1,10 @@
 html, body {
     height: 100%;
+    background-image: url(../../../../../src/assets/logistics2.jpg);
+    padding: 0;
+    background-repeat:no-repeat;
+    background-size:cover;
+    color: white;
   }
 
   #container {
@@ -7,7 +12,13 @@ html, body {
     margin-bottom: -330px;
     position: relative;
   }
-  
+
+  .contain {
+    color: black;
+    background-color: white;
+    opacity: 0.90;
+  }
+
   #footer {
     height: 330px;
     position: relative;
@@ -15,5 +26,10 @@ html, body {
 
   .clearfooter {
     height: 330px;
+    clear: both;
+  }
+
+  .clearheader {
+    height: 50px;
     clear: both;
   }

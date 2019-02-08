@@ -11,7 +11,7 @@ npm-debug.log
 .DS_Store
 .env
 /*.env
-
+node_modules
 # IDEs and editors
 /.idea
 .project

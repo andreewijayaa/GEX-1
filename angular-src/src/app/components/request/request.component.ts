@@ -5,6 +5,7 @@ import {Router, ActivatedRoute, Params} from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { StoreFetchService } from '../../services/storeFetch.service';
+import { request } from 'https';
 @Component({
   selector: 'app-request',
   templateUrl: './request.component.html',
@@ -58,11 +59,5 @@ export class RequestComponent implements OnInit {
         });
       });
 
-    }
-
-    //By: Omar
-    //Events that take place after a buyer accepts an offer.
-    offerAcceptedClicked() {
-      this.router.navigate(['/buyer/checkout']);
     }
 }

@@ -10,6 +10,16 @@ body{
   background-size:cover;
 }
 
+.clearheader {
+  height: 100px;
+  clear: both;
+}
+
+.clearfooter {
+  height: 50px;
+  clear: both;
+}
+
 h1, label{
   color: white;
 }

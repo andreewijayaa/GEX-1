@@ -61,7 +61,7 @@ export class SellerServicesComponent implements OnInit {
     // Get seller codes
     this.sellerService.getCode().subscribe((data: any) => {
       if (data.success) {
-        if (data.codeList.length == 0) { // Seller does not have any codes yet
+        if (data.codeList.length === 0) { // Seller does not have any codes yet
           this.None = true;
         } else {
           this.codeList = data.codeList;
@@ -72,7 +72,7 @@ export class SellerServicesComponent implements OnInit {
           for (i = 0; i < this.codeList.length; i++) {
 
             for (j = 0; j < this.codes.length; j++) {
-              if (this.codes[j].code == this.codeList[i]) {
+              if (this.codes[j].code === this.codeList[i]) {
                 LocalArray.push(this.codes[j].name);
             }
             }

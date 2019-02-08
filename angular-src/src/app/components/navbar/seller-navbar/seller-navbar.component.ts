@@ -7,7 +7,13 @@ import { SellerService } from '../../../services/seller.service';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser'
+import { Title } from '@angular/platform-browser';
+
+interface ISeller {
+    firstName: String,
+    lastName: String
+}
+
 
 @Component({
   selector: 'app-seller-navbar',
@@ -15,7 +21,7 @@ import { Title } from '@angular/platform-browser'
   styleUrls: ['./seller-navbar.component.css']
 })
 export class SellerNavbarComponent implements OnInit {
-  sellerNavbar: Object;
+  sellerNavbar = {} as ISeller;
   @Input() logout: Boolean;
 
   constructor(private sellerService: SellerService,
@@ -27,8 +33,11 @@ export class SellerNavbarComponent implements OnInit {
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application seller related pages.
-    this.titleService.setTitle("Seller | GEX");
-    this.sellerNavbar = this.route.snapshot.data['seller']
+    this.titleService.setTitle("Seller | Requiren");
+    this.sellerNavbar = this.route.snapshot.data['seller'];
+    this.sellerNavbar.firstName = this.sellerNavbar['data']['first_name'];
+    this.sellerNavbar.lastName = this.sellerNavbar['data']['last_name'];
+    //console.log(this.sellerNavbar.lastName);
   }
 
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton 

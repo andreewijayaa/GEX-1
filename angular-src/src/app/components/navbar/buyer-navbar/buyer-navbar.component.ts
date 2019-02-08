@@ -7,7 +7,12 @@ import { StoreFetchService } from '../../../services/storeFetch.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BuyerService } from '../../../services/buyer.service';
-import { Title } from '@angular/platform-browser'
+import { Title } from '@angular/platform-browser';
+
+interface IBuyer {
+  firstName: String,
+  lastName: String
+}
 
 @Component({
   selector: 'app-buyer-navbar',
@@ -16,7 +21,7 @@ import { Title } from '@angular/platform-browser'
 })
 export class BuyerNavbarComponent implements OnInit {
   @Input() logout: Boolean;
-  buyerNavbar: Object;
+  buyerNavbar: IBuyer;
 
   constructor(private storeFetchService: StoreFetchService,
     private router: Router,
@@ -27,8 +32,10 @@ export class BuyerNavbarComponent implements OnInit {
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application buyer related pages.
-    this.titleService.setTitle("Buyer | GEX");
+    this.titleService.setTitle("Buyer | Requiren");
     this.buyerNavbar = this.route.snapshot.data['buyer'];
+    this.buyerNavbar.firstName = this.buyerNavbar['data']['first_name'];
+    this.buyerNavbar.lastName = this.buyerNavbar['data']['last_name'];
   }
 
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton 

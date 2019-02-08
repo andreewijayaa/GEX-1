@@ -1,11 +1,15 @@
 <app-seller-navbar></app-seller-navbar>
 <flash-messages></flash-messages>
 
+<div class="clearheader"></div>
+
+<body>
 <form (submit)="AddCode()">
 	<div class="container">
+    &nbsp;
 		<h1>What goods/services would you like to provide?</h1>
     &nbsp;
-    <div class="card">
+    <div class="card contain">
 			<div class="card-body">
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Current Good/Service:</label>
@@ -18,7 +22,7 @@
         </div>
       </div>
     </div>
-		<div class="card">
+		<div class="card contain">
 			<div class="card-body">
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Category:</label>
@@ -40,3 +44,4 @@
 		<div class="clearfooter"></div>
 	</div>
 </form>
+</body>
