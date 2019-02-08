@@ -25,9 +25,6 @@ export class BuyerComponent implements OnInit {
     this.buyer = this.route.snapshot.data['buyer'];
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
       this.requestList = requests;
-      for (let request of requests) {
-        request.description = $("<div>").html(request.description).text();
-      }
     });
   }
 
