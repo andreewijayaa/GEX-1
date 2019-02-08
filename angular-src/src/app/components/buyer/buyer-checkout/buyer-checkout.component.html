@@ -14,7 +14,7 @@
             <h6 class="my-0" id="offerAcceptedTitle">{{offer.title}}</h6>
             <small class="text-muted" id="offerDescription">{{offer.description}}</small>
           </div>
-          <span class="price" id="offerPrice">${{offer.price}}.00</span>
+          <span class="price" id="offerPrice">${{offer.price}}</span>
         </li>
         <li class="list-group-item d-flex justify-content-between">
           <div class="col-25">
@@ -132,8 +132,10 @@
           <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
         </div>
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="saveBilling-info">
+          <form>
+          <input type="checkbox" class="custom-control-input" id="saveBilling-info" ng-model="isChecked" (change)="sameAddressChecked(isChecked ? 'A':'B')">
           <label class="custom-control-label" for="saveBilling-info">Save billing information for next time</label>
+          </form>
         </div>
         <hr class="mb-4">
         <h4 class="mb-3">Shipping address</h4>
@@ -229,36 +231,21 @@
           </div>
         </div>
         <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="purchaseClicked()" style="background-color: red; border: none">Proceed
-          to Payment</button>
-      </form>
-      <form action="/charge" method="POST">
-        <script
-        src="https://checkout.stripe.com/checkout.js"
-        class="stripe-button"
-        data-key="pk_test_9uQtOrFYROc49Js8RhyMDJtB"
-        data-amount="1000"
-        data-name="Chicken tits"
-        data-description="If you love chicken tits we got them yay!!!!!"
-        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-        data-locale="auto">
-        </script>
+        <h4 class="mb-3">Payment</h4>
+        <form novalidate (ngSubmit)="completePurchase()" [formGroup]="stripeTest">
+          <div class="mb-3">
+            <label for="addressShip">Cardholder's name</label>
+            <input type="text" class="form-control" formControlName="name" placeholder="" required>
+          </div>
+          <br>
+          <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
+          <br>
+          <br>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color: red; border: none" id="purchaseButton">Complete Purchase</button>
+        </form>
       </form>
     </div>
   </div>
 </div>
-
-<form action="your-server-side-code" method="POST">
-  <script
-    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="pk_test_9uQtOrFYROc49Js8RhyMDJtB"
-    data-amount="999"
-    data-name="Demo Site"
-    data-description="Example charge"
-    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-    data-locale="auto">
-  </script>
-</form>
-
 
 <div class="clearfooter"></div>
