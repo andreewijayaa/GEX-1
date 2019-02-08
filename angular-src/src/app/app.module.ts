@@ -97,7 +97,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     NgxPaginationModule,
     Ng2SearchPipeModule,
-    CKEditorModule
+    CKEditorModule,
     NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB')
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
