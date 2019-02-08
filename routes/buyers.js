@@ -154,7 +154,7 @@ router.post('/request', (req, res, next) => {
               applicableSeller[i].save((err) => {
                 if (err) { return next(err); }
               });
-              sendEmail.NotifySeller(applicableSeller[i], post._id);
+              sendEmail.NotifySeller(applicableSeller[i], post);
             }
           });
           return res.json({ success: true, msg: 'Your request was submitted!' });
