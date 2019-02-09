@@ -29,12 +29,14 @@ const fs = require('fs');
 const Offer = require('./models/offer');
 const ejs = require('ejs')._express;
 
+mongoose.set('useCreateIndex', true);
 
 // Connect To Database
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.database, { useNewUrlParser: true, promiseLibrary: require('bluebird') })
   .then(() => console.log(`Connected to database ${config.database}`))
   .catch((err) => console.log(`Database error: ${err}`));
+
 
 const app = express();
 
@@ -104,24 +106,31 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
-app.get('/checkout', function(req, res) {
-  
+// By: Omar
+// Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
+app.post('/checkout', (req, res, next) => {
   let offer = {
-    
-  };
+    stripeEmail: req.body.email,
+    stripeToken: req.body.token,
+    amount: req.body.amount,
+    description: req.body.description
+  }
 
-
-  fs.readFile('items.json', function(error, data) {
-    if (error) {
-      res.status(500).end();
-    }
-    else {
-      res.render('buyer-checkout.component.html', {
-        items: JSON.parse(data)
-      })
-    }
-  });
+  stripe.customers.create({
+    email: offer.stripeEmail,
+    source: offer.stripeToken
+  })
+  .then(customer => stripe.charges.create({
+    amount: offer.amount,
+    currency: 'usd',
+    //title: req.body.product,
+    description: offer.description,
+    customer: customer.id,
+    //source: offer.stripeToken
+  }))
 });
+
+
 if (process.env.NODE_ENV == 'production') {
   // For all GET requests, send back index.html
   // so that PathLocationStrategy can be used
