@@ -14,7 +14,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 export class MakeRequestComponent implements OnInit {
 
   public Editor = ClassicEditor;
-  
+
   // Temp codes for MVP - Kurgan
   codes = [
     { code: 95141601, name: 'House' },
@@ -44,7 +44,7 @@ export class MakeRequestComponent implements OnInit {
   ];
   title: String;
   code: Number;
-  description: String;
+  description: String = "Enter description of desired product";
   deadline: Date;
 
   // Used for the dropdown menu
