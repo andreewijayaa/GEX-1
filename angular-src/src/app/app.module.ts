@@ -39,6 +39,7 @@ import { SubmitCategoriesComponent } from './components/seller/submit-categories
 import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2SearchPipeModule} from 'ng2-search-filter';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NgxStripeModule, STRIPE_PUBLISHABLE_KEY } from 'ngx-stripe';
 
 const appRoutes: Routes = [
@@ -96,6 +97,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     NgxPaginationModule,
     Ng2SearchPipeModule,
+    CKEditorModule,
     NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB')
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],

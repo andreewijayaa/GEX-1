@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { BuyerService } from '../../../services/buyer.service';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-make-request',
@@ -11,6 +12,9 @@ import { BuyerService } from '../../../services/buyer.service';
   styleUrls: ['./make-request.component.css']
 })
 export class MakeRequestComponent implements OnInit {
+
+  public Editor = ClassicEditor;
+  
   // Temp codes for MVP - Kurgan
   codes = [
     { code: 95141601, name: 'House' },
