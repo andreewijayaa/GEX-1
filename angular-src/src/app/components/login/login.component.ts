@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
       if (data.success) {
         this.storeFetchService.storeBuyerData(data.token, data.buyer);
         this.router.navigate(['/buyer']);
-        window.location.reload();
+        // window.location.reload(); //Why do we need to reload ??
         this.notifier.notify('success', 'You are now logged in.');
       } else {
         this.notifier.notify('error', data.msg);

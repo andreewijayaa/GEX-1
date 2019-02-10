@@ -1,4 +1,4 @@
-![alt text](https://github.com/ronjonsilver/GEX/blob/master/public/assets/gexLog.png "GEX Logo")
+![alt text](https://github.com/ronjonsilver/GEX/blob/master/angular-src/src/app/components/navbar/logo.png "GEX Logo")
 
 ### TO USE THE GEX GITHUB
 
