@@ -37,6 +37,18 @@ export class MakeRequestComponent implements OnInit {
   description: String = "Enter description of desired product";
   deadline: Date;
 
+  public onChange(event): void {  // event will give you full breif of action
+    if (event.target.value == "2days") {
+      console.log("2 day deadline");
+    }
+    if (event.target.value == "5days") {
+      console.log("5 day deadline");
+    }
+    if (event.target.value == "1week") {
+      console.log("1 week deadline");
+    }
+  }
+
   constructor(private buyerService: BuyerService,
     private notifierService: NotifierService,
     private router: Router) {

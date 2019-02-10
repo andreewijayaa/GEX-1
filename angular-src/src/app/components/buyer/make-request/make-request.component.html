@@ -37,10 +37,11 @@ including the fields and labels.
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">Set offer deadline:</label>
           <div class="col-sm-10">
-            <select>
-              <option>2 days from today</option>
-              <option>5 days from today</option>
-              <option>1 week from today</option>
+            <select id="selectDeadline" (change)="onChange($event)">
+              <option>Select deadline...</option>
+              <option value="2days">2 days from today</option>
+              <option value="5days">5 days from today</option>
+              <option value="1week">1 week from today</option>
             </select>
           </div>
         </div>
