@@ -65,6 +65,8 @@ export class BuyerCheckoutComponent implements OnInit {
       name: ['', [Validators.required]]
     });
     this.fetchEvent()
+    document.getElementById('ShippingSection').hidden = true;
+    document.getElementById('PaymentSection').hidden = true;
   }
 
   fetchEvent() {
@@ -116,5 +118,35 @@ export class BuyerCheckoutComponent implements OnInit {
   }
 
   sameAddressChecked(event: any) {
+  }
+
+  billingButtonDonePressed() {
+    var currentValue = document.getElementById('ShippingSection').title.toString();
+
+    if (currentValue === "off") {
+      document.getElementById('ShippingSection').hidden = true;
+      document.getElementById('ShippingSection').title = "on";
+      document.getElementById('BillingButtonDone').style.backgroundColor = "red";
+    }
+    else if (currentValue === "on") {
+      document.getElementById('ShippingSection').hidden = false;
+      document.getElementById('ShippingSection').title = "off";
+      document.getElementById('BillingButtonDone').style.backgroundColor = "#FF6969";
+    }
+  }
+
+  shippingButtonDonePressed() {
+    var currentValue = document.getElementById('PaymentSection').title.toString();
+
+    if (currentValue === "off") {
+      document.getElementById('PaymentSection').hidden = true;
+      document.getElementById('PaymentSection').title = "on";
+      document.getElementById('ShippingButtonDone').style.backgroundColor = "red";
+    }
+    else if (currentValue === "on") {
+      document.getElementById('PaymentSection').hidden = false;
+      document.getElementById('PaymentSection').title = "off";
+      document.getElementById('ShippingButtonDone').style.backgroundColor = "#FF6969";
+    }
   }
 }
