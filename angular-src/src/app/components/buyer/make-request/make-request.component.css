@@ -24,7 +24,7 @@
 
   }
   .btn {
-    width: 100px;
+    width: auto;
     background-color: rgb(218, 64, 26);
     color: white;
     font-weight: bold;
@@ -52,4 +52,13 @@
   .clearfooter {
     height: 330px;
     clear: both;
+  }
+
+  .clearheader {
+    height: 90px;
+    clear: both;
+  }
+
+  :host ::ng-deep .ck-editor__editable {
+    min-height: 200px;
   }

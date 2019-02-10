@@ -38,22 +38,25 @@ module.exports.emailVerified = function(user, callback){
   });
 }
 
-
 //Function that will take in a seller, and request ID then email applicable sellers with a link to the request
 //Used Upon buyer submitting a new request
-module.exports.NotifySeller= function(seller, requestID, callback){
+module.exports.NotifySeller= function(seller, request, callback){
   const msg = {
     to: seller.email,
     from: 'gex_do_not_reply@gex.com',
     templateId: 'd-33099325b30c4edc940590551c708f87',
     dynamic_template_data: {
       name: seller.first_name,
-      requestID: 'http://localhost:4200/request/' + requestID,
+      requestID: 'http://localhost:4200/request/' + request._id,
+      requestTitle: request.Title,
       //requestID : 'https://powerful-taiga-46416.herokuapp.com/request/' + requestID,
     },
   };
+  console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);
+  /*
   sgMail.send(msg).then(() => {
   }).catch((error) => {
     console.log('error', error);
   });
+  */
 }

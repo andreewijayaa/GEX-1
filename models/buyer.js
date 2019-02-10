@@ -44,6 +44,10 @@ const BuyerSchema = mongoose.Schema({
         type : [String],
         required: false,
         data: Buffer
+    },
+    offerCart: {
+        type : [String],
+        required: false
     }
 });
 

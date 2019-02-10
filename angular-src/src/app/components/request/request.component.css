@@ -1,21 +1,38 @@
 body {
     height: 100vh;
+    background-image: url(../../../assets/sky-building1.JPG);
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size:cover;
+    position: relative;
+}
+
+.clearheader {
+    height: 100px;
+    clear: both;
+}
+
+.bubble {
+  background-color: #241da6;
+  color: white;
 }
 
 form{
     margin-top: 25px;
     margin: auto;
     top: 45px;
-
 }
 
-
 .container {
-    background-color: white;
+  color:black;
+  opacity: .90;
 }
 
 .card {
-    border: solid 1px lightgray; 
+    border: solid 1px gray;
+    background-color: whitesmoke;
+    color:black;
+    opacity: 1;
 }
 
 .parent {
@@ -33,7 +50,7 @@ p {
     font-weight: bold;
     opacity: .95;
   }
-  
+
   /* Add a hover effect for buttons */
   .btn:hover {
   opacity:.75;
@@ -42,5 +59,5 @@ p {
 
   hr {
     border: solid 2px dimgrey !important;
-    
+
   }

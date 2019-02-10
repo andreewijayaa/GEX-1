@@ -16,6 +16,8 @@
     ]
   },
   "dependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.2.4",
     "@sendgrid/mail": "^6.3.1",
     "@types/jquery": "^3.3.22",
     "bcryptjs": "*",
@@ -26,14 +28,16 @@
     "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "*",
     "method-override": "^3.0.0",
-    "mongoose": "*",
+    "mongoose": "^5.4.9",
     "multer": "^1.4.1",
     "multer-gridfs-storage": "^3.2.3",
+    "ngx-stripe": "^7.2.0",
     "nodemailer": "*",
     "nodemon": "^1.18.9",
     "passport": "*",
     "passport-jwt": "*",
     "pug": "^2.0.3",
+    "rxjs": "^6.4.0",
     "sendgrid": "^5.2.3",
     "stripe": "^6.23.0",
     "xmlhttprequest": "^1.8.0"

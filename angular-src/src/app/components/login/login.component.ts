@@ -3,12 +3,11 @@ import { RegisterService } from '../../services/register.service';
 import { AuthService } from '../../services/auth.service';
 import { StoreFetchService } from '../../services/storeFetch.service';
 import { Router } from '@angular/router';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { BuyerComponent } from '../buyer/buyer.component'
 import { ConditionFunc } from 'rxjs/internal/observable/generate';
 import { Config } from 'protractor';
 import { Buffer } from 'buffer';
-
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-login',
@@ -19,14 +18,14 @@ import { Buffer } from 'buffer';
 export class LoginComponent implements OnInit {
   email: String;
   password: String;
-
+  private readonly notifier: NotifierService;
 
   constructor(private registerService: RegisterService,
     private authService: AuthService,
     private storeFetchService: StoreFetchService,
     private router: Router,
-    private flashMessage: FlashMessagesService,
-    private buyerComp: BuyerComponent) { }
+    private notifierService: NotifierService,
+    private buyerComp: BuyerComponent) { this.notifier = notifierService; }
 
   ngOnInit() {
     if (this.storeFetchService.buyerIsLoggedIn())
@@ -49,9 +48,9 @@ export class LoginComponent implements OnInit {
         this.storeFetchService.storeBuyerData(data.token, data.buyer);
         this.router.navigate(['/buyer']);
         window.location.reload();
-        this.flashMessage.show('You are now logged in.', { cssClass: 'alert-success', timeout: 5000 });
+        this.notifier.notify('success', 'You are now logged in.');
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
+        this.notifier.notify('error', data.msg);
       }
     });
   }

@@ -31,7 +31,8 @@ const offerSchema = mongoose.Schema({
     type:Boolean,
     required: true,
     default: false
-  }
+  },
+  created_at: { type: Date, required: true, default: Date.now }
 });
 
 const Offer = module.exports = mongoose.model('Offer', offerSchema);
@@ -39,4 +40,8 @@ const Offer = module.exports = mongoose.model('Offer', offerSchema);
 module.exports.getOfferBySellerID = function(id, callback){
     const query = {seller_ID: id};
     Offer.findById(query, callback);
+}
+
+module.exports.getOfferByID = function(id, callback) {
+  Offer.findById(id, callback);
 }

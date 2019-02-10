@@ -7,7 +7,7 @@ const RequestSchema = mongoose.Schema({
     required: true
   },
   code:{
-    type: Number,
+    type: [Number],
     required: true
   },
   title:{
@@ -28,7 +28,8 @@ const RequestSchema = mongoose.Schema({
     type:Number,
     default: 0,
     required: true
-  }
+  },
+  created_at : { type: Date, required: true, default: Date.now }
 });
 
 const Request = module.exports = mongoose.model('Request', RequestSchema);

@@ -2,7 +2,7 @@
 // Seller Registration
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from '../../../services/validate.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
+import { NotifierService } from 'angular-notifier';
 import { Router } from '@angular/router';
 import { RegisterService } from '../../../services/register.service';
 
@@ -12,6 +12,9 @@ import { RegisterService } from '../../../services/register.service';
   styleUrls: ['./SellerRegister.component.css']
 })
 export class SellerRegisterComponent implements OnInit {
+  private readonly notifier: NotifierService;
+
+
   first_name: String;
   last_name: String;
   entity_name: String;
@@ -22,9 +25,11 @@ export class SellerRegisterComponent implements OnInit {
   confirmPassword: String;
 
   constructor( private validateService: ValidateService,
-              private flashMessage: FlashMessagesService,
+              private notifierService: NotifierService,
               private router: Router,
-              private registerService: RegisterService) { }
+              private registerService: RegisterService) {
+                this.notifier = notifierService;
+               }
 
   ngOnInit() {
   }
@@ -45,20 +50,20 @@ export class SellerRegisterComponent implements OnInit {
 
     // RequiredFields
     if (!this.validateService.ValidateSellerRegister(seller)) {
-      this.flashMessage.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 10000});
+      this.notifier.notify('error', 'Please fill in all fields');
       return false;
     }
 
     // Password Confirmation
     // tslint:disable-next-line:triple-equals
     if (seller.password != this.confirmPassword) {
-      this.flashMessage.show('Passwords do not match', {cssClass: 'alert-danger', timeout: 10000});
+      this.notifier.notify('error', 'Passwords do not match');
       return false;
     }
 
     // ValidateEmail
     if (!this.validateService.validateEmail(seller.email)) {
-      this.flashMessage.show('Invalid Email', {cssClass: 'alert-danger', timeout: 3000});
+      this.notifier.notify('error', 'Invalid Email');
       return false;
     }
 
@@ -67,7 +72,7 @@ export class SellerRegisterComponent implements OnInit {
       if (data.success) { // must know if its a successful register **
         this.router.navigate(['/preactivation']); // Tell buyer to checkemail
       } else {
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 10000});
+        this.notifier.notify('error', data.msg);
         this.router.navigate(['/seller-register']);
       }
     });
