@@ -34,7 +34,7 @@ export class BuyerComponent implements OnInit {
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
     if (this.buyer == null) {
-      window.location.reload();
+     // window.location.reload();
     } else {
       console.log(this.buyer);
     }
