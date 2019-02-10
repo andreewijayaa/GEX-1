@@ -34,7 +34,7 @@ export class MakeRequestComponent implements OnInit {
   ];
   title: String;
   code: Number[];
-  description: String = "Enter description of desired product";
+  description: String = "Product description...";
   deadline: Date;
 
   constructor(private buyerService: BuyerService,
