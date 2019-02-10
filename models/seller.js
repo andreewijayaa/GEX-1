@@ -65,6 +65,7 @@ const SellerSchema = mongoose.Schema({
     confirmationToken: {
         type: String
     },
+    created_at: { type: Date, required: true, default: Date.now }
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);

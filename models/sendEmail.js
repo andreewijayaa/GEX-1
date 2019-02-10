@@ -52,8 +52,11 @@ module.exports.NotifySeller= function(seller, request, callback){
       //requestID : 'https://powerful-taiga-46416.herokuapp.com/request/' + requestID,
     },
   };
+  console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);
+  /*
   sgMail.send(msg).then(() => {
   }).catch((error) => {
     console.log('error', error);
   });
+  */
 }
