@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import { SellerService } from '../../../services/seller.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
-
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-submit-offer',
   templateUrl: './submit-offer.component.html',
   styleUrls: ['./submit-offer.component.css']
 })
 export class SubmitOfferComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   id: any;
   title: String;
   description: String;
@@ -17,8 +16,11 @@ export class SubmitOfferComponent implements OnInit {
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
-    private flashMessage: FlashMessagesService,
-    private router: Router) { }
+
+    private notifierService: NotifierService,
+    private router: Router) {
+      this.notifier = notifierService;
+    }
 
   // On initialization process of the webpage
   ngOnInit() {
@@ -40,10 +42,10 @@ export class SubmitOfferComponent implements OnInit {
     // Posting offer feature for seller, connect it to the service for back-end process
     this.sellerService.postOffer(offer, this.id).subscribe((data: any) => {
       if (data.success) { // if the data succeed to be posted
-        this.flashMessage.show('Your Request was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.notifier.notify('success', 'Your Offer was submitted!');
         this.router.navigate(['/seller']);
       } else { // if it fails
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.notifier.notify('error', data.msg);
         this.router.navigate(['/seller/submit-offer/' + this.id]);
       }
     });

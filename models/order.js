@@ -18,7 +18,7 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required : true,
     },
-    payment: {
+    paymentInfo: {
         type: Object,
         required : true,
     },

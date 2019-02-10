@@ -3,7 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SellerService } from '../../../../services/seller.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
+import { NotifierService } from 'angular-notifier';
 import { Local } from 'protractor/built/driverProviders';
 
 @Component({
@@ -12,6 +12,8 @@ import { Local } from 'protractor/built/driverProviders';
   styleUrls: ['./seller-services.component.css']
 })
 export class SellerServicesComponent implements OnInit {
+  private readonly notifier: NotifierService;
+
   // Temp codes for MVP - Kurgan
 	codes = [
     { code: 78965422, name: 'Jewelry'},
@@ -41,8 +43,8 @@ export class SellerServicesComponent implements OnInit {
 	} */
 
   constructor(private sellerService: SellerService,
-    private flashMessage: FlashMessagesService,
-    private router: Router) { }
+    private notifierService: NotifierService,
+    private router: Router) { this.notifier = notifierService; }
 
   // View seller current codes - Roni
   ngOnInit() {
@@ -182,10 +184,10 @@ export class SellerServicesComponent implements OnInit {
 
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
-        this.flashMessage.show('Your New Code was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.notifier.notify('success', 'Your New Code was submitted!');
         this.router.navigate(['/seller/seller-services']);
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.notifier.notify('error', data.msg);
         this.router.navigate(['/seller/seller-services']);
       }
     });

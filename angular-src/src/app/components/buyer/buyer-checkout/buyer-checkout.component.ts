@@ -2,14 +2,13 @@
 //Buyer checkout page
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { RequestService } from '../../../services/request.service';
 import { StripeService, StripeCardComponent, ElementOptions, ElementsOptions, Element as StripeElement, Elements } from "ngx-stripe";
 import { FormGroup, FormBuilder, Validators, FormsModule } from "@angular/forms";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuyerService } from '../../../services/buyer.service';
-
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-buyer-checkout',
@@ -17,13 +16,13 @@ import { BuyerService } from '../../../services/buyer.service';
   styleUrls: ['./buyer-checkout.component.css']
 })
 export class BuyerCheckoutComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   selectedOfferId: any;
   offerList: Object;
   request_Id: any;
   offerPriceDisplay: any;
   totalPrice: any;
-  isDataAvailable: boolean = false;
+  isDataAvailable: Boolean = false;
   stripeTest: FormGroup;
   buyer: any;
 
@@ -51,14 +50,14 @@ export class BuyerCheckoutComponent implements OnInit {
   };
 
   constructor(private route: ActivatedRoute,
-    private flashMessage: FlashMessagesService,
     private router: Router,
     private storeFetchService: StoreFetchService,
     private requestService: RequestService,
     private fb: FormBuilder,
     private stripeService: StripeService,
     private httpClient: HttpClient,
-    private buyerService: BuyerService) { }
+    private buyerService: BuyerService,
+    private notifierService: NotifierService) {  this.notifier = notifierService; }
 
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
@@ -83,7 +82,7 @@ export class BuyerCheckoutComponent implements OnInit {
           console.log(this.offerList);
         }
         else {
-          this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 5000 });
+          this.notifier.notify('error', data.msg);
           this.router.navigate(['/']);
         }
       });
