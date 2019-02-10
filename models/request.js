@@ -7,7 +7,7 @@ const RequestSchema = mongoose.Schema({
     required: true
   },
   code:{
-    type: Number,
+    type: [Number],
     required: true
   },
   title:{
