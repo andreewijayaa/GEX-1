@@ -3,7 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import { RequestService } from '../../services/request.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
+import { NotifierService } from 'angular-notifier';
 import { StoreFetchService } from '../../services/storeFetch.service';
 import { request } from 'https';
 @Component({
@@ -12,12 +12,12 @@ import { request } from 'https';
   styleUrls: ['./request.component.css']
 })
 export class RequestComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   constructor(private route: ActivatedRoute,
     private requestService: RequestService,
-    private flashMessage: FlashMessagesService,
-    private router: Router,
-    private storeFetchService: StoreFetchService) { }
+    private notifierService: NotifierService,
+        private router: Router,
+    private storeFetchService: StoreFetchService) { this.notifier = notifierService; }
   id: any;
   request: Object;
   offerList: Object;
@@ -25,9 +25,8 @@ export class RequestComponent implements OnInit {
   ngOnInit() {
 
     if (this.storeFetchService.buyerIsLoggedIn() || this.storeFetchService.sellerIsLoggedIn()) {
-    }
-    else {
-      this.flashMessage.show('Please login to view request.', {cssClass: 'alert-danger', timeout: 5000});
+    } else {
+      this.notifier.notify('error', 'Please login to view request.');
       return this.router.navigate(['/login']);
     }
 
@@ -49,11 +48,11 @@ export class RequestComponent implements OnInit {
             this.status = false; // Seller
           }
           else {
-            this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 5000});
+            this.notifier.notify('success', data.msg);
             this.router.navigate(['/']);
           }
         } else {
-          this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 5000});
+          this.notifier.notify('error', data.msg);
           this.router.navigate(['/']);
         }
         });

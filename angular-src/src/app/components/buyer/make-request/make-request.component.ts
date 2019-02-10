@@ -1,8 +1,8 @@
 // By Roni
 // Buyer Request Submission
 import { Component, OnInit } from '@angular/core';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
 import { BuyerService } from '../../../services/buyer.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -12,7 +12,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   styleUrls: ['./make-request.component.css']
 })
 export class MakeRequestComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   public Editor = ClassicEditor;
 
   // Temp codes for MVP - Kurgan
@@ -38,8 +38,10 @@ export class MakeRequestComponent implements OnInit {
   deadline: Date;
 
   constructor(private buyerService: BuyerService,
-    private flashMessage: FlashMessagesService,
-    private router: Router) { }
+    private notifierService: NotifierService,
+    private router: Router) {
+      this.notifier = notifierService;
+    }
 
   ngOnInit() {
     this.code = [];
@@ -148,11 +150,11 @@ export class MakeRequestComponent implements OnInit {
     // Register Request
     this.buyerService.postBuyerRequest(request).subscribe((data: any) => {
       if (data.success) {
-        this.flashMessage.show('Your Request was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.notifier.notify('success', 'Your Request was submitted!');
         this.router.navigate(['/buyer']);
 
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.notifier.notify('error', data.msg);
         this.router.navigate(['/buyer/make-request']);
       }
     });

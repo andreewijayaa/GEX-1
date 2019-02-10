@@ -2,10 +2,9 @@
 // buyer Registration
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from '../../../services/validate.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { RegisterService } from '../../../services/register.service';
-
+import { NotifierService } from 'angular-notifier';
 @Component({
   selector: 'app-register',
   templateUrl: './BuyerRegister.component.html',
@@ -17,10 +16,11 @@ export class BuyerRegisterComponent implements OnInit {
   email: String;
   password: String;
 
+  private readonly notifier: NotifierService;
   constructor( private validateService: ValidateService,
-              private flashMessage: FlashMessagesService,
+            private notifierService: NotifierService,
               private router: Router,
-              private registerService: RegisterService) { }
+              private registerService: RegisterService) { this.notifier = notifierService;}
 
   ngOnInit() {
   }
@@ -36,13 +36,13 @@ export class BuyerRegisterComponent implements OnInit {
 
     // RequiredFields
     if (!this.validateService.ValidateBuyerRegister(buyer)) {
-      this.flashMessage.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 10000});
+      this.notifier.notify('error', 'Please fill in all fields');
       return false;
     }
 
     // ValidateEmail
     if (!this.validateService.validateEmail(buyer.email)) {
-      this.flashMessage.show('Invalid Email', {cssClass: 'alert-danger', timeout: 3000});
+      this.notifier.notify('error', 'Invalid Email');
       return false;
     }
 
@@ -51,7 +51,7 @@ export class BuyerRegisterComponent implements OnInit {
       if (data.success) {
         this.router.navigate(['/preactivation']); // Tell buyer to checkemail
       } else {
-        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+        this.notifier.notify('error', data.msg);
         this.router.navigate(['/buyer-register']);
       }
     });

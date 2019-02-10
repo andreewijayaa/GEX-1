@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FlashMessagesService } from 'angular2-flash-messages';
+import { NotifierService } from 'angular-notifier';
 import { SellerService } from '../../../services/seller.service';
 import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 
@@ -10,7 +10,7 @@ import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
   styleUrls: ['./submit-categories.component.css']
 })
 export class SubmitCategoriesComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   // Temp codes for MVP - Kurgan
   codes = [
     { code: 78965422, name: 'Jewelry'},
@@ -45,8 +45,8 @@ export class SubmitCategoriesComponent implements OnInit {
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
-    private flashMessage: FlashMessagesService,
-    private router: Router) { }
+    private notifierService: NotifierService,
+    private router: Router) { this.notifier = notifierService;}
 
   // On initialization process of the webpage
   ngOnInit() {
@@ -186,10 +186,10 @@ export class SubmitCategoriesComponent implements OnInit {
 
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
-        this.flashMessage.show('Your New Code was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.notifier.notify('success', 'Your New Code was submitted!');
         this.router.navigate(['/seller/seller-services']);
       } else {
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.notifier.notify('error', data.msg);
         this.router.navigate(['/seller/seller-services']);
       }
     });
@@ -219,20 +219,20 @@ export class SubmitCategoriesComponent implements OnInit {
     // setting description
     this.sellerService.setDescription(desc).subscribe((data: any) => {
       if (data.success) { // if the data succeed to be posted
-        this.flashMessage.show('Your Description was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.notifier.notify('success', 'Your Description was submitted!');
         this.success1 = true;
       } else { // if it fails
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.notifier.notify('error', data.msg);
       }
     });
 
     // setting billing address connect it to the service for back-end process
     this.sellerService.setBillingAddress(billingAddress).subscribe((data: any) => {
       if (data.success) { // if the data succeed to be posted
-        this.flashMessage.show('Your Billing Information was submitted!', { cssClass: 'alert-success', timeout: 4000 });
+        this.notifier.notify('success', 'Your Billing Information was submitted!');
         this.success2 = true;
       } else { // if it fails
-        this.flashMessage.show(data.msg, { cssClass: 'alert-danger', timeout: 3000 });
+        this.notifier.notify('error', data.msg);
       }
     });
 
