@@ -134,6 +134,9 @@ export class MakeRequestComponent implements OnInit {
 
   // Request Submission
   onRequestSubmit() {
+    this.code.push(49605403);
+    this.code.push(49605404);
+    this.code.push(49605402);
     // Request Generated JSON
     const request = {
       title: this.title,
@@ -141,7 +144,7 @@ export class MakeRequestComponent implements OnInit {
       description: this.description,
       deadline: this.deadline
     };
-
+    console.log(this.code.length); // You get Zero even though you have some checked
     // Register Request
     this.buyerService.postBuyerRequest(request).subscribe((data: any) => {
       if (data.success) {

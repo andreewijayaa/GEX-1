@@ -31,7 +31,8 @@ const offerSchema = mongoose.Schema({
     type:Boolean,
     required: true,
     default: false
-  }
+  },
+  created_at: { type: Date, required: true, default: Date.now }
 });
 
 const Offer = module.exports = mongoose.model('Offer', offerSchema);
