@@ -49,7 +49,7 @@ export class BuyerNavbarComponent implements OnInit {
     this.storeFetchService.userLogout();
     this.notifier.notify('success', 'You are logged out');
     this.router.navigate(['/login']);
-    window.location.reload();
+    // window.location.reload();
     return false;
   }
 }
