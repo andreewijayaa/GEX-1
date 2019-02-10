@@ -126,7 +126,7 @@
             <div class="invalid-feedback">Zip code required.</div>
           </div>
         </div>
-        <button class="btn btn-primary btn-sm" style="background-color: red; border: none" id="BillingButtonDone"
+        <button class="btn btn-primary btn-sm" style="background-color: #1761a0; border: none" id="BillingButtonDone"
           (click)="billingButtonDonePressed()">Continue to shipping</button>
         <div id="ShippingSection" title="off">
           <hr class="mb-4">
@@ -231,7 +231,7 @@
               <div class="invalid-feedback">Zip code required.</div>
             </div>
           </div>
-          <button class="btn btn-primary btn-sm" style="background-color: red; border: none" id="ShippingButtonDone"
+          <button class="btn btn-primary btn-sm" style="background-color:#1761a0; border: none" id="ShippingButtonDone"
             (click)="shippingButtonDonePressed()">Continue to payment</button>
         </div>
         <div id="PaymentSection" title="off">
@@ -246,7 +246,7 @@
             <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
             <br>
             <br>
-            <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color: red; border: none"
+            <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color: #1761a0; border: none"
               id="purchaseButton">Complete
               Purchase</button>
           </form>
