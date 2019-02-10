@@ -33,7 +33,7 @@
     "multer-gridfs-storage": "^3.2.3",
     "ngx-stripe": "^7.2.0",
     "nodemailer": "*",
-    "nodemon": "^1.18.9",
+    "nodemon": "^1.18.10",
     "passport": "*",
     "passport-jwt": "*",
     "pug": "^2.0.3",

@@ -1,11 +1,27 @@
+body{
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-user-select: node;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+}
+
+
+
 form {
-    border: 3px solid #f1f1f1;
-    position: absolute;
-    top: 400%;
+    border: 3px solid #fcfdfc;
+    position: relative;
+    top:30%;
     left: 50%;
     bottom: 50%;
-    height: 300px;
+    width: 600px;
+    height: 400px;
     transform: translate(-50%,-50%);
+    overflow: hidden;
 
   }
 
@@ -39,7 +55,7 @@ form {
   /* Add padding to containers */
   .container {
     padding: 16px;
-    
+
   }
 
 
