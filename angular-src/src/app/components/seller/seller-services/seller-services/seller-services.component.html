@@ -27,11 +27,6 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Category:</label>
 					<div class="col-sm-10">
-						<!-- <select (change)="onChange($event)">
-							<option *ngFor="let code of codes" value={{code.code}}>
-								{{code.name}}
-							</option>
-            </select> -->
             <div *ngFor="let code of codes">
               <input type="checkbox" value={{code.code}} id={{code.code}}>{{code.name}}<br>
             </div>

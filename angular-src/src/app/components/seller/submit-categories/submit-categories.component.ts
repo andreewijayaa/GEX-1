@@ -13,16 +13,6 @@ export class SubmitCategoriesComponent implements OnInit {
 
   // Temp codes for MVP - Kurgan
   codes = [
-    { code: 95141601, name: 'House' },
-    { code: 95141602, name: 'Mobile Home' },
-    { code: 91111603, name: 'Cooking/Food Prep'},
-    { code: 82141505, name: 'Computer Generated Design'},
-    { code: 82121503, name: 'Digital Printing'},
-    { code: 82101503, name: 'Magazine Advertising'},
-    { code: 50443200, name: 'Frozen Corn'},
-    { code: 42131700, name: 'Surgical Textiles'},
-    { code: 30111700, name: 'Plasters'},
-    { code: 23241600, name: 'Metal Cutting Tools'},
     { code: 78965422, name: 'Jewelry'},
     { code: 78965423, name: 'Necklaces (Jewelry)'},
     { code: 78965424, name: 'Rings (Jewelry)'},
@@ -58,12 +48,6 @@ export class SubmitCategoriesComponent implements OnInit {
     private flashMessage: FlashMessagesService,
     private router: Router) { }
 
-  // Used for the dropdown
-  public onChange(event): void {  // event will give you full breif of action
-    const newVal = event.target.value;
-    this.code = newVal;
-  }
-
   // On initialization process of the webpage
   ngOnInit() {
     var LocalArray = new Array();
@@ -95,27 +79,6 @@ export class SubmitCategoriesComponent implements OnInit {
 
   // Checking which checkboxes are checked and upload the code - By: Andre Wijaya
   AddCode() {
-    // House
-    var element = <HTMLInputElement> document.getElementById('95141601');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Mobile Home
-    var element = <HTMLInputElement> document.getElementById('95141602');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Cooking/Food Prep
-    var element = <HTMLInputElement> document.getElementById('91111603');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
     // Jewelry
     var element = <HTMLInputElement> document.getElementById('78965422');
     if (element.checked === true) {
