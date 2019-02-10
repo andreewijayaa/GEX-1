@@ -16,7 +16,7 @@ import { SubmitOfferComponent } from './components/seller/submit-offer/submit-of
 import { SellerAccountComponent } from './components/seller/seller-account/seller-account.component';
 import { SellerRegisterComponent } from './components/register/SellerRegister/SellerRegister.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { ValidateService } from './services/validate.service';
 import { RegisterService } from './services/register.service';
@@ -39,7 +39,8 @@ import { SubmitCategoriesComponent } from './components/seller/submit-categories
 import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2SearchPipeModule} from 'ng2-search-filter';
-
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { NgxStripeModule, STRIPE_PUBLISHABLE_KEY } from 'ngx-stripe';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -49,7 +50,7 @@ const appRoutes: Routes = [
   {path: 'seller-login', component: SellerLoginComponent},
   {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
-  {path: 'buyer/checkout/:id', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
+  {path: 'buyer/checkout/:offerId/:requestId', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve}},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
@@ -85,16 +86,19 @@ const appRoutes: Routes = [
     PostactivationComponent,
     SellerServicesComponent,
     RequestComponent,
-    BuyerCheckoutComponent,
+    BuyerCheckoutComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
+    ReactiveFormsModule,
     FlashMessagesModule.forRoot(),
     HttpClientModule,
     NgxPaginationModule,
-    Ng2SearchPipeModule
+    Ng2SearchPipeModule,
+    CKEditorModule,
+    NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB')
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
   bootstrap: [AppComponent]

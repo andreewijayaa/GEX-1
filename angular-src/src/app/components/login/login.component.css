@@ -142,3 +142,13 @@ a {
   font-size: 14px;
   font-weight: bold;
 }
+
+.clearfooter {
+  height: 50px;
+  clear: both;
+}
+
+.clearheader {
+  height: 100px;
+  clear: both;
+}

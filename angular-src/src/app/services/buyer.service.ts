@@ -14,6 +14,7 @@ export class BuyerService {
   buyer: any;
   request: any;
   update: any;
+  offer: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -87,6 +88,25 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
       return this.http.post('buyers/update', buyer, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  // By: Omar
+  // Sends the checkout information to server checkout route in app.js
+  checkout(offer) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    console.log(offer);
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
+      .pipe(map(res => res));
+    }
+    else {
+      return this.http.post('checkout', offer, httpOptions)
       .pipe(map(res => res));
     }
   }

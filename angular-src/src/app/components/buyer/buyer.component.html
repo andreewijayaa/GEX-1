@@ -1,11 +1,14 @@
 <app-buyer-navbar></app-buyer-navbar>
 
+<div class="clearheader"></div>
+
 <!--
 Bryan Vu contributed most of this buyer portal page.
 -->
 
-<div class = "container" *ngIf="buyer">
-&nbsp;
+<div class="container-fluid" *ngIf="buyer">
+  &nbsp;
+  <div class="container">
   <div class="row justify-content-md">
     <div>
       <h4 class="page-header">Welcome {{buyer.data.first_name}}!</h4>
@@ -15,50 +18,48 @@ Bryan Vu contributed most of this buyer portal page.
   </div>
 
 
-          <br>
+  <br>
 
 
-          <div class="row justify-content-md">
-            <div class="col">
-              <h3>{{buyer.data.first_name}}'s Requests</h3>
-            </div>
-            <div class="input-group col searchBox">
-              <input type="text" class="form-control" placeholder="Search Requests" [(ngModel)]="filter">
+  <div class="row justify-content-md">
+    <div class="col">
+      <h3>{{buyer.data.first_name}}'s Requests</h3>
+    </div>
+    <div class="input-group col searchBox">
+      <input type="text" class="form-control" placeholder="Search Requests" [(ngModel)]="filter">
 
-            </div>
-          </div>
-          &nbsp;
-            <li class="card container" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 5, currentPage: p}">
-              &nbsp;
+    </div>
+  </div>
+</div>
+  &nbsp;
+  <li class="card container" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 5, currentPage: p}">
+    &nbsp;
 
-              <div class="row">
-                <div class="col-md-auto">
-                  <h4>{{request.title}}</h4>
-                </div>
-                <div class="col">
-                <p><b>Offer count:</b> {{request.offerCount}}</p>
-                </div>
-              </div>
+    <div class="row">
+      <div class="col-md-auto">
+        <h4>{{request.title}}</h4>
+      </div>
+      <div class="col">
+        <p><b>Offer count:</b> {{request.offerCount}}</p>
+      </div>
+    </div>
 
-              <p><b>Deadline:</b> {{request.deadline}}</p>
-              <p><b>Description:</b> {{request.description}}</p>
-              <div class="col-sm-12" style="text-align: right;">
-              <button type="button" routerLink="/request/{{request._id}}" class="btn">View Offers</button>
-               </div>
-              <br>
+    <p><b>Deadline:</b> {{request.deadline}}</p>
+    <p><b>Description:</b> {{request.description}}</p>
+    <div class="col-sm-12" style="text-align: right;">
+      <button type="button" routerLink="/request/{{request._id}}" class="btn">View Offers</button>
+    </div>
+    <br>
 
-            </li>
+  </li>
 
-            <br>
+  <br>
 
-            <pagination-controls (pageChange) = "p = $event"
-                     previousLabel = "Previous"
-                     nextLabel = "Next"
-                     directionLinks = "true"
-                     autoHide = "true">
-                   </pagination-controls>
+  <pagination-controls (pageChange)="p = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
+    autoHide="true">
+  </pagination-controls>
 
 
 
 
-    <div class="clearfooter"></div>
+  <div class="clearfooter"></div>

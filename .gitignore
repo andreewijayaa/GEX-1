@@ -5,7 +5,8 @@
 /tmp
 /out-tsc
 /public
-/node_modules
+/node_modulesgit 
+node_modules
 npm-debug.log
 .DS_Store
 .env

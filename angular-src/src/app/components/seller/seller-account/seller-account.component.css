@@ -23,6 +23,11 @@ html, body {
   color:white;
 }
 
+.clearheader {
+  height: 100px;
+  clear: both;
+}
+
 #container {
   min-height: 100%;
   margin-bottom: -330px;

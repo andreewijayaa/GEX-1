@@ -7,6 +7,11 @@ body {
     position: relative;
 }
 
+.clearheader {
+    height: 100px;
+    clear: both;
+}
+
 .bubble {
   background-color: #241da6;
   color: white;

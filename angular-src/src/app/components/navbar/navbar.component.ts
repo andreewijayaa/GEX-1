@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application.
-    this.titleService.setTitle("GEX");
+    this.titleService.setTitle("Requiren");
 
     if (this.storeFetchService.buyerIsLoggedIn()) {
       this.userType = "buyer";
