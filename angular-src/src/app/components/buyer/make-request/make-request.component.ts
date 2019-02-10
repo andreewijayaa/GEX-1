@@ -34,7 +34,7 @@ export class MakeRequestComponent implements OnInit {
   ];
   title: String;
   code: Number[];
-  description: String = "Enter description of desired product";
+  description: String = 'Enter description of desired product';
   deadline: Date;
 
   public onChange(event): void {  // Simple deadline selection - Bryan Vu
@@ -64,96 +64,96 @@ export class MakeRequestComponent implements OnInit {
 
   // Checking checkboxes
   checkboxes() {
+
     // Jewelry
-    var element = <HTMLInputElement> document.getElementById('78965422');
+    const element = <HTMLInputElement> document.getElementById('78965422');
     if (element.checked === true) {
-      this.code.push(Number(element.value));
+      this.code.push(78965422);
     }
 
     // Necklaces (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965423');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element1 = <HTMLInputElement> document.getElementById('78965423');
+    if (element1.checked === true) {
+      this.code.push(78965423);
     }
 
     // Rings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('789654224');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element2 = <HTMLInputElement> document.getElementById('789654224');
+    if (element2.checked === true) {
+      this.code.push(789654224);
     }
 
     // Earrings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965425');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element3 = <HTMLInputElement> document.getElementById('78965425');
+    if (element3.checked === true) {
+      this.code.push(78965425);
     }
 
     // Dolls
-    var element = <HTMLInputElement> document.getElementById('68977451');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element4 = <HTMLInputElement> document.getElementById('68977451');
+    if (element4.checked === true) {
+      this.code.push(68977451);
     }
 
     // Sculptures
-    var element = <HTMLInputElement> document.getElementById('67887941');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element5 = <HTMLInputElement> document.getElementById('67887941');
+    if (element5.checked === true) {
+      this.code.push(67887941);
     }
 
     // Scarves
-    var element = <HTMLInputElement> document.getElementById('62145331');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element6 = <HTMLInputElement> document.getElementById('62145331');
+    if (element6.checked === true) {
+      this.code.push(62145331);
     }
 
     // Blankets
-    var element = <HTMLInputElement> document.getElementById('54887921');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element7 = <HTMLInputElement> document.getElementById('54887921');
+    if (element7.checked === true) {
+      this.code.push(54887921);
     }
 
     // Socks
-    var element = <HTMLInputElement> document.getElementById('52871151');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element8 = <HTMLInputElement> document.getElementById('52871151');
+    if (element8.checked === true) {
+      this.code.push(52871151);
     }
 
     // Pencils
-    var element = <HTMLInputElement> document.getElementById('50360051');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element9 = <HTMLInputElement> document.getElementById('50360051');
+    if (element9.checked === true) {
+      this.code.push(50360051);
     }
 
     // Painting
-    var element = <HTMLInputElement> document.getElementById('49605401');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element10 = <HTMLInputElement> document.getElementById('49605401');
+    if (element10.checked === true) {
+      this.code.push(49605401);
     }
 
     // Oil (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605402');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element11 = <HTMLInputElement> document.getElementById('49605402');
+    if (element11.checked === true) {
+      this.code.push(49605402);
     }
 
     // Watercolor (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605403');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element12 = <HTMLInputElement> document.getElementById('49605403');
+    if (element12.checked === true) {
+      this.code.push(49605403);
     }
 
     // Acrlyic (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605404');
-    if (element.checked === true) {
-      this.code.push(Number(element.value));
+    const element13 = <HTMLInputElement> document.getElementById('49605404');
+    if (element13.checked === true) {
+      this.code.push(49605404);
     }
   }
 
   // Request Submission
   onRequestSubmit() {
-    this.code.push(49605403);
-    this.code.push(49605404);
-    this.code.push(49605402);
+    // calling the function to check checkboxes --- THIS IS THE ONLY THING THAT MISSING and the checkboxes should work but it's not...
+    this.checkboxes();
     // Request Generated JSON
     const request = {
       title: this.title,
