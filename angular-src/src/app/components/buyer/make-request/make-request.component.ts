@@ -37,15 +37,18 @@ export class MakeRequestComponent implements OnInit {
   description: String = "Enter description of desired product";
   deadline: Date;
 
-  public onChange(event): void {  // event will give you full breif of action
+  public onChange(event): void {  // Simple deadline selection - Bryan Vu
     if (event.target.value == "2days") {
-      console.log("2 day deadline");
+      this.deadline = new Date();
+      this.deadline.setDate(this.deadline.getDate() + 2);
     }
     if (event.target.value == "5days") {
-      console.log("5 day deadline");
+      this.deadline = new Date();
+      this.deadline.setDate(this.deadline.getDate() + 5);
     }
     if (event.target.value == "1week") {
-      console.log("1 week deadline");
+      this.deadline = new Date();
+      this.deadline.setDate(this.deadline.getDate() + 7);
     }
   }
 
