@@ -187,10 +187,8 @@ export class SubmitCategoriesComponent implements OnInit {
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
         this.notifier.notify('success', 'Your New Code was submitted!');
-        this.router.navigate(['/seller/seller-services']);
       } else {
         this.notifier.notify('error', data.msg);
-        this.router.navigate(['/seller/seller-services']);
       }
     });
   }
