@@ -37,6 +37,21 @@ export class MakeRequestComponent implements OnInit {
   description: String = "Enter description of desired product";
   deadline: Date;
 
+  public onChange(event): void {  // Simple deadline selection - Bryan Vu
+    if (event.target.value == "2days") {
+      this.deadline = new Date();
+      this.deadline.setDate(this.deadline.getDate() + 2);
+    }
+    if (event.target.value == "5days") {
+      this.deadline = new Date();
+      this.deadline.setDate(this.deadline.getDate() + 5);
+    }
+    if (event.target.value == "1week") {
+      this.deadline = new Date();
+      this.deadline.setDate(this.deadline.getDate() + 7);
+    }
+  }
+
   constructor(private buyerService: BuyerService,
     private notifierService: NotifierService,
     private router: Router) {
