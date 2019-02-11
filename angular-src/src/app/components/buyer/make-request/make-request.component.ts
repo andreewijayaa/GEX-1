@@ -34,8 +34,10 @@ export class MakeRequestComponent implements OnInit {
   ];
   title: String;
   code: Number[];
+  submitLabels: String[];
   description: String = 'Enter description of desired product';
   deadline: Date;
+  buttonText: String = 'Submit Your Request to Sellers on Requiren';
 
   public onChange(event): void {  // Simple deadline selection - Bryan Vu
     if (event.target.value == "2days") {
@@ -60,6 +62,260 @@ export class MakeRequestComponent implements OnInit {
 
   ngOnInit() {
     this.code = [];
+    this.submitLabels = [];
+  }
+
+  labelButton() {
+    var btnTxt = 'Submit Your Request to ';
+    var slsize = this.submitLabels.length;
+    //console.log(this.submitLabels[0]);
+    for (var n = 0; n < slsize; n++) {
+      if (slsize <= 3) {
+        btnTxt = btnTxt + this.submitLabels[n];
+        if (n < (slsize - 1)) {
+          btnTxt = btnTxt + ", ";
+        }
+        else {
+          btnTxt = btnTxt + " ";
+        }
+      }
+      else {
+        if (n < 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + ", ";
+        }
+        if (n == 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + " ";
+        }
+      }
+    }
+    var rem = slsize - 3;
+    var remd = rem.toString();
+    if (slsize > 3) {
+      btnTxt = btnTxt + "(+" + remd + " more) ";
+    }
+    this.buttonText = btnTxt + "Sellers on Requiren";
+  }
+
+  deleteLabel(del: String) {
+    var slsize = this.submitLabels.length;
+    for (var n = 0; n < slsize; n++) {
+      if (this.submitLabels[n] == del) {
+        this.submitLabels.splice(n, 1);
+      }
+    }
+  }
+
+  public checkChange(event): void {
+
+    if (event.target.value == '78965422') {
+      const box0 = <HTMLInputElement> document.getElementById('78965422');
+      if (box0.checked == true) {
+        this.submitLabels.push("Jewelry");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Jewelry");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Necklaces (Jewelry)
+    if (event.target.value == '78965423') {
+      const box1 = <HTMLInputElement> document.getElementById('78965423');
+      if (box1.checked == true) {
+        this.submitLabels.push("Necklaces (Jewelry)");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Necklaces (Jewelry)");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Rings (Jewelry)
+    if (event.target.value == '78965424') {
+      const box2 = <HTMLInputElement> document.getElementById('78965424');
+      if (box2.checked == true) {
+        this.submitLabels.push("Rings (Jewelry)");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Rings (Jewelry)");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Earrings (Jewelry)
+    if (event.target.value == '78965425') {
+      const box3 = <HTMLInputElement> document.getElementById('78965425');
+      if (box3.checked == true) {
+        this.submitLabels.push("Earrings (Jewelry)");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Earrings (Jewelry)");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Dolls
+    if (event.target.value == '68977451') {
+      const box4 = <HTMLInputElement> document.getElementById('68977451');
+      if (box4.checked == true) {
+        this.submitLabels.push("Dolls");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Dolls");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Sculptures
+    if (event.target.value == '67887941') {
+      const box5 = <HTMLInputElement> document.getElementById('67887941');
+      if (box5.checked == true) {
+        this.submitLabels.push("Sculptures");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Sculptures");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Scarves
+    if (event.target.value == '62145331') {
+      const box6 = <HTMLInputElement> document.getElementById('62145331');
+      if (box6.checked == true) {
+        this.submitLabels.push("Scarves");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Scarves");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Blankets
+    if (event.target.value == '54887921') {
+      const box7 = <HTMLInputElement> document.getElementById('54887921');
+      if (box7.checked == true) {
+        this.submitLabels.push("Blankets");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Blankets");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Socks
+    if (event.target.value == '52871151') {
+      const box8 = <HTMLInputElement> document.getElementById('52871151');
+      if (box8.checked == true) {
+        this.submitLabels.push("Socks");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Socks");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Pencils
+    if (event.target.value == '50360051') {
+      const box9 = <HTMLInputElement> document.getElementById('50360051');
+      if (box9.checked == true) {
+        this.submitLabels.push("Pencils");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Pencils");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Painting
+    if (event.target.value == '49605401') {
+      const box10 = <HTMLInputElement> document.getElementById('49605401');
+      if (box10.checked == true) {
+        this.submitLabels.push("Painting");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Painting");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Oil (Painting)
+    if (event.target.value == '49605402') {
+      const box11 = <HTMLInputElement> document.getElementById('49605402');
+      if (box11.checked == true) {
+        this.submitLabels.push("Oil (Painting)");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Oil (Painting)");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Watercolor (Painting)
+    if (event.target.value == '49605403') {
+      const box12 = <HTMLInputElement> document.getElementById('49605403');
+      if (box12.checked == true) {
+        this.submitLabels.push("Watercolor (Painting)");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Watercolor (Painting)");
+          this.labelButton();
+        }
+      }
+    }
+
+    // Acrlyic (Painting)
+    if (event.target.value == '49605404') {
+      const box13 = <HTMLInputElement> document.getElementById('49605404');
+      if (box13.checked == true) {
+        this.submitLabels.push("Acrylic (Painting)");
+        this.labelButton();
+      }
+      else {
+        if (this.submitLabels.length != 0) {
+          this.deleteLabel("Acrylic (Painting)");
+          this.labelButton();
+        }
+      }
+    }
+
   }
 
   // Checking checkboxes

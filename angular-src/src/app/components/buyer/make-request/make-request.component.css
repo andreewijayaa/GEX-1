@@ -10,7 +10,7 @@
 
   form{
 
-    width: 800px;
+    width: 850px;
     text-align: left;
     margin: auto;
     opacity: .90;
@@ -24,7 +24,8 @@
 
   }
   .btn {
-    width: auto;
+    width: 775px;
+    height: auto;
     background-color: rgb(218, 64, 26);
     color: white;
     font-weight: bold;
@@ -62,4 +63,3 @@
   :host ::ng-deep .ck-editor__editable {
     min-height: 200px;
   }
-

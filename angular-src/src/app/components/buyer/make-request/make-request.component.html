@@ -24,7 +24,7 @@ including the fields and labels.
         <div class="form-group row">
           <div class="col-sm-12">
             <div *ngFor="let code of codes">
-              <input type="checkbox" value={{code.code}} id={{code.code}}>    {{code.name}}<br>
+              <input type="checkbox" value={{code.code}} id={{code.code}} (change)="checkChange($event)">    {{code.name}}<br>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@ including the fields and labels.
         <hr>
         <div class="form-group row">
           <div class="col-sm-12" style="text-align: right;">
-            <button type="submit" class="btn" routerLink="/buyer">Submit Request</button>
+            <button type="submit" class="btn" routerLink="/buyer">{{buttonText}}</button>
           </div>
         </div>
       </div>
