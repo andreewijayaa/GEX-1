@@ -10,6 +10,9 @@ node_modules
 npm-debug.log
 .DS_Store
 .env
+.vscode
+.vs
+.VSCode
 /*.env
 node_modules
 # IDEs and editors
