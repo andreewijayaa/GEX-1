@@ -1,13 +1,13 @@
 <app-buyer-navbar></app-buyer-navbar>
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="clearheader"></div>
 
 <div class="container-fluid" style="width: 280px; margin-left: 200px">
-    <h2>Secure checkout</h2>
-    <hr class="mb-4">
+  <h2>Secure checkout</h2>
+  <hr class="mb-4">
 </div>
 <br>
-<div class="container" style=" position: relative; left: 9%;">
+<div class="container" style=" position: relative;">
   <div class="row">
     <div class="col-md-4 order-md-3 mb-4 position-fixed" style="left: 55%; width: auto; top: 25.5%">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -37,226 +37,241 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-5 order-md-1">
-      <h4 class="mb-3">Billing address</h4>
-      <form class="needs-validation" novalidate>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="firstNameBilling">First name</label>
-            <input type="text" class="form-control" id="firstNameBilling" placeholder value required>
-            <div class="invalid-feedback">Valid first name is required</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="lastNameBilling">Last name</label>
-            <input type="text" class="form-control" id="lastNameBilling" placeholder value required>
-            <div class="invalid-feedback">Valid last name is required</div>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="addressBilling">Address 1</label>
-          <input type="text" class="form-control" id="addressBilling" placeholder="" required>
-          <div class="invalid-feedback">Please enter your billing address</div>
-        </div>
-        <div class="mb-3">
-          <label for="address2Billing">Address 2 <span class="text-muted">(Optional)</span></label>
-          <input type="text" class="form-control" id="address2Billing" placeholder="" required>
-        </div>
-        <div class="row">
-          <div class="col-md-5 mb-3">
-            <label for="cityBilling">City</label>
-            <input type="text" class="form-control" id="cityBilling" placeholder required>
-            <div class="invalid-feedback">City required.</div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="stateBilling">State</label>
-            <select class="custom-select d-block w-100" id="stateBilling" required>
-              <option value>--</option>
-              <option value="AL">AL</option>
-              <option value="AK">AK</option>
-              <option value="AR">AR</option>
-              <option value="AZ">AZ</option>
-              <option value="CA">CA</option>
-              <option value="CO">CO</option>
-              <option value="CT">CT</option>
-              <option value="DC">DC</option>
-              <option value="DE">DE</option>
-              <option value="FL">FL</option>
-              <option value="GA">GA</option>
-              <option value="HI">HI</option>
-              <option value="IA">IA</option>
-              <option value="ID">ID</option>
-              <option value="IL">IL</option>
-              <option value="IN">IN</option>
-              <option value="KS">KS</option>
-              <option value="KY">KY</option>
-              <option value="LA">LA</option>
-              <option value="MA">MA</option>
-              <option value="MD">MD</option>
-              <option value="ME">ME</option>
-              <option value="MI">MI</option>
-              <option value="MN">MN</option>
-              <option value="MO">MO</option>
-              <option value="MS">MS</option>
-              <option value="MT">MT</option>
-              <option value="NC">NC</option>
-              <option value="NE">NE</option>
-              <option value="NH">NH</option>
-              <option value="NJ">NJ</option>
-              <option value="NM">NM</option>
-              <option value="NV">NV</option>
-              <option value="NY">NY</option>
-              <option value="ND">ND</option>
-              <option value="OH">OH</option>
-              <option value="OK">OK</option>
-              <option value="OR">OR</option>
-              <option value="PA">PA</option>
-              <option value="RI">RI</option>
-              <option value="SC">SC</option>
-              <option value="SD">SD</option>
-              <option value="TN">TN</option>
-              <option value="TX">TX</option>
-              <option value="UT">UT</option>
-              <option value="VT">VT</option>
-              <option value="VA">VA</option>
-              <option value="WA">WA</option>
-              <option value="WI">WI</option>
-              <option value="WV">WV</option>
-              <option value="WY">WY</option>
-            </select>
-            <div class="invalid-feedback">Select state.</div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="zipBilling">Zip</label>
-            <input type="text" class="form-control small" id="zipBilling" placeholder required>
-            <div class="invalid-feedback">Zip code required.</div>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-sm" style="background-color: #1761a0; border: none" id="BillingButtonDone"
-          (click)="billingButtonDonePressed()">Continue to shipping</button>
-        <div id="ShippingSection" title="off">
-          <hr class="mb-4">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="same-address">
-            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="same-address">
-            <label class="custom-control-label" for="same-address">Save billing information for next time</label>
-          </div>
-          <hr class="mb-4">
-          <h4 class="mb-3">Shipping address</h4>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="firstNameShip">First name</label>
-              <input type="text" class="form-control" id="firstNameShip" placeholder value required>
-              <div class="invalid-feedback">Valid first name is required</div>
+    <div class="col-md-7 order-md-4">
+      <mat-vertical-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Billing address</ng-template>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="First name" formControlName="firstCtrl" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="Last name" formControlName="firstCtrl" required>
+                </mat-form-field>
+              </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="lastNameShip">Last name</label>
-              <input type="text" class="form-control" id="lastName" placeholder value required>
-              <div class="invalid-feedback">Valid last name is required</div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="addressShip">Address 1</label>
-            <input type="text" class="form-control" id="addressShip" placeholder="" required>
-            <div class="invalid-feedback">Please enter your billing address</div>
-          </div>
-          <div class="mb-3">
-            <label for="address2Ship">Address 2 <span class="text-muted">(Optional)</span></label>
-            <input type="text" class="form-control" id="address2Ship" placeholder="" required>
-          </div>
-          <div class="row">
-            <div class="col-md-5 mb-3">
-              <label for="cityShip">City</label>
-              <input type="text" class="form-control" id="cityShip" placeholder required>
-              <div class="invalid-feedback">City required.</div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="stateShip">State</label>
-              <select class="custom-select d-block w-100" id="stateShip" required>
-                <option value>--</option>
-                <option value="AL">AL</option>
-                <option value="AK">AK</option>
-                <option value="AR">AR</option>
-                <option value="AZ">AZ</option>
-                <option value="CA">CA</option>
-                <option value="CO">CO</option>
-                <option value="CT">CT</option>
-                <option value="DC">DC</option>
-                <option value="DE">DE</option>
-                <option value="FL">FL</option>
-                <option value="GA">GA</option>
-                <option value="HI">HI</option>
-                <option value="IA">IA</option>
-                <option value="ID">ID</option>
-                <option value="IL">IL</option>
-                <option value="IN">IN</option>
-                <option value="KS">KS</option>
-                <option value="KY">KY</option>
-                <option value="LA">LA</option>
-                <option value="MA">MA</option>
-                <option value="MD">MD</option>
-                <option value="ME">ME</option>
-                <option value="MI">MI</option>
-                <option value="MN">MN</option>
-                <option value="MO">MO</option>
-                <option value="MS">MS</option>
-                <option value="MT">MT</option>
-                <option value="NC">NC</option>
-                <option value="NE">NE</option>
-                <option value="NH">NH</option>
-                <option value="NJ">NJ</option>
-                <option value="NM">NM</option>
-                <option value="NV">NV</option>
-                <option value="NY">NY</option>
-                <option value="ND">ND</option>
-                <option value="OH">OH</option>
-                <option value="OK">OK</option>
-                <option value="OR">OR</option>
-                <option value="PA">PA</option>
-                <option value="RI">RI</option>
-                <option value="SC">SC</option>
-                <option value="SD">SD</option>
-                <option value="TN">TN</option>
-                <option value="TX">TX</option>
-                <option value="UT">UT</option>
-                <option value="VT">VT</option>
-                <option value="VA">VA</option>
-                <option value="WA">WA</option>
-                <option value="WI">WI</option>
-                <option value="WV">WV</option>
-                <option value="WY">WY</option>
-              </select>
-              <div class="invalid-feedback">Select state.</div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="zipShip">Zip</label>
-              <input type="text" class="form-control" id="zipShip" placeholder required>
-              <div class="invalid-feedback">Zip code required.</div>
-            </div>
-          </div>
-          <button class="btn btn-primary btn-sm" style="background-color:#1761a0; border: none" id="ShippingButtonDone"
-            (click)="shippingButtonDonePressed()">Continue to payment</button>
-        </div>
-        <div id="PaymentSection" title="off">
-          <hr class="mb-4">
-          <h4 class="mb-3">Payment</h4>
-          <form novalidate (ngSubmit)="completePurchase()" [formGroup]="stripeTest">
             <div class="mb-3">
-              <label for="addressShip">Cardholder's name</label>
-              <input type="text" class="form-control" formControlName="name" placeholder="" required>
+              <mat-form-field>
+                <input matInput placeholder="Address 1" formControlName="firstCtrl" required>
+              </mat-form-field>
+            </div>
+            <div class="mb-3">
+              <mat-form-field>
+                <input matInput placeholder="Address 2 (Optional)" formControlName="firstCtrl">
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="City" formControlName="firstCtrl" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-5 mb-3">
+                <mat-form-field>
+                  <mat-select placeholder="State" formControlName="firstCtrl" required>
+                    <mat-option value>--</mat-option>
+                    <mat-option value="AL">AL</mat-option>
+                    <mat-option value="AK">AK</mat-option>
+                    <mat-option value="AR">AR</mat-option>
+                    <mat-option value="AZ">AZ</mat-option>
+                    <mat-option value="CA">CA</mat-option>
+                    <mat-option value="CO">CO</mat-option>
+                    <mat-option value="CT">CT</mat-option>
+                    <mat-option value="DC">DC</mat-option>
+                    <mat-option value="DE">DE</mat-option>
+                    <mat-option value="FL">FL</mat-option>
+                    <mat-option value="GA">GA</mat-option>
+                    <mat-option value="HI">HI</mat-option>
+                    <mat-option value="IA">IA</mat-option>
+                    <mat-option value="ID">ID</mat-option>
+                    <mat-option value="IL">IL</mat-option>
+                    <mat-option value="IN">IN</mat-option>
+                    <mat-option value="KS">KS</mat-option>
+                    <mat-option value="KY">KY</mat-option>
+                    <mat-option value="LA">LA</mat-option>
+                    <mat-option value="MA">MA</mat-option>
+                    <mat-option value="MD">MD</mat-option>
+                    <mat-option value="ME">ME</mat-option>
+                    <mat-option value="MI">MI</mat-option>
+                    <mat-option value="MN">MN</mat-option>
+                    <mat-option value="MO">MO</mat-option>
+                    <mat-option value="MS">MS</mat-option>
+                    <mat-option value="MT">MT</mat-option>
+                    <mat-option value="NC">NC</mat-option>
+                    <mat-option value="NE">NE</mat-option>
+                    <mat-option value="NH">NH</mat-option>
+                    <mat-option value="NJ">NJ</mat-option>
+                    <mat-option value="NM">NM</mat-option>
+                    <mat-option value="NV">NV</mat-option>
+                    <mat-option value="NY">NY</mat-option>
+                    <mat-option value="ND">ND</mat-option>
+                    <mat-option value="OH">OH</mat-option>
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="OR">OR</mat-option>
+                    <mat-option value="PA">PA</mat-option>
+                    <mat-option value="RI">RI</mat-option>
+                    <mat-option value="SC">SC</mat-option>
+                    <mat-option value="SD">SD</mat-option>
+                    <mat-option value="TN">TN</mat-option>
+                    <mat-option value="TX">TX</mat-option>
+                    <mat-option value="UT">UT</mat-option>
+                    <mat-option value="VT">VT</mat-option>
+                    <mat-option value="VA">VA</mat-option>
+                    <mat-option value="WA">WA</mat-option>
+                    <mat-option value="WI">WI</mat-option>
+                    <mat-option value="WV">WV</mat-option>
+                    <mat-option value="WY">WY</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="Zip" formControlName="firstCtrl" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <button mat-button matStepperNext style="background-color: #1761a0; color: white">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Shipping address</ng-template>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="First name" formControlName="secondCtrl" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="Last name" formControlName="secondCtrl" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="mb-3">
+              <mat-form-field>
+                <input matInput placeholder="Address 1" formControlName="secondCtrl" required>
+              </mat-form-field>
+            </div>
+            <div class="mb-3">
+              <mat-form-field>
+                <input matInput placeholder="Address 2 (Optional)" formControlName="secondCtrl">
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="City" formControlName="secondCtrl" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-5 mb-3">
+                <mat-form-field>
+                  <mat-select placeholder="State" formControlName="secondCtrl" required>
+                    <mat-option value>--</mat-option>
+                    <mat-option value="AL">AL</mat-option>
+                    <mat-option value="AK">AK</mat-option>
+                    <mat-option value="AR">AR</mat-option>
+                    <mat-option value="AZ">AZ</mat-option>
+                    <mat-option value="CA">CA</mat-option>
+                    <mat-option value="CO">CO</mat-option>
+                    <mat-option value="CT">CT</mat-option>
+                    <mat-option value="DC">DC</mat-option>
+                    <mat-option value="DE">DE</mat-option>
+                    <mat-option value="FL">FL</mat-option>
+                    <mat-option value="GA">GA</mat-option>
+                    <mat-option value="HI">HI</mat-option>
+                    <mat-option value="IA">IA</mat-option>
+                    <mat-option value="ID">ID</mat-option>
+                    <mat-option value="IL">IL</mat-option>
+                    <mat-option value="IN">IN</mat-option>
+                    <mat-option value="KS">KS</mat-option>
+                    <mat-option value="KY">KY</mat-option>
+                    <mat-option value="LA">LA</mat-option>
+                    <mat-option value="MA">MA</mat-option>
+                    <mat-option value="MD">MD</mat-option>
+                    <mat-option value="ME">ME</mat-option>
+                    <mat-option value="MI">MI</mat-option>
+                    <mat-option value="MN">MN</mat-option>
+                    <mat-option value="MO">MO</mat-option>
+                    <mat-option value="MS">MS</mat-option>
+                    <mat-option value="MT">MT</mat-option>
+                    <mat-option value="NC">NC</mat-option>
+                    <mat-option value="NE">NE</mat-option>
+                    <mat-option value="NH">NH</mat-option>
+                    <mat-option value="NJ">NJ</mat-option>
+                    <mat-option value="NM">NM</mat-option>
+                    <mat-option value="NV">NV</mat-option>
+                    <mat-option value="NY">NY</mat-option>
+                    <mat-option value="ND">ND</mat-option>
+                    <mat-option value="OH">OH</mat-option>
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="OR">OR</mat-option>
+                    <mat-option value="PA">PA</mat-option>
+                    <mat-option value="RI">RI</mat-option>
+                    <mat-option value="SC">SC</mat-option>
+                    <mat-option value="SD">SD</mat-option>
+                    <mat-option value="TN">TN</mat-option>
+                    <mat-option value="TX">TX</mat-option>
+                    <mat-option value="UT">UT</mat-option>
+                    <mat-option value="VT">VT</mat-option>
+                    <mat-option value="VA">VA</mat-option>
+                    <mat-option value="WA">WA</mat-option>
+                    <mat-option value="WI">WI</mat-option>
+                    <mat-option value="WV">WV</mat-option>
+                    <mat-option value="WY">WY</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="Zip" formControlName="secondCtrl" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
+              <button mat-button matStepperNext style="background-color: #1761a0; color: white">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="thirdFormGroup">
+          <form [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>Payment</ng-template>
+            <mat-form-field>
+              <input matInput placeholder="Cardholder's name" formControlName="thirdCtrl" required>
+            </mat-form-field>
+            <br>
+            <div>
+              <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
             </div>
             <br>
-            <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>
-            <br>
-            <br>
-            <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color: #1761a0; border: none"
+            <div>
+              <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
+              <button mat-button matStepperNext style="background-color: #1761a0; color: white">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Complete purchase</ng-template>
+          <br>
+          <div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="completePurchase()" style="background-color: #1761a0; border: none"
               id="purchaseButton">Complete
               Purchase</button>
-          </form>
-        </div>
-      </form>
+          </div>
+          <br>
+          <div>
+            <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
+            <button mat-button (click)="stepper.reset()" style="background-color: #1761a0; color: white">Reset</button>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
     </div>
   </div>
 </div>
