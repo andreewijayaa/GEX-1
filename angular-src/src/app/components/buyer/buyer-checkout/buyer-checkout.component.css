@@ -1,5 +1,5 @@
 .clearfooter {
-    height: 400px;
+    height: 220px;
     clear: both;
 }
 
@@ -79,4 +79,7 @@ span.price {
     background-color: #fefde5 !important;
   }
   
+  .total {
+    overflow-y: scroll;
+  }
   
