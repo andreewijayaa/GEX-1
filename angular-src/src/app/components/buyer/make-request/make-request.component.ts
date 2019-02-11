@@ -33,9 +33,11 @@ export class MakeRequestComponent implements OnInit {
     { code: 49605404, name: 'Acrlyic (Painting)',  image: 'https://picsum.photos/200', checked: false}
   ];
   title: String;
+  submitLabels: String[];
   codeArray: Number[];
   description: String = 'Enter description of desired product';
   deadline: Date;
+  buttonText: String = 'Submit Your Request to Sellers on Requiren';
 
   public onChange(event): void {  // Simple deadline selection - Bryan Vu
     if (event.target.value === '2days') {
@@ -59,16 +61,54 @@ export class MakeRequestComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.submitLabels = [];
     this.codeArray = [];
   }
+
+  labelButton() {
+    var btnTxt = 'Submit Your Request to ';
+    var slsize = this.submitLabels.length;
+    //console.log(this.submitLabels[0]);
+    for (var n = 0; n < slsize; n++) {
+      if (slsize <= 3) {
+        btnTxt = btnTxt + this.submitLabels[n];
+        if (n < (slsize - 1)) {
+          btnTxt = btnTxt + ", ";
+        }
+        else {
+          btnTxt = btnTxt + " ";
+        }
+      }
+      else {
+        if (n < 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + ", ";
+        }
+        if (n == 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + " ";
+        }
+      }
+    }
+    var rem = slsize - 3;
+    var remd = rem.toString();
+    if (slsize > 3) {
+      btnTxt = btnTxt + "(+" + remd + " more) ";
+    }
+    this.buttonText = btnTxt + "Sellers on Requiren";
+  }
+
+
 
   onCheckboxChange(option, event) {
     if (event.target.checked) {
       this.codeArray.push(option.code);
+      this.submitLabels.push(option.name);
+      this.labelButton();
     } else {
       for(var i = 0 ; i < this.codes.length; i++) {
         if(this.codeArray[i] == option.code) {
           this.codeArray.splice(i, 1);
+          this.submitLabels.splice(i, 1);
+          this.labelButton();
         }
       }
   }
