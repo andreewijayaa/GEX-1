@@ -2,11 +2,16 @@
 
 <div class="clearheader"></div>
 
-<div class="container">
+<div class="container-fluid" style="width: 280px; margin-left: 200px">
+    <h2>Secure checkout</h2>
+    <hr class="mb-4">
+</div>
+<br>
+<div class="container" style=" position: relative; left: 9%;">
   <div class="row">
     <div class="col-md-4 order-md-3 mb-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">Your accepted offer</span>
+        <span class="text-muted">Summary</span>
       </h4>
       <ul class="list-group mb-3">
         <li *ngFor="let offer of offerList" class="list-group-item d-flex justify-content-between lh-condensed">
@@ -26,13 +31,13 @@
               <p><small href="#">Estimated tax to be collected:</small> <span class="price">$0.00</span></p>
               <p><small href="#">Estimated fee to be collected:</small> <span class="price">$0.00</span></p>
               <hr>
-              <p style="color: red; font-weight: bold">Total (USD):<span class="price" style="color:red" id="totalPrice"><b></b></span></p>
+              <p style="color: #9a0606; font-weight: bold">Total (USD):<span class="price" style="color:red" id="totalPrice"><b></b></span></p>
             </div>
           </div>
         </li>
       </ul>
     </div>
-    <div class="col-md-8 order-md-1" style="border-bottom: 5px">
+    <div class="col-md-5 order-md-1">
       <h4 class="mb-3">Billing address</h4>
       <form class="needs-validation" novalidate>
         <div class="row">
@@ -62,7 +67,7 @@
             <input type="text" class="form-control" id="cityBilling" placeholder required>
             <div class="invalid-feedback">City required.</div>
           </div>
-          <div class="col-md-2 mb-3">
+          <div class="col-md-3 mb-3">
             <label for="stateBilling">State</label>
             <select class="custom-select d-block w-100" id="stateBilling" required>
               <option value>--</option>
@@ -122,7 +127,7 @@
           </div>
           <div class="col-md-3 mb-3">
             <label for="zipBilling">Zip</label>
-            <input type="text" class="form-control" id="zipBilling" placeholder required>
+            <input type="text" class="form-control small" id="zipBilling" placeholder required>
             <div class="invalid-feedback">Zip code required.</div>
           </div>
         </div>
@@ -167,7 +172,7 @@
               <input type="text" class="form-control" id="cityShip" placeholder required>
               <div class="invalid-feedback">City required.</div>
             </div>
-            <div class="col-md-2 mb-3">
+            <div class="col-md-3 mb-3">
               <label for="stateShip">State</label>
               <select class="custom-select d-block w-100" id="stateShip" required>
                 <option value>--</option>

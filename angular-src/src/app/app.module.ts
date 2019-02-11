@@ -61,7 +61,8 @@ const appRoutes: Routes = [
         resolve: { seller: SellerResolve }},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
-  {path: 'request/:id', component: RequestComponent, resolve: { buyer: BuyerResolve, seller: SellerResolve }}
+  {path: 'request/:id', component: RequestComponent, resolve: { buyer: BuyerResolve, seller: SellerResolve }},
+  {path: '**', redirectTo: '/'}
 ];
 
 // NOTIFICATION SETTINGS

@@ -15,23 +15,22 @@ including the fields and labels.
       <div class="card-body">
           <h1>Submit Product Request</h1><br><hr>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Request Title:</label>
-          <div class="col-sm-10">
-            <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="">
+
+          <div class="col-sm-12">
+            <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="" placeholder="Request Title">
           </div>
         </div>
+        <label class="col-sm-12">Which category does your request fall under:</label>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Request Category:</label>
-          <div class="col-sm-10">
+          <div class="col-sm-12">
             <div *ngFor="let code of codes">
               <input type="checkbox" value={{code.code}} id={{code.code}}>    {{code.name}}<br>
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Enter description of desired product:</label>
-          <div class="col-sm-10">
-            <ckeditor [editor]="Editor" [(ngModel)]="description" name="description"></ckeditor>
+          <div class="col-sm-12">
+            <ckeditor [editor]="Editor" [(ngModel)]="description" name="description" placeholder="product discription..."></ckeditor>
           </div>
         </div>
         <div class="form-group row">
@@ -48,7 +47,7 @@ including the fields and labels.
         <hr>
         <div class="form-group row">
           <div class="col-sm-12" style="text-align: right;">
-            <button type="submit" class="btn" routerLink="/buyer">Submit Your Request to Sellers on Requiren</button>
+            <button type="submit" class="btn" routerLink="/buyer">Submit Request</button>
           </div>
         </div>
       </div>
