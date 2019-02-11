@@ -17,36 +17,36 @@ export class MakeRequestComponent implements OnInit {
 
   // Temp codes for MVP - Kurgan
   codes = [
-    { code: 78965422, name: 'Jewelry'},
-    { code: 78965423, name: 'Necklaces (Jewelry)'},
-    { code: 78965424, name: 'Rings (Jewelry)'},
-    { code: 78965425, name: 'Earrings (Jewelry)'},
-    { code: 68977451, name: 'Dolls'},
-    { code: 67887941, name: 'Sculptures'},
-    { code: 62145331, name: 'Scarves'},
-    { code: 54887921, name: 'Blankets'},
-    { code: 52871151, name: 'Socks'},
-    { code: 50360051, name: 'Pencils'},
-    { code: 49605401, name: 'Painting'},
-    { code: 49605402, name: 'Oil (Painting)'},
-    { code: 49605403, name: 'Watercolor (Painting)'},
-    { code: 49605404, name: 'Acrlyic (Painting)'}
+    { code: 78965422, name: 'Jewelry', image: 'https://picsum.photos/200', checked: false},
+    { code: 78965423, name: 'Necklaces (Jewelry)',  image: 'https://picsum.photos/200', checked: false},
+    { code: 78965424, name: 'Rings (Jewelry)', image: 'https://picsum.photos/200',  checked: false},
+    { code: 78965425, name: 'Earrings (Jewelry)',  image: 'https://picsum.photos/200', checked: false},
+    { code: 68977451, name: 'Dolls',  image: 'https://picsum.photos/200', checked: false},
+    { code: 67887941, name: 'Sculptures',  image: 'https://picsum.photos/200', checked: false},
+    { code: 62145331, name: 'Scarves',  image: 'https://picsum.photos/200', checked: false},
+    { code: 54887921, name: 'Blankets',  image: 'https://picsum.photos/200', checked: false},
+    { code: 52871151, name: 'Socks',  image: 'https://picsum.photos/200', checked: false},
+    { code: 50360051, name: 'Pencils',  image: 'https://picsum.photos/200', checked: false},
+    { code: 49605401, name: 'Painting',  image: 'https://picsum.photos/200', checked: false},
+    { code: 49605402, name: 'Oil (Painting)',  image: 'https://picsum.photos/200', checked: false},
+    { code: 49605403, name: 'Watercolor (Painting)',  image: 'https://picsum.photos/200', checked: false},
+    { code: 49605404, name: 'Acrlyic (Painting)',  image: 'https://picsum.photos/200', checked: false}
   ];
   title: String;
-  code: Number[];
+  codeArray: Number[];
   description: String = 'Enter description of desired product';
   deadline: Date;
 
   public onChange(event): void {  // Simple deadline selection - Bryan Vu
-    if (event.target.value == "2days") {
+    if (event.target.value === '2days') {
       this.deadline = new Date();
       this.deadline.setDate(this.deadline.getDate() + 2);
     }
-    if (event.target.value == "5days") {
+    if (event.target.value === '5days') {
       this.deadline = new Date();
       this.deadline.setDate(this.deadline.getDate() + 5);
     }
-    if (event.target.value == "1week") {
+    if (event.target.value === '1week') {
       this.deadline = new Date();
       this.deadline.setDate(this.deadline.getDate() + 7);
     }
@@ -59,118 +59,54 @@ export class MakeRequestComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.code = [];
+    this.codeArray = [];
   }
 
-  // Checking checkboxes
-  checkboxes() {
-
-    // Jewelry
-    const element = <HTMLInputElement> document.getElementById('78965422');
-    if (element.checked === true) {
-      this.code.push(78965422);
-    }
-
-    // Necklaces (Jewelry)
-    const element1 = <HTMLInputElement> document.getElementById('78965423');
-    if (element1.checked === true) {
-      this.code.push(78965423);
-    }
-
-    // Rings (Jewelry)
-    const element2 = <HTMLInputElement> document.getElementById('789654224');
-    if (element2.checked === true) {
-      this.code.push(789654224);
-    }
-
-    // Earrings (Jewelry)
-    const element3 = <HTMLInputElement> document.getElementById('78965425');
-    if (element3.checked === true) {
-      this.code.push(78965425);
-    }
-
-    // Dolls
-    const element4 = <HTMLInputElement> document.getElementById('68977451');
-    if (element4.checked === true) {
-      this.code.push(68977451);
-    }
-
-    // Sculptures
-    const element5 = <HTMLInputElement> document.getElementById('67887941');
-    if (element5.checked === true) {
-      this.code.push(67887941);
-    }
-
-    // Scarves
-    const element6 = <HTMLInputElement> document.getElementById('62145331');
-    if (element6.checked === true) {
-      this.code.push(62145331);
-    }
-
-    // Blankets
-    const element7 = <HTMLInputElement> document.getElementById('54887921');
-    if (element7.checked === true) {
-      this.code.push(54887921);
-    }
-
-    // Socks
-    const element8 = <HTMLInputElement> document.getElementById('52871151');
-    if (element8.checked === true) {
-      this.code.push(52871151);
-    }
-
-    // Pencils
-    const element9 = <HTMLInputElement> document.getElementById('50360051');
-    if (element9.checked === true) {
-      this.code.push(50360051);
-    }
-
-    // Painting
-    const element10 = <HTMLInputElement> document.getElementById('49605401');
-    if (element10.checked === true) {
-      this.code.push(49605401);
-    }
-
-    // Oil (Painting)
-    const element11 = <HTMLInputElement> document.getElementById('49605402');
-    if (element11.checked === true) {
-      this.code.push(49605402);
-    }
-
-    // Watercolor (Painting)
-    const element12 = <HTMLInputElement> document.getElementById('49605403');
-    if (element12.checked === true) {
-      this.code.push(49605403);
-    }
-
-    // Acrlyic (Painting)
-    const element13 = <HTMLInputElement> document.getElementById('49605404');
-    if (element13.checked === true) {
-      this.code.push(49605404);
-    }
+  onCheckboxChange(option, event) {
+    if (event.target.checked) {
+      this.codeArray.push(option.code);
+    } else {
+      for(var i = 0 ; i < this.codes.length; i++) {
+        if(this.codeArray[i] == option.code) {
+          this.codeArray.splice(i, 1);
+        }
+      }
   }
+}
 
   // Request Submission
   onRequestSubmit() {
-    // calling the function to check checkboxes --- THIS IS THE ONLY THING THAT MISSING and the checkboxes should work but it's not...
-    this.checkboxes();
+    console.log(this.title);
+    if (typeof this.title === 'undefined') {
+      window.scrollTo(1, 1);
+      return this.notifier.notify('error', 'Please input a title.');
+    }
+    if (this.codeArray.length <= 0) {
+      return this.notifier.notify('error', 'Please select a catagory.');
+    }
+    if (this.description === 'Enter description of desired product') {
+      return this.notifier.notify('error', 'Please input a description.');
+    }
+    if (!this.deadline) {
+      return this.notifier.notify('error', 'Please select a deadline.');
+    }
+
+    window.scrollTo(1, 1);
     // Request Generated JSON
     const request = {
       title: this.title,
-      code: this.code,
+      code: this.codeArray,
       description: this.description,
       deadline: this.deadline
     };
-    console.log(this.code.length); // You get Zero even though you have some checked
+    console.log(this.codeArray);
     // Register Request
     this.buyerService.postBuyerRequest(request).subscribe((data: any) => {
       if (data.success) {
         this.notifier.notify('success', 'Your Request was submitted!');
         this.router.navigate(['/buyer']);
-
       } else {
         this.notifier.notify('error', data.msg);
-        this.router.navigate(['/buyer/make-request']);
       }
     });
   }
