@@ -16,8 +16,10 @@
     ]
   },
   "dependencies": {
+    "@angular/cdk": "^7.3.1",
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.2.4",
+    "@angular/material": "^7.3.1",
     "@sendgrid/mail": "^6.3.1",
     "@types/jquery": "^3.3.22",
     "bcryptjs": "*",
