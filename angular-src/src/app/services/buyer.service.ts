@@ -104,8 +104,7 @@ export class BuyerService {
     if (isDevMode()) {
       return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
       .pipe(map(res => res));
-    }
-    else {
+    } else {
       return this.http.post('checkout', offer, httpOptions)
       .pipe(map(res => res));
     }

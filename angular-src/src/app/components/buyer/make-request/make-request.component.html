@@ -13,20 +13,21 @@ including the fields and labels.
     &nbsp;
     <div class="card">
       <div class="card-body">
-          <h1>Submit Product Request</h1><br><hr>
+          <h1>Submit Product Request</h1><hr>
         <div class="form-group row">
-
           <div class="col-sm-12">
             <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="" placeholder="Request Title">
           </div>
         </div>
         <label class="col-sm-12">Which category does your request fall under:</label>
         <div class="form-group row">
-          <div class="col-sm-12">
-            <div *ngFor="let code of codes">
-              <input type="checkbox" value={{code.code}} id={{code.code}} (change)="checkChange($event)">    {{code.name}}<br>
-            </div>
-          </div>
+            <ul *ngFor="let code of codes" id="otis">
+              <li>
+              <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
+              <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
+              <label id="piclabel">{{code.name}}</label>
+            </li>
+          </ul>
         </div>
         <div class="form-group row">
           <div class="col-sm-12">
@@ -34,9 +35,9 @@ including the fields and labels.
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Set offer deadline:</label>
           <div class="col-sm-10">
-            <select id="selectDeadline" (change)="onChange($event)">
+            <br>
+            <select class="dropdown" id="selectDeadline" (change)="onChange($event)" >
               <option>Select deadline...</option>
               <option value="2days">2 days from today</option>
               <option value="5days">5 days from today</option>
