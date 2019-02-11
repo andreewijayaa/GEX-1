@@ -41,9 +41,8 @@ const BuyerSchema = mongoose.Schema({
       type : [String]
     },
     profile_image: {
-        type : [String],
-        required: false,
-        data: Buffer
+        type : String,
+        required: false
     },
     offerCart: {
         type : [String],

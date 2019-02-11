@@ -62,6 +62,10 @@ const SellerSchema = mongoose.Schema({
         required: true,
         default: false
     },
+    profile_image: {
+        type : String,
+        required: false,
+    },
     confirmationToken: {
         type: String
     },

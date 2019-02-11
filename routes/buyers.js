@@ -8,6 +8,11 @@ const Request = require('../models/request');
 const sendEmail = require('../models/sendEmail');
 const Seller = require('../models/seller');
 const bcrypt = require('bcryptjs');
+const upload = require('../services/multer');
+const upload2 = require('../services/multer2');
+const fs = require('fs');
+const singleUpload = upload.single('image');
+const singleUpload2 = upload2.single('image');
 
 
 //Register route for buyers by Roni
@@ -128,6 +133,18 @@ router.post('/request', (req, res, next) => {
       description: req.body.description,
       deadline: req.body.deadline
     });
+    //code added by John to add images to requests
+    /*if (req.file != undefined){
+      singleUpload2(req, res, function(err, some) {
+        if (err) {
+          return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+        }
+        //console.log(req.file.location);
+        //return res.json({'imageUrl': req.file.location});
+      });
+      request.request_images.push(req.file.location);
+    }*/
+    //end of code added by john to add images to request
     // console.log('buyers id is %s', decoded.data._id);
     //Find buyer to attach the request ID to the buyer_requests_byID
     Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
@@ -215,6 +232,26 @@ router.post('/update', (req, res /*next*/) => {
       });
       updated.save();
     }
+  });
+});
+
+//route to add profile picture to account
+//by John
+router.post('/profilepicture', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload(req, res, function(err, some) {
+      if (err) {
+        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+      }
+      console.log(req.file.location);
+      Buyer.findById(decoded.data._id, (err, buyer_pic) => {
+        buyer_pic.set({profile_image: req.file.location});
+        buyer_pic.save();
+        return res.json({'imageUrl': req.file.location});
+      });
+    });
   });
 });
 
