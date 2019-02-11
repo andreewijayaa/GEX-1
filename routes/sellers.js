@@ -351,7 +351,7 @@ router.post('/profilepicture', function(req, res) {
   });
 });
 
-//test code
+//test code (WAS USED FOR DEBUGGING)
 /*router.post('/image-upload', function(req, res) {
   singleUpload(req, res, function(err, some) {
     if (err) {
