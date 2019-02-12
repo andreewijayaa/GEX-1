@@ -27,6 +27,10 @@ export class BuyerCheckoutComponent implements OnInit {
   buyer: any;
   initialClick1: Boolean = false;
   initialClick2: Boolean = false;
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
 
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
 
@@ -59,7 +63,8 @@ export class BuyerCheckoutComponent implements OnInit {
     private stripeService: StripeService,
     private httpClient: HttpClient,
     private buyerService: BuyerService,
-    private notifierService: NotifierService) {  this.notifier = notifierService; }
+    private notifierService: NotifierService,
+    private _formBuilder: FormBuilder) {  this.notifier = notifierService; }
 
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
@@ -67,8 +72,16 @@ export class BuyerCheckoutComponent implements OnInit {
       name: ['', [Validators.required]]
     });
     this.fetchEvent()
-    document.getElementById('ShippingSection').hidden = true;
-    document.getElementById('PaymentSection').hidden = true;
+
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
+    this.thirdFormGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required]
+    });
   }
 
   fetchEvent() {
@@ -117,50 +130,5 @@ export class BuyerCheckoutComponent implements OnInit {
           console.log(result.error.message);
         }
       });
-  }
-
-  sameAddressChecked(event: any) {
-  }
-
-  billingButtonDonePressed() {
-    var currentValue = document.getElementById('ShippingSection').title.toString();
-
-    if (currentValue === "off" && this.initialClick1 === true) {
-      document.getElementById('ShippingSection').hidden = true;
-      document.getElementById('ShippingSection').title = "on";
-      document.getElementById('BillingButtonDone').style.backgroundColor = "#1761a0";
-    }
-    else if (currentValue === "on") {
-      document.getElementById('ShippingSection').hidden = false;
-      document.getElementById('ShippingSection').title = "off";
-      document.getElementById('BillingButtonDone').style.backgroundColor = "#46749c";
-    }
-    else if (this.initialClick1 === false) {
-      document.getElementById('ShippingSection').hidden = false;
-      document.getElementById('ShippingSection').title = "off";
-      document.getElementById('BillingButtonDone').style.backgroundColor = "#46749c";
-      this.initialClick1 = true;
-    }
-  }
-
-  shippingButtonDonePressed() {
-    var currentValue = document.getElementById('PaymentSection').title.toString();
-
-    if (currentValue === "off" && this.initialClick2 === true) {
-      document.getElementById('PaymentSection').hidden = true;
-      document.getElementById('PaymentSection').title = "on";
-      document.getElementById('ShippingButtonDone').style.backgroundColor = "#1761a0";
-    }
-    else if (currentValue === "on") {
-      document.getElementById('PaymentSection').hidden = false;
-      document.getElementById('PaymentSection').title = "off";
-      document.getElementById('ShippingButtonDone').style.backgroundColor = "#46749c";
-    }
-    else if (this.initialClick2 === false) {
-      document.getElementById('PaymentSection').hidden = false;
-      document.getElementById('PaymentSection').title = "off";
-      document.getElementById('ShippingButtonDone').style.backgroundColor = "#46749c";
-      this.initialClick2 = true;
-    }
   }
 }

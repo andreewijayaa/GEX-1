@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../../services/register.service';
 import { BuyerService } from '../../services/buyer.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { RequestService } from '../../services/request.service';
 
 @Component({
   selector: 'app-buyer',
@@ -13,11 +14,14 @@ export class BuyerComponent implements OnInit {
   requestList: Object;
   loaded: Promise<boolean>;
   loading: Boolean;
+  panelOpenState = false;
+
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private requestService: RequestService) { }
 
   // showing buyer info when buyer portal page loads - Bryan Vu
 
@@ -38,5 +42,10 @@ export class BuyerComponent implements OnInit {
     } else {
       console.log(this.buyer);
     }
+  }
+
+  expanded(id:any) {
+    let requestId = id;
+    console.log(requestId);
   }
 }
