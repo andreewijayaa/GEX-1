@@ -45,7 +45,7 @@ Bryan Vu contributed most of this buyer portal page.
     </table>
 
     <mat-accordion>
-      <mat-expansion-panel id="requestExpansionId" (opened)="expanded()" *ngFor="let request of requestList">
+      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList" (opened)="expanded(request._id)">
         <mat-expansion-panel-header style="text-align:center">
           <mat-panel-title style="width: 180px">
             {{request.title}}
@@ -61,41 +61,56 @@ Bryan Vu contributed most of this buyer portal page.
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <div class="container" style="border:3px solid black">
+        <div class="container" style="border:3px solid black; background-color: #dcdde1">
           &nbsp;
           <mat-panel-title>
-            Description:
+            Request Description:
           </mat-panel-title>
           <mat-panel-title>
-            {{request.description}}
+            <div [innerHTML]="request.description"></div>
+          </mat-panel-title>
+          <br>
+          <mat-panel-title>
+            Offers:
           </mat-panel-title>
           <br>
           <table class="table table-striped table-sm" style="background-color: #487eb0; color: white">
             <thead>
-              <tr style="text-align:center">
-                <th>Offer</th>
-                <th style="width: 300px;">Title</th>
-                <th style="width: 300px;">Submission Date</th>
-                <th style="width: 300px;">Price</th>
+              <tr style="text-align:center;">
+                <th>Title</th>
+                <th>Submission Date</th>
+                <th>Price</th>
               </tr>
             </thead>
           </table>
 
-          <mat-expansion-panel >
-            <mat-expansion-panel-header style="text-align:center">
-              <mat-panel-title style="width: 100px">
-                #
+          <mat-expansion-panel *ngFor="let offer of offerList" style="background-color: #f5f6fa">
+            <mat-expansion-panel-header>
+              <mat-panel-title style="margin-left: 3%">
+                {{offer.title}}
               </mat-panel-title>
-              <mat-panel-title style="width: 200px">
-                  offer-title
-                </mat-panel-title>
-                <mat-panel-title style="width: 200px">
-                    offer-sub-date
-                  </mat-panel-title>
-                  <mat-panel-title style="width: 50px">
-                      offer-price
-                    </mat-panel-title>
+              <mat-panel-title style="margin-left: 25%">
+                offer-sub-date
+              </mat-panel-title>
+              <mat-panel-title style="margin-left: 30%">
+                ${{offer.price}}
+              </mat-panel-title>
             </mat-expansion-panel-header>
+
+            <div class="container" style="border:3px solid #7f8fa6">
+              &nbsp;
+              <mat-panel-title>
+                Offer Description:
+              </mat-panel-title>
+              <mat-panel-title>
+                {{offer.description}}
+              </mat-panel-title>
+              <mat-panel-title style="margin-left: 85%">
+                <button type="button" routerLink="/request/{{request._id}}" class="btn" style="background-color: #8c7ae6">Add
+                  to Cart</button>
+              </mat-panel-title>
+              &nbsp;
+            </div>
           </mat-expansion-panel>
           &nbsp;
         </div>
