@@ -65,7 +65,7 @@ html, body {
 }
 
 .clearfooter {
-  height: 600px;
+  height: 400px;
   clear: both;
 }
 
@@ -89,3 +89,5 @@ html, body {
     stroke-dashoffset: -124px;
   }
 }
+
+
