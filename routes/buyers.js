@@ -8,7 +8,7 @@ const Request = require('../models/request');
 const sendEmail = require('../models/sendEmail');
 const Seller = require('../models/seller');
 const bcrypt = require('bcryptjs');
-
+const Offer = require('../models/offer');
 
 //Register route for buyers by Roni
 //Takes in all required information as JSON
@@ -89,6 +89,8 @@ router.post('/login', (req, res, next) => {
             first_name: buyer.first_name,
             last_name: buyer.last_name,
             email: buyer.email,
+            profile_image: buyer.profile_image,
+            offerCart: buyer.offerCart
           }
         });
       } else {
@@ -199,7 +201,7 @@ router.post('/update', (req, res /*next*/) => {
     password: req.body.pass,
     id: req.body.updater_id
   }
-  
+
   Buyer.findById(update.id, (err, updated) => {
     if (!update)
       return res.status(405).send({ success: false, message: 'could not retrieve buyer info to update.' });
@@ -216,6 +218,34 @@ router.post('/update', (req, res /*next*/) => {
       updated.save();
     }
   });
+});
+
+/*
+Profile update - By: Omar
+Will add the accepted offer to the buyers cart.
+*/
+router.post('/addToCart', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
+
+  // Must be a buyer logged in to be able to enter an item to cart
+  jwt.verify(token, config.secret, function (err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+
+    //const offerCart = decoded.data.offer
+    //console.log(req.body.offerID);
+
+    //Find buyer to add the offer to the buyers cart
+    Buyer.findById(decoded.data._id, (err, buyerToAddCart) => {
+      // console.log('inside the find by id function');
+      if (err) return handleError(err);
+      // Save item to cart
+      buyerToAddCart.offerCart.push(req.body.offerID);
+      buyerToAddCart.save();
+      res.json({success: true});
+    });
+  });
+
 });
 
 //Email Verification - RONI

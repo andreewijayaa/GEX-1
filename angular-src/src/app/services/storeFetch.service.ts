@@ -30,6 +30,8 @@ export class StoreFetchService {
   storeBuyerData(token, buyer) {
     localStorage.setItem('id_token', token);
     localStorage.setItem('buyer', JSON.stringify(buyer)); // can only store stings not objects
+    var obj = JSON.parse(localStorage.getItem('buyer'));
+    localStorage.setItem('buyerCart', obj['offerCart']['length']);
     this.RegisterToken = token;
     this.buyer = buyer;
   }
