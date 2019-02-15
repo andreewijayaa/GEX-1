@@ -41,6 +41,9 @@ import { Ng2SearchPipeModule} from 'ng2-search-filter';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NgxStripeModule, STRIPE_PUBLISHABLE_KEY } from 'ngx-stripe';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -140,6 +143,15 @@ const customNotifierOptions: NotifierOptions = {
     FormsModule,
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatExpansionModule,
+    MatBadgeModule,
     // Site Notifications
     NotifierModule.withConfig (customNotifierOptions),
     HttpClientModule,
