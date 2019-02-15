@@ -11,7 +11,7 @@ import { Title } from '@angular/platform-browser';
 
 interface IBuyer {
   firstName: String,
-  lastName: String
+  lastName: String,
 }
 
 @Component({
@@ -22,7 +22,9 @@ interface IBuyer {
 export class BuyerNavbarComponent implements OnInit {
   private readonly notifier: NotifierService;
   @Input() logout: Boolean;
+  @Input() itemAddedToCart = 0;
   buyerNavbar: IBuyer;
+  totalItemsCart = parseInt(localStorage.getItem('buyerCart'), 10);
 
   constructor(private storeFetchService: StoreFetchService,
     private router: Router,
@@ -39,7 +41,11 @@ export class BuyerNavbarComponent implements OnInit {
     this.buyerNavbar = this.route.snapshot.data['buyer'];
     this.buyerNavbar.firstName = this.buyerNavbar['data']['first_name'];
     this.buyerNavbar.lastName = this.buyerNavbar['data']['last_name'];
+    //this.buyerNavbar.cartItemBadge = localStorage.getItem('buyerCart');
+    //console.log(this.counter.length);
   }
+
+
 
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton
   // goes into the local memory using the services developed in order to remove the current user so that if another user wishes to log on they can.

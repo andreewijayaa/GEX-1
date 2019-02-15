@@ -15,6 +15,7 @@ export class BuyerService {
   request: any;
   update: any;
   offer: any;
+  offerCartItem: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -47,10 +48,10 @@ export class BuyerService {
       };
       if (isDevMode()) {
         return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
-        .pipe(map(res => res));
+          .pipe(map(res => res));
       } else {
         return this.http.post('buyers/request', request, httpOptions)
-        .pipe(map(res => res));
+          .pipe(map(res => res));
       }
     } else {
       this.router.navigate(['/buyer']);
@@ -61,17 +62,17 @@ export class BuyerService {
   getBuyerRequests() {
     this.loadToken();
     const httpOptions = {
-      headers: new HttpHeaders ({
-        'Content-Type':  'application/json',
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
         'x-access-token': this.buyerToken
       })
     };
     if (isDevMode()) {
       return this.http.get('http://localhost:3000/buyers/request', httpOptions)
-      .pipe(map(res => res));
+        .pipe(map(res => res));
     } else {
       return this.http.get('buyers/request', httpOptions)
-     .pipe(map(res => res));
+        .pipe(map(res => res));
     }
   }
 
@@ -85,10 +86,26 @@ export class BuyerService {
     };
     if (isDevMode()) {
       return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
-      .pipe(map(res => res));
+        .pipe(map(res => res));
     } else {
       return this.http.post('buyers/update', buyer, httpOptions)
-      .pipe(map(res => res));
+        .pipe(map(res => res));
+    }
+  }
+
+  addOfferToBuyerCart(offerCartItem) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/addToCart', offerCartItem, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
+        .pipe(map(res => res));
     }
   }
 
@@ -103,10 +120,10 @@ export class BuyerService {
     console.log(offer);
     if (isDevMode()) {
       return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
-      .pipe(map(res => res));
+        .pipe(map(res => res));
     } else {
       return this.http.post('checkout', offer, httpOptions)
-      .pipe(map(res => res));
+        .pipe(map(res => res));
     }
   }
 
