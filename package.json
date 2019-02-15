@@ -22,6 +22,7 @@
     "@angular/material": "^7.3.1",
     "@sendgrid/mail": "^6.3.1",
     "@types/jquery": "^3.3.22",
+    "agenda": "^2.0.2",
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
