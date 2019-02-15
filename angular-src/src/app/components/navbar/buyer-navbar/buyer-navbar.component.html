@@ -26,12 +26,14 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown">
-          <img class="img-cart" src="../../../../assets/cartLogo.png" alt="" width="35" height="35"><span matBadge="1" matBadgeColor="warn" matBadgeSize="medium"></span>
+          <img class="img-cart" src="../../../../assets/cartLogo.png" alt="" width="35" height="35"><span *ngIf="(totalItemsCart + itemAddedToCart) > 0" class="cartBadge" matBadge="{{totalItemsCart + itemAddedToCart}}" matBadgeColor="warn" matBadgeSize="medium"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-family: Open Sans">
-              <a class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">Cart empty.</a>
+              <a *ngIf="(totalItemsCart + itemAddedToCart) == 0"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">Cart empty.</a>
+              <a *ngIf="(totalItemsCart + itemAddedToCart) == 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{totalItemsCart + itemAddedToCart}} offer in your cart.</a>
+              <a *ngIf="(totalItemsCart + itemAddedToCart) > 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{totalItemsCart + itemAddedToCart}} offers in your cart.</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" routerLink="/buyer" routerLinkActive="active-link"><button type="button" routerLink="/buyer" class="btn" style="background-color: #4cd137">Proceed to Cart</button>
+              <a class="dropdown-item" routerLink="/buyer" routerLinkActive="active-link"><button type="button" routerLink="/buyer" class="btn" style="background-color: #4cd137;">Go to Cart</button>
               </a>
             </div>
       </li>
