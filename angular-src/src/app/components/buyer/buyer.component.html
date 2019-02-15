@@ -45,7 +45,7 @@ Bryan Vu contributed most of this buyer portal page.
     </table>
 
     <mat-accordion>
-      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 5, currentPage: p}" (opened)="expanded(request._id)">
+      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 25, currentPage: p}" (opened)="expanded(request._id)">
         <mat-expansion-panel-header style="text-align:center">
           <mat-panel-title style="width: 180px" id="requestTitle">
             {{request.title}}
