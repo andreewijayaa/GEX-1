@@ -9,9 +9,9 @@ const methodOverride = require('method-override')
 
 //Buyer Schema
 const BuyerSchema = mongoose.Schema({
-    account_type:{
-      type: Number,
-      default: 0
+    account_type: {
+        type: Number,
+        default: 0
     },
     first_name: {
         type: String,
@@ -38,15 +38,15 @@ const BuyerSchema = mongoose.Schema({
         type: String
     },
     buyer_requests_byID: {
-      type : [String]
+        type: [String]
     },
     profile_image: {
-        type : [String],
+        type: [String],
         required: false,
         data: Buffer
     },
     offerCart: {
-        type : [String],
+        type: [String],
         required: false
     }
 });
@@ -55,21 +55,21 @@ const BuyerSchema = mongoose.Schema({
 const Buyer = module.exports = mongoose.model('Buyer', BuyerSchema);
 
 // Retrieve buyers from DB by ID
-module.exports.getBuyerbyId = function(id, callback){
+module.exports.getBuyerbyId = function (id, callback) {
     Buyer.findById(id, callback);
 }
 
 // Retrieve buyers from DB by Email
-module.exports.getBuyerbyEmail = function(email, callback){
-    const query = {email: email};
+module.exports.getBuyerbyEmail = function (email, callback) {
+    const query = { email: email };
     Buyer.findOne(query, callback);
 }
 
 // Add buyer to DB with encrypted password
-module.exports.addBuyer = function(newBuyer, callback){
-    bcrypt.genSalt(10,(err, salt) => {
+module.exports.addBuyer = function (newBuyer, callback) {
+    bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newBuyer.password, salt, (err, hash) => {
-            if(err) {throw err;}
+            if (err) { throw err; }
             newBuyer.password = hash;
             newBuyer.save(callback);
         });
@@ -77,12 +77,12 @@ module.exports.addBuyer = function(newBuyer, callback){
 }
 
 // compare inputted password to the buyer hashed password
-module.exports.comparePassword = function (inputtedPassword, hash, callback){
+module.exports.comparePassword = function (inputtedPassword, hash, callback) {
     bcrypt.compare(inputtedPassword, hash, (err, isMatch) => {
-            if(isMatch) {
-                return callback(null, isMatch);
-            } else {
-                return callback();
-            }
-        });
+        if (isMatch) {
+            return callback(null, isMatch);
+        } else {
+            return callback();
+        }
+    });
 }

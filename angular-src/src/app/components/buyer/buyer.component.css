@@ -15,6 +15,10 @@ body, html {
   clear: both;
 }
 
+button{
+  white-space: pre-wrap !important;
+}
+
 .app-loading .spinner {
   height: 200px;
   width: 200px;
