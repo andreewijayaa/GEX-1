@@ -189,6 +189,25 @@ export class SellerService {
     }
   }
 
+  //allow user to upload profile picture
+  //By John
+  setProfilePicture(profilePic){
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/sellers/profilepicture', profilePic, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/profilepicture', profilePic)
+      .pipe(map(res => res));
+    }
+  }
+
   // logging out seller
   sellerLogout() {
     this.sellerToken = null;

@@ -111,6 +111,25 @@ export class BuyerService {
     }
   }
 
+  //allow user to upload profile picture
+  //By John
+  setProfilePicture(profilePic){
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/profilepicture', profilePic, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/profilepicture', profilePic)
+      .pipe(map(res => res));
+    }
+  }
+
   // Load local token
   loadToken() {
     const token = localStorage.getItem('id_token');
