@@ -193,14 +193,18 @@
                         </mat-panel-title>
                         &nbsp;
                         <mat-panel-title>
-                          <b>Offer Description:</b>
-                          <div [innerHTML]="offer.description"></div>
+                          <b>Your Price: &nbsp;</b>
+                          $&nbsp;
+                          <div [innerHTML]="offer.price"></div>
                         </mat-panel-title>
                         &nbsp;
                       </div>
                     </mat-expansion-panel>
                   </mat-accordion>
+                  &nbsp;
                 </li>
+                &nbsp;
+                &nbsp;
 
                 <!-- <div class="card container" *ngFor="let offer of offerList">
                   <div class="card-body">
@@ -254,7 +258,13 @@
                       </tr>
                     </thead>
                   </table>
+
+                  <!-- Functionality here! -->
+
+                  &nbsp;
                 </li>
+                &nbsp;
+                &nbsp;
               </ul>
             </div>
           <!-- End Content -->
