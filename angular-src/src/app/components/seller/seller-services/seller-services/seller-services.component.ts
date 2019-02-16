@@ -181,7 +181,6 @@ export class SellerServicesComponent implements OnInit {
   //   }
   // }
 
-  // Upload new code to seller - Roni
   AddCode() {
     const code = {
       codes: this.codeArray

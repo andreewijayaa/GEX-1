@@ -17,7 +17,14 @@
   &nbsp;
   <div class="card contain">
     <div class="card-body">
-      <h4>Personal Information</h4>
+      <div class="row justify-content-md">
+        <div class="col">
+          <h4>Personal Information</h4>
+        </div>
+        <div class="col">
+          <p style="text-align: right"><a [routerLink]="['/seller/submit-categories']" routerLinkActive="router-link-active" >Add More Information...</a></p>
+        </div>
+      </div>
       &nbsp;
       <form action="/action_page.php">
         <div class="form-group">

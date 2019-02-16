@@ -321,7 +321,7 @@ router.post('/addDescription', (req, res) => {
         seller_descipt.set({description: req.body.description});
         seller_descipt.save(function (err, updatedSeller) {
           if (err) return handleError(err);
-          return res.status(500).send({ success: true, message: "Attempted to add desciption"});
+          return res.json({ success: true, message: "Attempted to add desciption"});
         });
       });
   });
@@ -363,7 +363,7 @@ router.post('/addBillingAddress', (req, res) => {
           seller_bill.save(function (err, updatedSeller) {
             if (err) return handleError(err);
             console.log('Success billing!');
-            return res.status(500).send({ success: true, message: "Attempted to add billing address "});
+            return res.json({ success: true, message: "Attempted to add billing address "});
           });
         });
       });
