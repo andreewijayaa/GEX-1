@@ -112,15 +112,19 @@ export class BuyerService {
 
   //allow user to upload profile picture
   //By John
-  setProfilePicture(profilePic){
+  setProfilePicture(profilePic: File): Observable<Object>{
+    console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
         'x-access-token': this.buyerToken
       })
     };
+    const formData = new FormData();
+
+    formData.append('image', profilePic)
     if (isDevMode()) {
-      return this.http.post('http://localhost:3000/buyers/profilepicture', profilePic, httpOptions)
+      return this.http.post('http://localhost:3000/buyers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database

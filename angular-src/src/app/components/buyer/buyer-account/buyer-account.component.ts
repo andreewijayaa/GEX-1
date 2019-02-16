@@ -3,12 +3,19 @@ import { BuyerService } from '../../../services/buyer.service';
 import { ActivatedRoute } from '@angular/router';
 import { SellerAccountComponent } from '../../seller/seller-account/seller-account.component';
 
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
+}
+
 @Component({
   selector: 'app-buyer-account',
   templateUrl: './buyer-account.component.html',
   styleUrls: ['./buyer-account.component.css']
 })
 export class BuyerAccountComponent implements OnInit {
+
+  //for image porcessing
+  selectedFile: ImageSnippet;
 
   // Delcared buyer variable.
   buyer: any;
@@ -139,5 +146,25 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';  
+  }
+
+  // By: John
+  // function for updating profile image
+  processFile(imageInput: any){
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
+        (res) => {
+
+        },
+        (err) => {
+
+        })
+    });
+
+    reader.readAsDataURL(file);
   }
 }

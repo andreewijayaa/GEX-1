@@ -4,11 +4,13 @@ Will let out app.js file know if we are in development of production. If we are 
 public so this will ensure the secret key is hidden. 
 If we are in development mode then it will not hide the stripe secret key.
 */
-
-//if (process.env.NODE_ENV !== 'production') {
+//const result = require('dotenv').config();
+//console.log(result);
+//console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
   //require('dotenv').config();
-//}
+}
 
 // Stripe Keys used for testing.
 const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
