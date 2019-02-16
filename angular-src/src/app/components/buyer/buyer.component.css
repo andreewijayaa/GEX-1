@@ -44,7 +44,7 @@ html, body {
   height: 100%;
 }
 .btn {
-
+  width: 250px;
   background-color: rgb(218, 64, 26);
   color: white;
   font-weight: bold;
@@ -93,5 +93,3 @@ html, body {
     stroke-dashoffset: -124px;
   }
 }
-
-
