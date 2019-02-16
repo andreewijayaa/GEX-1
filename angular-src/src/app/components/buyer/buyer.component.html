@@ -128,9 +128,11 @@ Bryan Vu contributed most of this buyer portal page.
       </mat-expansion-panel>
     </mat-accordion>
 
-
-
     &nbsp;
+
+    <pagination-controls (pageChange)="p = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
+      autoHide="true">
+    </pagination-controls>
 
     <!----
     <div class="row">
@@ -150,5 +152,7 @@ Bryan Vu contributed most of this buyer portal page.
     <br>-->
   </li>
 </div>
+
+
 
 <div class="clearfooter"></div>
