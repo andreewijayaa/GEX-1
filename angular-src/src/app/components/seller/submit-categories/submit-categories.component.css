@@ -27,6 +27,11 @@ html, body {
   clear: both;
 }
 
+.clearheader {
+  height: 40px;
+  clear: both;
+}
+
 .stepTabs {
   width: 370px;
 }
