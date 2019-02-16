@@ -25,11 +25,11 @@
 		<div class="card contain">
 			<div class="card-body">
 				<div class="form-group row">
-          <label class="col-sm-12" style="color:#FF0000">colored means it's subscribed to you already</label>
+          <label class="col-sm-12" style="color:#FF0000">You are already opted in to the selected ones:</label>
           &nbsp;
 					<div class="form-group row">
             <ul *ngFor="let code of codes" id="otis">
-              <li>
+              <li *ngIf = "codeList != undefined">
                 <div *ngIf="codeList.indexOf(code.code) !== -1">
                   <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)" checked/>
                   <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
@@ -41,6 +41,13 @@
                   <label id="piclabel">{{code.name}}</label>
                 </div>
               </li>
+              <li *ngIf = "codeList == undefined">
+                  <div>
+                    <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
+                    <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
+                    <label id="piclabel">{{code.name}}</label>
+                  </div>
+                </li>
             </ul>
           </div>
         </div>
