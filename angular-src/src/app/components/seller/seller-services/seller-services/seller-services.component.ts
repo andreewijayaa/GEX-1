@@ -16,25 +16,28 @@ export class SellerServicesComponent implements OnInit {
 
   // Temp codes for MVP - Kurgan
 	codes = [
-    { code: 78965422, name: 'Jewelry'},
-    { code: 78965423, name: 'Necklaces (Jewelry)'},
-    { code: 78965424, name: 'Rings (Jewelry)'},
-    { code: 78965425, name: 'Earrings (Jewelry)'},
-    { code: 68977451, name: 'Dolls'},
-    { code: 67887941, name: 'Sculptures'},
-    { code: 62145331, name: 'Scarves'},
-    { code: 54887921, name: 'Blankets'},
-    { code: 52871151, name: 'Socks'},
-    { code: 50360051, name: 'Pencils'},
-    { code: 49605401, name: 'Painting'},
-    { code: 49605402, name: 'Oil (Painting)'},
-    { code: 49605403, name: 'Watercolor (Painting)'},
-    { code: 49605404, name: 'Acrlyic (Painting)'}
+    { code: 78965422, name: 'Jewelry', image: 'https://picsum.photos/200', checked: false },
+    { code: 78965423, name: 'Necklaces (Jewelry)', image: 'https://picsum.photos/200', checked: false },
+    { code: 78965424, name: 'Rings (Jewelry)', image: 'https://picsum.photos/200', checked: false },
+    { code: 78965425, name: 'Earrings (Jewelry)', image: 'https://picsum.photos/200', checked: false },
+    { code: 68977451, name: 'Dolls', image: 'https://picsum.photos/200', checked: false },
+    { code: 67887941, name: 'Sculptures', image: 'https://picsum.photos/200', checked: false },
+    { code: 62145331, name: 'Scarves', image: 'https://picsum.photos/200', checked: false },
+    { code: 54887921, name: 'Blankets', image: 'https://picsum.photos/200', checked: false },
+    { code: 52871151, name: 'Socks', image: 'https://picsum.photos/200', checked: false },
+    { code: 50360051, name: 'Pencils', image: 'https://picsum.photos/200', checked: false },
+    { code: 49605401, name: 'Painting', image: 'https://picsum.photos/200', checked: false },
+    { code: 49605402, name: 'Oil (Painting)', image: 'https://picsum.photos/200', checked: false },
+    { code: 49605403, name: 'Watercolor (Painting)', image: 'https://picsum.photos/200', checked: false },
+    { code: 49605404, name: 'Acrlyic (Painting)', image: 'https://picsum.photos/200', checked: false }
   ];
+  submitLabels: String[];
+  codeArray: Number[];
   code: Number;
   codeList: [Number];
   None: Boolean;
   codeNames: any[];
+  buttonText: String = 'Subscribe to any products on Requiren';
 
   // Used for the dropdown
 /* 	public onChange(event): void {  // event will give you full breif of action
@@ -48,6 +51,8 @@ export class SellerServicesComponent implements OnInit {
 
   // View seller current codes - Roni
   ngOnInit() {
+    this.submitLabels = [];
+    this.codeArray = [];
     var LocalArray = new Array();
     this.None = false;
     // Get seller codes
@@ -75,111 +80,111 @@ export class SellerServicesComponent implements OnInit {
     });
   }
 
-  // Checking which checkboxes are checked and upload the code - By: Andre Wijaya
-  AddCode() {
-    // Jewelry
-    var element = <HTMLInputElement> document.getElementById('78965422');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  // // Checking which checkboxes are checked and upload the code - By: Andre Wijaya
+  // AddCode() {
+  //   // Jewelry
+  //   var element = <HTMLInputElement> document.getElementById('78965422');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Necklaces (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965423');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Necklaces (Jewelry)
+  //   var element = <HTMLInputElement> document.getElementById('78965423');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Rings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('789654224');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Rings (Jewelry)
+  //   var element = <HTMLInputElement> document.getElementById('789654224');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Earrings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965425');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Earrings (Jewelry)
+  //   var element = <HTMLInputElement> document.getElementById('78965425');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Dolls
-    var element = <HTMLInputElement> document.getElementById('68977451');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Dolls
+  //   var element = <HTMLInputElement> document.getElementById('68977451');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Sculptures
-    var element = <HTMLInputElement> document.getElementById('67887941');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Sculptures
+  //   var element = <HTMLInputElement> document.getElementById('67887941');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Scarves
-    var element = <HTMLInputElement> document.getElementById('62145331');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Scarves
+  //   var element = <HTMLInputElement> document.getElementById('62145331');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Blankets
-    var element = <HTMLInputElement> document.getElementById('54887921');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Blankets
+  //   var element = <HTMLInputElement> document.getElementById('54887921');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Socks
-    var element = <HTMLInputElement> document.getElementById('52871151');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Socks
+  //   var element = <HTMLInputElement> document.getElementById('52871151');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Pencils
-    var element = <HTMLInputElement> document.getElementById('50360051');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Pencils
+  //   var element = <HTMLInputElement> document.getElementById('50360051');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Painting
-    var element = <HTMLInputElement> document.getElementById('49605401');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Painting
+  //   var element = <HTMLInputElement> document.getElementById('49605401');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Oil (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605402');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Oil (Painting)
+  //   var element = <HTMLInputElement> document.getElementById('49605402');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Watercolor (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605403');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
+  //   // Watercolor (Painting)
+  //   var element = <HTMLInputElement> document.getElementById('49605403');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
 
-    // Acrlyic (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605404');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-  }
+  //   // Acrlyic (Painting)
+  //   var element = <HTMLInputElement> document.getElementById('49605404');
+  //   if (element.checked === true) {
+  //     this.code = Number(element.value);
+  //     this.uploadCode();
+  //   }
+  // }
 
   // Upload new code to seller - Roni
-  uploadCode() {
+  AddCode() {
     const code = {
-      codes: this.code
+      codes: this.codeArray
     };
 
     this.sellerService.setNewCode(code).subscribe((data: any) => {
@@ -191,5 +196,50 @@ export class SellerServicesComponent implements OnInit {
         this.router.navigate(['/seller/seller-services']);
       }
     });
+  }
+
+  labelButton() {
+    var btnTxt = 'Subscribe to  ';
+    var slsize = this.submitLabels.length;
+    //console.log(this.submitLabels[0]);
+    for (var n = 0; n < slsize; n++) {
+      if (slsize <= 3) {
+        btnTxt = btnTxt + this.submitLabels[n];
+        if (n < (slsize - 1)) {
+          btnTxt = btnTxt + ', ';
+        } else {
+          btnTxt = btnTxt + ' ';
+        }
+      } else {
+        if (n < 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + ', ';
+        }
+        if (n === 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + ' ';
+        }
+      }
+    }
+    var rem = slsize - 3;
+    var remd = rem.toString();
+    if (slsize > 3) {
+      btnTxt = btnTxt + '(+' + remd + ' more) ';
+    }
+    this.buttonText = btnTxt + ' on Requiren';
+  }
+
+  onCheckboxChange(option, event) {
+    if (event.target.checked) {
+      this.codeArray.push(option.code);
+      this.submitLabels.push(option.name);
+      this.labelButton();
+    } else {
+      for (var i = 0; i < this.codes.length; i++) {
+        if (this.codeArray[i] === option.code) {
+          this.codeArray.splice(i, 1);
+          this.submitLabels.splice(i, 1);
+          this.labelButton();
+        }
+      }
+    }
   }
 }
