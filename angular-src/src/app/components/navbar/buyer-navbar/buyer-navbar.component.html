@@ -33,7 +33,7 @@
               <a *ngIf="(totalItemsCart + itemAddedToCart) == 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{totalItemsCart + itemAddedToCart}} offer in your cart.</a>
               <a *ngIf="(totalItemsCart + itemAddedToCart) > 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{totalItemsCart + itemAddedToCart}} offers in your cart.</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" routerLink="/buyer" routerLinkActive="active-link"><button type="button" routerLink="/buyer" class="btn" style="background-color: #4cd137;">Go to Cart</button>
+              <a class="dropdown-item" routerLink="/buyer/cart" routerLinkActive="active-link"><button type="button" routerLink="/buyer" class="btn" style="background-color: #4cd137;">Go to Cart</button>
               </a>
             </div>
       </li>
