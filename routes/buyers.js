@@ -147,8 +147,10 @@ router.post('/request', (req, res, next) => {
           // Look for a seller with the same code the buyer has posted a request with
           // find all applicable sellers and email them (Notifcation System) 
           // The email will contain a link to view the Request for sellers 
-          Seller.find({ 'codes': post.code }, (err, applicableSeller) => {
+          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
             if (err) { return next(err); }
+            console.log('Post Id:' + post.code)
+            console.log(applicableSeller);
             // Loop through all the sellers found and email them independtly
             // Might need to find a better way of doing this for when there is a large amount of sellers
             for (i = 0; i < applicableSeller.length; i++) {

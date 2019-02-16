@@ -44,7 +44,8 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AcceptOfferDialogComponent } from './components/buyer/buyer.component'
+import { AcceptOfferDialogComponent } from './components/buyer/buyer.component';
+import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component'
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
   {path: 'seller-login', component: SellerLoginComponent},
   {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
+  {path: 'buyer/cart', component: BuyerCartComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/checkout/:offerId/:requestId', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard],
         resolve: { buyer: BuyerResolve }},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve}},
@@ -137,7 +139,8 @@ const customNotifierOptions: NotifierOptions = {
     SellerServicesComponent,
     RequestComponent,
     BuyerCheckoutComponent,
-    AcceptOfferDialogComponent
+    AcceptOfferDialogComponent,
+    BuyerCartComponent
   ],
   entryComponents: [
     AcceptOfferDialogComponent
