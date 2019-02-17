@@ -9,7 +9,7 @@
     &nbsp;
 		<h1>What goods/services would you like to provide?</h1>
     &nbsp;
-    <div class="card contain">
+    <!-- <div class="card contain">
 			<div class="card-body">
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Current Good/Service:</label>
@@ -21,19 +21,37 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 		<div class="card contain">
 			<div class="card-body">
 				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Category:</label>
-					<div class="col-sm-10">
-            <div *ngFor="let code of codes">
-              <input type="checkbox" value={{code.code}} id={{code.code}}>{{code.name}}<br>
-            </div>
-            &nbsp;
-            <button type="submit" class="btn btn-primary float-right">Submit</button>
+          <label class="col-sm-12" style="color:#FF0000">You are already opted in to the selected ones:</label>
+          &nbsp;
+					<div class="form-group row">
+            <ul *ngFor="let code of codes" id="otis">
+              <li *ngIf = "codeList != undefined">
+                <div *ngIf="codeList.indexOf(code.code) !== -1">
+                  <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)" checked/>
+                  <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
+                  <label id="piclabel">{{code.name}}</label>
+                </div>
+                <div *ngIf="codeList.indexOf(code.code) === -1">
+                  <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
+                  <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
+                  <label id="piclabel">{{code.name}}</label>
+                </div>
+              </li>
+              <li *ngIf = "codeList == undefined">
+                  <div>
+                    <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
+                    <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
+                    <label id="piclabel">{{code.name}}</label>
+                  </div>
+                </li>
+            </ul>
           </div>
-				</div>
+        </div>
+        <button type="submit" class="btn btn-primary col-sm-12" style="align-items: center">{{buttonText}}</button>
 			</div>
 		</div>
 		<div class="clearfooter"></div>

@@ -14,6 +14,7 @@ const fs = require('fs');
 const singleUpload = upload.single('image');
 const singleUpload2 = upload2.single('image');
 
+const Offer = require('../models/offer');
 
 //Register route for buyers by Roni
 //Takes in all required information as JSON
@@ -94,6 +95,8 @@ router.post('/login', (req, res, next) => {
             first_name: buyer.first_name,
             last_name: buyer.last_name,
             email: buyer.email,
+            profile_image: buyer.profile_image,
+            offerCart: buyer.offerCart
           }
         });
       } else {
@@ -162,8 +165,10 @@ router.post('/request', (req, res, next) => {
           // Look for a seller with the same code the buyer has posted a request with
           // find all applicable sellers and email them (Notifcation System) 
           // The email will contain a link to view the Request for sellers 
-          Seller.find({ 'codes': post.code }, (err, applicableSeller) => {
+          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
             if (err) { return next(err); }
+            console.log('Post Id:' + post.code)
+            console.log(applicableSeller);
             // Loop through all the sellers found and email them independtly
             // Might need to find a better way of doing this for when there is a large amount of sellers
             for (i = 0; i < applicableSeller.length; i++) {
@@ -216,7 +221,7 @@ router.post('/update', (req, res /*next*/) => {
     password: req.body.pass,
     id: req.body.updater_id
   }
-  
+
   Buyer.findById(update.id, (err, updated) => {
     if (!update)
       return res.status(405).send({ success: false, message: 'could not retrieve buyer info to update.' });
@@ -253,6 +258,33 @@ router.post('/profilepicture', function(req, res) {
       });
     });
   });
+});
+/*
+Profile update - By: Omar
+Will add the accepted offer to the buyers cart.
+*/
+router.post('/addToCart', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
+
+  // Must be a buyer logged in to be able to enter an item to cart
+  jwt.verify(token, config.secret, function (err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+
+    //const offerCart = decoded.data.offer
+    //console.log(req.body.offerID);
+
+    //Find buyer to add the offer to the buyers cart
+    Buyer.findById(decoded.data._id, (err, buyerToAddCart) => {
+      // console.log('inside the find by id function');
+      if (err) return handleError(err);
+      // Save item to cart
+      buyerToAddCart.offerCart.push(req.body.offerID);
+      buyerToAddCart.save();
+      res.json({success: true});
+    });
+  });
+
 });
 
 //Email Verification - RONI

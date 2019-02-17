@@ -3,6 +3,8 @@ import { RegisterService } from '../../services/register.service';
 import { BuyerService } from '../../services/buyer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService } from '../../services/request.service';
+import { MatDialog } from '@angular/material';
+
 
 @Component({
   selector: 'app-buyer',
@@ -16,12 +18,15 @@ export class BuyerComponent implements OnInit {
   loading: Boolean;
   panelOpenState = false;
   offerList: Object;
+  offerTitleAddToCart: String;
+  pushItemToNavbar = 0;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router,
     private route: ActivatedRoute,
-    private requestService: RequestService) { }
+    private requestService: RequestService,
+    private dialog: MatDialog) { }
 
   // showing buyer info when buyer portal page loads - Bryan Vu
 
@@ -67,4 +72,32 @@ export class BuyerComponent implements OnInit {
       }
     });
   }
+
+  acceptOffer() {
+    const dialogRef = this.dialog.open(AcceptOfferDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      //console.log(`Dialog result: ${result}`);
+      //console.log(this.buyer);
+      const offer_id = document.getElementById('offerId').innerHTML;
+      const offerToCart = {
+        offerID: offer_id
+      }
+      this.buyerService.addOfferToBuyerCart(offerToCart).subscribe((data: any) => {
+        if (data.success)
+          var prevItems = localStorage.getItem('buyerCart');
+          var newItem = 1;
+          var newTotalItems = parseInt(prevItems, 10) + newItem;
+          localStorage.setItem('buyerCart', newTotalItems.toString());
+          this.pushItemToNavbar = 1;
+          (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
+       });
+    });
+  }
 }
+
+@Component({
+  selector: 'dialog-content-offer-accept',
+  templateUrl: 'dialog-content-offer-accept.html',
+})
+export class AcceptOfferDialogComponent { }

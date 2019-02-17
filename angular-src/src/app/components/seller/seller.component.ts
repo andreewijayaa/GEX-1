@@ -63,4 +63,8 @@ export class SellerComponent implements OnInit {
   history(currentTab) {
     this.currentTab = currentTab;
   }
+
+  archive(currentTab) {
+    this.currentTab = currentTab;
+  }
 }

@@ -1,4 +1,4 @@
-<app-buyer-navbar></app-buyer-navbar>
+<app-buyer-navbar [itemAddedToCart]="pushItemToNavbar"></app-buyer-navbar>
 
 <div class="clearheader"></div>
 
@@ -11,7 +11,7 @@ Bryan Vu contributed most of this buyer portal page.
   <div class="container">
     <div class="row justify-content-md">
       <div>
-        <h4 class="page-header">Welcome {{buyer.data.first_name}}</h4>
+        <h4 class="page-header">Welcome {{buyer.data.first_name}}!</h4>
 
         <button type="button" routerLink="/buyer/make-request" class="btn btn-block" style="background-color: #1761a0; color: white">Submit
           New Request</button>
@@ -45,19 +45,22 @@ Bryan Vu contributed most of this buyer portal page.
     </table>
 
     <mat-accordion>
-      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList" (opened)="expanded(request._id)">
+      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 25, currentPage: p}" (opened)="expanded(request._id)">
         <mat-expansion-panel-header style="text-align:center">
-          <mat-panel-title style="width: 180px">
+          <mat-panel-title style="width: 180px" id="requestTitle">
             {{request.title}}
           </mat-panel-title>
           <mat-panel-title style="width:200px">
-            Active
+            Pending
           </mat-panel-title>
           <mat-panel-title style="width: 75px">
             {{request.offerCount}}
           </mat-panel-title>
           <mat-panel-title style="width: 90px">
             {{request.deadline}}
+          </mat-panel-title>
+          <mat-panel-title id="selectedRequestId" hidden>
+            {{request._id}}
           </mat-panel-title>
         </mat-expansion-panel-header>
 
@@ -86,28 +89,31 @@ Bryan Vu contributed most of this buyer portal page.
 
           <mat-expansion-panel *ngFor="let offer of offerList" style="background-color: #f5f6fa">
             <mat-expansion-panel-header>
-              <mat-panel-title style="margin-left: 3%">
+              <mat-panel-title id="offerTitle" style="margin-left: 3%">
                 {{offer.title}}
               </mat-panel-title>
-              <mat-panel-title style="margin-left: 25%">
+              <mat-panel-title id="offerSubDate" style="margin-left: 25%">
                 offer-sub-date
               </mat-panel-title>
-              <mat-panel-title style="margin-left: 30%">
+              <mat-panel-title id="offerPrice" style="margin-left: 30%">
                 ${{offer.price}}
+              </mat-panel-title>
+              <mat-panel-title id="offerId" hidden>
+                {{offer._id}}
               </mat-panel-title>
             </mat-expansion-panel-header>
 
             <div class="container" style="border:3px solid #7f8fa6">
               &nbsp;
               <mat-panel-title>
-                Offer Description:
+                Offer Details:
               </mat-panel-title>
-              <mat-panel-title>
+              <mat-panel-title id="offerDescription">
                 {{offer.description}}
               </mat-panel-title>
               <mat-panel-title style="margin-left: 85%">
-                <button type="button" routerLink="/request/{{request._id}}" class="btn" style="background-color: #8c7ae6">Add
-                  to Cart</button>
+                <button mat-button (click)="acceptOffer()" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept
+                  Offer</button>
               </mat-panel-title>
               &nbsp;
             </div>
@@ -122,9 +128,11 @@ Bryan Vu contributed most of this buyer portal page.
       </mat-expansion-panel>
     </mat-accordion>
 
-
-
     &nbsp;
+
+    <pagination-controls (pageChange)="p = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
+      autoHide="true">
+    </pagination-controls>
 
     <!----
     <div class="row">
@@ -144,5 +152,7 @@ Bryan Vu contributed most of this buyer portal page.
     <br>-->
   </li>
 </div>
+
+
 
 <div class="clearfooter"></div>
