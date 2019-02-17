@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SellerService } from '../../../../services/seller.service';
 import { NotifierService } from 'angular-notifier';
 import { Local } from 'protractor/built/driverProviders';
-
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/MEANstackPractice/master/images.png";
 @Component({
   selector: 'app-seller-services',
   templateUrl: './seller-services.component.html',
@@ -16,31 +16,28 @@ export class SellerServicesComponent implements OnInit {
 
   // Temp codes for MVP - Kurgan
 	codes = [
-    { code: 78965422, name: 'Jewelry'},
-    { code: 78965423, name: 'Necklaces (Jewelry)'},
-    { code: 78965424, name: 'Rings (Jewelry)'},
-    { code: 78965425, name: 'Earrings (Jewelry)'},
-    { code: 68977451, name: 'Dolls'},
-    { code: 67887941, name: 'Sculptures'},
-    { code: 62145331, name: 'Scarves'},
-    { code: 54887921, name: 'Blankets'},
-    { code: 52871151, name: 'Socks'},
-    { code: 50360051, name: 'Pencils'},
-    { code: 49605401, name: 'Painting'},
-    { code: 49605402, name: 'Oil (Painting)'},
-    { code: 49605403, name: 'Watercolor (Painting)'},
-    { code: 49605404, name: 'Acrlyic (Painting)'}
+    { code: 78965422, name: 'Jewelry', image: DefaultImageIcon, checked: false },
+    { code: 78965423, name: 'Necklaces (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 78965424, name: 'Rings (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 78965425, name: 'Earrings (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 68977451, name: 'Dolls', image: DefaultImageIcon, checked: false },
+    { code: 67887941, name: 'Sculptures', image: DefaultImageIcon, checked: false },
+    { code: 62145331, name: 'Scarves', image: DefaultImageIcon, checked: false },
+    { code: 54887921, name: 'Blankets', image: DefaultImageIcon, checked: false },
+    { code: 52871151, name: 'Socks', image: DefaultImageIcon, checked: false },
+    { code: 50360051, name: 'Pencils', image: DefaultImageIcon, checked: false },
+    { code: 49605401, name: 'Painting', image: DefaultImageIcon, checked: false },
+    { code: 49605402, name: 'Oil (Painting)', image: DefaultImageIcon, checked: false },
+    { code: 49605403, name: 'Watercolor (Painting)', image: DefaultImageIcon, checked: false },
+    { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
   ];
+  submitLabels: String[];
+  codeArray: Number[];
   code: Number;
   codeList: [Number];
   None: Boolean;
   codeNames: any[];
-
-  // Used for the dropdown
-/* 	public onChange(event): void {  // event will give you full breif of action
-    const newVal = event.target.value;
-		this.code = newVal;
-	} */
+  buttonText: String = 'Subscribe to any products on Requiren';
 
   constructor(private sellerService: SellerService,
     private notifierService: NotifierService,
@@ -48,148 +45,78 @@ export class SellerServicesComponent implements OnInit {
 
   // View seller current codes - Roni
   ngOnInit() {
-    var LocalArray = new Array();
-    this.None = false;
+    this.submitLabels = [];
+    this.codeArray = [];
     // Get seller codes
     this.sellerService.getCode().subscribe((data: any) => {
       if (data.success) {
         if (data.codeList.length === 0) { // Seller does not have any codes yet
-          this.None = true;
         } else {
           this.codeList = data.codeList;
-          this.None = false;
-          var i, j = 0;
-          // Retrieve all seller current codes
-          // FOR MVP ONLY, will find a better and suffiecent way to perform this
-          for (i = 0; i < this.codeList.length; i++) {
-
-            for (j = 0; j < this.codes.length; j++) {
-              if (this.codes[j].code === this.codeList[i]) {
-                LocalArray.push(this.codes[j].name);
-            }
-            }
-          }
-          this.codeNames = LocalArray;
         }
       }
     });
   }
 
-  // Checking which checkboxes are checked and upload the code - By: Andre Wijaya
   AddCode() {
-    // Jewelry
-    var element = <HTMLInputElement> document.getElementById('78965422');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Necklaces (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965423');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Rings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('789654224');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Earrings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965425');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Dolls
-    var element = <HTMLInputElement> document.getElementById('68977451');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Sculptures
-    var element = <HTMLInputElement> document.getElementById('67887941');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Scarves
-    var element = <HTMLInputElement> document.getElementById('62145331');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Blankets
-    var element = <HTMLInputElement> document.getElementById('54887921');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Socks
-    var element = <HTMLInputElement> document.getElementById('52871151');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Pencils
-    var element = <HTMLInputElement> document.getElementById('50360051');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Painting
-    var element = <HTMLInputElement> document.getElementById('49605401');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Oil (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605402');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Watercolor (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605403');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Acrlyic (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605404');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-  }
-
-  // Upload new code to seller - Roni
-  uploadCode() {
     const code = {
-      codes: this.code
+      codes: this.codeArray
     };
 
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
-        this.notifier.notify('success', 'Your New Code was submitted!');
-        this.router.navigate(['/seller/seller-services']);
+        this.notifier.notify('success', data.msg);
+        this.router.navigate(['/seller']);
       } else {
         this.notifier.notify('error', data.msg);
         this.router.navigate(['/seller/seller-services']);
       }
     });
+  }
+
+  labelButton() {
+    var btnTxt = 'Subscribe to  ';
+    var slsize = this.submitLabels.length;
+    //console.log(this.submitLabels[0]);
+    for (var n = 0; n < slsize; n++) {
+      if (slsize <= 3) {
+        btnTxt = btnTxt + this.submitLabels[n];
+        if (n < (slsize - 1)) {
+          btnTxt = btnTxt + ', ';
+        } else {
+          btnTxt = btnTxt + ' ';
+        }
+      } else {
+        if (n < 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + ', ';
+        }
+        if (n === 2) {
+          btnTxt = btnTxt + this.submitLabels[n] + ' ';
+        }
+      }
+    }
+    var rem = slsize - 3;
+    var remd = rem.toString();
+    if (slsize > 3) {
+      btnTxt = btnTxt + '(+' + remd + ' more) ';
+    }
+    this.buttonText = btnTxt + ' on Requiren';
+  }
+
+  onCheckboxChange(option, event) {
+    if (event.target.checked) {
+      this.codeArray.push(option.code);
+      this.submitLabels.push(option.name);
+      this.labelButton();
+    } else {
+      for (var i = 0; i < this.codes.length; i++) {
+        if (this.codeArray[i] === option.code) {
+          this.codeArray.splice(i, 1);
+          this.submitLabels.splice(i, 1);
+          this.labelButton();
+        }
+      }
+    }
+   console.log(this.codeArray);
   }
 }
