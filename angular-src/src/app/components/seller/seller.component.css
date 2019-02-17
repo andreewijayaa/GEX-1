@@ -69,6 +69,11 @@ body, html {
   clear: both;
 }
 
+.clearheader {
+  height: 100px;
+  clear: both;
+}
+
 .app-loading {
   position: center;
   display: flex;

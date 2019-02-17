@@ -1,39 +1,20 @@
 <app-navbar></app-navbar>
-
 <body>
-
     <div class="container">
         <form (submit)="OnBuyerRegisterSubmit()">
             <div class="container">
                 <div class="container header">
-
-                <h1>Register</h1>
-
+                <h3>Register</h3>
                 </div>
-
                 <hr>
-
-
                 <input type="text" [(ngModel)]="email" name="email" placeholder="Enter Email" required>
-
                 <p>Seller? <a routerLink="/seller-register" routerLinkActive="active"> Register here.</a></p>
-
-
                 <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
-
-
                 <input type="text" placeholder="Enter Last Name" [(ngModel)]="last_name" name="last_name" required>
-
-
                 <input type="password" placeholder="Enter Password" [(ngModel)]="password" name="psw" required>
-
-
                 <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
-
                 <button type="submit" class="btn" routerLink="/buyer-register" routerLinkActive="active">Register</button>
-
                 <p>Already have an account? <a routerLink="/login" routerLinkActive="active">Login</a>.</p>
-
             </div>
         </form>
     </div>
