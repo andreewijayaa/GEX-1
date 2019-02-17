@@ -35,13 +35,13 @@
                   <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
                   <label id="piclabel">{{code.name}}</label>
                 </div>
-                <div *ngIf="codeList.indexOf(code.code) === -1">
+                <div *ngIf="codeArray.indexOf(code.code) === -1">
                   <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
                   <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
                   <label id="piclabel">{{code.name}}</label>
                 </div>
               </li>
-              <li *ngIf = "codeList == undefined">
+              <li *ngIf = "codeArray == undefined">
                   <div>
                     <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
                     <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
