@@ -45,21 +45,22 @@ including the fields and labels.
         <div class="form-group row">
           <div class="col-sm-12" style="text-align: right;">
             <button type="submit" class="btn-block btn-primary">{{buttonText}}</button>
-          <div class="form-group row">
-            <div class="col-sm-10">
-              <br>
-              <select class="dropdown" id="selectDeadline" (change)="onChange($event)">
-                <option>Select deadline...</option>
-                <option value="2days">2 days from today</option>
-                <option value="5days">5 days from today</option>
-                <option value="1week">1 week from today</option>
-              </select>
+            <div class="form-group row">
+              <div class="col-sm-10">
+                <br>
+                <select class="dropdown" id="selectDeadline" (change)="onChange($event)">
+                  <option>Select deadline...</option>
+                  <option value="2days">2 days from today</option>
+                  <option value="5days">5 days from today</option>
+                  <option value="1week">1 week from today</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <hr>
-          <div class="form-group row">
-            <div class="col-sm-12" style="text-align: right;">
-              <button type="submit" class="btn">{{buttonText}}</button>
+            <hr>
+            <div class="form-group row">
+              <div class="col-sm-12" style="text-align: right;">
+                <button type="submit" class="btn">{{buttonText}}</button>
+              </div>
             </div>
           </div>
         </div>
