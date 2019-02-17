@@ -27,8 +27,8 @@
 				<div class="form-group row">
           <label class="col-sm-12" style="color:#FF0000">You are already opted in to the selected ones:</label>
           &nbsp;
-					<div class="form-group row">
-            <ul *ngFor="let code of codes" id="otis">
+					<div class="container-fluid" style="position: relative; right: 4%">
+            <ul class="checkbox-grid" *ngFor="let code of codes" id="otis">
               <li *ngIf = "codeList != undefined">
                 <div *ngIf="codeList.indexOf(code.code) !== -1">
                   <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)" checked/>
