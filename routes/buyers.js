@@ -255,7 +255,7 @@ router.post('/addToCart', (req, res, next) => {
 router.get('/retrieveCart', (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
-
+  var orderTotal, offerPriceTotal, orderFees;
   // Must be a buyer logged in to be able to enter an item to cart
   jwt.verify(token, config.secret, function (err, decoded) {
     if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
@@ -265,8 +265,53 @@ router.get('/retrieveCart', (req, res, next) => {
       if(buyerViewingCart.offerCart == undefined ||  buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
       
       Offer.find({'_id': {$in: buyerViewingCart.offerCart}}, (err, offersInCart) => {
-        return res.status(200).send({ success: true, offersInCart});
+  
+        offersInCart.forEach(function(currentOffer) {
+          offerPriceTotal += currentOffer.price;
+          Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
+           currentOffer['provider'] = SellersOffer.entity_name;
+           console.log(currentOffer);
+          });
+        });
+        orderFees = offerPriceTotal * 0.10 ; //Add fee calculation here
+        orderTotal = offerPriceTotal + orderFees;
+        return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderTotal,orderFees});
       });
+    });
+  });
+});
+
+// Retrieve Cart with offers as objects
+router.post('/removeFromCart', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  const offer = req.body.offerID;
+  if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
+
+  // Must be a buyer logged in to be able to enter an item to cart
+  jwt.verify(token, config.secret, function (err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
+
+    Buyer.findById( decoded.data._id, (err, buyerViewingCart) => {
+      if (err) return handleError(err);
+      if(buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
+      
+      var index = buyerViewingCart.offerCart.indexOf(offer);
+      if(index != -1) {
+        if (index > -1) {
+          buyerViewingCart.offerCart.splice(index, 1);
+        }
+      } else {
+        return res.status(500).send({ success: false, msg: "Offer not found in cart."});
+      }
+      
+      if (buyerViewingCart.offerCart.indexOf(offer) == -1) {
+        buyerViewingCart.save((err) => {
+          if (err) { return next(err); }
+          return res.status(200).send({ success: true, msg: "Offer removed from cart."});
+        });
+      } else {
+        return res.status(500).send({ success: false, msg: "Unable to remove offer from cart."});
+      }
     });
   });
 });
