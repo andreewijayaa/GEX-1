@@ -35,3 +35,7 @@
     -webkit-transform: translateZ(10);
     transform: translateZ(0);
   }
+
+  .dropdown:hover>.dropdown-menu {
+    display: block;
+  }
