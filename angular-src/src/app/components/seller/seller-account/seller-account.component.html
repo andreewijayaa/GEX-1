@@ -51,6 +51,14 @@
             <label for="verifyPwd">Confirm Password:</label>
             <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword" required>
         </div>
+        <img class= "profilePicutre" src={{seller.data.profile_image}} alt="" width="40" height="40">
+        <div class="form-group">
+          <label for="profImage">Update Profile Image:</label>
+          <input #imageInput
+                  type="file" 
+                  accept="image/*"
+                  (change) = "processFile(imageInput)">
+        </div>
         <label id="errorMessage" hidden>{{this.errorMessage}}</label>
         <br>
         <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>

@@ -2,11 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { SellerService } from '../../../services/seller.service';
 import { ActivatedRoute } from '@angular/router';
 
+//class for importing image
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
+}
+
 @Component({
   selector: 'app-seller-account',
   templateUrl: './seller-account.component.html',
   styleUrls: ['./seller-account.component.css']
 })
+
 export class SellerAccountComponent implements OnInit {
   mainLogout: Boolean;
 
@@ -16,6 +22,8 @@ export class SellerAccountComponent implements OnInit {
   seller_updatedLastName: String;
   seller_updatedPassword: String;
   errorMessage: String;
+  //for image porcessing
+  selectedFile: ImageSnippet;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
@@ -140,5 +148,25 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';  
+  }
+
+  // By: John
+  // function for updating profile image
+  processFile(imageInput: any){
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      this.sellerService.setProfilePicture(this.selectedFile.file).subscribe(
+        (res) => {
+
+        },
+        (err) => {
+
+        })
+    });
+
+    reader.readAsDataURL(file);
   }
 }

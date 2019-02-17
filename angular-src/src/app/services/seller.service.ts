@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpBackend } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { isDevMode } from '@angular/core';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -191,15 +192,19 @@ export class SellerService {
 
   //allow user to upload profile picture
   //By John
-  setProfilePicture(profilePic){
+  setProfilePicture(profilePic: File): Observable<Object>{
+    //console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
         'x-access-token': this.sellerToken
       })
     };
+    const formData = new FormData();
+
+    formData.append('image', profilePic)
     if (isDevMode()) {
-      return this.http.post('http://localhost:3000/sellers/profilepicture', profilePic, httpOptions)
+      return this.http.post('http://localhost:3000/sellers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database

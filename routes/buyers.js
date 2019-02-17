@@ -187,6 +187,28 @@ router.post('/request', (req, res, next) => {
   });
 })
 
+router.post('/requestpicture', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload2(req, res, function(err, some) {
+      if (err) {
+        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+      }
+      console.log(req.file.location);
+      if (!req.body._id){
+        return res.status(401).send({ success: false, message:'No request id provided.' });
+      }
+      Request.findById(req.body._id, (err, request_pic) => {
+        request_pic.request_images.push(req.file.location);
+        request_pic.save();
+        console.log(request_pic);
+        return res.json({'imageUrl': req.file.location});
+      });
+    });
+  });
+});
+
 // Retrieve all applicable requests to the logged in buyer
 router.get('/request', (req, res, next) => {
   var token = req.headers['x-access-token'];
