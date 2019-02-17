@@ -108,6 +108,23 @@ export class BuyerService {
         .pipe(map(res => res));
     }
   }
+  // By Roni
+  // Retreive buyer shopping cart
+  retrieveBuyerCart() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.get('http://localhost:3000/buyers/retrieveCart', httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/retrieveCart', httpOptions)
+        .pipe(map(res => res));
+    }
+  }
 
   // By: Omar
   // Sends the checkout information to server checkout route in app.js

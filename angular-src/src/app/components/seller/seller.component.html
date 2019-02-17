@@ -18,7 +18,8 @@
     <div class="w3-container">
       <div class="container" style="margin-top:70px; height:750px; width: 1500px;">
 
-        <h4>Welcome, {{seller.first_name}}</h4>
+        <h4>Welcome {{seller.first_name}}!</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         &nbsp;
 
         <!-- Seller's tabs -->
@@ -60,10 +61,7 @@
                 </div> -->
                 <div class="col">
                   <div class="input-group mb-3 searchBox">
-                    <input type="text" class="form-control" placeholder="Search">
-                    <div class="input-group-append">
-                      <button class="btn submitSearchBtn text-white" type="submit">Search</button>
-                    </div>
+                    <input type="text" class="form-control" placeholder="Search Subscribed Requests" [(ngModel)]="sfilter">
                   </div>
                 </div>
               </div>
@@ -81,7 +79,7 @@
                 </table>
 
                 <mat-accordion>
-                  <mat-expansion-panel id="requestExpansionId" *ngFor="let request of activeRequests">
+                  <mat-expansion-panel id="requestExpansionId" *ngFor="let request of activeRequests | filter:sfilter | paginate: {itemsPerPage: 25, currentPage: pr}">
                     <mat-expansion-panel-header style="text-align:center">
                       <mat-panel-title style="width:285px">
                         {{request.title}}
@@ -123,6 +121,9 @@
                   </div>
                 </div> -->
                 &nbsp;
+                <pagination-controls (pageChange)="pr = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
+                  autoHide="true">
+                </pagination-controls>
               </li>
               &nbsp;
               &nbsp;
@@ -148,10 +149,7 @@
                 </div> -->
                 <div class="col">
                   <div class="input-group mb-3 searchBox">
-                    <input type="text" class="form-control" placeholder="Search">
-                    <div class="input-group-append">
-                      <button class="btn submitSearchBtn text-white" type="submit">Search</button>
-                    </div>
+                    <input type="text" class="form-control" placeholder="Search Offers" [(ngModel)]="ofilter">
                   </div>
                 </div>
               </div>
@@ -170,7 +168,7 @@
                   </table>
 
                   <mat-accordion>
-                    <mat-expansion-panel id="requestExpansionId" *ngFor="let offer of offerList">
+                    <mat-expansion-panel id="requestExpansionId" *ngFor="let offer of offerList | filter:ofilter | paginate: {itemsPerPage: 25, currentPage: po}">
                       <mat-expansion-panel-header style="text-align:center">
                         <mat-panel-title style="width:285px">
                             {{offer.title}}
@@ -202,6 +200,9 @@
                     </mat-expansion-panel>
                   </mat-accordion>
                   &nbsp;
+                  <pagination-controls (pageChange)="po = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
+                    autoHide="true">
+                  </pagination-controls>
                 </li>
                 &nbsp;
                 &nbsp;
@@ -237,7 +238,7 @@
                 </div> -->
                 <div class="col">
                   <div class="input-group mb-3 searchBox">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" placeholder="Search Archived Requests">
                     <div class="input-group-append">
                       <button class="btn submitSearchBtn text-white" type="submit">Search</button>
                     </div>
