@@ -21,28 +21,39 @@
   </div>
 </nav>
 -->
-<!doctype html>
 
-<html lang="en">
 
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color:white; height: 60px; border-bottom: 5px solid #EDEDED;" >
-    <a class="navbar-brand" href="#" style="font-size: 22px"><img src="assets\RequirenLogoDraft2.png" width="200" height="175" style="margin-top: 10px; margin-left: 7px" class="img-responsive"></a>
+  <nav class="navbar navbar-expand-lg navbar-light" >
+    <a class="navbar-brand" href="#"><img src="assets\RequirenLogoDraft2.png"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <button class="btn btn-outline-primary my-2 my-sm-0" type="button" routerLink="/login" routerLinkActive="active-link"
-            style="font-size: 18px">Login</button>
-        </li>
-        <li class="nav-item active">
-          <button class="btn btn-outline-primary my-2 my-sm-0" type="button" routerLink="/buyer-register"
-            routerLinkActive="active-link" style="font-size: 18px">Register</button>
+
+        <ul class="primary-nav">
+          <li class="primary-nav-item"><a href="#">Buy</a></li>
+          <li class="primary-nav-item"><a href="#">Sell</a></li>
+          <li class="primary-nav-item"><a href="#">How it works</a></li>
+          <li class="primary-nav-item"><a href="#">Pricing</a></li>
+          <li class="dropdown">
+              <button class="dropbtn dropdown-toggle" data-toggle="dropdown">More</button>
+              <div class="dropdown-content">
+                <a href="#">About Us</a>
+                <a href="#">Reviews</a>
+                <a href="#">Vendors</a>
+                <a href="#">FAQs</a>
+              </div>
+            </li>
+        </ul>
+
+      <ul class="primary-nav ml-auto">
+        <li class="primary-nav">
+          <button class="btn" type="button" routerLink="/login" routerLinkActive="active-link"
+           >Login</button>
         </li>
       </ul>
     </div>
   </nav>
 
-</html>
+
