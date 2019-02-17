@@ -255,7 +255,7 @@ router.post('/addToCart', (req, res, next) => {
 router.get('/retrieveCart', (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
-  var orderTotal, offerPriceTotal, orderFees;
+  var orderTotal = 0, offerPriceTotal = 0, orderFees = 0;
   // Must be a buyer logged in to be able to enter an item to cart
   jwt.verify(token, config.secret, function (err, decoded) {
     if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
@@ -265,17 +265,21 @@ router.get('/retrieveCart', (req, res, next) => {
       if(buyerViewingCart.offerCart == undefined ||  buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
       
       Offer.find({'_id': {$in: buyerViewingCart.offerCart}}, (err, offersInCart) => {
-  
+        var offers = offersInCart;
+
+        //Add entity name to the returned object.
         offersInCart.forEach(function(currentOffer) {
-          offerPriceTotal += currentOffer.price;
+          offerPriceTotal = offerPriceTotal + currentOffer.price;
           Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-           currentOffer['provider'] = SellersOffer.entity_name;
-           console.log(currentOffer);
+            offers.provider = SellersOffer.entity_name;
           });
         });
-        orderFees = offerPriceTotal * 0.10 ; //Add fee calculation here
+        offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
+        orderFees = offerPriceTotal * 0.01 ; //Add fee calculation here
         orderTotal = offerPriceTotal + orderFees;
-        return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderTotal,orderFees});
+        orderFees = Math.round(orderFees * 100) / 100;
+        orderTotal = Math.round(orderTotal * 100) / 100;
+        return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderFees,orderTotal});
       });
     });
   });
