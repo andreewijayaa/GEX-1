@@ -29,8 +29,6 @@ export class BuyerCartComponent implements OnInit {
     this.buyer = this.route.snapshot.data['buyer'];
     this.getCart();
     //this.offerid = this.buyer['data']['offerCart'];
-
-
   }
 
 getCart() {
@@ -49,7 +47,6 @@ getCart() {
   });
 }
   removeOfferFromCart(offerid) {
-
     const offer_ID = {
       offerID : offerid
     }

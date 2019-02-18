@@ -12,10 +12,12 @@ export class SellerAccountComponent implements OnInit {
 
   seller: any;
   seller_id: String;
-  seller_updatedFirstName: String;
-  seller_updatedLastName: String;
+  seller_updatedFirstName = localStorage.getItem('sellerFirstName');
+  seller_updatedLastName = localStorage.getItem('sellerLastName');
   seller_updatedPassword: String;
   errorMessage: String;
+  updateSellerFirstName = localStorage.getItem('sellerFirstName');
+  updateSellerLastName = localStorage.getItem('sellerLastName');
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
@@ -64,8 +66,8 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
       (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
-    } 
-    else { 
+    }
+    else {
       // Could not update profile
     }
   }
@@ -107,16 +109,28 @@ export class SellerAccountComponent implements OnInit {
         "pass": this.seller_updatedPassword
       }
 
-      this.sellerService.updateSellerProfile(update).subscribe((data: any) => {});
-      this.errorMessage = "Account updated successfully! Please log out and log back in.";
-      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
-      (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
-      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
-      (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
-      (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
-      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
-      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
-      return true;
+      this.sellerService.updateSellerProfile(update).subscribe((data: any) => {
+        if (data.success) {
+          localStorage.setItem('sellerFirstName', this.seller_updatedFirstName);
+          localStorage.setItem('sellerLastName', this.seller_updatedLastName);
+          this.updateSellerFirstName = localStorage.getItem('sellerFirstName');
+          this.updateSellerLastName = localStorage.getItem('sellerLastName');
+
+          this.errorMessage = "Account updated successfully!";
+          (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
+          (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
+          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
+          (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
+          return true;
+        }
+        else {
+          this.errorMessage = "Something went wrong. Your information could not be updated. Please refresh the page and try again.";
+          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
+        }
+      });
     }
     return false;
   }
@@ -139,6 +153,6 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
-    (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';  
+    (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
   }
 }

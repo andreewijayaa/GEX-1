@@ -14,7 +14,6 @@ interface ISeller {
     lastName: String
 }
 
-
 @Component({
   selector: 'app-seller-navbar',
   templateUrl: './seller-navbar.component.html',
@@ -24,6 +23,8 @@ export class SellerNavbarComponent implements OnInit {
   private readonly notifier: NotifierService;
   sellerNavbar = {} as ISeller;
   @Input() logout: Boolean;
+  @Input() seller_first_name = localStorage.getItem('sellerFirstName');
+  @Input() seller_last_name = localStorage.getItem('sellerLastName');
 
   constructor(private sellerService: SellerService,
     private storeFetchService: StoreFetchService,
