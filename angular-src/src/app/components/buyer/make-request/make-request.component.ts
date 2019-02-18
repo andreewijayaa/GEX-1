@@ -6,6 +6,10 @@ import { NotifierService } from 'angular-notifier';
 import { BuyerService } from '../../../services/buyer.service';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/MEANstackPractice/master/images.png";
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
+}
+
 @Component({
   selector: 'app-make-request',
   templateUrl: './make-request.component.html',
@@ -14,6 +18,10 @@ const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/MEANsta
 export class MakeRequestComponent implements OnInit {
   private readonly notifier: NotifierService;
   public Editor = ClassicEditor;
+  //for image porcessing
+  selectedFile: ImageSnippet;
+
+  Image_Urls: String[];
 
   // Temp codes for MVP - Kurgan
   codes = [
@@ -151,4 +159,25 @@ export class MakeRequestComponent implements OnInit {
     });
   }
 
+  // By: John
+  // function for updating profile image
+  processFile(imageInput: any){
+    debugger;
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      this.buyerService.addRequestImage(this.selectedFile.file).subscribe(
+        (res) => {
+          this.Image_Urls.push(res["imageUrl"]);
+          debugger;
+        },
+        (err) => {
+
+        })
+    });
+
+    reader.readAsDataURL(file);
+  }
 }

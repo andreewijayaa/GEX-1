@@ -13,6 +13,7 @@ export class BuyerService {
   buyerToken: any;
   buyer: any;
   request: any;
+  requestID: any;
   update: any;
   offer: any;
   offerCartItem: any;
@@ -147,7 +148,7 @@ export class BuyerService {
   //allow user to upload profile picture
   //By John
   setProfilePicture(profilePic: File): Observable<Object>{
-    console.log("profile picutre action taken");
+    //console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -166,6 +167,29 @@ export class BuyerService {
       .pipe(map(res => res));
     }
   }
+
+  //upload images to request
+  addRequestImage(requestPic: File): Observable<Object>{
+    //console.log("profile picutre action taken");
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.buyerToken
+      })
+    };
+    const formData = new FormData();
+
+    formData.append('image', requestPic)
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/requestpicture', formData, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/requestpicture', requestPic)
+      .pipe(map(res => res));
+    }
+  }
+
 
   // Load local token
   loadToken() {

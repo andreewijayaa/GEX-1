@@ -122,7 +122,7 @@ router.get('/profile', (req, res) => {
 
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
 // Route to post request to the DB with the information entered by buyer and also information about the buyer submitting the request
-router.post('/request', (req, res, next) => {
+router.post('/request/:id', (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
 
@@ -138,16 +138,11 @@ router.post('/request', (req, res, next) => {
       deadline: req.body.deadline
     });
     //code added by John to add images to requests
-    /*if (req.file != undefined){
-      singleUpload2(req, res, function(err, some) {
-        if (err) {
-          return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
-        }
-        //console.log(req.file.location);
-        //return res.json({'imageUrl': req.file.location});
-      });
-      request.request_images.push(req.file.location);
-    }*/
+    if (req.body.request_pic != null){
+      request.request_images.pus(req.body.request_pic);
+      console.log("in that if statement");
+    }
+    console.log("past if statement");
     //end of code added by john to add images to request
     // console.log('buyers id is %s', decoded.data._id);
     //Find buyer to attach the request ID to the buyer_requests_byID
@@ -187,6 +182,8 @@ router.post('/request', (req, res, next) => {
   });
 })
 
+//Code to add picutres to request. Testing purposes before adding to add request.post
+//by John
 router.post('/requestpicture', function(req, res) {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
@@ -199,12 +196,7 @@ router.post('/requestpicture', function(req, res) {
       if (!req.body._id){
         return res.status(401).send({ success: false, message:'No request id provided.' });
       }
-      Request.findById(req.body._id, (err, request_pic) => {
-        request_pic.request_images.push(req.file.location);
-        request_pic.save();
-        console.log(request_pic);
         return res.json({'imageUrl': req.file.location});
-      });
     });
   });
 });
