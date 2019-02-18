@@ -39,7 +39,7 @@ export class BuyerComponent implements OnInit {
     });
   }
 
-  getBuyer(){
+  getBuyer() {
     this.buyerService.getBuyerProfile().subscribe((buyerdata: any) => {
       this.buyerProfile = buyerdata;
       console.log(this.buyerProfile);
@@ -52,7 +52,7 @@ export class BuyerComponent implements OnInit {
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
     if (this.buyer == null) {
-     window.location.reload();
+      window.location.reload();
     } else {
       console.log(this.buyer);
     }
@@ -94,15 +94,16 @@ export class BuyerComponent implements OnInit {
     }
 
     this.buyerService.addOfferToBuyerCart(offerToCart).subscribe((data: any) => {
-      if (data.success)
+      if (data.success) {
         var prevItems = localStorage.getItem('buyerCart');
-      var newItem = 1;
-      var newTotalItems = parseInt(prevItems, 10) + newItem;
-      localStorage.setItem('buyerCart', newTotalItems.toString());
-      this.pushItemToNavbar = 1;
-      element.textContent = 'Offer Accepted';
-      element.disabled = true;
-      this.getBuyer();
+        var newItem = 1;
+        var newTotalItems = parseInt(prevItems, 10) + newItem;
+        localStorage.setItem('buyerCart', newTotalItems.toString());
+        this.pushItemToNavbar = 1;
+        element.textContent = 'Offer Accepted';
+        element.disabled = true;
+        this.getBuyer();
+      }
       //(<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
     });
     /*
