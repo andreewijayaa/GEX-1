@@ -139,7 +139,9 @@ if (process.env.NODE_ENV == 'production') {
   });
 }
 app.all('*', function(req, res) {
-  res.redirect("http://localhost:4200/");
+  //res.redirect("http://localhost:4200/");
+  res.redirect("https://powerful-taiga-46416.herokuapp.com/");
+  
 });
 // Start Server
 app.listen(port, () => {

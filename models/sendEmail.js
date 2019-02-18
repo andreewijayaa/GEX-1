@@ -11,8 +11,8 @@ module.exports.sendVerificationEmail = function(user, callback){
     templateId: 'd-479988c021f8483ab911fe7222a9c253',
     dynamic_template_data: {
       name: user.first_name,
-      tokenID: 'http://localhost:4200/postactivation/' + user.confirmationToken,
-      //tokenID: '"https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken,
+      //tokenID: 'http://localhost:4200/postactivation/' + user.confirmationToken,
+      tokenID: '"https://powerful-taiga-46416.herokuapp.com/postactivation/' + user.confirmationToken,
     },
   };
   sgMail.send(msg).then(() => {
@@ -47,16 +47,16 @@ module.exports.NotifySeller= function(seller, request, callback){
     templateId: 'd-33099325b30c4edc940590551c708f87',
     dynamic_template_data: {
       name: seller.first_name,
-      requestID: 'http://localhost:4200/request/' + request._id,
+      //requestID: 'http://localhost:4200/request/' + request._id,
       requestTitle: request.Title,
-      //requestID : 'https://powerful-taiga-46416.herokuapp.com/request/' + requestID,
+      requestID : 'https://powerful-taiga-46416.herokuapp.com/request/' + requestID,
     },
   };
-  console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);
-  /*
+  //console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);
+  
   sgMail.send(msg).then(() => {
   }).catch((error) => {
     console.log('error', error);
   });
-  */
+  
 }
