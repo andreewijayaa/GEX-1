@@ -171,7 +171,6 @@ export class MakeRequestComponent implements OnInit {
       this.buyerService.addRequestImage(this.selectedFile.file).subscribe(
         (res) => {
           this.Image_Urls.push(res["imageUrl"]);
-          debugger;
         },
         (err) => {
 
