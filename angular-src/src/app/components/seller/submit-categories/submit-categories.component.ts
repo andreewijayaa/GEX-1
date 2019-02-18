@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { SellerService } from '../../../services/seller.service';
 import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-submit-categories',
@@ -43,14 +44,23 @@ export class SubmitCategoriesComponent implements OnInit {
   postal_code: String;
   description: any;
   buttonText: String = 'Subscribe to any products on Requiren';
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
-    private router: Router) { this.notifier = notifierService;}
+    private router: Router,
+    private _formBuilder: FormBuilder) { this.notifier = notifierService;}
 
   // On initialization process of the webpage
   ngOnInit() {
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
     this.submitLabels = [];
     this.codeArray = [];
     var LocalArray = new Array();
