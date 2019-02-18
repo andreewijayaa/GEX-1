@@ -22,7 +22,8 @@ interface IBuyer {
 export class BuyerNavbarComponent implements OnInit {
   private readonly notifier: NotifierService;
   @Input() logout: Boolean;
-  @Input() itemAddedToCart = 0;
+  @Input() itemAdded_RemovedCart = 0;
+  @Input() itemRemovedFromCart = 0;
   buyerNavbar: IBuyer;
   totalItemsCart = parseInt(localStorage.getItem('buyerCart'), 10);
 

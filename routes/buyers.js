@@ -300,20 +300,22 @@ router.post('/removeFromCart', (req, res, next) => {
       if(buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
       
       var index = buyerViewingCart.offerCart.indexOf(offer);
-      if(index != -1) {
+      if (index !== -1) {
         if (index > -1) {
           buyerViewingCart.offerCart.splice(index, 1);
         }
-      } else {
+      } 
+      else {
         return res.status(500).send({ success: false, msg: "Offer not found in cart."});
       }
-      
-      if (buyerViewingCart.offerCart.indexOf(offer) == -1) {
+
+      if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
         buyerViewingCart.save((err) => {
           if (err) { return next(err); }
           return res.status(200).send({ success: true, msg: "Offer removed from cart."});
         });
-      } else {
+      } 
+      else {
         return res.status(500).send({ success: false, msg: "Unable to remove offer from cart."});
       }
     });
