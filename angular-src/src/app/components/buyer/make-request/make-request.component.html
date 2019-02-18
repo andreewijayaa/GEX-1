@@ -7,61 +7,55 @@ including the fields and labels.
 -->
 
 <body>
-  <form (submit)="onRequestSubmit()">
-    <div class="container-fluid">
+<form (submit)="onRequestSubmit()">
+  <div class="container-fluid">
 
-      &nbsp;
-      <div class="card">
-        <div class="card-body">
-          <h1>Submit Product Request</h1>
-          <hr>
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="" placeholder="Request Title">
-            </div>
+    &nbsp;
+    <div class="card">
+      <div class="card-body">
+          <h1>Submit Product Request</h1><hr>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <input class="form-control mr-sm-2" type="text" [(ngModel)]="title" name="title" value="" placeholder="Request Title">
           </div>
-          <label class="col-sm-12" style="font-weight: bold">Which category does your request fall under:</label>
-          <div class="container-fluid" style="position: relative; right: 4%">
-            &nbsp;
-            <ul class="checkbox-grid" *ngFor="let code of codes" id="otis">
+        </div>
+        <label class="col-sm-12">Which category does your request fall under:</label>
+        <div class="form-group row">
+            <ul *ngFor="let code of codes" id="otis">
               <li>
-                <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)" />
-                <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
-                <label id="piclabel">{{code.name}}</label>
-              </li>
-            </ul>
-            &nbsp;
+              <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
+              <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
+              <label id="piclabel">{{code.name}}</label>
+            </li>
+          </ul>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <ckeditor [editor]="Editor" [(ngModel)]="description" name="description" placeholder="product discription..."></ckeditor>
           </div>
-          &nbsp;
-          <div>
-            &nbsp;
-            <div class="col-sm-12">
-              &nbsp;
-              <ckeditor [editor]="Editor" [(ngModel)]="description" name="description" placeholder="product discription..."></ckeditor>
-            </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <br>
+            <select class="dropdown" id="selectDeadline" (change)="onChange($event)" >
+              <option>Select deadline...</option>
+              <option value="2days">2 days from today</option>
+              <option value="5days">5 days from today</option>
+              <option value="1week">1 week from today</option>
+            </select>
           </div>
-          <div class="form-group row">
-            <div class="col-sm-10">
-              <br>
-              <select class="dropdown" id="selectDeadline" (change)="onChange($event)">
-                <option>Select deadline...</option>
-                <option value="2days">2 days from today</option>
-                <option value="5days">5 days from today</option>
-                <option value="1week">1 week from today</option>
-              </select>
-            </div>
-          </div>
-          <hr>
-          <div class="form-group row">
-            <div class="col-sm-12" style="text-align: right;">
-              <button type="submit" class="btn">{{buttonText}}</button>
-            </div>
+        </div>
+        <hr>
+        <div class="form-group row">
+          <div class="col-sm-12" style="text-align: right;">
+            <button type="submit" class="btn-block btn-primary">{{buttonText}}</button>
           </div>
         </div>
       </div>
-      <div class="clearfooter"></div>
     </div>
-  </form>
+    <div class="clearfooter"></div>
+  </div>
+</form>
 </body>
 <!--
 <html>
