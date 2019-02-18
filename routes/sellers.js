@@ -279,21 +279,21 @@ router.post('/addCode', (req, res) => {
   var token = req.headers['x-access-token'];
 
   //if they don't have a token
-  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  if (!token) return res.status(401).send({ success: false, message:'Invalid Access.' });
   console.log('add code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
-      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+      if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
       delete decoded.data.password;
       if (req.body.codes == null){
         return res.status(500).send({ success: false, message: "Code is null"});
       }
       Seller.findById(decoded.data._id, (err, seller_adding_codes) => {
         if (err) return handleError(err);
-        seller_adding_codes.codes.push(req.body.codes);
+        seller_adding_codes.codes = req.body.codes;
         seller_adding_codes.save((err) =>{
           if (err) { return next(err); }
-          res.json({success: true, msg:"Succesfully added code to account!"});
+          res.json({success: true, msg:"Goods/Services Updated Successfully!"});
         });
       });
   });

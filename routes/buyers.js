@@ -113,6 +113,7 @@ router.get('/profile', (req, res) => {
   });
 });
 
+
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
 // Route to post request to the DB with the information entered by buyer and also information about the buyer submitting the request
 router.post('/request', (req, res, next) => {
@@ -248,6 +249,26 @@ router.post('/addToCart', (req, res, next) => {
     });
   });
 
+});
+
+// Retrieve Cart with offers as objects
+router.get('/retrieveCart', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
+
+  // Must be a buyer logged in to be able to enter an item to cart
+  jwt.verify(token, config.secret, function (err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
+
+    Buyer.findById( decoded.data._id, (err, buyerViewingCart) => {
+      if (err) return handleError(err);
+      if(buyerViewingCart.offerCart == undefined ||  buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
+      
+      Offer.find({'_id': {$in: buyerViewingCart.offerCart}}, (err, offersInCart) => {
+        return res.status(200).send({ success: true, offersInCart});
+      });
+    });
+  });
 });
 
 //Email Verification - RONI

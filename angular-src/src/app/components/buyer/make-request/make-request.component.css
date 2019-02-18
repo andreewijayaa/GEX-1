@@ -133,3 +133,9 @@
     box-shadow: 0 0 50px #90ee90;
     z-index: -1;
   }
+
+  .checkbox-grid li {
+    display: block;
+    float: left;
+    width: 25%;
+}

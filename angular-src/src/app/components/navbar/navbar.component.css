@@ -1,35 +1,99 @@
-/*
-.navbar-brand{
-  max-height: 30px;
-  max-width: 30%;
-  overflow: visible;
-  padding: 0;
 
-}
-
-.logForm {
-  list-style-type: none;
+.navbar {
   margin: 0;
-  padding: 0;
+  background-color:white;
+  height: 80px;
+  position: absulote;
+  border: 1px;
+}
+
+.navbar-brand{
+  max-height: 200px;
+  max-width: 200px;
+  max-width: 30%;
   overflow: hidden;
-}
-
-
-.nav-item2{
-
-  float: left;
-  list-style-type: none;
-  font-size: 18px;
-  padding-top: 0;
+  padding: 0;
+  text-align: center;
+  position: relative;
 
 }
-
-.nav-item2 a:hover {
-  background-color: lightgray;
-}
-*/
 
 .navbar-nav > li{
   padding-left:10px;
   padding-right:10px;
+}
+
+ul {
+  list-style: none;
+  display: inline-flex;
+  margin-top: 12px;
+  text-align: center;
+
+}
+a {
+  text-decoration: none;
+  color: black;
+
+}
+
+.primary-nav-item {
+  list-style: none;
+  display: inline-flex;
+  padding: 12px;
+
+}
+
+.dropbtn , .btn{
+
+  color: black;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content{
+  display: block;
+}
+.primary-nav:hover .primary-nav-item {
+  display: block;
+
+}
+
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: #81aee2;
+}
+.btn:hover {
+  background-color: rgb(193, 230, 193);
 }
