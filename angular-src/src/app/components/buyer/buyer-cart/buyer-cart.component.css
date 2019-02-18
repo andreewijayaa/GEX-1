@@ -1,4 +1,17 @@
 .clearfooter {
-    height: 800px;
+    height: 400px;
     clear: both;
+  }
+
+  .clearheader {
+    height: 120px;
+    clear: both;
+  }
+
+  ul {
+    list-style-type: none;
+    }
+  
+  button[type=removeButton]:hover {
+    text-decoration: underline;
   }

@@ -74,6 +74,21 @@ export class BuyerComponent implements OnInit {
   }
 
   acceptOffer() {
+    const offer_id = document.getElementById('offerId').innerHTML;
+    const offerToCart = {
+      offerID: offer_id
+    }
+
+    this.buyerService.addOfferToBuyerCart(offerToCart).subscribe((data: any) => {
+      if (data.success)
+        var prevItems = localStorage.getItem('buyerCart');
+      var newItem = 1;
+      var newTotalItems = parseInt(prevItems, 10) + newItem;
+      localStorage.setItem('buyerCart', newTotalItems.toString());
+      this.pushItemToNavbar = 1;
+      (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
+    });
+    /*
     const dialogRef = this.dialog.open(AcceptOfferDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -93,6 +108,7 @@ export class BuyerComponent implements OnInit {
           (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
        });
     });
+    */
   }
 }
 
