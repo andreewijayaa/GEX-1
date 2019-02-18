@@ -46,6 +46,9 @@ export class SubmitCategoriesComponent implements OnInit {
   buttonText: String = 'Subscribe to any products on Requiren';
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  first: Boolean;
+  second: Boolean;
+  third: Boolean;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -55,6 +58,10 @@ export class SubmitCategoriesComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+    // for the steps
+    this.first = false;
+    this.second = false;
+    this.third = false;
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -62,29 +69,13 @@ export class SubmitCategoriesComponent implements OnInit {
       secondCtrl: ['', Validators.required]
     });
     this.submitLabels = [];
-    this.codeArray = [];
-    var LocalArray = new Array();
     this.None = false;
     // Get seller codes
     this.sellerService.getCode().subscribe((data: any) => {
       if (data.success) {
         if (data.codeList.length === 0) { // Seller does not have any codes yet
-          this.None = true;
         } else {
-          this.codeList = data.codeList;
-          this.None = false;
-          var i, j = 0;
-          // Retrieve all seller current codes
-          // FOR MVP ONLY, will find a better and suffiecent way to perform this
-          for (i = 0; i < this.codeList.length; i++) {
-
-            for (j = 0; j < this.codes.length; j++) {
-              if (this.codes[j].code === this.codeList[i]) {
-                LocalArray.push(this.codes[j].name);
-            }
-            }
-          }
-          this.codeNames = LocalArray;
+          this.codeArray = data.codeList;
         }
       }
     });
@@ -193,7 +184,7 @@ export class SubmitCategoriesComponent implements OnInit {
 
   AddCode() {
     const code = {
-      codes: this.code
+      codes: this.codeArray
     };
 
     this.sellerService.setNewCode(code).subscribe((data: any) => {
@@ -266,7 +257,7 @@ export class SubmitCategoriesComponent implements OnInit {
     };
 
     const code = {
-      codes: this.code
+      codes: this.codeArray
     };
 
     // adding code
