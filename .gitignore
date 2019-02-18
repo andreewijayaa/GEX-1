@@ -4,7 +4,7 @@
 /dist
 /tmp
 /out-tsc
-/public
+
 /node_modulesgit 
 node_modules
 npm-debug.log
