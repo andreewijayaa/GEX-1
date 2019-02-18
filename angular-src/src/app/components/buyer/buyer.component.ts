@@ -21,8 +21,7 @@ export class BuyerComponent implements OnInit {
   offerList: Object;
   offerTitleAddToCart: String;
   pushItemToNavbar = 0;
-  offerCart: [String] = [""];
-
+  //offerCart: [String] = [""];
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router,
@@ -67,7 +66,7 @@ export class BuyerComponent implements OnInit {
       if (data.success) {
         this.offerList = data.offers;
         //this.offerCart = this.buyerProfile.data.offerCart;
-        console.log(this.offerCart);
+        //console.log(this.offerCart);
 
         // used to distinguish between if buyer is viewing the request or a seller
         // to limit access
