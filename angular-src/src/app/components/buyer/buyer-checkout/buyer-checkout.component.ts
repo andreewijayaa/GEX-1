@@ -31,6 +31,9 @@ export class BuyerCheckoutComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
+  offersInCart: [String];
+  emptyCart: Boolean;
+  orderFees: Number;
 
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
 
@@ -67,11 +70,24 @@ export class BuyerCheckoutComponent implements OnInit {
     private _formBuilder: FormBuilder) {  this.notifier = notifierService; }
 
   ngOnInit() {
-    this.buyer = this.route.snapshot.data['buyer'];
+    //this.buyer = this.route.snapshot.data['buyer'];
+    this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
+      if (data.success) {
+        this.emptyCart = false;
+        this.offersInCart = data.offersInCart;
+        this.offerPriceDisplay = data.offerPriceTotal;
+        this.orderFees = data.orderFees;
+        this.totalPrice = data.orderTotal;
+      } else {
+        this.notifier.notify('warning', 'Must accept offers to checkout.');
+        this.router.navigate(['/buyer']);
+      }
+    });
+
     this.stripeTest = this.fb.group({
       name: ['', [Validators.required]]
     });
-    this.fetchEvent()
+    //this.fetchEvent()
 
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]

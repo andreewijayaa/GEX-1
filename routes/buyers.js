@@ -265,14 +265,15 @@ router.get('/retrieveCart', (req, res, next) => {
       if(buyerViewingCart.offerCart == undefined ||  buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
       
       Offer.find({'_id': {$in: buyerViewingCart.offerCart}}, (err, offersInCart) => {
+        if (err) return res.status(500).send({ success: false, message: 'Offer not found.' });
         var offers = offersInCart;
 
         //Add entity name to the returned object.
         offersInCart.forEach(function(currentOffer) {
           offerPriceTotal = offerPriceTotal + currentOffer.price;
-          Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-            offers.provider = SellersOffer.entity_name;
-          });
+          //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
+            //offers.provider = SellersOffer.entity_name;
+          //});
         });
         offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
         orderFees = offerPriceTotal * 0.01 ; //Add fee calculation here
@@ -287,6 +288,7 @@ router.get('/retrieveCart', (req, res, next) => {
 
 // Retrieve Cart with offers as objects
 router.post('/removeFromCart', (req, res, next) => {
+  
   var token = req.headers['x-access-token'];
   const offer = req.body.offerID;
   if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });

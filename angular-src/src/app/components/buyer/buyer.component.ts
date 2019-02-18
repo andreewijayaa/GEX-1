@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material';
 })
 export class BuyerComponent implements OnInit {
   buyer: Object;
+  buyerProfile: Object;
   requestList: Object;
   loaded: Promise<boolean>;
   loading: Boolean;
@@ -20,7 +21,7 @@ export class BuyerComponent implements OnInit {
   offerList: Object;
   offerTitleAddToCart: String;
   pushItemToNavbar = 0;
-
+  offerCart: [String] = [""];
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router,
@@ -32,8 +33,16 @@ export class BuyerComponent implements OnInit {
 
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
+    this.getBuyer();
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
       this.requestList = requests;
+    });
+  }
+
+  getBuyer(){
+    this.buyerService.getBuyerProfile().subscribe((buyerdata: any) => {
+      this.buyerProfile = buyerdata;
+      console.log(this.buyerProfile);
     });
   }
 
@@ -43,7 +52,7 @@ export class BuyerComponent implements OnInit {
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
     if (this.buyer == null) {
-      // window.location.reload();
+     window.location.reload();
     } else {
       console.log(this.buyer);
     }
@@ -51,10 +60,14 @@ export class BuyerComponent implements OnInit {
 
   expanded(id: any) {
     let requestId = id;
+    this.getBuyer();
     // Make a call to retrieve request information with all offers to that request
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
+        this.offerCart = this.buyerProfile.data.offerCart;
+        console.log(this.offerCart);
+
         // used to distinguish between if buyer is viewing the request or a seller
         // to limit access
         if (data.status === 0) {
@@ -71,10 +84,11 @@ export class BuyerComponent implements OnInit {
         //this.router.navigate(['/']);
       }
     });
+    this.getBuyer();
   }
 
-  acceptOffer() {
-    const offer_id = document.getElementById('offerId').innerHTML;
+  acceptOffer(element, offer_id) {
+    //const offer_id = document.getElementById('offerId').innerHTML;
     const offerToCart = {
       offerID: offer_id
     }
@@ -86,7 +100,10 @@ export class BuyerComponent implements OnInit {
       var newTotalItems = parseInt(prevItems, 10) + newItem;
       localStorage.setItem('buyerCart', newTotalItems.toString());
       this.pushItemToNavbar = 1;
-      (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
+      element.textContent = 'Offer Accepted';
+      element.disabled = true;
+      this.getBuyer();
+      //(<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
     });
     /*
     const dialogRef = this.dialog.open(AcceptOfferDialogComponent);

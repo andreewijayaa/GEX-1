@@ -56,7 +56,7 @@ const appRoutes: Routes = [
   {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
   {path: 'buyer/cart', component: BuyerCartComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
-  {path: 'buyer/checkout/:offerId/:requestId', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard],
+  {path: 'buyer/checkout/', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard],
         resolve: { buyer: BuyerResolve }},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve}},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
