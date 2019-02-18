@@ -30,7 +30,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
@@ -47,7 +47,7 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      if (isDevMode()) {
+      if (process.env.NODE_ENV !== 'production') {
         return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
           .pipe(map(res => res));
       } else {
@@ -68,7 +68,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/buyers/request', httpOptions)
         .pipe(map(res => res));
     } else {
@@ -85,7 +85,7 @@ export class BuyerService {
         'Content-Type': 'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -101,7 +101,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/buyers/addToCart', offerCartItem, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -118,7 +118,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/buyers/retrieveCart', httpOptions)
         .pipe(map(res => res));
     } else {
@@ -136,7 +136,7 @@ export class BuyerService {
       })
     };
     console.log(offer);
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -154,7 +154,7 @@ export class BuyerService {
       })
     };
     console.log(offerID);
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
         .pipe(map(res => res));
     } else {

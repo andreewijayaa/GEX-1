@@ -13,16 +13,17 @@ export class RegisterService {
 
   // Buyer Register Service
   RegisterBuyer(buyer) {
+    console.log('Inside Buyer Register');
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     };
-    if (isDevMode()) {
-      console.log("YEAHHH DEV MODE IS WORKING");
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
+      console.log('Inside Buyer Register');
       return this.http.post('buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
     }
@@ -35,7 +36,7 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -46,7 +47,7 @@ export class RegisterService {
 
   // Buyer email activation through link, pass in the token with the function call
   activateAccount(token) {
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/buyers/confirmEmail/' + token, token)
       .pipe(map(res => res));
     } else {
@@ -56,7 +57,7 @@ export class RegisterService {
   }
   // Seller email activation through link, pass in the token with the function call
   selleractivateAccount(token) {
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/confirmEmail/' + token, token)
       .pipe(map(res => res));
     } else {

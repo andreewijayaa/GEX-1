@@ -31,7 +31,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('sellers/profile', httpOptions).pipe(map(res => res));
@@ -48,7 +48,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions).pipe(map(res => res));
     } else {
       // This will return json file fetched from database
@@ -66,7 +66,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -84,7 +84,7 @@ export class SellerService {
         'Content-Type': 'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/update', seller, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -103,7 +103,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -122,7 +122,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
       .pipe(map(res => res));
     } else {
@@ -142,7 +142,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
     } else {
     // This will return json file fetched from database
@@ -160,7 +160,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/addDescription', description, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -179,7 +179,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
       .pipe(map(res => res));
     } else {

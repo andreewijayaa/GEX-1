@@ -23,7 +23,7 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -39,7 +39,7 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV !== 'production') {
       return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
       .pipe(map(res => res));
     } else {
