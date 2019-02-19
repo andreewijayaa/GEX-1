@@ -29,8 +29,8 @@
           &nbsp;
 					<div class="container-fluid" style="position: relative; right: 4%">
             <ul class="checkbox-grid" *ngFor="let code of codes" id="otis">
-              <li *ngIf = "codeList != undefined">
-                <div *ngIf="codeList.indexOf(code.code) !== -1">
+              <li *ngIf = "codeArray != undefined">
+                <div *ngIf="codeArray.indexOf(code.code) !== -1">
                   <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)" checked/>
                   <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
                   <label id="piclabel">{{code.name}}</label>

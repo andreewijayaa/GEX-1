@@ -1,4 +1,4 @@
-<app-buyer-navbar [itemAddedToCart]="pushItemToNavbar"></app-buyer-navbar>
+<app-buyer-navbar [itemAdded_RemovedCart]="pushItemToNavbar"></app-buyer-navbar>
 
 <div class="clearheader"></div>
 
@@ -111,9 +111,15 @@ Bryan Vu contributed most of this buyer portal page.
               <mat-panel-title id="offerDescription">
                 {{offer.description}}
               </mat-panel-title>
+              <!--
+              <mat-panel-title *ngIf="offerCart.indexOf(offer._id) === -1" style="margin-left: 85%">
+                <button mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
+              </mat-panel-title>
+              <mat-panel-title *ngIf="offerCart.indexOf(offer._id) !== -1" style="margin-left: 85%">
+                <button [disabled]="true" mat-button style="background-color: #006400; color: white;">Offer In Cart</button>
+              </mat-panel-title>-->
               <mat-panel-title style="margin-left: 85%">
-                <button mat-button (click)="acceptOffer()" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept
-                  Offer</button>
+                <button mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
               </mat-panel-title>
               &nbsp;
             </div>

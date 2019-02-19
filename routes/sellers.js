@@ -90,6 +90,7 @@ router.post('/update', (req, res /*next*/) => {
         });
       });
       updated.save();
+      res.json({success: true});
     }
   });
 });

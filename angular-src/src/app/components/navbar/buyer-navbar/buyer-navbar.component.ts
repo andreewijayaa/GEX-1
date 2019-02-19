@@ -22,7 +22,9 @@ interface IBuyer {
 export class BuyerNavbarComponent implements OnInit {
   private readonly notifier: NotifierService;
   @Input() logout: Boolean;
-  @Input() itemAddedToCart = 0;
+  @Input() itemAdded_RemovedCart = 0;
+  @Input() buyer_first_name = localStorage.getItem('buyerFirstName');
+  @Input() buyer_last_name = localStorage.getItem('buyerLastName');
   buyerNavbar: IBuyer;
   totalItemsCart = parseInt(localStorage.getItem('buyerCart'), 10);
 

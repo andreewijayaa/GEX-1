@@ -17,6 +17,7 @@ export class BuyerService {
   update: any;
   offer: any;
   offerCartItem: any;
+  offerID: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -190,6 +191,23 @@ export class BuyerService {
     }
   }
 
+  removeOfferFromCart(offerID) {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    console.log(offerID);
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/removeFromCart', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
 
   // Load local token
   loadToken() {
