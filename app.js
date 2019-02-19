@@ -5,7 +5,7 @@ public so this will ensure the secret key is hidden.
 If we are in development mode then it will not hide the stripe secret key.
 */
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV != 'production') {
   require('dotenv').load();
 }
 

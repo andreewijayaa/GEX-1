@@ -19,7 +19,7 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV != 'production') {
       return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -36,7 +36,7 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV != 'production') {
       return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -47,7 +47,7 @@ export class RegisterService {
 
   // Buyer email activation through link, pass in the token with the function call
   activateAccount(token) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV != 'production') {
       return this.http.post('http://localhost:3000/buyers/confirmEmail/' + token, token)
       .pipe(map(res => res));
     } else {
@@ -57,7 +57,7 @@ export class RegisterService {
   }
   // Seller email activation through link, pass in the token with the function call
   selleractivateAccount(token) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV != 'production') {
       return this.http.post('http://localhost:3000/sellers/confirmEmail/' + token, token)
       .pipe(map(res => res));
     } else {
