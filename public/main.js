@@ -1299,7 +1299,7 @@ module.exports = " body {\r\n  -webkit-touch-callout: none;\r\n  -webkit-text-si
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-buyer-navbar></app-buyer-navbar>\r\n\r\n<div class=\"clearheader\"></div>\r\n\r\n<!--Bryan Vu contributed to much of the buyer product request form,\r\nincluding the fields and labels.\r\n-->\r\n\r\n<body>\r\n<form (submit)=\"onRequestSubmit()\">\r\n  <div class=\"container-fluid\">\r\n\r\n    &nbsp;\r\n    <div class=\"card\">\r\n      <div class=\"card-body\">\r\n          <h1>Submit Product Request</h1><hr>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-12\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" [(ngModel)]=\"title\" name=\"title\" value=\"\" placeholder=\"Request Title\">\r\n          </div>\r\n        </div>\r\n        <label class=\"col-sm-12\">Which category does your request fall under:</label>\r\n        <div class=\"form-group row\">\r\n            <ul *ngFor=\"let code of codes\" id=\"otis\">\r\n              <li>\r\n              <input type=\"checkbox\" name=\"code\" value={{code.code}} id={{code.code}} (change)=\"onCheckboxChange(code,$event)\"/>\r\n              <label id=\"piclabel\" for={{code.code}}><img src={{code.image}} /></label>\r\n              <label id=\"piclabel\">{{code.name}}</label>\r\n            </li>\r\n          </ul>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-12\">\r\n            <ckeditor [editor]=\"Editor\" [(ngModel)]=\"description\" name=\"description\" placeholder=\"product discription...\"></ckeditor>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-10\">\r\n            <br>\r\n            <select class=\"dropdown\" id=\"selectDeadline\" (change)=\"onChange($event)\" >\r\n              <option>Select deadline...</option>\r\n              <option value=\"2days\">2 days from today</option>\r\n              <option value=\"5days\">5 days from today</option>\r\n              <option value=\"1week\">1 week from today</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n        <hr>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-12\" style=\"text-align: right;\">\r\n            <button type=\"submit\" class=\"btn-block btn-primary\">{{buttonText}}</button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"clearfooter\"></div>\r\n  </div>\r\n</form>\r\n</body>\r\n<!--\r\n<html>\r\n <head>\r\n  <title>Webslesson Tutorial | Search HTML Table Data by using JQuery</title>\r\n  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js\"></script>\r\n  <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" />\r\n  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>\r\n  <style>\r\n  #result {\r\n   position: absolute;\r\n   width: 100%;\r\n   max-width:870px;\r\n   cursor: pointer;\r\n   overflow-y: auto;\r\n   max-height: 400px;\r\n   box-sizing: border-box;\r\n   z-index: 1001;\r\n  }\r\n  .link-class:hover{\r\n   background-color:#f1f1f1;\r\n  }\r\n  </style>\r\n </head>\r\n <body>\r\n  <br /><br />\r\n  <div class=\"container\" style=\"width:900px;\">\r\n   <h2 align=\"center\">JSON Live Data Search using Ajax JQuery</h2>\r\n   <h3 align=\"center\">Employee Data</h3>\r\n   <br /><br />\r\n   <div align=\"center\">\r\n    <input type=\"text\" name=\"search\" id=\"search\" placeholder=\"Search Employee Details\" class=\"form-control\" />\r\n   </div>\r\n   <ul class=\"list-group\" id=\"result\"></ul>\r\n   <br />\r\n  </div>\r\n </body>\r\n</html>\r\n<script>\r\n\r\n$(document).ready(function(){\r\n  const Http = new XMLHttpRequest();\r\n  const url='http://localhost:3000/codes/getCodes';\r\n  Http.open(\"GET\", url);\r\n  Http.send();\r\n  Http.onreadystatechange=(e)=>{\r\n    console.log(Http.responseText)\r\n $.ajaxSetup({ cache: false });\r\n $('#search').keyup(function(){\r\n  $('#result').html('');\r\n  $('#state').val('');\r\n  var searchField = $('#search').val();\r\n  var expression = new RegExp(searchField, \"i\");\r\n  var file = Http.responseText;\r\n  $.getJSON('file', function(data) {\r\n   $.each(data, function(key, value){\r\n    if (value.code_description.search(expression) != -1)\r\n    {\r\n     $('#result').append('<li class=\"list-group-item link-class\">'+value.code_description+' | <span class=\"text-muted\">'+value.code_number+'</span></li>');\r\n    }\r\n   });\r\n  });\r\n });\r\n}\r\n $('#result').on('click', 'li', function() {\r\n  var click_text = $(this).text().split('|');\r\n  $('#search').val($.trim(click_text[0]));\r\n  $(\"#result\").html('');\r\n });\r\n});\r\n</script>\r\n-->\r\n"
+module.exports = "<app-buyer-navbar></app-buyer-navbar>\r\n\r\n<div class=\"clearheader\"></div>\r\n\r\n<!--Bryan Vu contributed to much of the buyer product request form,\r\nincluding the fields and labels.\r\n-->\r\n\r\n<body>\r\n<form (submit)=\"onRequestSubmit()\">\r\n  <div class=\"container-fluid\">\r\n\r\n    &nbsp;\r\n    <div class=\"card\">\r\n      <div class=\"card-body\">\r\n          <h1>Submit Product Request</h1><hr>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-12\">\r\n            <input class=\"form-control mr-sm-2\" type=\"text\" [(ngModel)]=\"title\" name=\"title\" value=\"\" placeholder=\"Request Title\">\r\n          </div>\r\n        </div>\r\n        <label class=\"col-sm-12\">Which category does your request fall under:</label>\r\n        <div class=\"form-group row\">\r\n            <ul *ngFor=\"let code of codes\" id=\"otis\">\r\n              <li>\r\n              <input type=\"checkbox\" name=\"code\" value={{code.code}} id={{code.code}} (change)=\"onCheckboxChange(code,$event)\"/>\r\n              <label id=\"piclabel\" for={{code.code}}><img src={{code.image}} /></label>\r\n              <label id=\"piclabel\">{{code.name}}</label>\r\n            </li>\r\n          </ul>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-12\">\r\n            <ckeditor [editor]=\"Editor\" [(ngModel)]=\"description\" name=\"description\" placeholder=\"product discription...\"></ckeditor>\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-10\">\r\n            <br>\r\n            <select class=\"dropdown\" id=\"selectDeadline\" (change)=\"onChange($event)\" >\r\n              <option>Select deadline...</option>\r\n              <option value=\"2days\">2 days from today</option>\r\n              <option value=\"5days\">5 days from today</option>\r\n              <option value=\"1week\">1 week from today</option>\r\n            </select>\r\n          </div>\r\n        </div>\r\n        <hr>\r\n        <div class=\"form-group row\">\r\n          <div class=\"col-sm-12\" style=\"text-align: right;\">\r\n            <button type=\"submit\" class=\"btn-block btn-primary\">{{buttonText}}</button>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"clearfooter\"></div>\r\n  </div>\r\n</form>\r\n</body>\r\n<!--\r\n<html>\r\n <head>\r\n  <title>Webslesson Tutorial | Search HTML Table Data by using JQuery</title>\r\n  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js\"></script>\r\n  <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" />\r\n  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>\r\n  <style>\r\n  #result {\r\n   position: absolute;\r\n   width: 100%;\r\n   max-width:870px;\r\n   cursor: pointer;\r\n   overflow-y: auto;\r\n   max-height: 400px;\r\n   box-sizing: border-box;\r\n   z-index: 1001;\r\n  }\r\n  .link-class:hover{\r\n   background-color:#f1f1f1;\r\n  }\r\n  </style>\r\n </head>\r\n <body>\r\n  <br /><br />\r\n  <div class=\"container\" style=\"width:900px;\">\r\n   <h2 align=\"center\">JSON Live Data Search using Ajax JQuery</h2>\r\n   <h3 align=\"center\">Employee Data</h3>\r\n   <br /><br />\r\n   <div align=\"center\">\r\n    <input type=\"text\" name=\"search\" id=\"search\" placeholder=\"Search Employee Details\" class=\"form-control\" />\r\n   </div>\r\n   <ul class=\"list-group\" id=\"result\"></ul>\r\n   <br />\r\n  </div>\r\n </body>\r\n</html>\r\n<script>\r\n\r\n$(document).ready(function(){\r\n  const Http = new XMLHttpRequest();\r\n  const url='codes/getCodes';\r\n  Http.open(\"GET\", url);\r\n  Http.send();\r\n  Http.onreadystatechange=(e)=>{\r\n    console.log(Http.responseText)\r\n $.ajaxSetup({ cache: false });\r\n $('#search').keyup(function(){\r\n  $('#result').html('');\r\n  $('#state').val('');\r\n  var searchField = $('#search').val();\r\n  var expression = new RegExp(searchField, \"i\");\r\n  var file = Http.responseText;\r\n  $.getJSON('file', function(data) {\r\n   $.each(data, function(key, value){\r\n    if (value.code_description.search(expression) != -1)\r\n    {\r\n     $('#result').append('<li class=\"list-group-item link-class\">'+value.code_description+' | <span class=\"text-muted\">'+value.code_number+'</span></li>');\r\n    }\r\n   });\r\n  });\r\n });\r\n}\r\n $('#result').on('click', 'li', function() {\r\n  var click_text = $(this).text().split('|');\r\n  $('#search').val($.trim(click_text[0]));\r\n  $(\"#result\").html('');\r\n });\r\n});\r\n</script>\r\n-->\r\n"
 
 /***/ }),
 
@@ -3503,7 +3503,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var AuthService = /** @class */ (function () {
     function AuthService(http) {
         this.http = http;
@@ -3515,14 +3514,11 @@ var AuthService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('buyers/login', buyer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Seller Authenticate Service
     AuthService.prototype.AuthenticateSeller = function (seller) {
@@ -3531,14 +3527,11 @@ var AuthService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('sellers/login', seller, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     AuthService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -3625,7 +3618,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var BuyerService = /** @class */ (function () {
     function BuyerService(http, router) {
         this.http = http;
@@ -3640,12 +3632,10 @@ var BuyerService = /** @class */ (function () {
                 'x-access-token': this.buyerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.get('buyers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Buyer Request submission service - Roni
     BuyerService.prototype.postBuyerRequest = function (request) {
@@ -3657,14 +3647,11 @@ var BuyerService = /** @class */ (function () {
                     'x-access-token': this.buyerToken
                 })
             };
-            if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-                return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
-                    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-            }
-            else {
+            if (true) {
                 return this.http.post('buyers/request', request, httpOptions)
                     .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
             }
+            else {}
         }
         else {
             this.router.navigate(['/buyer']);
@@ -3679,14 +3666,11 @@ var BuyerService = /** @class */ (function () {
                 'x-access-token': this.buyerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/buyers/request', httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.get('buyers/request', httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // By: Omar
     // Update current buyers profile
@@ -3696,14 +3680,11 @@ var BuyerService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('buyers/update', buyer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     BuyerService.prototype.addOfferToBuyerCart = function (offerCartItem) {
         var httpOptions = {
@@ -3712,14 +3693,11 @@ var BuyerService = /** @class */ (function () {
                 'x-access-token': this.buyerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/buyers/addToCart', offerCartItem, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // By Roni
     // Retreive buyer shopping cart
@@ -3730,14 +3708,11 @@ var BuyerService = /** @class */ (function () {
                 'x-access-token': this.buyerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/buyers/retrieveCart', httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.get('buyers/retrieveCart', httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // By: Omar
     // Sends the checkout information to server checkout route in app.js
@@ -3748,14 +3723,11 @@ var BuyerService = /** @class */ (function () {
             })
         };
         console.log(offer);
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('checkout', offer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     BuyerService.prototype.removeOfferFromCart = function (offerID) {
         var httpOptions = {
@@ -3765,14 +3737,11 @@ var BuyerService = /** @class */ (function () {
             })
         };
         console.log(offerID);
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('buyers/removeFromCart', offerID, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Load local token
     BuyerService.prototype.loadToken = function () {
@@ -3824,27 +3793,23 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var RegisterService = /** @class */ (function () {
     function RegisterService(http) {
         this.http = http;
     }
     // Buyer Register Service
     RegisterService.prototype.RegisterBuyer = function (buyer) {
+        console.log('Inside Buyer Register');
         var httpOptions = {
             headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
                 'Content-Type': 'application/json'
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            console.log("YEAHHH DEV MODE IS WORKING");
-            return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('buyers/register', buyer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Seller Register Service
     RegisterService.prototype.RegisterSeller = function (seller) {
@@ -3853,36 +3818,27 @@ var RegisterService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('sellers/register', seller, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Buyer email activation through link, pass in the token with the function call
     RegisterService.prototype.activateAccount = function (token) {
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/buyers/confirmEmail/' + token, token)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('buyers/confirmEmail/' + token, token)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Seller email activation through link, pass in the token with the function call
     RegisterService.prototype.selleractivateAccount = function (token) {
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/confirmEmail/' + token, token)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('sellers/confirmEmail/' + token, token)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     RegisterService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -3923,7 +3879,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var RequestService = /** @class */ (function () {
     function RequestService(http, router) {
         this.http = http;
@@ -3939,14 +3894,11 @@ var RequestService = /** @class */ (function () {
             })
         };
         // Call back-end route to retrieve request data
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/requests/' + id, id, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.post('requests/' + id, id, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Load user logged in token
     RequestService.prototype.loadToken = function () {
@@ -4039,7 +3991,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var SellerService = /** @class */ (function () {
     function SellerService(http) {
         this.http = http;
@@ -4060,12 +4011,10 @@ var SellerService = /** @class */ (function () {
             })
         };
         // This will return json file fetched from database
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
+        if (true) {
             return this.http.get('sellers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Service to fetch offers history of the logged in user (front-end to back-end connection)
     SellerService.prototype.getSellerOffersHistory = function () {
@@ -4077,13 +4026,10 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
-            // This will return json file fetched from database
+        if (true) {
             return this.http.get('sellers/viewoffers', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
     SellerService.prototype.postOffer = function (comingOffer, requestID) {
@@ -4095,15 +4041,11 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
-            // This will return json file fetched from database
+        if (true) {
             return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // By: Omar
     // Update current sellers profile
@@ -4113,14 +4055,11 @@ var SellerService = /** @class */ (function () {
                 'Content-Type': 'application/json'
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/update', seller, httpOptions)
+        if (true) {
+            return this.http.post('sellers/update', seller, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
-        else {
-            return this.http.post('seller/update', seller, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
+        else {}
     };
     // Service to post a new code for a seller to subscribe to a specific product code (front-end to back-end connection)
     SellerService.prototype.setNewCode = function (code) {
@@ -4132,15 +4071,11 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
-            // This will return json file fetched from database
+        if (true) {
             return this.http.post('sellers//addCode', code, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Service to fetch the code that a seller subscribed to
     SellerService.prototype.getCode = function () {
@@ -4151,15 +4086,11 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
-            // This will return json file fetched from database
+        if (true) {
             return this.http.get('sellers/getCode', httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Service to get active requests from buyers associated with seller's code
     SellerService.prototype.getActiveRequests = function () {
@@ -4171,13 +4102,10 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
-            // This will return json file fetched from database
+        if (true) {
             return this.http.get('sellers/viewactiverequests', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     // Service to post a new description for seller
     SellerService.prototype.setDescription = function (description) {
@@ -4189,15 +4117,11 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/addDescription', description, httpOptions)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
-        else {
-            // This will return json file fetched from database
+        if (true) {
             return this.http.post('sellers/addDescription', description, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
+        else {}
     };
     SellerService.prototype.setBillingAddress = function (billingAddress) {
         this.loadToken();
@@ -4208,15 +4132,11 @@ var SellerService = /** @class */ (function () {
                 'x-access-token': this.sellerToken
             })
         };
-        if (Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["isDevMode"])()) {
-            return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
+        if (true) {
+            return this.http.post('sellers/addBillingAddress', billingAddress, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
-        else {
-            // This will return json file fetched from database
-            return this.http.post('sellers/addBillingAddress', billingAddress)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
-        }
+        else {}
     };
     // logging out seller
     SellerService.prototype.sellerLogout = function () {

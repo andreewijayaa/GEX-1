@@ -98,7 +98,7 @@ including the fields and labels.
 
 $(document).ready(function(){
   const Http = new XMLHttpRequest();
-  const url='http://localhost:3000/codes/getCodes';
+  const url='codes/getCodes';
   Http.open("GET", url);
   Http.send();
   Http.onreadystatechange=(e)=>{
