@@ -8,6 +8,12 @@ const Request = require('../models/request');
 const sendEmail = require('../models/sendEmail');
 const Seller = require('../models/seller');
 const bcrypt = require('bcryptjs');
+const upload = require('../services/multer');
+const upload2 = require('../services/multer2');
+const fs = require('fs');
+const singleUpload = upload.single('image');
+const singleUpload2 = upload2.single('image');
+
 const Offer = require('../models/offer');
 
 //Register route for buyers by Roni
@@ -116,7 +122,7 @@ router.get('/profile', (req, res) => {
 
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
 // Route to post request to the DB with the information entered by buyer and also information about the buyer submitting the request
-router.post('/request', (req, res, next) => {
+router.post('/request/:id', (req, res, next) => {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
 
@@ -131,6 +137,13 @@ router.post('/request', (req, res, next) => {
       description: req.body.description,
       deadline: req.body.deadline
     });
+    //code added by John to add images to requests
+    if (req.body.request_pic != null){
+      request.request_images.pus(req.body.request_pic);
+      console.log("in that if statement");
+    }
+    console.log("past if statement");
+    //end of code added by john to add images to request
     // console.log('buyers id is %s', decoded.data._id);
     //Find buyer to attach the request ID to the buyer_requests_byID
     Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
@@ -168,6 +181,25 @@ router.post('/request', (req, res, next) => {
     });
   });
 })
+
+//Code to add picutres to request. Testing purposes before adding to add request.post
+//by John
+router.post('/requestpicture', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload2(req, res, function(err, some) {
+      if (err) {
+        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+      }
+      console.log(req.file.location);
+      if (!req.body._id){
+        return res.status(401).send({ success: false, message:'No request id provided.' });
+      }
+        return res.json({'imageUrl': req.file.location});
+    });
+  });
+});
 
 // Retrieve all applicable requests to the logged in buyer
 router.get('/request', (req, res, next) => {
@@ -224,6 +256,25 @@ router.post('/update', (req, res /*next*/) => {
   });
 });
 
+//route to add profile picture to account
+//by John
+router.post('/profilepicture', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload(req, res, function(err, some) {
+      if (err) {
+        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+      }
+      console.log(req.file.location);
+      Buyer.findById(decoded.data._id, (err, buyer_pic) => {
+        buyer_pic.set({profile_image: req.file.location});
+        buyer_pic.save();
+        return res.json({'imageUrl': req.file.location});
+      });
+    });
+  });
+});
 /*
 Profile update - By: Omar
 Will add the accepted offer to the buyers cart.

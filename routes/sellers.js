@@ -7,7 +7,11 @@ const Seller = require('../models/seller');
 const Request = require('../models/request');
 const Offer = require('../models/offer');
 const sendEmail = require('../models/sendEmail');
+const upload = require('../services/multer');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
+const singleUpload = upload.single('image')
+
 
 // Seller register route that will take in all required information that is required from seller upon registration
 // By Roni
@@ -327,6 +331,44 @@ router.post('/addDescription', (req, res) => {
       });
   });
 });
+
+//code to add profile picture to account
+//By John
+router.post('/profilepicture', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload(req, res, function(err, some) {
+      if (err) {
+        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+      }
+      console.log(req.file.location);
+      Seller.findById(decoded.data._id, (err, seller_pic) => {
+        seller_pic.set({profile_image: req.file.location});
+        seller_pic.save();
+        return res.json({'imageUrl': req.file.location});
+      });
+    });
+  });
+});
+
+//test code (WAS USED FOR DEBUGGING)
+/*router.post('/image-upload', function(req, res) {
+  singleUpload(req, res, function(err, some) {
+    if (err) {
+      return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+    }
+    console.log(req.file.location);
+    return res.json({'imageUrl': req.file.location});
+  });
+})*/
+
+//code to retrieve profile picture from account
+//By John
+//router.get('/profilepicture', (req, res) => {
+  //anyone can view a profile picture of an account. There is no verification
+
+//});
 
 //let's seller's add billing addres to account
 //code by John
