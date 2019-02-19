@@ -21,7 +21,8 @@ export class BuyerComponent implements OnInit {
   offerList: Object;
   offerTitleAddToCart: String;
   pushItemToNavbar = 0;
-  //offerCart: [String] = [""];
+  offerCart: [String] = [""];
+
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router,
@@ -42,30 +43,30 @@ export class BuyerComponent implements OnInit {
   getBuyer() {
     this.buyerService.getBuyerProfile().subscribe((buyerdata: any) => {
       this.buyerProfile = buyerdata;
-      console.log(this.buyerProfile);
+      //console.log(this.buyerProfile);
     });
   }
 
   // tslint:disable-next-line:member-ordering
-
 
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
     if (this.buyer == null) {
       window.location.reload();
     } else {
-      console.log(this.buyer);
+      //console.log(this.buyer);
     }
   }
 
   expanded(id: any) {
     let requestId = id;
     this.getBuyer();
+    //(<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
     // Make a call to retrieve request information with all offers to that request
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
-        //this.offerCart = this.buyerProfile.data.offerCart;
+        this.offerCart = this.buyerProfile['data']['offerCart'];
         //console.log(this.offerCart);
 
         // used to distinguish between if buyer is viewing the request or a seller
@@ -89,10 +90,24 @@ export class BuyerComponent implements OnInit {
 
   acceptOffer(element, offer_id) {
     //const offer_id = document.getElementById('offerId').innerHTML;
+    const offerAccepted = {
+      offer_ID: offer_id,
+      offer_accepted: true
+    }
+
+    this.buyerService.offerAccepted(offerAccepted).subscribe((data: any) => {
+      if (data.success) {
+        //console.log("Offer Accepted Successful.");
+        (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
+      }
+      else {
+        //console.log("Offer Accepted NOT Successful.");
+      }
+    });
+
     const offerToCart = {
       offerID: offer_id
     }
-
     this.buyerService.addOfferToBuyerCart(offerToCart).subscribe((data: any) => {
       if (data.success) {
         var prevItems = localStorage.getItem('buyerCart');

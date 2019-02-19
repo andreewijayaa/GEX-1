@@ -13,7 +13,6 @@ const upload2 = require('../services/multer2');
 const fs = require('fs');
 const singleUpload = upload.single('image');
 const singleUpload2 = upload2.single('image');
-
 const Offer = require('../models/offer');
 
 //Register route for buyers by Roni
@@ -335,6 +334,42 @@ router.get('/retrieveCart', (req, res, next) => {
         return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderFees,orderTotal});
       });
     });
+  });
+});
+
+// Offer Accepted
+router.post('/offerAccepted', (req, res /*next*/) => {
+  let accepted = {
+    id: req.body.offer_ID,
+    offerAccepted: req.body.offer_accepted
+  }
+
+  Offer.findById(accepted.id, (err, offer) => {
+    if (!offer)
+      return res.status(405).send({ success: false, message: 'could not retrieve offer info to update.' });
+    else {
+      offer.offerAccepted = accepted.offerAccepted;
+      offer.save();
+      res.json({success: true});
+    }
+  });
+});
+
+// Offer Removed so Rejected
+router.post('/offerRejected', (req, res /*next*/) => {
+  let removed = {
+    id: req.body.offer_ID,
+    offerRemoved: req.body.offer_removed
+  }
+
+  Offer.findById(removed.id, (err, offer) => {
+    if (!offer)
+      return res.status(405).send({ success: false, message: 'could not retrieve offer info to update.' });
+    else {
+      offer.offerAccepted = removed.offerRemoved;
+      offer.save();
+      res.json({success: true});
+    }
   });
 });
 

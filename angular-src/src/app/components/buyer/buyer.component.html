@@ -113,13 +113,14 @@ Bryan Vu contributed most of this buyer portal page.
               </mat-panel-title>
               <!--
               <mat-panel-title *ngIf="offerCart.indexOf(offer._id) === -1" style="margin-left: 85%">
-                <button mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
+                <button mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>#8c7ae6
               </mat-panel-title>
               <mat-panel-title *ngIf="offerCart.indexOf(offer._id) !== -1" style="margin-left: 85%">
                 <button [disabled]="true" mat-button style="background-color: #006400; color: white;">Offer In Cart</button>
               </mat-panel-title>-->
               <mat-panel-title style="margin-left: 85%">
-                <button mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
+                <button *ngIf="offer.offerAccepted === true" mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #4cd137; color: white;" disabled>Offer Accepted</button>
+                <button *ngIf="offer.offerAccepted === false" mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
               </mat-panel-title>
               &nbsp;
             </div>

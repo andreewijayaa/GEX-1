@@ -25,15 +25,12 @@ export class BuyerCheckoutComponent implements OnInit {
   isDataAvailable: Boolean = false;
   stripeTest: FormGroup;
   buyer: any;
-  initialClick1: Boolean = false;
-  initialClick2: Boolean = false;
-  isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  thirdFormGroup: FormGroup;
   offersInCart: [String];
   emptyCart: Boolean;
   orderFees: Number;
+  editable: boolean = false;
 
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
 
@@ -94,9 +91,6 @@ export class BuyerCheckoutComponent implements OnInit {
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
-    });
-    this.thirdFormGroup = this._formBuilder.group({
-      thirdCtrl: ['', Validators.required]
     });
   }
 
