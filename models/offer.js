@@ -29,7 +29,6 @@ const offerSchema = mongoose.Schema({
   },
   offerAccepted:{
     type:Boolean,
-    required: true,
     default: false
   },
   created_at:{ 

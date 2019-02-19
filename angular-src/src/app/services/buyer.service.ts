@@ -192,7 +192,6 @@ export class BuyerService {
   }
 
   removeOfferFromCart(offerID) {
-
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -205,6 +204,38 @@ export class BuyerService {
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/removeFromCart', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  offerAccepted(offerID) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/offerAccepted', offerID, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/offerAccepted', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  offerRejected(offerID) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/offerRejected', offerID, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/offerRejected', offerID, httpOptions)
         .pipe(map(res => res));
     }
   }
