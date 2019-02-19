@@ -29,6 +29,10 @@ const RequestSchema = mongoose.Schema({
     default: 0,
     required: true
   },
+  request_images: {
+    type : [String],
+    required: false
+  },
   created_at : { type: Date, required: true, default: Date.now }
 });
 
