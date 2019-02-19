@@ -5,7 +5,7 @@ public so this will ensure the secret key is hidden.
 If we are in development mode then it will not hide the stripe secret key.
 */
 
-if (process.env.NODE_ENV != 'production') {
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
 
@@ -139,8 +139,7 @@ if (process.env.NODE_ENV == 'production') {
   });
 }
 app.all('*', function(req, res) {
-  //res.redirect("http://localhost:4200/");
-  res.redirect("https://powerful-taiga-46416.herokuapp.com/");
+  res.redirect(process.env.BASE_URL);
   
 });
 // Start Server

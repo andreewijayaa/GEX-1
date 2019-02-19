@@ -47,7 +47,7 @@ router.post('/register',(req,res,next) => {
               else {
                   // send Seller a verification email
                   // upon successful registration 
-                  sendEmail.sendVerificationEmail(seller);
+                  sendEmail.sellerSendVerificationEmail(seller);
                   res.json({success: true, msg:"Seller Registered!"})
               }
           });
@@ -451,7 +451,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
             console.log(err);
           } else {
             //If account Registred Send Email for Email Verification Completed
-            sendEmail.emailVerified(seller);
+            sendEmail.sellerEmailVerified(seller);
             const token = jwt.sign({data: seller}, config.secret, {
               expiresIn: 604800 // 1 week
             });
@@ -495,7 +495,7 @@ router.post('/resend/:token', (req,res, next) =>
         console.log(err);
       } else {
         // If account Registred Send Email for Email Verification
-        sendEmail.sendVerificationEmail(seller);
+        sendEmail.sellerSendVerificationEmail(seller);
       }
     });
   });

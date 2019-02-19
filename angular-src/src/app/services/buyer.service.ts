@@ -30,8 +30,8 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/buyers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
     }
@@ -47,8 +47,8 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      if (process.env.NODE_ENV != 'production') {
-        return this.http.post('buyers/request', request, httpOptions)
+      if (process.env.NODE_ENV !== 'production') {
+        return this.http.post(process.env.BASE_URL + '/buyers/request', request, httpOptions)
           .pipe(map(res => res));
       } else {
         return this.http.post('buyers/request', request, httpOptions)
@@ -68,8 +68,8 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('buyers/request', httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/buyers/request', httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.get('buyers/request', httpOptions)
@@ -85,8 +85,8 @@ export class BuyerService {
         'Content-Type': 'application/json'
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('buyers/update', buyer, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/update', buyer, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/update', buyer, httpOptions)
@@ -101,8 +101,8 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/addToCart', offerCartItem, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
@@ -118,8 +118,8 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('buyers/retrieveCart', httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/buyers/retrieveCart', httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.get('buyers/retrieveCart', httpOptions)
@@ -136,8 +136,8 @@ export class BuyerService {
       })
     };
     console.log(offer);
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('checkout', offer, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/checkout', offer, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('checkout', offer, httpOptions)
@@ -154,8 +154,8 @@ export class BuyerService {
       })
     };
     console.log(offerID);
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('buyers/removeFromCart', offerID, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/removeFromCart', offerID, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/removeFromCart', offerID, httpOptions)

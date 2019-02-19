@@ -31,8 +31,8 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('sellers/profile', httpOptions).pipe(map(res => res));
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/sellers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('sellers/profile', httpOptions).pipe(map(res => res));
     }
@@ -48,8 +48,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('sellers/viewoffers', httpOptions).pipe(map(res => res));
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/sellers/viewoffers', httpOptions).pipe(map(res => res));
     } else {
       // This will return json file fetched from database
       return this.http.get('sellers/viewoffers', httpOptions).pipe(map(res => res));
@@ -66,8 +66,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
@@ -84,8 +84,8 @@ export class SellerService {
         'Content-Type': 'application/json'
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers/update', seller, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers/update', seller, httpOptions)
       .pipe(map(res => res));
     } else {
       return this.http.post('seller/update', seller, httpOptions)
@@ -103,8 +103,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers//addCode', code, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers//addCode', code, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
@@ -122,8 +122,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('sellers/getCode', httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/sellers/getCode', httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
@@ -142,8 +142,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.get(process.env.BASE_URL + '/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
     } else {
     // This will return json file fetched from database
     return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
@@ -160,8 +160,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers/addDescription', description, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers/addDescription', description, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
@@ -179,8 +179,8 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers/addBillingAddress', billingAddress, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers/addBillingAddress', billingAddress, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database

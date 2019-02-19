@@ -19,8 +19,8 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('buyers/register', buyer, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
       console.log('Inside Buyer Register');
@@ -36,8 +36,8 @@ export class RegisterService {
         'Content-Type': 'application/json'
       })
     };
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers/register', seller, httpOptions)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers/register', seller, httpOptions)
       .pipe(map(res => res));
     } else {
      return this.http.post('sellers/register', seller, httpOptions)
@@ -47,8 +47,8 @@ export class RegisterService {
 
   // Buyer email activation through link, pass in the token with the function call
   activateAccount(token) {
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('buyers/confirmEmail/' + token, token)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/confirmEmail/' + token, token)
       .pipe(map(res => res));
     } else {
       return this.http.post('buyers/confirmEmail/' + token, token)
@@ -57,8 +57,8 @@ export class RegisterService {
   }
   // Seller email activation through link, pass in the token with the function call
   selleractivateAccount(token) {
-    if (process.env.NODE_ENV != 'production') {
-      return this.http.post('sellers/confirmEmail/' + token, token)
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/sellers/confirmEmail/' + token, token)
       .pipe(map(res => res));
     } else {
       return this.http.post('sellers/confirmEmail/' + token, token)
