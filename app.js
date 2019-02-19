@@ -9,6 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
 }
 
+console.log('Node Env= ' + process.env.NODE_ENV)
+
 // Stripe Keys used for testing.
 const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
 const keySecret = process.env.STRIPE_SECRET_KEY;
