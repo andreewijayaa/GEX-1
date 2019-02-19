@@ -21,7 +21,8 @@ export class BuyerComponent implements OnInit {
   offerList: Object;
   offerTitleAddToCart: String;
   pushItemToNavbar = 0;
-  //offerCart: [String] = [""];
+  offerCart: [String] = [""];
+
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
     private router: Router,
@@ -42,19 +43,18 @@ export class BuyerComponent implements OnInit {
   getBuyer() {
     this.buyerService.getBuyerProfile().subscribe((buyerdata: any) => {
       this.buyerProfile = buyerdata;
-      console.log(this.buyerProfile);
+      //console.log(this.buyerProfile);
     });
   }
 
   // tslint:disable-next-line:member-ordering
-
 
   refreshBuyer() {
     this.buyer = JSON.parse(localStorage.getItem('buyer'));
     if (this.buyer == null) {
       window.location.reload();
     } else {
-      console.log(this.buyer);
+      //console.log(this.buyer);
     }
   }
 
@@ -65,7 +65,7 @@ export class BuyerComponent implements OnInit {
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
-        //this.offerCart = this.buyerProfile.data.offerCart;
+        this.offerCart = this.buyerProfile['data']['offerCart'];
         //console.log(this.offerCart);
 
         // used to distinguish between if buyer is viewing the request or a seller
