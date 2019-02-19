@@ -31,7 +31,7 @@ export class BuyerService {
       })
     };
     if (process.env.NODE_ENV != 'production') {
-      return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
+      return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
     }
@@ -48,7 +48,7 @@ export class BuyerService {
         })
       };
       if (process.env.NODE_ENV != 'production') {
-        return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
+        return this.http.post('buyers/request', request, httpOptions)
           .pipe(map(res => res));
       } else {
         return this.http.post('buyers/request', request, httpOptions)
@@ -69,7 +69,7 @@ export class BuyerService {
       })
     };
     if (process.env.NODE_ENV != 'production') {
-      return this.http.get('http://localhost:3000/buyers/request', httpOptions)
+      return this.http.get('buyers/request', httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.get('buyers/request', httpOptions)
@@ -86,7 +86,7 @@ export class BuyerService {
       })
     };
     if (process.env.NODE_ENV != 'production') {
-      return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
+      return this.http.post('buyers/update', buyer, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/update', buyer, httpOptions)
@@ -102,7 +102,7 @@ export class BuyerService {
       })
     };
     if (process.env.NODE_ENV != 'production') {
-      return this.http.post('http://localhost:3000/buyers/addToCart', offerCartItem, httpOptions)
+      return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
@@ -119,7 +119,7 @@ export class BuyerService {
       })
     };
     if (process.env.NODE_ENV != 'production') {
-      return this.http.get('http://localhost:3000/buyers/retrieveCart', httpOptions)
+      return this.http.get('buyers/retrieveCart', httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.get('buyers/retrieveCart', httpOptions)
@@ -137,7 +137,7 @@ export class BuyerService {
     };
     console.log(offer);
     if (process.env.NODE_ENV != 'production') {
-      return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
+      return this.http.post('checkout', offer, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('checkout', offer, httpOptions)
@@ -155,7 +155,7 @@ export class BuyerService {
     };
     console.log(offerID);
     if (process.env.NODE_ENV != 'production') {
-      return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
+      return this.http.post('buyers/removeFromCart', offerID, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/removeFromCart', offerID, httpOptions)

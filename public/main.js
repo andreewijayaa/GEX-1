@@ -3515,7 +3515,7 @@ var AuthService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
+            return this.http.post('buyers/login', buyer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3528,7 +3528,7 @@ var AuthService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
+            return this.http.post('sellers/login', seller, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3633,7 +3633,7 @@ var BuyerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
+            return this.http.get('buyers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
     };
@@ -3648,7 +3648,7 @@ var BuyerService = /** @class */ (function () {
                 })
             };
             if (true) {
-                return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
+                return this.http.post('buyers/request', request, httpOptions)
                     .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
             }
             else {}
@@ -3667,7 +3667,7 @@ var BuyerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.get('http://localhost:3000/buyers/request', httpOptions)
+            return this.http.get('buyers/request', httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3681,7 +3681,7 @@ var BuyerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
+            return this.http.post('buyers/update', buyer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3694,7 +3694,7 @@ var BuyerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/buyers/addToCart', offerCartItem, httpOptions)
+            return this.http.post('buyers/addToCart', offerCartItem, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3709,7 +3709,7 @@ var BuyerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.get('http://localhost:3000/buyers/retrieveCart', httpOptions)
+            return this.http.get('buyers/retrieveCart', httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3724,7 +3724,7 @@ var BuyerService = /** @class */ (function () {
         };
         console.log(offer);
         if (true) {
-            return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
+            return this.http.post('checkout', offer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3738,7 +3738,7 @@ var BuyerService = /** @class */ (function () {
         };
         console.log(offerID);
         if (true) {
-            return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
+            return this.http.post('buyers/removeFromCart', offerID, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3806,7 +3806,7 @@ var RegisterService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
+            return this.http.post('buyers/register', buyer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3819,7 +3819,7 @@ var RegisterService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
+            return this.http.post('sellers/register', seller, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3827,7 +3827,7 @@ var RegisterService = /** @class */ (function () {
     // Buyer email activation through link, pass in the token with the function call
     RegisterService.prototype.activateAccount = function (token) {
         if (true) {
-            return this.http.post('http://localhost:3000/buyers/confirmEmail/' + token, token)
+            return this.http.post('buyers/confirmEmail/' + token, token)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3835,7 +3835,7 @@ var RegisterService = /** @class */ (function () {
     // Seller email activation through link, pass in the token with the function call
     RegisterService.prototype.selleractivateAccount = function (token) {
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/confirmEmail/' + token, token)
+            return this.http.post('sellers/confirmEmail/' + token, token)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -3895,7 +3895,7 @@ var RequestService = /** @class */ (function () {
         };
         // Call back-end route to retrieve request data
         if (true) {
-            return this.http.post('http://localhost:3000/requests/' + id, id, httpOptions)
+            return this.http.post('requests/' + id, id, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (res) { return res; }));
         }
         else {}
@@ -4012,7 +4012,7 @@ var SellerService = /** @class */ (function () {
         };
         // This will return json file fetched from database
         if (true) {
-            return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
+            return this.http.get('sellers/profile', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
     };
@@ -4027,7 +4027,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
+            return this.http.get('sellers/viewoffers', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
     };
@@ -4042,7 +4042,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+            return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
@@ -4056,7 +4056,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/update', seller, httpOptions)
+            return this.http.post('sellers/update', seller, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
@@ -4072,7 +4072,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
+            return this.http.post('sellers//addCode', code, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
@@ -4087,7 +4087,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
+            return this.http.get('sellers/getCode', httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
@@ -4103,7 +4103,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
+            return this.http.get('sellers/viewactiverequests', httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
     };
@@ -4118,7 +4118,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/addDescription', description, httpOptions)
+            return this.http.post('sellers/addDescription', description, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
@@ -4133,7 +4133,7 @@ var SellerService = /** @class */ (function () {
             })
         };
         if (true) {
-            return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
+            return this.http.post('sellers/addBillingAddress', billingAddress, httpOptions)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (res) { return res; }));
         }
         else {}
