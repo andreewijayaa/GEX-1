@@ -13,6 +13,7 @@ export class BuyerService {
   buyerToken: any;
   buyer: any;
   request: any;
+  requestID: any;
   update: any;
   offer: any;
   offerCartItem: any;
@@ -145,8 +146,52 @@ export class BuyerService {
     }
   }
 
-  removeOfferFromCart(offerID) {
+  //allow user to upload profile picture
+  //By John
+  setProfilePicture(profilePic: File): Observable<Object>{
+    //console.log("profile picutre action taken");
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.buyerToken
+      })
+    };
+    const formData = new FormData();
 
+    formData.append('image', profilePic)
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/profilepicture', formData, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/profilepicture', profilePic)
+      .pipe(map(res => res));
+    }
+  }
+
+  //upload images to request
+  addRequestImage(requestPic: File): Observable<Object>{
+    //console.log("profile picutre action taken");
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.buyerToken
+      })
+    };
+    const formData = new FormData();
+
+    formData.append('image', requestPic)
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/requestpicture', formData, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/requestpicture', requestPic)
+      .pipe(map(res => res));
+    }
+  }
+
+  removeOfferFromCart(offerID) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -159,6 +204,38 @@ export class BuyerService {
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/removeFromCart', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  offerAccepted(offerID) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/offerAccepted', offerID, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/offerAccepted', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  offerRejected(offerID) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (isDevMode()) {
+      return this.http.post('http://localhost:3000/buyers/offerRejected', offerID, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/offerRejected', offerID, httpOptions)
         .pipe(map(res => res));
     }
   }

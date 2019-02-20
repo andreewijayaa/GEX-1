@@ -29,8 +29,6 @@ export class BuyerCartComponent implements OnInit {
     this.buyer = this.route.snapshot.data['buyer'];
     this.getCart();
     //this.offerid = this.buyer['data']['offerCart'];
-
-
   }
 
 getCart() {
@@ -49,6 +47,18 @@ getCart() {
   });
 }
   removeOfferFromCart(offerid) {
+    const offerRemoved = {
+      offer_ID: offerid,
+      offer_removed: false
+    }
+    this.buyerService.offerRejected(offerRemoved).subscribe((data: any) => {
+      if (data.success) {
+        //console.log("Offer Removed Successful.");
+      }
+      else {
+        //console.log("Offer Removed NOT Successful.");
+      }
+    });
 
     const offer_ID = {
       offerID : offerid

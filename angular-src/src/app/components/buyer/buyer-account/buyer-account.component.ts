@@ -3,6 +3,10 @@ import { BuyerService } from '../../../services/buyer.service';
 import { ActivatedRoute } from '@angular/router';
 import { SellerAccountComponent } from '../../seller/seller-account/seller-account.component';
 
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
+}
+
 @Component({
   selector: 'app-buyer-account',
   templateUrl: './buyer-account.component.html',
@@ -10,14 +14,19 @@ import { SellerAccountComponent } from '../../seller/seller-account/seller-accou
 })
 export class BuyerAccountComponent implements OnInit {
 
+  //for image porcessing
+  selectedFile: ImageSnippet;
+
   // Delcared buyer variable.
   buyer: any;
   buyerLogout: Boolean;
   buyer_id: String;
-  buyer_updatedFirstName: String;
-  buyer_updatedLastName: String;
+  buyer_updatedFirstName = localStorage.getItem('buyerFirstName');
+  buyer_updatedLastName = localStorage.getItem('buyerLastName');
   buyer_updatedPassword: String;
   errorMessage: String;
+  updateBuyerFirstName = localStorage.getItem('buyerFirstName');
+  updateBuyerLastName = localStorage.getItem('buyerLastName');
 
   constructor(private buyerService: BuyerService,
     private route: ActivatedRoute) { }
@@ -63,12 +72,12 @@ export class BuyerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
       (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
       (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
-    } 
-    else { 
+    }
+    else {
       // Could not update profile
     }
   }
-  
+
   // By: Omar
   // This function has not been fully implemented yet. Once this gets completed it will help tie the frontend and backend of this page together.
   updateBuyerData(): Boolean {
@@ -106,16 +115,29 @@ export class BuyerAccountComponent implements OnInit {
         "pass": this.buyer_updatedPassword
       }
 
-      this.buyerService.updateBuyerProfile(update).subscribe((data: any) => {});
-      this.errorMessage = "Account updated successfully! Please log out and log back in.";
-      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
-      (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
-      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
-      (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
-      (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
-      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
-      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
-      return true;
+      this.buyerService.updateBuyerProfile(update).subscribe((data: any) => {
+        if (data.success) {
+          //console.log('Buyer Account Update Successful.');
+          localStorage.setItem('buyerFirstName', this.buyer_updatedFirstName);
+          localStorage.setItem('buyerLastName', this.buyer_updatedLastName);
+          this.updateBuyerFirstName = localStorage.getItem('buyerFirstName');
+          this.updateBuyerLastName = localStorage.getItem('buyerLastName');
+
+          this.errorMessage = "Account updated successfully!";
+          (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
+          (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
+          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
+          (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
+          return true;
+        }
+        else {
+          this.errorMessage = "Something went wrong. Your information could not be updated. Please refresh the page and try again.";
+          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
+        }
+      });
     }
     return false;
   }
@@ -138,6 +160,26 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
-    (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';  
+    (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
+  }
+
+  // By: John
+  // function for updating profile image
+  processFile(imageInput: any){
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
+        (res) => {
+
+        },
+        (err) => {
+
+        })
+    });
+
+    reader.readAsDataURL(file);
   }
 }

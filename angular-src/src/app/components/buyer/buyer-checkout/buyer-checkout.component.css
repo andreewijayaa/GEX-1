@@ -82,4 +82,11 @@ span.price {
   .total {
     overflow-y: scroll;
   }
+
+  .col-md-8, .col-md-4, .col-md-12 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
   

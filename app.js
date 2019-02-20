@@ -4,9 +4,12 @@ Will let out app.js file know if we are in development of production. If we are 
 public so this will ensure the secret key is hidden. 
 If we are in development mode then it will not hide the stripe secret key.
 */
-
+//const result = require('dotenv').config();
+//console.log(result);
+//console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
+  //require('dotenv').config();
 }
 
 console.log('Node Env= ' + process.env.NODE_ENV)
@@ -30,6 +33,9 @@ const stripe = require('stripe')(keySecret);
 const fs = require('fs');
 const Offer = require('./models/offer');
 const ejs = require('ejs')._express;
+const multer = require("multer");
+const multerS3 = require('multer-s3');
+const aws = require('aws-sdk');
 
 mongoose.set('useCreateIndex', true);
 
@@ -68,6 +74,7 @@ if (process.env.NODE_ENV == 'production') {
   // middleware
   app.use(forceSSL());
 }
+
 
 // Port Number 
 //const port = 3000;;
