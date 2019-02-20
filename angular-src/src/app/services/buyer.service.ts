@@ -31,6 +31,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
+    console.log(process.env.BASE_URL);
     if (process.env.NODE_ENV !== 'production') {
       return this.http.get(process.env.BASE_URL + '/buyers/profile', httpOptions).pipe(map(res => res));
     } else {
@@ -146,10 +147,10 @@ export class BuyerService {
     }
   }
 
-  //allow user to upload profile picture
-  //By John
-  setProfilePicture(profilePic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
+  // allow user to upload profile picture
+  // By John
+  setProfilePicture(profilePic: File): Observable<Object> {
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -158,9 +159,9 @@ export class BuyerService {
     };
     const formData = new FormData();
 
-    formData.append('image', profilePic)
-    if (isDevMode()) {
-      return this.http.post('http://localhost:3000/buyers/profilepicture', formData, httpOptions)
+    formData.append('image', profilePic);
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
@@ -169,9 +170,9 @@ export class BuyerService {
     }
   }
 
-  //upload images to request
-  addRequestImage(requestPic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
+  // upload images to request
+  addRequestImage(requestPic: File): Observable<Object> {
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -179,10 +180,9 @@ export class BuyerService {
       })
     };
     const formData = new FormData();
-
-    formData.append('image', requestPic)
-    if (isDevMode()) {
-      return this.http.post('http://localhost:3000/buyers/requestpicture', formData, httpOptions)
+    formData.append('image', requestPic);
+    if (process.env.NODE_ENV !== 'production') {
+      return this.http.post(process.env.BASE_URL + '/buyers/requestpicture', formData, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
