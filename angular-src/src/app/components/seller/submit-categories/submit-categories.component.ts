@@ -69,6 +69,7 @@ export class SubmitCategoriesComponent implements OnInit {
       secondCtrl: ['', Validators.required]
     });
     this.submitLabels = [];
+    this.codeArray = [];
     this.None = false;
     // Get seller codes
     this.sellerService.getCode().subscribe((data: any) => {
