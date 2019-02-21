@@ -23,8 +23,8 @@ export class RequestService {
         })
       };
       // Call back-end route to retrieve request data
-      if (process.env.NODE_ENV !== 'production') {
-        return this.http.post(process.env.BASE_URL + '/requests/' + id, id, httpOptions)
+      if (process.env.NODE_ENV === 'development') {
+        return this.http.post('http://localhost:3000/requests/' + id, id, httpOptions)
         .pipe(map(res => res));
       } else {
         return this.http.post('requests/' + id, id, httpOptions)

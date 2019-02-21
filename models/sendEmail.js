@@ -2,6 +2,7 @@
 //Using SendGrid as our email service
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+console.log('Base URL = ' +  process.env.BASE_URL);
 //Function that will take in a seller, and email them their token
 //Used Upon user registration to confirm email
 module.exports.sellerSendVerificationEmail = function(user, callback){

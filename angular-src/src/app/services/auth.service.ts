@@ -23,8 +23,8 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
-    if (process.env.NODE_ENV !== 'production') {
-      return this.http.post(process.env.BASE_URL + '/buyers/login', buyer, httpOptions)
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/login', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
     return this.http.post('buyers/login', buyer, httpOptions)
@@ -39,8 +39,8 @@ export class AuthService {
         'Content-Type':  'application/json'
       })
     };
-    if (process.env.NODE_ENV !== 'production') {
-      return this.http.post(process.env.BASE_URL + '/sellers/login', seller, httpOptions)
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/login', seller, httpOptions)
       .pipe(map(res => res));
     } else {
     return this.http.post('sellers/login', seller, httpOptions)

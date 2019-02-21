@@ -46,6 +46,7 @@ export class SellerServicesComponent implements OnInit {
   // View seller current codes - Roni
   ngOnInit() {
     this.submitLabels = [];
+    this.codeArray = [];
     // Get seller codes
     this.sellerService.getCode().subscribe((data: any) => {
       if (data.success) {
