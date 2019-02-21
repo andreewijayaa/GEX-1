@@ -43,7 +43,7 @@ const BuyerSchema = mongoose.Schema({
     profile_image: {
         type : String,
         required: false,
-        default: "https://pofileimages.s3.amazonaws.com/1550343668028"
+        default: "https://pofileimages.s3.amazonaws.com/155079112060"
     },
     offerCart: {
         type: [String],
