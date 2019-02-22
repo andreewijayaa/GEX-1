@@ -344,7 +344,7 @@ router.post('/addDescription', (req, res) => {
       Seller.findById(decoded.data._id, (err, seller_descipt) => {
         if (err) return handleError(err);
         seller_descipt.set({description: req.body.description});
-        seller.descipt.user_account_setup[2] = true;
+        seller_descipt.user_account_setup[1] = true;
         seller_descipt.save(function (err, updatedSeller) {
           if (err) return handleError(err);
           return res.json({ success: true, message: "Attempted to add desciption"});

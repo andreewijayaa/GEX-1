@@ -104,3 +104,9 @@ label img {
   float: left;
   width: 25%;
 }
+
+.btnMid {
+  align-self: center;
+  text-align: center;
+
+}
