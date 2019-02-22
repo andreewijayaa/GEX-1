@@ -96,10 +96,11 @@
         <form (submit)="OnSubmitClickBtn()">
           <div class="card">
             <div class="card-body">
-              <h3>Connect with Stripe.</h3>
+              <h3><strong>Connect with Stripe.</strong></h3>
               <h4>To have the ability to recieve payments.</h4>
               &nbsp;
-              <img class="center" routerLink="/" routerLinkActive="active" src="../../../../assets/blue-on-light@2x.png" alt="Girl in a jacket">
+              <br>
+              <img class="stripe" onmouseover="" style="cursor: pointer;" (click)="rerouteToStripe()" src="../../../../assets/blue-on-light@2x.png"  alt="Connect with Stripe">
             </div>
           </div>
           <div>

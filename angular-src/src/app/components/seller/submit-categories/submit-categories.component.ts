@@ -29,6 +29,7 @@ export class SubmitCategoriesComponent implements OnInit {
     { code: 49605403, name: 'Watercolor (Painting)', image: 'https://picsum.photos/200', checked: false },
     { code: 49605404, name: 'Acrlyic (Painting)', image: 'https://picsum.photos/200', checked: false }
   ];
+  sellerID: String;
   submitLabels: String[];
   codeArray: Number[];
   code: Number;
@@ -58,6 +59,8 @@ export class SubmitCategoriesComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+    // Get Seller Information
+    this.getSellerInfo();
     // for the steps
     this.first = false;
     this.second = false;
@@ -94,6 +97,33 @@ export class SubmitCategoriesComponent implements OnInit {
         this.notifier.notify('error', data.msg);
       }
     });
+  }
+
+  getSellerInfo() {
+    this.sellerService.getSellerProfile().subscribe((data: any) => {
+      if (data) {
+        this.sellerID = data.data._id;
+      }
+    });
+  }
+
+  rerouteToStripe() {
+    console.log('Data = ' + this.sellerID);
+    const redirect_uri: string = 'https://powerful-taiga-46416.herokuapp.com/seller';
+    const client_id: string = 'ca_EVl0RHMGrhYGo6GDjWwwn40nmD4aK6AA';
+
+
+    const urlToOpen: string = 'https://connect.stripe.com/express/oauth/authorize?redirect_uri='
+                            + redirect_uri + '&client_id=' + client_id
+                            + '&state=' + this.sellerID;
+    let url: string = '';
+    if (!/^http[s]?:\/\//.test(urlToOpen)) {
+        url += 'http://';
+    }
+    console.log(url);
+    url += urlToOpen;
+    window.open(url, '_blank');
+
   }
 
   labelButton() {

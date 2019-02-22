@@ -166,7 +166,7 @@ router.get('/view', (req, res) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
-      console.log('codes associated with seller' + decoded.data.codes);
+      //console.log('codes associated with seller' + decoded.data.codes);
       Request.find( {'code' :{$in:decoded.data.codes}}, (err, requests) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
@@ -253,7 +253,7 @@ router.post('/accountSetup', (req,res) => {
 //made by John. Revised by Roni
   router.post('/makeOffer/:id', (req,res,next) =>{
     var id = req.body.request_ID;
-    console.log('Request with an offer being added to: ' + id);
+    //console.log('Request with an offer being added to: ' + id);
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
     jwt.verify(token, config.secret, (err, decoded) => {
@@ -272,22 +272,22 @@ router.post('/accountSetup', (req,res) => {
         if (err) return handleError(err);//throws err if search for seller fails
         newOffer.save( (err,post) => {
           if (err) return res.json(err); 
-          console.log(post._id);
+          //console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
             seller_making_offer.open_requests.push(id);//this is the new line added that hopefully fixes the active requests.
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
-              console.log('New Offer made tied to Seller %s', decoded.data._id);
-              console.log('Request ID is: ' + id);
+              //console.log('New Offer made tied to Seller %s', decoded.data._id);
+              //console.log('Request ID is: ' + id);
               Request.findById(id, (err, request_with_offer) => {
                 if (err) return handleError(err);
-                console.log('Found request\n' + request_with_offer);
+                //console.log('Found request\n' + request_with_offer);
                 request_with_offer.request_offers_byID.push(post._id);
                 request_with_offer.offerCount++;
                 request_with_offer.save((err) =>{
                   if (err){return next(err);}
-                  console.log('New Offer made tied to Request %s ', request_with_offer._id);
+                  //console.log('New Offer made tied to Request %s ', request_with_offer._id);
                 });
               });
             });
@@ -304,7 +304,7 @@ router.post('/addCode', (req, res) => {
 
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'Invalid Access.' });
-  console.log('add code called');
+  //console.log('add code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
@@ -328,7 +328,7 @@ router.post('/addCode', (req, res) => {
 //let's seller's add a description to their account
 //code by John
 router.post('/addDescription', (req, res) => {
-  console.log('add description called');
+  //console.log('add description called');
   var token = req.headers['x-access-token'];
 
   //if they don't have a token
@@ -337,10 +337,10 @@ router.post('/addDescription', (req, res) => {
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       if (req.body.description == null){
-        console.log('No description added');
+        //console.log('No description added');
         return res.status(500).send({ success: false, message: "No description added"});
       }
-      console.log('adding this description: ' + req.body.description);
+      //console.log('adding this description: ' + req.body.description);
       Seller.findById(decoded.data._id, (err, seller_descipt) => {
         if (err) return handleError(err);
         seller_descipt.set({description: req.body.description});
@@ -363,7 +363,7 @@ router.post('/profilepicture', function(req, res) {
       if (err) {
         return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
       }
-      console.log(req.file.location);
+      //console.log(req.file.location);
       Seller.findById(decoded.data._id, (err, seller_pic) => {
         seller_pic.set({profile_image: req.file.location});
         seller_pic.save();
@@ -394,7 +394,7 @@ router.post('/profilepicture', function(req, res) {
 //let's seller's add billing addres to account
 //code by John
 router.post('/addBillingAddress', (req, res) => {
-  console.log('add billing address called');
+  //console.log('add billing address called');
   var token = req.headers['x-access-token'];
 
   //if they don't have a token
@@ -426,7 +426,7 @@ router.post('/addBillingAddress', (req, res) => {
           seller_bill.billing_address.push(req.body.postal_code);
           seller_bill.save(function (err, updatedSeller) {
             if (err) return handleError(err);
-            console.log('Success billing!');
+            //console.log('Success billing!');
             return res.json({ success: true, message: "Attempted to add billing address "});
           });
         });
@@ -441,7 +441,7 @@ router.post('/removeCode', (req, res) => {
 
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-  console.log('remove code called');
+ // console.log('remove code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
@@ -466,13 +466,12 @@ router.get('/getCode', (req, res) => {
   var codeList = new Array();
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-  console.log('view code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       Seller.findById(decoded.data._id, (err, seller_viewing_codes) => {
         if (err) return handleError(err);
-        console.log(seller_viewing_codes.codes.length)
+        //console.log(seller_viewing_codes.codes.length)
         codeList = seller_viewing_codes.codes;
         //if no code were added for the seller
         if (codeList == 'undefined' && codeList == null)

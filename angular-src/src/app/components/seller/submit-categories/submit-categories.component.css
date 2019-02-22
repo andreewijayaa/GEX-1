@@ -7,7 +7,11 @@ html, body {
   margin-bottom: -600px;
   position: relative;
 }
-
+img.stripe {
+  cursor: pointer;
+  text-align: center;
+  box-align: middle;
+}
 .contain {
   opacity: .90;
 }

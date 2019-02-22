@@ -22,7 +22,7 @@ export class SellerService {
   }
 
   // Service to fetch seller profile from database (front-end to back-end connection)
-  getSellerProfile() {
+  getSellerProfile(): Observable<any> {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -57,7 +57,7 @@ export class SellerService {
     }
   }
 
-  
+
   // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
   postOffer(comingOffer, requestID) {
     this.loadToken();
