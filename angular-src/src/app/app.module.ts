@@ -45,7 +45,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AcceptOfferDialogComponent } from './components/buyer/buyer.component';
-import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component'
+import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
+import { MomentModule } from 'ngx-moment';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -167,7 +168,8 @@ const customNotifierOptions: NotifierOptions = {
     NgxPaginationModule,
     Ng2SearchPipeModule,
     CKEditorModule,
-    NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB')
+    NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB'),
+    MomentModule
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
   bootstrap: [AppComponent]

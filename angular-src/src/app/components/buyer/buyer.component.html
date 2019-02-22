@@ -57,7 +57,7 @@ Bryan Vu contributed most of this buyer portal page.
             {{request.offerCount}}
           </mat-panel-title>
           <mat-panel-title style="width: 90px">
-            {{request.deadline}}
+            {{request.deadline | amDifference: today :'days' : true}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
           <mat-panel-title id="selectedRequestId" hidden>
             {{request._id}}
