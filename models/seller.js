@@ -53,7 +53,7 @@ const SellerSchema = mongoose.Schema({
         type: [String]
     },
     user_account_setup: {
-        type: Boolean,
+        type: [Boolean],
         required: true,
         default: false
     },

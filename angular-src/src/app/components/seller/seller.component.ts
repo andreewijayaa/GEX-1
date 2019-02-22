@@ -17,6 +17,8 @@ export class SellerComponent implements OnInit {
   requestList: Object;
   offerList: Object;
   activeRequests: Object;
+  accountSetup: Number;
+  accountSetupBool: Boolean = false;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute) { }
@@ -26,30 +28,43 @@ export class SellerComponent implements OnInit {
       // Fetching seller profile information from the service to be used in the webpage
       this.sellerService.getSellerProfile().subscribe((profile: any) => {
         this.seller = profile.data;
-        //this.loaded_seller = Promise.resolve(true);
-      },
-        err => {
-          console.log(err);
-          return false;
-        });
-
-      // Fetching seller offer history from the service to be used in the webpage
-      this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
-        this.offerList = offers;
-      },
-        err => {
-          console.log(err);
-          return false;
-        });
-
-        // Fetching seller active requests from the service to be used in the webpage
-        this.sellerService.getActiveRequests().subscribe((requests: any) => {
-          this.activeRequests = requests;
+        
+        if (this.seller.user_account_setup[0]  
+          || this.seller.user_account_setup[1] 
+          || this.seller.user_account_setup[2]) {
+          this.accountSetupBool = true;
+          // Fetching seller offer history from the s ervice to be used in the webpage
+        this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
+          this.offerList = offers;
         },
           err => {
             console.log(err);
             return false;
           });
+          // Fetching seller active requests from the service to be used in the webpage
+          this.sellerService.getActiveRequests().subscribe((requests: any) => {
+            this.activeRequests = requests;
+          },
+            err => {
+              console.log(err);
+              return false;
+            });
+        } else { // DISPLAY THE BAR ON THE MAIN PAGE
+          let count;
+          for (let i = 0; i < 3; i++) {
+            if (this.seller.user_account_setup[i] === true) {
+              count++;
+            }
+          }
+          this.accountSetup = count / 100;
+        }
+
+      },
+        err => {
+          console.log(err);
+          return false;
+        });
+      // Check if account has been setup
   }
 
   // Tab first configuration
