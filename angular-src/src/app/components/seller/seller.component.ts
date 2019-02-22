@@ -51,6 +51,35 @@ export class SellerComponent implements OnInit {
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
       this.seller = profile.data;
+      //this.loaded_seller = Promise.resolve(true);
+      this.loader = false;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+
+    // Fetching seller offer history from the service to be used in the webpage
+    this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
+      this.offerList = offers;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+
+    // Fetching seller active requests from the service to be used in the webpage
+    this.sellerService.getActiveRequests().subscribe((requests: any) => {
+      this.activeRequests = requests;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+
+    // Fetching seller profile information from the service to be used in the webpage
+    this.sellerService.getSellerProfile().subscribe((profile: any) => {
+      this.seller = profile.data;
 
       if (this.seller.user_account_setup[0]
         || this.seller.user_account_setup[1]
