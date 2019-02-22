@@ -124,3 +124,10 @@ body, html {
     stroke-dashoffset: -124px;
   }
 }
+
+.spin {
+  position: relative;
+  margin-top: 300px;
+  left: 50%;
+  min-height: 100%;
+}
