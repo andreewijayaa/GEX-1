@@ -31,7 +31,8 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    // console.log('Process.ev: " + process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/buyers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('buyers/profile', httpOptions).pipe(map(res => res));
@@ -48,7 +49,7 @@ export class BuyerService {
           'x-access-token': this.buyerToken
         })
       };
-      if (isDevMode()) {
+      if (process.env.NODE_ENV === 'development') {
         return this.http.post('http://localhost:3000/buyers/request', request, httpOptions)
           .pipe(map(res => res));
       } else {
@@ -69,7 +70,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/buyers/request', httpOptions)
         .pipe(map(res => res));
     } else {
@@ -86,7 +87,7 @@ export class BuyerService {
         'Content-Type': 'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/update', buyer, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -102,7 +103,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/addToCart', offerCartItem, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -119,7 +120,7 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/buyers/retrieveCart', httpOptions)
         .pipe(map(res => res));
     } else {
@@ -137,7 +138,7 @@ export class BuyerService {
       })
     };
     console.log(offer);
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
         .pipe(map(res => res));
     } else {
@@ -146,10 +147,10 @@ export class BuyerService {
     }
   }
 
-  //allow user to upload profile picture
-  //By John
-  setProfilePicture(profilePic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
+  // allow user to upload profile picture
+  // By John
+  setProfilePicture(profilePic: File): Observable<Object> {
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -158,8 +159,8 @@ export class BuyerService {
     };
     const formData = new FormData();
 
-    formData.append('image', profilePic)
-    if (isDevMode()) {
+    formData.append('image', profilePic);
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -169,9 +170,9 @@ export class BuyerService {
     }
   }
 
-  //upload images to request
-  addRequestImage(requestPic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
+  // upload images to request
+  addRequestImage(requestPic: File): Observable<Object> {
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -179,9 +180,8 @@ export class BuyerService {
       })
     };
     const formData = new FormData();
-
-    formData.append('image', requestPic)
-    if (isDevMode()) {
+    formData.append('image', requestPic);
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/requestpicture', formData, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -199,7 +199,7 @@ export class BuyerService {
       })
     };
     console.log(offerID);
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
         .pipe(map(res => res));
     } else {

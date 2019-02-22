@@ -53,7 +53,7 @@ const SellerSchema = mongoose.Schema({
         type: [String]
     },
     user_account_setup: {
-        type: Boolean,
+        type: [Boolean],
         required: true,
         default: false
     },
@@ -65,7 +65,7 @@ const SellerSchema = mongoose.Schema({
     profile_image: {
         type : String,
         required: false,
-        deafault: "https://pofileimages.s3.amazonaws.com/1550343668028"
+        deafault: "https://pofileimages.s3.amazonaws.com/155079112060"
     },
     confirmationToken: {
         type: String

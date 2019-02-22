@@ -26,6 +26,7 @@ router.post('/register',(req,res,next) => {
         position: req.body.position,
         phone_number: req.body.phone_number,
         password: req.body.password,
+        user_account_setup: [false, false, false],
         confirmationToken: jwt.sign({data: 'seller'}, config.secret, {
           expiresIn: '24h'}) // 1 day
     });
@@ -51,7 +52,7 @@ router.post('/register',(req,res,next) => {
               else {
                   // send Seller a verification email
                   // upon successful registration 
-                  sendEmail.sendVerificationEmail(seller);
+                  sendEmail.sellerSendVerificationEmail(seller);
                   res.json({success: true, msg:"Seller Registered!"})
               }
           });
@@ -213,7 +214,25 @@ router.get('/viewactiverequests', (req,res) => {
   });
 });
 
-
+// This will be used to check account setup - By Roni
+router.post('/accountSetup', (req,res) => {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message:'Must login to setup account.' });
+  jwt.verify(token, config.secret, (err, decoded) => {
+    Seller.findById(decoded.data._id,{$exists: decoded.data.user_account_setup} , (err, sellerSettingUp) => {
+      const stepIndex = req.body.step;
+      if(stepIndex >= 0 && stepIndex <= 2 && user_account_setup[stepIndex] == false) {
+        sellerSettingUp.user_account_setup[stepIndex] = true;
+        sellerSettingUp.save((err) => {
+          if(err) return res.status(500).send({ success: false, message: 'Step ' + stepIndex + ' did not save!' });
+          return res.status(200).send({ success: false, message: 'Step ' + stepIndex + ' successfully completed!' });
+        });
+      } else {
+        return res.status(500).send({ success: false, message: 'Step ' + stepIndex + ' did not save!' });
+      }
+    });
+  });
+});
 //route to view requests the have catergories that belong to 
 //made by john (NOT NEEDED)
 /*router.get('/viewrequests', (req,res) => {
@@ -296,6 +315,7 @@ router.post('/addCode', (req, res) => {
       Seller.findById(decoded.data._id, (err, seller_adding_codes) => {
         if (err) return handleError(err);
         seller_adding_codes.codes = req.body.codes;
+        seller_adding_codes.user_account_setup[0] = true;
         seller_adding_codes.save((err) =>{
           if (err) { return next(err); }
           res.json({success: true, msg:"Goods/Services Updated Successfully!"});
@@ -324,6 +344,7 @@ router.post('/addDescription', (req, res) => {
       Seller.findById(decoded.data._id, (err, seller_descipt) => {
         if (err) return handleError(err);
         seller_descipt.set({description: req.body.description});
+        seller.descipt.user_account_setup[2] = true;
         seller_descipt.save(function (err, updatedSeller) {
           if (err) return handleError(err);
           return res.json({ success: true, message: "Attempted to add desciption"});
@@ -384,7 +405,7 @@ router.post('/addBillingAddress', (req, res) => {
       Seller.update({_id: decoded.data._id}, {$set : {billing_address: [] }}, function (err, something) {
         if (err) return handleError(err);
         Seller.findById(decoded.data._id, (err, seller_bill) => {
-          seller_bill.set({user_account_setup : true});
+          //seller_bill.set({user_account_setup : true});
           if (err) return handleError(err);
           /*var new_address = 
           {
@@ -494,7 +515,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
             console.log(err);
           } else {
             //If account Registred Send Email for Email Verification Completed
-            sendEmail.emailVerified(seller);
+            sendEmail.sellerEmailVerified(seller);
             const token = jwt.sign({data: seller}, config.secret, {
               expiresIn: 604800 // 1 week
             });
@@ -538,7 +559,7 @@ router.post('/resend/:token', (req,res, next) =>
         console.log(err);
       } else {
         // If account Registred Send Email for Email Verification
-        sendEmail.sendVerificationEmail(seller);
+        sendEmail.sellerSendVerificationEmail(seller);
       }
     });
   });

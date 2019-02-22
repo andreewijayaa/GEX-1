@@ -47,7 +47,7 @@ router.post('/register', (req, res/*,next*/) => {
           }
           else {
             //after buyer was added to DB, send email for verification - RONI
-            sendEmail.sendVerificationEmail(buyer);
+            sendEmail.buyerSendVerificationEmail(buyer);
             res.json({ success: true, msg: "Buyer Registered!" })
           }
         });
@@ -440,7 +440,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
             console.log(err);
           } else {
             //If account Registred Send Email for Email Verification Completed
-            sendEmail.emailVerified(buyer);
+            sendEmail.buyerEmailVerified(buyer);
             //Automatically login user after account activation
             const token = jwt.sign({ data: buyer }, config.secret, {
               expiresIn: 604800 // 1 week

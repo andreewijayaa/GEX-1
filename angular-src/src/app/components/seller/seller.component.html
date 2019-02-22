@@ -25,7 +25,14 @@
   <div class="center" *ngIf="seller">
     <div class="w3-container">
       <div class="container" style="margin-top:70px; height:750px; width: 1500px;">
-
+        <!--Account Setup By Roni--> 
+        <div *ngIf="!accountSetupBool">
+            <label>Complete these steps to start recieving requests!</label>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+            </div>
+            <button type="button" class="btn btn-primary" routerLink="/seller/submit-categories" routerLinkActive="active">Setup Account</button>
+        </div>
         <h4>Welcome {{seller.first_name}}!</h4>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         &nbsp;

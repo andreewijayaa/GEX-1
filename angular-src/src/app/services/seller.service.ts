@@ -32,7 +32,7 @@ export class SellerService {
       })
     };
     // This will return json file fetched from database
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('sellers/profile', httpOptions).pipe(map(res => res));
@@ -49,7 +49,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/sellers/viewoffers', httpOptions).pipe(map(res => res));
     } else {
       // This will return json file fetched from database
@@ -57,6 +57,7 @@ export class SellerService {
     }
   }
 
+  
   // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
   postOffer(comingOffer, requestID) {
     this.loadToken();
@@ -67,7 +68,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -85,7 +86,7 @@ export class SellerService {
         'Content-Type': 'application/json'
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/sellers/update', seller, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -104,7 +105,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/sellers//addCode', code, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -123,7 +124,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/sellers/getCode', httpOptions)
       .pipe(map(res => res));
     } else {
@@ -143,11 +144,28 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.get('http://localhost:3000/sellers/viewactiverequests', httpOptions).pipe(map(res => res));
     } else {
     // This will return json file fetched from database
     return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
+    }
+  }
+  // Service to fetch offers history of the logged in user (front-end to back-end connection)
+  accountSetupStep(step) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'step': step
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/accountSetup', httpOptions).pipe(map(res => res));
+    } else {
+      // This will return json file fetched from database
+      return this.http.post('sellers/accountSetup', httpOptions).pipe(map(res => res));
     }
   }
 
@@ -161,7 +179,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/sellers/addDescription', description, httpOptions)
       .pipe(map(res => res));
     } else {
@@ -180,7 +198,7 @@ export class SellerService {
         'x-access-token': this.sellerToken
       })
     };
-    if (isDevMode()) {
+    if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
       .pipe(map(res => res));
     } else {

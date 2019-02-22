@@ -7,10 +7,14 @@ If we are in development mode then it will not hide the stripe secret key.
 //const result = require('dotenv').config();
 //console.log(result);
 //console.log(process.env.NODE_ENV);
+console.log('Process.env.NODE_ENV : ' + process.env.NODE_ENV);
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
   //require('dotenv').config();
 }
+
+console.log('Node Env= ' + process.env.NODE_ENV)
 
 // Stripe Keys used for testing.
 const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
@@ -75,10 +79,10 @@ if (process.env.NODE_ENV == 'production') {
 
 
 // Port Number 
-const port = 3000;;
-if (process.env.NODE_ENV == 'production') {
-  port = process.env.PORT || 8080;
-}
+
+var port = 3000;
+if(process.env.NODE_ENV === 'production')
+{ var port = process.env.PORT || 8080; }
 
 // CORS Middleware
 app.use(cors());
@@ -146,7 +150,8 @@ if (process.env.NODE_ENV == 'production') {
   });
 }
 app.all('*', function(req, res) {
-  res.redirect("http://localhost:4200/");
+  res.redirect(process.env.BASE_URL);
+  
 });
 // Start Server
 app.listen(port, () => {
