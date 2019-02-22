@@ -1,0 +1,76 @@
+<div *ngIf="submitOffer === false">
+  <h2 mat-dialog-title style="min-width:600px; text-align-last: center">{{box_title}}</h2>
+  <div layout-align="space-between end">
+    <mat-dialog-content>
+      <mat-form-field style="width: 100%">
+        <input matInput placeholder="Offer Title" [formControl]="titleFormControl" [errorStateMatcher]="matcher">
+        <mat-hint>Enter your offer title!</mat-hint>
+        <mat-error *ngIf="titleFormControl.hasError('required') && !titleFormControl.hasError('required')">
+          Please enter a title for this offer.
+        </mat-error>
+        <mat-error *ngIf="titleFormControl.hasError('required')">
+          Title is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field style="width: 100%;">
+        <textarea matInput placeholder="Enter your offer description for the selected request" [formControl]="descriptionFormControl"
+          [errorStateMatcher]="matcher" style="height: 150px"></textarea>
+        <mat-hint>Enter your offer description!</mat-hint>
+        <mat-error *ngIf="descriptionFormControl.hasError('required') && !descriptionFormControl.hasError('required')">
+          Please enter a title for this offer.
+        </mat-error>
+        <mat-error *ngIf="descriptionFormControl.hasError('required')">
+          Description is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field style="width: 24%;">
+        <span matPrefix>$&nbsp;</span>
+        <input matInput id="price" placeholder="Amount" class="example-right-align" type="number" [formControl]="priceFormControl"
+          [errorStateMatcher]="matcher" style="text-align-last:right">
+        <mat-hint>Enter your offer price!</mat-hint>
+        <mat-error *ngIf="priceFormControl.hasError('required') && !priceFormControl.hasError('required')">
+          Please enter a price for this offer.
+        </mat-error>
+        <mat-error *ngIf="priceFormControl.hasError('required')">
+          Price is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </mat-dialog-content>
+
+    <div mat-dialog-actions style="float:right">
+      <button mat-button (click)="cancel()">Cancel</button>
+      <button mat-button (click)="submit()" cdkFocusInitial>SUBMIT OFFER</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="submitOffer === true" style="min-width:auto; min-height:auto;">
+  <h2 mat-dialog-title style="text-align: center;" layout-align="space-between end">Confirm offer information:</h2>
+  <div layout-align="space-between end">
+    <mat-list>
+      <mat-list-item><strong style="margin-right: 5px">Title:</strong>
+        {{confirmTitle}}</mat-list-item>
+      <br>
+      <br>
+      <br>
+      <br>
+      <mat-list-item><b style="margin-right:5px">Description:</b>  
+        {{confirmDescription}}</mat-list-item>
+      <br>
+      <br>
+      <br>
+      <br>
+      <mat-list-item><strong style="margin-right: 5px">Price:</strong>
+        {{confirmPrice}}</mat-list-item>
+    </mat-list>
+
+    <div mat-dialog-actions style="float:right">
+        <button mat-button (click)="confirmDialogCancel()">Back</button>
+        <button mat-button (click)="confirmDialogSubmit()" cdkFocusInitial style="background-color:limegreen">SUBMIT</button>
+      </div>
+  </div>
+</div>

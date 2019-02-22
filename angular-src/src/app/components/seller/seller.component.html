@@ -1,3 +1,9 @@
+<div class="spin" *ngIf="loader === true">
+    <mat-spinner class="example-margin" [diameter]="100"></mat-spinner>
+    <div style="height: 700px; clear: both;"></div>
+</div>
+
+<div *ngIf="loader === false">
 <app-seller-navbar></app-seller-navbar>
 
 <div *ngIf='!seller' class="app-loading">
@@ -83,7 +89,7 @@
                 <mat-accordion>
                   <mat-expansion-panel id="requestExpansionId" *ngFor="let request of activeRequests | filter:sfilter | paginate: {itemsPerPage: 25, currentPage: pr}">
                     <mat-expansion-panel-header style="text-align:center">
-                      <mat-panel-title style="width:285px">
+                      <mat-panel-title  id="requestTitle" style="width:285px">
                         {{request.title}}
                       </mat-panel-title>
                       <mat-panel-title style="width:200px">
@@ -92,6 +98,9 @@
                       <mat-panel-title style="width: 100px">
                         {{request.deadline}}
                       </mat-panel-title>
+                      <mat-panel-title id="requestID" style="width: 100px" hidden>
+                          {{request._id}}
+                        </mat-panel-title>
                     </mat-expansion-panel-header>
 
                     <div class="container" style="border:3px solid black; background-color: #dcdde1">
@@ -106,7 +115,7 @@
                       <div class="col-sm-12" style="text-align: right;">
                         <button type="button" class="btn btn-warning">Archive</button>
                         &nbsp;
-                        <button type="button" routerLink="/seller/submit-offer/{{request._id}}" class="btn btn-primary">Submit New Offer</button>
+                        <button type="button" (click)="submitOffer(request.title, request._id)" class="btn btn-primary">Submit New Offer</button>
                       </div>
                       &nbsp;
                     </div>
@@ -278,3 +287,4 @@
   </div>
   </div>
 </body>
+</div>
