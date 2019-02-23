@@ -144,9 +144,3 @@ export class BuyerComponent implements OnInit {
     */
   }
 }
-
-@Component({
-  selector: 'dialog-content-offer-accept',
-  templateUrl: 'dialog-content-offer-accept.html',
-})
-export class AcceptOfferDialogComponent { }

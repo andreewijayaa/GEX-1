@@ -46,9 +46,7 @@ export class BuyerNavbarComponent implements OnInit {
     //this.buyerNavbar.cartItemBadge = localStorage.getItem('buyerCart');
     //console.log(this.counter.length);
   }
-
-
-
+  
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton
   // goes into the local memory using the services developed in order to remove the current user so that if another user wishes to log on they can.
   // It also navigates the user to the correct page since they no longer have access to the buyer pages once they log out.

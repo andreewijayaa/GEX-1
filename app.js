@@ -7,7 +7,6 @@ If we are in development mode then it will not hide the stripe secret key.
 //const result = require('dotenv').config();
 //console.log(result);
 //console.log(process.env.NODE_ENV);
-console.log('Process.env.NODE_ENV : ' + process.env.NODE_ENV);
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
