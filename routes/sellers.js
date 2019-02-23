@@ -297,6 +297,58 @@ router.post('/accountSetup', (req,res) => {
   });
 });
 
+// Connect Stripe account to Seller account
+router.post('/authenticateStripe', (req, res, next) => {
+  var token = req.headers['x-access-token']; // Get Token
+  if (!token) return res.status(401).send({ success: false, message:'Invalid Access.' }); //Invalid Token
+
+  //Verify Logged in token
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
+    console.log('decoded ID: ' +decoded.data._id);
+    console.log('State: ' + req.body.state);
+    console.log('Code: ' + req.body.code);
+    //Make sure Stripe returned state is the same as User ID - Updating correct seller Stripe_ID
+    if(req.body.state !== decoded.data._id) { 
+      return res.status(500).send({ success: false, message: 'Not able to connect with Stripe.' });
+    }
+    // Data to be sent to stripe
+    var postData = {          
+      client_secret: 'sk_test_2AL7EAHq9V423nX52NbhBu6C',
+      code: req.body.code,
+      grant_type: 'authorization_code'
+    }
+    // CURL POST request to STRIPE
+    var request = require('request');
+      var clientServerOptions = {
+        uri: 'https://connect.stripe.com/oauth/token',
+        body: JSON.stringify(postData),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    // MAKING THE STRIPE REQUEST
+    request(clientServerOptions, function (error, response) {
+      // REQUEST FAILED
+      if(err) return res.status(500).send({ success: false, message: 'Request to Stripe failed.' });
+      
+      // Parse the returned stripe call to a Json Object
+      var bodyObject = JSON.parse(JSON.parse(JSON.stringify(response.body)))
+      
+      if(bodyObject.stripe_user_id !== undefined) {
+        // Update the stripe_id with the applicate seller
+        Seller.updateOne({ _id: decoded.data._id }, { $set: { stripe_id: bodyObject.stripe_user_id }}, (err, updatingStripe) => {
+          if(err) return res.status(500).send({ success: false, message: 'Not able to connect with Stripe.' });
+          return res.status(200).send({ success: true, message: 'Stripe account connected successfully!' });
+        });
+      } else {
+        return res.status(500).send({ success: false, message: 'Stripe connection was lost.' });
+      }
+    });
+  });
+});
+
 //let's sellers add a code to their account by John
 //uses mongoose to add a code and save it to the array of codes for the seller
 router.post('/addCode', (req, res) => {

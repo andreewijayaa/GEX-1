@@ -51,6 +51,7 @@ export class SubmitCategoriesComponent implements OnInit {
   second: Boolean;
   third: Boolean;
 
+
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
