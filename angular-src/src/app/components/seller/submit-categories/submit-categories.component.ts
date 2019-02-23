@@ -90,7 +90,9 @@ export class SubmitCategoriesComponent implements OnInit {
     const code = {
       codes: this.codeArray
     };
-
+    if (this.codeArray.length <= 0 ) {
+      return this.notifier.notify('error', 'Please select atleast one.');
+    }
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
         this.notifier.notify('success', 'Your New Code was submitted!');
@@ -105,6 +107,9 @@ export class SubmitCategoriesComponent implements OnInit {
       description: this.description
     };
 
+    if (this.description !== undefined) {
+      return this.notifier.notify('error', 'Description can not be left blank.');
+    }
     // setting description
     this.sellerService.setDescription(desc).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted

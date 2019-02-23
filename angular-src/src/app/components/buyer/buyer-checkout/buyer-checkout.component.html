@@ -1,8 +1,9 @@
+<script src="https://checkout.stripe.com/checkout.js"></script>
 <app-buyer-navbar></app-buyer-navbar>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="clearheader"></div>
-
 <div class="container">
+    <button id="customButton">Purchase</button>
   <h2>Secure checkout</h2>
   <hr class="mb-4">
   <div class="row">
@@ -158,14 +159,14 @@
         <li class="list-group-item d-flex justify-content-between">
           <div class="col-25">
             <div>
-              <p><small>Offer:</small> <span class="price">$0.00</span></p>
+              <p><small>Offers:</small> <span class="price">${{offerPriceDisplay}}</span></p>
               <p><small>Shipping & handling:</small> <span class="price">$0.00</span></p>
               <hr>
-              <p><small>Total before tax & fee:</small> <span class="price">$0.00</span></p>
+              <p><small>Total before tax & fee:</small> <span class="price">${{offerPriceDisplay}}</span></p>
               <p><small>Estimated tax to be collected:</small> <span class="price">$0.00</span></p>
-              <p><small>Estimated fee to be collected:</small> <span class="price">$0.00</span></p>
+              <p><small>Estimated fee to be collected:</small> <span class="price">${{orderFeesDisplay}}</span></p>
               <hr>
-              <p style="color: #9a0606; font-weight: bold">Total (USD):<span class="price" style="color:red" id="totalPrice"><b></b></span></p>
+              <p style="color: #9a0606; font-weight: bold">Total (USD):<span class="price" style="color:black" id="totalPrice">${{totalPriceDisplay}}</span></p>
             </div>
           </div>
         </li>
@@ -175,3 +176,29 @@
 </div>
 
 <div class="clearfooter"></div>
+<script>
+    var handler = StripeCheckout.configure({
+      key: 'pk_test_9uQtOrFYROc49Js8RhyMDJtB',
+      image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+      locale: 'auto',
+      token: function(token) {
+        // You can access the token ID with `token.id`.
+        // Get the token ID to your server-side code for use.
+      }
+    });
+
+    document.getElementById('customButton').addEventListener('click', function(e) {
+      // Open Checkout with further options:
+      handler.open({
+        name: 'Requiren',
+        description: '2 widgets',
+        amount: 2000
+      });
+      e.preventDefault();
+    });
+
+    // Close Checkout on page navigation:
+    window.addEventListener('popstate', function() {
+      handler.close();
+    });
+    </script>
