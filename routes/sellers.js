@@ -166,7 +166,7 @@ router.get('/view', (req, res) => {
 
   jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
-      console.log('codes associated with seller' + decoded.data.codes);
+      //console.log('codes associated with seller' + decoded.data.codes);
       Request.find( {'code' :{$in:decoded.data.codes}}, (err, requests) => {
         if (err) return res.status(500).send({ success: false, message: 'Found no posts matching that code.' });
         res.status(200).send(requests);
@@ -253,7 +253,7 @@ router.post('/accountSetup', (req,res) => {
 //made by John. Revised by Roni
   router.post('/makeOffer/:id', (req,res,next) =>{
     var id = req.body.request_ID;
-    console.log('Request with an offer being added to: ' + id);
+    //console.log('Request with an offer being added to: ' + id);
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
     jwt.verify(token, config.secret, (err, decoded) => {
@@ -271,29 +271,81 @@ router.post('/accountSetup', (req,res) => {
       Seller.findById(decoded.data._id, (err, seller_making_offer) => {
         if (err) return handleError(err);//throws err if search for seller fails
         newOffer.save( (err,post) => {
-          if (err) return handleError(err); 
-          console.log(post._id);
+          if (err) return res.json(err); 
+          //console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
             seller_making_offer.open_requests.push(id);//this is the new line added that hopefully fixes the active requests.
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
-              console.log('New Offer made tied to Seller %s', decoded.data._id);
-              console.log('Request ID is: ' + id);
+              //console.log('New Offer made tied to Seller %s', decoded.data._id);
+              //console.log('Request ID is: ' + id);
               Request.findById(id, (err, request_with_offer) => {
                 if (err) return handleError(err);
-                console.log('Found request\n' + request_with_offer);
+                //console.log('Found request\n' + request_with_offer);
                 request_with_offer.request_offers_byID.push(post._id);
                 request_with_offer.offerCount++;
                 request_with_offer.save((err) =>{
                   if (err){return next(err);}
-                  console.log('New Offer made tied to Request %s ', request_with_offer._id);
+                  //console.log('New Offer made tied to Request %s ', request_with_offer._id);
                 });
               });
             });
             res.status(201).json(post);
         });
       });
+  });
+});
+
+// Connect Stripe account to Seller account
+router.post('/authenticateStripe', (req, res, next) => {
+  var token = req.headers['x-access-token']; // Get Token
+  if (!token) return res.status(401).send({ success: false, message:'Invalid Access.' }); //Invalid Token
+
+  //Verify Logged in token
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
+    console.log('decoded ID: ' +decoded.data._id);
+    console.log('State: ' + req.body.state);
+    console.log('Code: ' + req.body.code);
+    //Make sure Stripe returned state is the same as User ID - Updating correct seller Stripe_ID
+    if(req.body.state !== decoded.data._id) { 
+      return res.status(500).send({ success: false, message: 'Not able to connect with Stripe.' });
+    }
+    // Data to be sent to stripe
+    var postData = {          
+      client_secret: 'sk_test_2AL7EAHq9V423nX52NbhBu6C',
+      code: req.body.code,
+      grant_type: 'authorization_code'
+    }
+    // CURL POST request to STRIPE
+    var request = require('request');
+      var clientServerOptions = {
+        uri: 'https://connect.stripe.com/oauth/token',
+        body: JSON.stringify(postData),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    // MAKING THE STRIPE REQUEST
+    request(clientServerOptions, function (error, response) {
+      // REQUEST FAILED
+      if(err) return res.status(500).send({ success: false, message: 'Request to Stripe failed.' });
+      
+      // Parse the returned stripe call to a Json Object
+      var bodyObject = JSON.parse(JSON.parse(JSON.stringify(response.body)))
+      
+      if(bodyObject.stripe_user_id !== undefined) {
+        // Update the stripe_id with the applicate seller
+        Seller.updateOne({ _id: decoded.data._id }, { $set: { stripe_id: bodyObject.stripe_user_id }}, (err, updatingStripe) => {
+          if(err) return res.status(500).send({ success: false, message: 'Not able to connect with Stripe.' });
+          return res.status(200).send({ success: true, message: 'Stripe account connected successfully!' });
+        });
+      } else {
+        return res.status(500).send({ success: false, message: 'Stripe connection was lost.' });
+      }
+    });
   });
 });
 
@@ -304,7 +356,7 @@ router.post('/addCode', (req, res) => {
 
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'Invalid Access.' });
-  console.log('add code called');
+  //console.log('add code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
@@ -328,7 +380,7 @@ router.post('/addCode', (req, res) => {
 //let's seller's add a description to their account
 //code by John
 router.post('/addDescription', (req, res) => {
-  console.log('add description called');
+  //console.log('add description called');
   var token = req.headers['x-access-token'];
 
   //if they don't have a token
@@ -337,10 +389,10 @@ router.post('/addDescription', (req, res) => {
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       if (req.body.description == null){
-        console.log('No description added');
+        //console.log('No description added');
         return res.status(500).send({ success: false, message: "No description added"});
       }
-      console.log('adding this description: ' + req.body.description);
+      //console.log('adding this description: ' + req.body.description);
       Seller.findById(decoded.data._id, (err, seller_descipt) => {
         if (err) return handleError(err);
         seller_descipt.set({description: req.body.description});
@@ -363,7 +415,7 @@ router.post('/profilepicture', function(req, res) {
       if (err) {
         return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
       }
-      console.log(req.file.location);
+      //console.log(req.file.location);
       Seller.findById(decoded.data._id, (err, seller_pic) => {
         seller_pic.set({profile_image: req.file.location});
         seller_pic.save();
@@ -394,7 +446,7 @@ router.post('/profilepicture', function(req, res) {
 //let's seller's add billing addres to account
 //code by John
 router.post('/addBillingAddress', (req, res) => {
-  console.log('add billing address called');
+  //console.log('add billing address called');
   var token = req.headers['x-access-token'];
 
   //if they don't have a token
@@ -426,7 +478,7 @@ router.post('/addBillingAddress', (req, res) => {
           seller_bill.billing_address.push(req.body.postal_code);
           seller_bill.save(function (err, updatedSeller) {
             if (err) return handleError(err);
-            console.log('Success billing!');
+            //console.log('Success billing!');
             return res.json({ success: true, message: "Attempted to add billing address "});
           });
         });
@@ -441,7 +493,7 @@ router.post('/removeCode', (req, res) => {
 
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-  console.log('remove code called');
+ // console.log('remove code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
@@ -466,13 +518,12 @@ router.get('/getCode', (req, res) => {
   var codeList = new Array();
   //if they don't have a token
   if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-  console.log('view code called');
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
       if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
       Seller.findById(decoded.data._id, (err, seller_viewing_codes) => {
         if (err) return handleError(err);
-        console.log(seller_viewing_codes.codes.length)
+        //console.log(seller_viewing_codes.codes.length)
         codeList = seller_viewing_codes.codes;
         //if no code were added for the seller
         if (codeList == 'undefined' && codeList == null)

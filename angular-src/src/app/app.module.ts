@@ -42,11 +42,14 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NgxStripeModule, STRIPE_PUBLISHABLE_KEY } from 'ngx-stripe';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AcceptOfferDialogComponent } from './components/buyer/buyer.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { MomentModule } from 'ngx-moment';
+import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent } from './components/seller/seller.component';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { StripeCallbackComponent } from './components/seller/stripe-callback/stripe-callback.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -140,11 +143,16 @@ const customNotifierOptions: NotifierOptions = {
     SellerServicesComponent,
     RequestComponent,
     BuyerCheckoutComponent,
-    AcceptOfferDialogComponent,
-    BuyerCartComponent
+    SubmitOfferDialogComponent,
+    OfferSubmittedDialogComponent,
+    OfferSubmittedFailedDialogComponent,
+    BuyerCartComponent,
+    StripeCallbackComponent
   ],
   entryComponents: [
-    AcceptOfferDialogComponent
+    SubmitOfferDialogComponent,
+    OfferSubmittedDialogComponent,
+    OfferSubmittedFailedDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -162,6 +170,9 @@ const customNotifierOptions: NotifierOptions = {
     MatExpansionModule,
     MatBadgeModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+    MatListModule,
     // Site Notifications
     NotifierModule.withConfig (customNotifierOptions),
     HttpClientModule,
@@ -171,7 +182,7 @@ const customNotifierOptions: NotifierOptions = {
     NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB'),
     MomentModule
   ],
-  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve],
+  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
 
 })

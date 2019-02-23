@@ -96,36 +96,11 @@
         <form (submit)="OnSubmitClickBtn()">
           <div class="card">
             <div class="card-body">
-              <h3>Billing Address</h3>
+              <h3><strong>Connect with Stripe.</strong></h3>
+              <h4>To have the ability to recieve payments.</h4>
               &nbsp;
-                <div class="form-group">
-                  <label for="firstName" style="text-align: left">&nbsp;&nbsp;First Name:</label>
-                  <input [(ngModel)]="first_name" placeholder="Enter First Name" class="form-control" name="first_name" rows="1" required>
-                </div>
-                <div class="form-group">
-                  <label for="lastName" style="text-align: left">&nbsp;&nbsp;Last Name: </label>
-                  <input [(ngModel)]="last_name" placeholder="Enter Last Name" class="form-control" name="last_name" rows="1" required>
-                </div>
-                <div class="form-group">
-                  <label for="streetAddress" style="text-align: left">&nbsp;&nbsp;Street Address:</label>
-                  <input [(ngModel)]="street_address" placeholder="Enter Street Address" class="form-control" name="street_address" rows="3" required>
-                </div>
-                <div class="form-group">
-                  <label for="city" style="text-align: left">&nbsp;&nbsp;City: </label>
-                  <input [(ngModel)]="city" placeholder="Enter City" class="form-control" name="city" rows="1" required>
-                </div>
-                <div class="form-group">
-                  <label for="country" style="text-align: left">&nbsp;&nbsp;Country:</label>
-                  <input [(ngModel)]="country" placeholder="Enter Country" class="form-control" name="country" rows="1" required>
-                </div>
-                <div class="form-group">
-                  <label for="state_province" style="text-align: left">&nbsp;&nbsp;State/Province: </label>
-                  <input [(ngModel)]="state_province" placeholder="Enter State/Province" class="form-control" name="state_province" rows="1" required>
-                </div>
-                <div class="form-group">
-                  <label for="postal_code" style="text-align: left">&nbsp;&nbsp;Postal Code: </label>
-                  <input [(ngModel)]="postal_code" placeholder="Enter Postal Code" type="Postal" class="form-control" name="postal_code" rows="1" required>
-                </div>
+              <br>
+              <img class="stripe" onmouseover="" style="cursor: pointer;" (click)="rerouteToStripe()" src="../../../../assets/blue-on-light@2x.png"  alt="Connect with Stripe">
             </div>
           </div>
           <div>
