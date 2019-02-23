@@ -47,7 +47,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import { StripeCallbackComponent } from './components/seller/stripe-callback/stripe-callback.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
