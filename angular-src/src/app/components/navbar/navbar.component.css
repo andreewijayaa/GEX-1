@@ -1,17 +1,28 @@
 
 .navbar {
   margin: 0;
-  background-color:white;
-  height: 80px;
+  height: auto;
   position: absulote;
   border: 1px;
+  overflow: visible;
+  z-index: 9999;
+
 }
+#navbarSupportContent {
+  background-color: brown;
+}
+
 
 .navbar-brand{
   max-height: 150px;
+<<<<<<< HEAD
+  max-width: 150px;
+  max-width: 20%;
+=======
   max-width: 200px;
   max-width: 30%;
   overflow: hidden;
+>>>>>>> upstream/master
   padding: 0;
   text-align: center;
   position: relative;
@@ -25,7 +36,7 @@
 
 ul {
   list-style: none;
-  display: inline-flex;
+  display: flexbox;
   margin-top: 12px;
   text-align: center;
 
