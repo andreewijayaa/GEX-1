@@ -332,17 +332,12 @@ router.get('/retrieveCart', (req, res, next) => {
         orderFees = Math.round(orderFees * 100) / 100;
         orderTotal = Math.round(orderTotal * 100) / 100;
 
-
-        // Make all TWO SIG FIGS
-        offerPriceTotal = parseFloat(offerPriceTotal.toFixed(2));
-        orderTotal = parseFloat(orderTotal.toFixed(2));
-        orderFees = parseFloat(orderFees.toFixed(2));
-
         return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderFees,orderTotal});
       });
     });
   });
 });
+
 
 // Offer Accepted
 router.post('/offerAccepted', (req, res /*next*/) => {
@@ -418,6 +413,62 @@ router.post('/removeFromCart', (req, res, next) => {
   });
 });
 
+// By: Omar
+// Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
+router.post('/checkout', (req, res, next) => {
+  // let offer = {
+  //   stripeEmail: req.body.email,
+  //   stripeToken: req.body.token,
+  //   amount: req.body.amount,
+  //   description: req.body.description
+  // }
+
+  // stripe.customers.create({
+  //   email: offer.stripeEmail,
+  //   source: offer.stripeToken
+  // })
+  // .then(customer => stripe.charges.create({
+  //   amount: offer.amount,
+  //   currency: 'usd',
+  //   //title: req.body.product,
+  //   description: offer.description,
+  //   customer: customer.id,
+  //   //source: offer.stripeToken
+  // }))
+
+  var stripe = require("stripe")("sk_test_2AL7EAHq9V423nX52NbhBu6C");
+
+// Create a Charge:
+  stripe.charges.create({
+    amount: 10000,
+    currency: "usd",
+    source: "tok_visa",
+    transfer_group: "{ORDER10}",
+  }).then(function(charge) {
+    // asynchronously called
+  });
+
+  // Create a Transfer to the connected account (later):
+  stripe.transfers.create({
+    amount: 7000,
+    currency: "usd",
+    destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
+    transfer_group: "{ORDER10}",
+  }).then(function(transfer) {
+    // asynchronously called
+  });
+
+  // Create a second Transfer to another connected account (later):
+  stripe.transfers.create({
+    amount: 2000,
+    currency: "usd",
+    destination: "{OTHER_CONNECTED_STRIPE_ACCOUNT_ID}",
+    transfer_group: "{ORDER10}",
+  }).then(function(second_transfer) {
+    // asynchronously called
+  });
+
+});
 //Email Verification - RONI
 //Will check the route for a token and search the DB for a user with that 
 //token to activate their account
