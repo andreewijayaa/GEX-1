@@ -50,10 +50,12 @@ export class SellerComponent implements OnInit {
   // On initialization process of the webpage
   ngOnInit() {
 
+    // get params if stripe is sending a redirect
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
       this.state = params['state'];
     });
+    // Call stripe backend connect function
     if(this.code !== undefined && this.state !== undefined)
     {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
