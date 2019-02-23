@@ -47,6 +47,7 @@ export class SellerComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+    this.route.snapshot.params['bank'];
     this.loader = true;
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
