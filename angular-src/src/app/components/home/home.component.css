@@ -15,7 +15,11 @@ body , html {
 
 }
 
+.testimonials {
 
+  padding: 12px;
+
+}
 
 
 .container-fluid {
@@ -98,6 +102,7 @@ h6 {
   font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700;
 }
+
 
 .mainheader {
   font-size: 30px;

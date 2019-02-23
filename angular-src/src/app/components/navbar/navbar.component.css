@@ -8,16 +8,12 @@
   z-index: 9999;
 
 }
-#navbarSupportContent {
-  background-color: brown;
-}
-
 
 .navbar-brand{
   max-height: 150px;
   max-width: 200px;
   max-width: 30%;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
   text-align: center;
   position: relative;
@@ -31,7 +27,7 @@
 
 ul {
   list-style: none;
-  display: flexbox;
+  display: inline-flex;
   margin-top: 12px;
   text-align: center;
 
@@ -61,8 +57,7 @@ a {
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  position: relative;
-  display: inline-block;
+
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -78,6 +73,7 @@ a {
 /* Links inside the dropdown */
 .dropdown-content a {
   color: black;
+  position: relative;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
