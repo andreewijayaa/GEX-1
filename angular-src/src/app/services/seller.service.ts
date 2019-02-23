@@ -78,6 +78,30 @@ export class SellerService {
     }
   }
 
+  // Stripe Service call to connect Seller account with stripe account
+  connectStripe(code, state): Observable<any>  {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    const body = {
+        'code': code,
+        'state': state
+    }
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/authenticateStripe', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/authenticateStripe',body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // By: Omar
   // Update current sellers profile
   updateSellerProfile(seller) {
