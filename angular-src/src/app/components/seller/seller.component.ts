@@ -260,3 +260,15 @@ export class OfferSubmittedDialogComponent { }
   templateUrl: 'dialog-content-offer-failed.html'
 })
 export class OfferSubmittedFailedDialogComponent { }
+
+@Component({
+  selector: 'dialog-content-stripe-created-success',
+  templateUrl: 'dialog-content-stripe-created-success.html'
+})
+export class StipeAccountCreatedSuccessDialogComponent { }
+
+@Component({
+  selector: 'dialog-content-stripe-created-failed',
+  templateUrl: 'dialog-content-stripe-created-failed.html'
+})
+export class StipeAccountCreatedFailedDialogComponent { }

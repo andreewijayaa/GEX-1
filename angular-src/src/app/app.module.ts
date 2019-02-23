@@ -45,9 +45,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AcceptOfferDialogComponent } from './components/buyer/buyer.component';
+import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { MomentModule } from 'ngx-moment';
-import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent } from './components/seller/seller.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { StripeCallbackComponent } from './components/seller/stripe-callback/stripe-callback.component';
 
@@ -146,13 +146,17 @@ const customNotifierOptions: NotifierOptions = {
     SubmitOfferDialogComponent,
     OfferSubmittedDialogComponent,
     OfferSubmittedFailedDialogComponent,
+    StipeAccountCreatedSuccessDialogComponent,
+    StipeAccountCreatedFailedDialogComponent,
     BuyerCartComponent,
     StripeCallbackComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,
     OfferSubmittedDialogComponent,
-    OfferSubmittedFailedDialogComponent
+    OfferSubmittedFailedDialogComponent,
+    StipeAccountCreatedSuccessDialogComponent,
+    StipeAccountCreatedFailedDialogComponent
   ],
   imports: [
     BrowserModule,
