@@ -38,6 +38,10 @@ export class SellerComponent implements OnInit {
   dialogLoader: boolean;
   accountSetup: Number;
   accountSetupBool: Boolean = false;
+  progress1: any;
+  progress2: any;
+  progress3: any;
+  temp: any;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -49,7 +53,6 @@ export class SellerComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
-
     // get params if stripe is sending a redirect
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
@@ -109,13 +112,33 @@ export class SellerComponent implements OnInit {
         return false;
       });
 
+      this.progress1 = 0;
+      this.progress2 = 0;
+      this.progress3 = 0;
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
       this.seller = profile.data;
 
+      this.temp = this.seller.user_account_setup;
+      if (this.seller.user_account_setup[0]) {
+        this.progress1 = 100;
+        if (this.seller.user_account_setup[1]) {
+          this.progress2 = 100;
+          if (this.seller.user_account_setup[2]) {
+            this.progress3 = 100;
+          } else {
+            this.progress3 = 50;
+          }
+        } else {
+          this.progress2 = 50;
+        }
+      } else {
+        this.progress1 = 50;
+      }
+
       if (this.seller.user_account_setup[0]
-        || this.seller.user_account_setup[1]
-        || this.seller.user_account_setup[2]) {
+        && this.seller.user_account_setup[1]
+        && this.seller.user_account_setup[2]) {
         this.accountSetupBool = true;
         // Fetching seller offer history from the s ervice to be used in the webpage
         this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
@@ -149,6 +172,7 @@ export class SellerComponent implements OnInit {
         return false;
       });
     // Check if account has been setup
+
   }
 
   submitOffer(title: any, id: any) {
