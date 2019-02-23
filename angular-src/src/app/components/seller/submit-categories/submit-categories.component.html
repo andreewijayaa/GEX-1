@@ -60,12 +60,12 @@
                       </ul>
                     </div>
                   </div>
+                  <div>
+                    <button matStepperNext class="float-right btn btn-primary" (click)="AddCode()">Submit and Continue ></button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button mat-button matStepperNext class="float-right" (click)="AddCode()">Submit and Continue ></button>
           </div>
         </form>
       </mat-step>
@@ -82,11 +82,11 @@
                     <textarea class="form-control" [(ngModel)]="description" name="description" rows="20" required></textarea>
                   </div>
                 </form>
+                <div>
+                  <button matStepperNext class="float-right btn btn-primary" (click)="AddDescription()">Submit and Continue ></button>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button mat-button matStepperNext class="float-right" (click)="AddDescription()">Submit and Continue ></button>
           </div>
         </form>
       </mat-step>
@@ -115,8 +115,9 @@
             </div>
           </div>
         </div>
+        &nbsp;
         <div>
-          <button mat-button matStepperNext class="float-right">Finish!</button>
+          <button matStepperNext class="float-right btn btn-primary" routerLink="/seller" routerLinkActive="router-link-active">Finish!</button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>
