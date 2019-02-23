@@ -61,10 +61,20 @@ export class SellerComponent implements OnInit {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
         if(response.success) {
           //Display Success stripe Dialog
-          this.notifier.notify('success', response.msg);
+          const dialogRef = this.dialog;
+          dialogRef.open(StipeAccountCreatedSuccessDialogComponent);
+          setTimeout(function () {
+            dialogRef.closeAll();
+          }, 5000);
+          //this.notifier.notify('success', response.msg);
         } else {
           //Display fail stripe Dialog
-          this.notifier.notify('error', response.msg);
+          const dialogRef = this.dialog;
+          dialogRef.open(StipeAccountCreatedFailedDialogComponent);
+          setTimeout(function () {
+            dialogRef.closeAll();
+          }, 5000);
+          //this.notifier.notify('error', response.msg);
         }
       });
     }
