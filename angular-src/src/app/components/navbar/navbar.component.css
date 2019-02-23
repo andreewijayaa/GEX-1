@@ -15,8 +15,14 @@
 
 .navbar-brand{
   max-height: 150px;
+<<<<<<< HEAD
   max-width: 150px;
   max-width: 20%;
+=======
+  max-width: 200px;
+  max-width: 30%;
+  overflow: hidden;
+>>>>>>> upstream/master
   padding: 0;
   text-align: center;
   position: relative;

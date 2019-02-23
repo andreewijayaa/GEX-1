@@ -22,7 +22,7 @@ export class SellerService {
   }
 
   // Service to fetch seller profile from database (front-end to back-end connection)
-  getSellerProfile() {
+  getSellerProfile(): Observable<any> {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -57,7 +57,7 @@ export class SellerService {
     }
   }
 
-  
+
   // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
   postOffer(comingOffer, requestID) {
     this.loadToken();
@@ -74,6 +74,30 @@ export class SellerService {
     } else {
     // This will return json file fetched from database
       return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  // Stripe Service call to connect Seller account with stripe account
+  connectStripe(code, state): Observable<any>  {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    const body = {
+        'code': code,
+        'state': state
+    }
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/authenticateStripe', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/authenticateStripe',body, httpOptions)
       .pipe(map(res => res));
     }
   }
@@ -151,23 +175,25 @@ export class SellerService {
     return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
     }
   }
-  // Service to fetch offers history of the logged in user (front-end to back-end connection)
-  accountSetupStep(step) {
-    this.loadToken();
-    // Tokens needed to fetch data from database
-    const httpOptions = {
-      headers: new HttpHeaders ({
-        'Content-Type':  'application/json',
-        'step': step
-      })
-    };
-    if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/accountSetup', httpOptions).pipe(map(res => res));
-    } else {
-      // This will return json file fetched from database
-      return this.http.post('sellers/accountSetup', httpOptions).pipe(map(res => res));
-    }
-  }
+  // // Service to fetch offers history of the logged in user (front-end to back-end connection)
+  // accountSetupStep(step) {
+  //   this.loadToken();
+  //   // Tokens needed to fetch data from database
+  //   const httpOptions = {
+  //     headers: new HttpHeaders ({
+  //       'Content-Type':  'application/json'
+  //     })
+  //   };
+  //   const body = {
+  //     'step': step
+  //   };
+  //   if (process.env.NODE_ENV === 'development') {
+  //     return this.http.post('http://localhost:3000/sellers/accountSetup', body, httpOptions).pipe(map(res => res));
+  //   } else {
+  //     // This will return json file fetched from database
+  //     return this.http.post('sellers/accountSetup', body, httpOptions).pipe(map(res => res));
+  //   }
+  // }
 
   // Service to post a new description for seller
   setDescription(description) {

@@ -29,6 +29,7 @@ export class SubmitCategoriesComponent implements OnInit {
     { code: 49605403, name: 'Watercolor (Painting)', image: 'https://picsum.photos/200', checked: false },
     { code: 49605404, name: 'Acrlyic (Painting)', image: 'https://picsum.photos/200', checked: false }
   ];
+  sellerID: String;
   submitLabels: String[];
   codeArray: Number[];
   code: Number;
@@ -50,6 +51,7 @@ export class SubmitCategoriesComponent implements OnInit {
   second: Boolean;
   third: Boolean;
 
+
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
@@ -58,6 +60,8 @@ export class SubmitCategoriesComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+    // Get Seller Information
+    this.getSellerInfo();
     // for the steps
     this.first = false;
     this.second = false;
@@ -82,112 +86,13 @@ export class SubmitCategoriesComponent implements OnInit {
     });
   }
 
-  /* // Checking which checkboxes are checked and upload the code - By: Andre Wijaya
-  AddCode() {
-    // Jewelry
-    var element = <HTMLInputElement> document.getElementById('78965422');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Necklaces (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965423');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Rings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('789654224');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Earrings (Jewelry)
-    var element = <HTMLInputElement> document.getElementById('78965425');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Dolls
-    var element = <HTMLInputElement> document.getElementById('68977451');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Sculptures
-    var element = <HTMLInputElement> document.getElementById('67887941');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Scarves
-    var element = <HTMLInputElement> document.getElementById('62145331');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Blankets
-    var element = <HTMLInputElement> document.getElementById('54887921');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Socks
-    var element = <HTMLInputElement> document.getElementById('52871151');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Pencils
-    var element = <HTMLInputElement> document.getElementById('50360051');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Painting
-    var element = <HTMLInputElement> document.getElementById('49605401');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Oil (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605402');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Watercolor (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605403');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-
-    // Acrlyic (Painting)
-    var element = <HTMLInputElement> document.getElementById('49605404');
-    if (element.checked === true) {
-      this.code = Number(element.value);
-      this.uploadCode();
-    }
-  } */
-
   AddCode() {
     const code = {
       codes: this.codeArray
     };
-
+    if (this.codeArray.length <= 0 ) {
+      return this.notifier.notify('error', 'Please select atleast one.');
+    }
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
         this.notifier.notify('success', 'Your New Code was submitted!');
@@ -195,6 +100,51 @@ export class SubmitCategoriesComponent implements OnInit {
         this.notifier.notify('error', data.msg);
       }
     });
+  }
+
+  AddDescription() {
+    const desc = {
+      description: this.description
+    };
+
+    if (this.description !== undefined) {
+      return this.notifier.notify('error', 'Description can not be left blank.');
+    }
+    // setting description
+    this.sellerService.setDescription(desc).subscribe((data: any) => {
+      if (data.success === true) { // if the data succeed to be posted
+        this.notifier.notify('success', 'Your Description was submitted!');
+      } else { // if it fails
+        this.notifier.notify('error', data.msg);
+      }
+    });
+  }
+
+  getSellerInfo() {
+    this.sellerService.getSellerProfile().subscribe((data: any) => {
+      if (data) {
+        this.sellerID = data.data._id;
+      }
+    });
+  }
+
+  rerouteToStripe() {
+    console.log('Data = ' + this.sellerID);
+    const redirect_uri: string = 'https://powerful-taiga-46416.herokuapp.com/seller';
+    const client_id: string = 'ca_EVl0RHMGrhYGo6GDjWwwn40nmD4aK6AA';
+
+
+    const urlToOpen: string = 'https://connect.stripe.com/express/oauth/authorize?redirect_uri='
+                            + redirect_uri + '&client_id=' + client_id
+                            + '&state=' + this.sellerID;
+    let url: string = '';
+    if (!/^http[s]?:\/\//.test(urlToOpen)) {
+        url += 'http://';
+    }
+    console.log(url);
+    url += urlToOpen;
+    window.open(url, '_blank');
+
   }
 
   labelButton() {
@@ -240,50 +190,6 @@ export class SubmitCategoriesComponent implements OnInit {
         }
       }
     }
-  }
-
-  OnSubmitClickBtn() {
-    const billingAddress = {
-      first_name: this.first_name,
-      last_name: this.last_name,
-      street_address: this.street_address,
-      city: this.city,
-      country: this.country,
-      state_province: this.state_province,
-      postal_code: this.postal_code,
-    };
-
-    const desc = {
-      description: this.description
-    };
-
-    const code = {
-      codes: this.codeArray
-    };
-
-    // adding code
-    this.sellerService.setNewCode(code).subscribe((data2: any) => {
-      if (data2.success) {
-        this.notifier.notify('success', 'Your New Code was submitted!');
-        // setting description
-        this.sellerService.setDescription(desc).subscribe((data: any) => {
-          if (data.success === true) { // if the data succeed to be posted
-            // setting billing address connect it to the service for back-end process
-            this.sellerService.setBillingAddress(billingAddress).subscribe((data1: any) => {
-              if (data1.success) { // if the data succeed to be posted
-                this.router.navigate(['/seller']);
-              } else { // if it fails
-                this.notifier.notify('error', data1.msg);
-              }
-            });
-          } else { // if it fails
-            this.notifier.notify('error', data.msg);
-          }
-        });
-      } else {
-        this.notifier.notify('error', data2.msg);
-      }
-    });
   }
 
     // Tab first configuration

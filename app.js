@@ -4,10 +4,6 @@ Will let out app.js file know if we are in development of production. If we are 
 public so this will ensure the secret key is hidden. 
 If we are in development mode then it will not hide the stripe secret key.
 */
-//const result = require('dotenv').config();
-//console.log(result);
-//console.log(process.env.NODE_ENV);
-console.log('Process.env.NODE_ENV : ' + process.env.NODE_ENV);
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
@@ -15,10 +11,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 console.log('Node Env= ' + process.env.NODE_ENV)
-
-// Stripe Keys used for testing.
-const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
-const keySecret = process.env.STRIPE_SECRET_KEY;
 
 const express = require('express');
 const path = require('path');
@@ -31,7 +23,6 @@ var nodemailer = require("nodemailer");
 const GridFSStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const methodOverride = require('method-override')
-const stripe = require('stripe')(keySecret);
 const fs = require('fs');
 const Offer = require('./models/offer');
 const ejs = require('ejs')._express;
@@ -117,29 +108,7 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
-// By: Omar
-// Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
-app.post('/checkout', (req, res, next) => {
-  let offer = {
-    stripeEmail: req.body.email,
-    stripeToken: req.body.token,
-    amount: req.body.amount,
-    description: req.body.description
-  }
 
-  stripe.customers.create({
-    email: offer.stripeEmail,
-    source: offer.stripeToken
-  })
-  .then(customer => stripe.charges.create({
-    amount: offer.amount,
-    currency: 'usd',
-    //title: req.body.product,
-    description: offer.description,
-    customer: customer.id,
-    //source: offer.stripeToken
-  }))
-});
 
 
 if (process.env.NODE_ENV == 'production') {

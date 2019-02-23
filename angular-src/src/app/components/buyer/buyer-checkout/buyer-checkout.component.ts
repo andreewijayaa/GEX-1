@@ -20,7 +20,7 @@ export class BuyerCheckoutComponent implements OnInit {
   selectedOfferId: any;
   offerList: Object;
   request_Id: any;
-  offerPriceDisplay: any;
+  offerPrice: any;
   totalPrice: any;
   isDataAvailable: Boolean = false;
   stripeTest: FormGroup;
@@ -31,6 +31,10 @@ export class BuyerCheckoutComponent implements OnInit {
   emptyCart: Boolean;
   orderFees: Number;
   editable: boolean = false;
+
+
+  //FOR DISPLAY
+  offerPriceDisplay: any; orderFeesDisplay: any; totalPriceDisplay: any;
 
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
 
@@ -70,11 +74,18 @@ export class BuyerCheckoutComponent implements OnInit {
     //this.buyer = this.route.snapshot.data['buyer'];
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
+        console.log(data);
         this.emptyCart = false;
         this.offersInCart = data.offersInCart;
-        this.offerPriceDisplay = data.offerPriceTotal;
+        this.offerPrice = data.offerPriceTotal;
         this.orderFees = data.orderFees;
         this.totalPrice = data.orderTotal;
+
+        //CONVERT ALL TO TWO SIG FIGS
+        this.offerPriceDisplay = this.offerPrice.toFixed(2);
+        this.orderFeesDisplay = this.orderFees.toFixed(2);
+        this.totalPriceDisplay = this.totalPrice.toFixed(2);
+
       } else {
         this.notifier.notify('warning', 'Must accept offers to checkout.');
         this.router.navigate(['/buyer']);

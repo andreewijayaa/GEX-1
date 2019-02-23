@@ -101,7 +101,7 @@ body, html {
   stroke-dashoffset: 0;
   animation: dash 1.5s ease-in-out infinite;
   stroke-linecap: round;
-  stroke: #ddd;
+  stroke: blue;
 }
 
 @keyframes rotate {
@@ -123,4 +123,36 @@ body, html {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -124px;
   }
+}
+
+.spin {
+  position: relative;
+  margin-top: 300px;
+  left: 50%;
+  min-height: 100%;
+}
+
+.column {
+  width: 269px;
+  height: 40px;
+  float: left;
+  padding: 10px;
+}
+.columnLabel {
+	width: 150px;
+  float: left;
+  padding: 10px;
+}
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.completeBtn {
+  font-size: 14px;
+  height: 45px;
+  width: 125px;
+}
+.progress {
+  height: 45px;
 }

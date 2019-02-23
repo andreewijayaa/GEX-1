@@ -12,11 +12,12 @@ Bryan Vu contributed most of this buyer portal page.
     <div class="row justify-content-md">
       <div>
         <h4 class="page-header">Welcome {{buyer.data.first_name}}!</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </div>
-        &nbsp;
-        <button type="button" routerLink="/buyer/make-request" class="btn btn-block" style="background-color: #1761a0; color: white">Submit
-          New Request</button>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+          dolore magna aliqua.</p>
+      </div>
+      &nbsp;
+      <button type="button" routerLink="/buyer/make-request" class="btn btn-block" style="background-color: #1761a0; color: white">Submit
+        New Request</button>
     </div>
 
     <br>
@@ -45,7 +46,8 @@ Bryan Vu contributed most of this buyer portal page.
     </table>
 
     <mat-accordion>
-      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 25, currentPage: p}" (opened)="expanded(request._id)">
+      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 25, currentPage: p}"
+        (opened)="expanded(request._id)">
         <mat-expansion-panel-header style="text-align:center">
           <mat-panel-title style="width: 180px" id="requestTitle">
             {{request.title}}
@@ -56,8 +58,14 @@ Bryan Vu contributed most of this buyer portal page.
           <mat-panel-title style="width: 75px">
             {{request.offerCount}}
           </mat-panel-title>
-          <mat-panel-title style="width: 90px">
-            {{request.deadline}}
+          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 90px; color: green">
+            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+          </mat-panel-title>
+          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 3 && (request.deadline | amDifference: today :'days' : true | number:'1.0-0') > 0" style="width: 90px; color: red">
+            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+          </mat-panel-title>
+          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 0" style="width: 90px; color: red">
+            EXPIRED<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
           <mat-panel-title id="selectedRequestId" hidden>
             {{request._id}}
@@ -119,19 +127,16 @@ Bryan Vu contributed most of this buyer portal page.
                 <button [disabled]="true" mat-button style="background-color: #006400; color: white;">Offer In Cart</button>
               </mat-panel-title>-->
               <mat-panel-title style="margin-left: 85%">
-                <button *ngIf="offer.offerAccepted === true" mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #4cd137; color: white;" disabled>Offer Accepted</button>
-                <button *ngIf="offer.offerAccepted === false" mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
+                <button *ngIf="offer.offerAccepted === true" mat-button (click)="acceptOffer($event.target, offer._id)"
+                  id="acceptOfferButton" style="background-color: #4cd137; color: white;" disabled>Offer Accepted</button>
+                <button *ngIf="offer.offerAccepted === false" mat-button (click)="acceptOffer($event.target, offer._id)"
+                  id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
               </mat-panel-title>
               &nbsp;
             </div>
           </mat-expansion-panel>
           &nbsp;
         </div>
-
-        <!----
-        <mat-form-field>
-          <input matInput placeholder="Age">
-        </mat-form-field>-->
       </mat-expansion-panel>
     </mat-accordion>
 
@@ -140,26 +145,7 @@ Bryan Vu contributed most of this buyer portal page.
     <pagination-controls (pageChange)="p = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
       autoHide="true">
     </pagination-controls>
-
-    <!----
-    <div class="row">
-      <div class="col-md-auto">
-        <h4>{{request.title}}</h4>
-      </div>
-      <div class="col">
-        <p><b>Offer count:</b> {{request.offerCount}}</p>
-      </div>
-    </div>
-
-    <p><b>Deadline:</b> {{request.deadline}}</p>
-    <p><b>Description:</b> {{request.description}}</p>
-    <div class="col-sm-12" style="text-align: right;">
-      <button type="button" routerLink="/request/{{request._id}}" class="btn">View Offers</button>
-    </div>
-    <br>-->
   </li>
 </div>
-
-
 
 <div class="clearfooter"></div>

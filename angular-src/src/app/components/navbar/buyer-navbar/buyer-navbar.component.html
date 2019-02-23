@@ -1,5 +1,5 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="background-color:white; border-bottom: 5px solid #EDEDED; height: 100px;">
-  <a class="navbar-brand" style="font-size: 22px"><img src="assets\RequirenBuyerLogoDraft.png" width="200" height="175" style="margin-top: 5px; margin-left: 15px" class="img-responsive"></a>
+  <a class="navbar-brand" routerLink="/buyer" routerLinkActive="active" style="font-size: 22px"><img src="assets\requirenSimpleLogoPNG.png" width="200" height="60" style="margin-top: 5px; margin-left: 15px" class="img-responsive"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -10,7 +10,7 @@
           <img class="img-circle" src="https://pofileimages.s3.amazonaws.com/1550791120608" alt="" width="40" height="40">
       </a>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+        <a class="nav-link dropdown-toggle" routerLink="/buyer" routerLinkActive="active" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false" style="font-size: 20px; font-family: Open Sans">
           {{buyer_first_name}} {{buyer_last_name}}<span class="sr-only">(current)</span>
         </a>
