@@ -4,7 +4,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { RequestService } from '../../../services/request.service';
-import { StripeService, StripeCardComponent, ElementOptions, ElementsOptions, Element as StripeElement, Elements } from "ngx-stripe";
 import { FormGroup, FormBuilder, Validators, FormsModule } from "@angular/forms";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuyerService } from '../../../services/buyer.service';
@@ -36,35 +35,11 @@ export class BuyerCheckoutComponent implements OnInit {
   //FOR DISPLAY
   offerPriceDisplay: any; orderFeesDisplay: any; totalPriceDisplay: any;
 
-  @ViewChild(StripeCardComponent) card: StripeCardComponent;
-
-  cardOptions: ElementOptions = {
-    style: {
-      base: {
-        iconColor: '#666EE8',
-        color: '#31325F',
-        //lineHeight: '40px',
-
-        //fontWeight: 300,
-        //fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSize: '18px',
-        '::placeholder': {
-          color: '#CFD7E0'
-        }
-      }
-    }
-  };
-
-  elementsOptions: ElementsOptions = {
-    locale: 'en'
-  };
-
   constructor(private route: ActivatedRoute,
     private router: Router,
     private storeFetchService: StoreFetchService,
     private requestService: RequestService,
     private fb: FormBuilder,
-    private stripeService: StripeService,
     private httpClient: HttpClient,
     private buyerService: BuyerService,
     private notifierService: NotifierService,
@@ -128,6 +103,7 @@ export class BuyerCheckoutComponent implements OnInit {
   }
 
   completePurchase() {
+    /*
     const price = document.getElementById('offerPrice').innerText;
     console.log(price);
     const name = this.stripeTest.get('name').value;
@@ -151,5 +127,6 @@ export class BuyerCheckoutComponent implements OnInit {
           console.log(result.error.message);
         }
       });
+      */
   }
 }

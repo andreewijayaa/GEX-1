@@ -36,7 +36,6 @@
     "multer": "^1.4.1",
     "multer-gridfs-storage": "^3.2.3",
     "multer-s3": "^2.9.0",
-    "ngx-stripe": "^7.2.0",
     "nodemailer": "*",
     "nodemon": "^1.18.10",
     "passport": "*",

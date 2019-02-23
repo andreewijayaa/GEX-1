@@ -39,7 +39,6 @@ import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Ng2SearchPipeModule} from 'ng2-search-filter';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { NgxStripeModule, STRIPE_PUBLISHABLE_KEY } from 'ngx-stripe';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab } from '@angular/material';
@@ -181,7 +180,6 @@ const customNotifierOptions: NotifierOptions = {
     NgxPaginationModule,
     Ng2SearchPipeModule,
     CKEditorModule,
-    NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB'),
     MomentModule
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
