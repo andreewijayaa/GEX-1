@@ -175,23 +175,25 @@ export class SellerService {
     return this.http.get('sellers/viewactiverequests', httpOptions).pipe(map(res => res));
     }
   }
-  // Service to fetch offers history of the logged in user (front-end to back-end connection)
-  accountSetupStep(step) {
-    this.loadToken();
-    // Tokens needed to fetch data from database
-    const httpOptions = {
-      headers: new HttpHeaders ({
-        'Content-Type':  'application/json',
-        'step': step
-      })
-    };
-    if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/accountSetup', httpOptions).pipe(map(res => res));
-    } else {
-      // This will return json file fetched from database
-      return this.http.post('sellers/accountSetup', httpOptions).pipe(map(res => res));
-    }
-  }
+  // // Service to fetch offers history of the logged in user (front-end to back-end connection)
+  // accountSetupStep(step) {
+  //   this.loadToken();
+  //   // Tokens needed to fetch data from database
+  //   const httpOptions = {
+  //     headers: new HttpHeaders ({
+  //       'Content-Type':  'application/json'
+  //     })
+  //   };
+  //   const body = {
+  //     'step': step
+  //   };
+  //   if (process.env.NODE_ENV === 'development') {
+  //     return this.http.post('http://localhost:3000/sellers/accountSetup', body, httpOptions).pipe(map(res => res));
+  //   } else {
+  //     // This will return json file fetched from database
+  //     return this.http.post('sellers/accountSetup', body, httpOptions).pipe(map(res => res));
+  //   }
+  // }
 
   // Service to post a new description for seller
   setDescription(description) {

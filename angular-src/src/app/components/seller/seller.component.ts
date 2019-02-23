@@ -60,10 +60,10 @@ export class SellerComponent implements OnInit {
     {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
         if(response.success) {
-          //Display Success stripe Dialog
+          // Display Success stripe Dialog
           this.notifier.notify('success', response.msg);
         } else {
-          //Display fail stripe Dialog
+          // Display fail stripe Dialog
           this.notifier.notify('error', response.msg);
         }
       });
