@@ -214,25 +214,25 @@ router.get('/viewactiverequests', (req,res) => {
   });
 });
 
-// This will be used to check account setup - By Roni
-router.post('/accountSetup', (req,res) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message:'Must login to setup account.' });
-  jwt.verify(token, config.secret, (err, decoded) => {
-    Seller.findById(decoded.data._id,{$exists: decoded.data.user_account_setup} , (err, sellerSettingUp) => {
-      const stepIndex = req.body.step;
-      if(stepIndex >= 0 && stepIndex <= 2 && user_account_setup[stepIndex] == false) {
-        sellerSettingUp.user_account_setup[stepIndex] = true;
-        sellerSettingUp.save((err) => {
-          if(err) return res.status(500).send({ success: false, message: 'Step ' + stepIndex + ' did not save!' });
-          return res.status(200).send({ success: false, message: 'Step ' + stepIndex + ' successfully completed!' });
-        });
-      } else {
-        return res.status(500).send({ success: false, message: 'Step ' + stepIndex + ' did not save!' });
-      }
-    });
-  });
-});
+// // This will be used to check account setup - By Roni
+// router.post('/accountSetup', (req,res) => {
+//   var token = req.headers['x-access-token'];
+//   if (!token) return res.status(401).send({ success: false, message:'Must login to setup account.' });
+//   jwt.verify(token, config.secret, (err, decoded) => {
+//     Seller.findById(decoded.data._id,{$exists: decoded.data.user_account_setup} , (err, sellerSettingUp) => {
+//       const stepIndex = req.body.step;
+//       if(stepIndex >= 0 && stepIndex <= 2 && user_account_setup[stepIndex] == false) {
+//         sellerSettingUp.user_account_setup[stepIndex] = true;
+//         sellerSettingUp.save((err) => {
+//           if(err) return res.status(500).send({ success: false, message: 'Step ' + stepIndex + ' did not save!' });
+//           return res.status(200).send({ success: false, message: 'Step ' + stepIndex + ' successfully completed!' });
+//         });
+//       } else {
+//         return res.status(500).send({ success: false, message: 'Step ' + stepIndex + ' did not save!' });
+//       }
+//     });
+//   });
+// });
 //route to view requests the have catergories that belong to 
 //made by john (NOT NEEDED)
 /*router.get('/viewrequests', (req,res) => {
@@ -305,9 +305,9 @@ router.post('/authenticateStripe', (req, res, next) => {
   //Verify Logged in token
   jwt.verify(token, config.secret, function(err, decoded) {
     if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
-    console.log('decoded ID: ' +decoded.data._id);
-    console.log('State: ' + req.body.state);
-    console.log('Code: ' + req.body.code);
+    // console.log('decoded ID: ' +decoded.data._id);
+    // console.log('State: ' + req.body.state);
+    // console.log('Code: ' + req.body.code);
     //Make sure Stripe returned state is the same as User ID - Updating correct seller Stripe_ID
     if(req.body.state !== decoded.data._id) { 
       return res.status(500).send({ success: false, message: 'Not able to connect with Stripe.' });
@@ -331,19 +331,26 @@ router.post('/authenticateStripe', (req, res, next) => {
     // MAKING THE STRIPE REQUEST
     request(clientServerOptions, function (error, response) {
       // REQUEST FAILED
-      if(err) return res.status(500).send({ success: false, message: 'Request to Stripe failed.' });
+      if(err) return res.status(500).send({ success: false, msg: 'Request to Stripe failed.' });
       
       // Parse the returned stripe call to a Json Object
       var bodyObject = JSON.parse(JSON.parse(JSON.stringify(response.body)))
       
       if(bodyObject.stripe_user_id !== undefined) {
+        //Update seller account setup - We know that seller has added stripe
+        Seller.findById(decoded.data._id, (err, seller_adding_stripe) => { 
+          seller_adding_stripe.user_account_setup.set(2, true);
+          seller_adding_stripe.save((err) =>{
+            if (err) { return next(err); }
+          });
+        });
         // Update the stripe_id with the applicate seller
         Seller.updateOne({ _id: decoded.data._id }, { $set: { stripe_id: bodyObject.stripe_user_id }}, (err, updatingStripe) => {
-          if(err) return res.status(500).send({ success: false, message: 'Not able to connect with Stripe.' });
-          return res.status(200).send({ success: true, message: 'Stripe account connected successfully!' });
+          if(err) return res.status(500).send({ success: false, msg: 'Not able to connect with Stripe.' });
+          return res.status(200).send({ success: true, msg: 'Stripe account connected successfully!' });
         });
       } else {
-        return res.status(500).send({ success: false, message: 'Stripe connection was lost.' });
+        return res.status(200).send({ success: false, msg: 'Stripe connection was lost.' });
       }
     });
   });
@@ -367,10 +374,10 @@ router.post('/addCode', (req, res) => {
       Seller.findById(decoded.data._id, (err, seller_adding_codes) => {
         if (err) return handleError(err);
         seller_adding_codes.codes = req.body.codes;
-        seller_adding_codes.user_account_setup[0] = true;
+        seller_adding_codes.user_account_setup.set(0, true);
         seller_adding_codes.save((err) =>{
           if (err) { return next(err); }
-          res.json({success: true, msg:"Goods/Services Updated Successfully!"});
+          return res.json({success: true, msg:"Goods/Services Updated Successfully!"});
         });
       });
   });
@@ -396,7 +403,7 @@ router.post('/addDescription', (req, res) => {
       Seller.findById(decoded.data._id, (err, seller_descipt) => {
         if (err) return handleError(err);
         seller_descipt.set({description: req.body.description});
-        seller.descipt.user_account_setup[2] = true;
+        seller_descipt.user_account_setup.set(1, true);
         seller_descipt.save(function (err, updatedSeller) {
           if (err) return handleError(err);
           return res.json({ success: true, message: "Attempted to add desciption"});

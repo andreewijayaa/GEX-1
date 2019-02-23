@@ -100,6 +100,21 @@ export class SubmitCategoriesComponent implements OnInit {
     });
   }
 
+  AddDescription() {
+    const desc = {
+      description: this.description
+    };
+
+    // setting description
+    this.sellerService.setDescription(desc).subscribe((data: any) => {
+      if (data.success === true) { // if the data succeed to be posted
+        this.notifier.notify('success', 'Your Description was submitted!');
+      } else { // if it fails
+        this.notifier.notify('error', data.msg);
+      }
+    });
+  }
+
   getSellerInfo() {
     this.sellerService.getSellerProfile().subscribe((data: any) => {
       if (data) {
@@ -170,50 +185,6 @@ export class SubmitCategoriesComponent implements OnInit {
         }
       }
     }
-  }
-
-  OnSubmitClickBtn() {
-    const billingAddress = {
-      first_name: this.first_name,
-      last_name: this.last_name,
-      street_address: this.street_address,
-      city: this.city,
-      country: this.country,
-      state_province: this.state_province,
-      postal_code: this.postal_code,
-    };
-
-    const desc = {
-      description: this.description
-    };
-
-    const code = {
-      codes: this.codeArray
-    };
-
-    // adding code
-    this.sellerService.setNewCode(code).subscribe((data2: any) => {
-      if (data2.success) {
-        this.notifier.notify('success', 'Your New Code was submitted!');
-        // setting description
-        this.sellerService.setDescription(desc).subscribe((data: any) => {
-          if (data.success === true) { // if the data succeed to be posted
-            // setting billing address connect it to the service for back-end process
-            this.sellerService.setBillingAddress(billingAddress).subscribe((data1: any) => {
-              if (data1.success) { // if the data succeed to be posted
-                this.router.navigate(['/seller']);
-              } else { // if it fails
-                this.notifier.notify('error', data1.msg);
-              }
-            });
-          } else { // if it fails
-            this.notifier.notify('error', data.msg);
-          }
-        });
-      } else {
-        this.notifier.notify('error', data2.msg);
-      }
-    });
   }
 
     // Tab first configuration

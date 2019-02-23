@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, Input } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
@@ -28,6 +28,8 @@ export class SellerComponent implements OnInit {
 
   // Variables declaration
   private readonly notifier: NotifierService;
+  code: String;
+  state: String;
   seller: any;
   requestList: Object;
   offerList: Object;
@@ -47,7 +49,36 @@ export class SellerComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
-    this.route.snapshot.params['bank'];
+
+    // get params if stripe is sending a redirect
+    this.route.queryParams.subscribe(params => {
+      this.code = params['code'];
+      this.state = params['state'];
+    });
+    // Call stripe backend connect function
+    if(this.code !== undefined && this.state !== undefined)
+    {
+      this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
+        if(response.success) {
+          //Display Success stripe Dialog
+          const dialogRef = this.dialog;
+          dialogRef.open(StipeAccountCreatedSuccessDialogComponent);
+          setTimeout(function () {
+            dialogRef.closeAll();
+          }, 5000);
+          //this.notifier.notify('success', response.msg);
+        } else {
+          //Display fail stripe Dialog
+          const dialogRef = this.dialog;
+          dialogRef.open(StipeAccountCreatedFailedDialogComponent);
+          setTimeout(function () {
+            dialogRef.closeAll();
+          }, 5000);
+          //this.notifier.notify('error', response.msg);
+        }
+      });
+    }
+
     this.loader = true;
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
