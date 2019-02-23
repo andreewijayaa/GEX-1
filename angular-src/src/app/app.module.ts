@@ -46,6 +46,7 @@ import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, M
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
+import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 const appRoutes: Routes = [
@@ -180,7 +181,8 @@ const customNotifierOptions: NotifierOptions = {
     NgxPaginationModule,
     Ng2SearchPipeModule,
     CKEditorModule,
-    NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB')
+    NgxStripeModule.forRoot('pk_test_9uQtOrFYROc49Js8RhyMDJtB'),
+    MomentModule
   ],
   providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]

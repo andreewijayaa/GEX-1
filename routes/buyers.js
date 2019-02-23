@@ -331,6 +331,13 @@ router.get('/retrieveCart', (req, res, next) => {
         orderTotal = offerPriceTotal + orderFees;
         orderFees = Math.round(orderFees * 100) / 100;
         orderTotal = Math.round(orderTotal * 100) / 100;
+
+
+        // Make all TWO SIG FIGS
+        offerPriceTotal = parseFloat(offerPriceTotal.toFixed(2));
+        orderTotal = parseFloat(orderTotal.toFixed(2));
+        orderFees = parseFloat(orderFees.toFixed(2));
+
         return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderFees,orderTotal});
       });
     });
