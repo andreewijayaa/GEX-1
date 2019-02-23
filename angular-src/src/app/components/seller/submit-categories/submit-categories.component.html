@@ -60,12 +60,12 @@
                       </ul>
                     </div>
                   </div>
+                  <div>
+                    <button matStepperNext class="float-right btn btn-primary" (click)="AddCode()">Submit and Continue ></button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button mat-button matStepperNext class="float-right">Next</button>
           </div>
         </form>
       </mat-step>
@@ -82,33 +82,43 @@
                     <textarea class="form-control" [(ngModel)]="description" name="description" rows="20" required></textarea>
                   </div>
                 </form>
+                <div>
+                  <button matStepperNext class="float-right btn btn-primary" (click)="AddDescription()">Submit and Continue ></button>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext class="float-right">Next</button>
           </div>
         </form>
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Step 3</ng-template>
-        <form (submit)="OnSubmitClickBtn()">
-          <div class="card">
-            <div class="card-body">
-              <h3><strong>Connect with Stripe.</strong></h3>
-              <h4>To have the ability to recieve payments.</h4>
-              &nbsp;
-              <br>
+        <div class="card">
+          <div class="card-body">
+            <h2>Almost There!!</h2>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <h3 align="center">stripe</h3>
+            &nbsp;
+            <h5 align="center">Connect with Stripe for any transactions</h5>
+            <label>Stripe is the easiest way to accept credit cards. Process major international debit or credit cards, including
+              Visa, MasterCard and American Express. You don't need a merchant account, sop you can start accepting payments today.
+            </label>
+            &nbsp;
+            &nbsp;
+            <label>Click "Connect with Stripe", create a free Stripe account in a few minutes and start processing payments immediately</label>
+            &nbsp;
+            &nbsp;
+            <div class="btnMid">
               <img class="stripe" onmouseover="" style="cursor: pointer;" (click)="rerouteToStripe()" src="../../../../assets/blue-on-light@2x.png"  alt="Connect with Stripe">
             </div>
           </div>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button type="submit" class="float-right">Submit</button>
-            <button mat-button class="float-right" (click)="stepper.reset()">Reset</button>
-          </div>
-        </form>
+        </div>
+        &nbsp;
+        <div>
+          <button matStepperNext class="float-right btn btn-primary" routerLink="/seller" routerLinkActive="router-link-active">Finish!</button>
+        </div>
       </mat-step>
     </mat-horizontal-stepper>
 
