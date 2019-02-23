@@ -109,6 +109,12 @@ label img {
   width: 25%;
 }
 
+.btnMid {
+  align-self: center;
+  text-align: center;
+
+}
+
 .app-loading .spinner {
   height: 200px;
   width: 200px;
