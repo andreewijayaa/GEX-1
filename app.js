@@ -30,7 +30,7 @@ var nodemailer = require("nodemailer");
 const GridFSStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const methodOverride = require('method-override')
-const stripe = require('stripe')(keySecret);
+//const stripe = require('stripe')(keySecret);
 const fs = require('fs');
 const Offer = require('./models/offer');
 const ejs = require('ejs')._express;
@@ -116,6 +116,7 @@ app.use('/codes', codes);
 //requests route
 app.use('/requests', requests);
 
+/*
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
 app.post('/checkout', (req, res, next) => {
@@ -138,8 +139,7 @@ app.post('/checkout', (req, res, next) => {
     customer: customer.id,
     //source: offer.stripeToken
   }))
-});
-
+});*/
 
 if (process.env.NODE_ENV == 'production') {
   // For all GET requests, send back index.html
