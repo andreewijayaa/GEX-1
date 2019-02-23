@@ -65,7 +65,7 @@ Bryan Vu contributed most of this buyer portal page.
             {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
           <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 0" style="width: 90px; color: red">
-            EXPIRED
+            EXPIRED<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
           <mat-panel-title id="selectedRequestId" hidden>
             {{request._id}}
