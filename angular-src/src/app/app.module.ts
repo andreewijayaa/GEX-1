@@ -145,8 +145,7 @@ const customNotifierOptions: NotifierOptions = {
     OfferSubmittedFailedDialogComponent,
     StipeAccountCreatedSuccessDialogComponent,
     StipeAccountCreatedFailedDialogComponent,
-    BuyerCartComponent,
-    StripeCallbackComponent
+    BuyerCartComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,
