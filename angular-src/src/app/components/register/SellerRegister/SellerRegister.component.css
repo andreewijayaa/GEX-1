@@ -4,9 +4,10 @@ body{
   -webkit-text-size-adjust: none;
   -webkit-user-select: node;
   height: 110vh;
+  height: 100%;
   background-repeat:no-repeat;
   background-size:cover;
-  margin: 0 auto;
+  margin: auto;
   padding: 0;
 
 }
@@ -22,8 +23,8 @@ form {
   text-align: center;
   margin-top: 80px;
   margin: auto;
-  overflow: hidden;
-  align-content: center;
+  text-align: left;
+
   box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
 
@@ -32,7 +33,10 @@ form:hover {
   box-shadow: 0 14px 30px 0 rgba(0,0,0,0.2);
 }
 .clear-footer {
-  height: 100px;
+  height: 300px;
+}
+.clear-header {
+  height: 80px;
 }
 
 h3 {
