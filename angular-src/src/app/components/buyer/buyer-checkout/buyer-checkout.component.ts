@@ -1,10 +1,10 @@
 //By: Omar
 //Buyer checkout page
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { StoreFetchService } from '../../../services/storeFetch.service';
 import { RequestService } from '../../../services/request.service';
-import { FormGroup, FormBuilder, Validators, FormsModule } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormsModule, NgForm } from "@angular/forms";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuyerService } from '../../../services/buyer.service';
 import { NotifierService } from 'angular-notifier';
@@ -14,7 +14,12 @@ import { NotifierService } from 'angular-notifier';
   templateUrl: './buyer-checkout.component.html',
   styleUrls: ['./buyer-checkout.component.css']
 })
-export class BuyerCheckoutComponent implements OnInit {
+export class BuyerCheckoutComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('cardInfo') cardInfo: ElementRef;
+  card: any;
+  cardHandler = this.onChange.bind(this);
+  error: string;
+
   private readonly notifier: NotifierService;
   selectedOfferId: any;
   offerList: Object;
@@ -22,7 +27,6 @@ export class BuyerCheckoutComponent implements OnInit {
   offerPrice: any;
   totalPrice: any;
   isDataAvailable: Boolean = false;
-  stripeTest: FormGroup;
   buyer: any;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -30,7 +34,6 @@ export class BuyerCheckoutComponent implements OnInit {
   emptyCart: Boolean;
   orderFees: Number;
   editable: boolean = false;
-
 
   //FOR DISPLAY
   offerPriceDisplay: any; orderFeesDisplay: any; totalPriceDisplay: any;
@@ -43,15 +46,17 @@ export class BuyerCheckoutComponent implements OnInit {
     private httpClient: HttpClient,
     private buyerService: BuyerService,
     private notifierService: NotifierService,
-    private _formBuilder: FormBuilder) {  this.notifier = notifierService; }
+    private _formBuilder: FormBuilder,
+    private cd: ChangeDetectorRef) { this.notifier = notifierService; }
 
   ngOnInit() {
-    //this.buyer = this.route.snapshot.data['buyer'];
+    this.buyer = this.route.snapshot.data['buyer'];
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
         console.log(data);
         this.emptyCart = false;
         this.offersInCart = data.offersInCart;
+        console.log(this.offersInCart[0]['title']);
         this.offerPrice = data.offerPriceTotal;
         this.orderFees = data.orderFees;
         this.totalPrice = data.orderTotal;
@@ -67,39 +72,58 @@ export class BuyerCheckoutComponent implements OnInit {
       }
     });
 
-    this.stripeTest = this.fb.group({
-      name: ['', [Validators.required]]
-    });
-    //this.fetchEvent()
-
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+
   }
 
-  fetchEvent() {
-    return this.route.params.subscribe(params => {
-      this.selectedOfferId = params.offerId;
-      this.request_Id = params.requestId;
+  ngAfterViewInit() {
+    this.card = elements.create('card');
+    this.card.mount(this.cardInfo.nativeElement);
+    this.card.addEventListener('change', this.cardHandler);
+  }
 
-      // --> Extract the id pass with URL
-      // Make a call to retrieve request information with all offers to that request
+  ngOnDestroy() {
+    this.card.removeEventListener('change', this.cardHandler);
+    this.card.destroy();
+  }
 
-      this.requestService.getRequest(this.request_Id).subscribe((data: any) => {
+  onChange({ error }) {
+    if (error) {
+      this.error = error.message;
+    } else {
+      this.error = null;
+    }
+    this.cd.detectChanges();
+  }
+
+  async onSubmit(form: NgForm) {
+    const { token, error } = await stripe.createToken(this.card);
+
+    if (error) {
+      console.log('Something is wrong:', error);
+    } else {
+      console.log('Success!', token);
+      // ...send the token to the your backend to process the charge
+      const obj = {
+        "token": token,
+        "email": this.buyer['data']['email'],
+        "amount": this.totalPriceDisplay * 100,
+        "description": this.offersInCart[0]['title']
+      } 
+      this.buyerService.checkout(obj).subscribe((data: any) => {
         if (data.success) {
-          //this.request = data.request;
-          this.offerList = data.offers;
-          console.log(this.offerList);
+          console.log("Charge Successful");
         }
         else {
-          this.notifier.notify('error', data.msg);
-          this.router.navigate(['/']);
+          console.log("Charge unsuccessful");
         }
       });
-    });
+    }
   }
 
   completePurchase() {
@@ -126,7 +150,6 @@ export class BuyerCheckoutComponent implements OnInit {
           // Error creating the token
           console.log(result.error.message);
         }
-      });
-      */
+      });*/
   }
 }

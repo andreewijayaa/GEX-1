@@ -16,7 +16,7 @@ import { SubmitOfferComponent } from './components/seller/submit-offer/submit-of
 import { SellerAccountComponent } from './components/seller/seller-account/seller-account.component';
 import { SellerRegisterComponent } from './components/register/SellerRegister/SellerRegister.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ValidateService } from './services/validate.service';
 import { RegisterService } from './services/register.service';
 import { AuthService } from './services/auth.service';

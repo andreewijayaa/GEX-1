@@ -1,3 +1,6 @@
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://checkout.stripe.com/checkout.js"></script>
+
 <app-buyer-navbar></app-buyer-navbar>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="clearheader"></div>
@@ -114,31 +117,19 @@
             <mat-form-field>
               <input matInput placeholder="Cardholder's name" formControlName="secondCtrl" required>
             </mat-form-field>
-            <br>
-            <div>
-              <!-----<ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions"></ngx-stripe-card>-->
-            </div>
-            <br>
+              <form #checkout="ngForm" (ngSubmit)="onSubmit(checkout)" class="checkout">
+                <div class="form-row">
+                  <label for="card-info">Please enter your card information:</label>
+                  <div id="card-info" style="width: 100%" #cardInfo></div>
+
+                  <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+                </div>
+                <button type="submit">Complete Purchase</button>
+              </form>
             <div>
               <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
-              <button mat-button matStepperNext style="background-color: #1761a0; color: white">Next</button>
+              <button mat-button (click)="stepper.reset()" style="background-color: #1761a0; color: white">Reset</button>
             </div>
-          </form>
-        </mat-step>
-        <mat-step [completed]="editable">
-          <ng-template matStepLabel>Complete purchase</ng-template>
-          <form>
-          <br>
-          <div>
-            <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="completePurchase()" style="background-color: #1761a0; border: none"
-              id="purchaseButton">Complete
-              Purchase</button>
-          </div>
-          <br>
-          <div>
-            <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
-            <button mat-button (click)="stepper.reset()" style="background-color: #1761a0; color: white">Reset</button>
-          </div>
           </form>
         </mat-step>
       </mat-vertical-stepper>
