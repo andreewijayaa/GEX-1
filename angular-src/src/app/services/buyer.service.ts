@@ -139,10 +139,10 @@ export class BuyerService {
     };
     console.log(offer);
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
+      return this.http.post('http://localhost:3000/buyers/charge', offer, httpOptions)
         .pipe(map(res => res));
     } else {
-      return this.http.post('checkout', offer, httpOptions)
+      return this.http.post('buyers/charge', offer, httpOptions)
         .pipe(map(res => res));
     }
   }

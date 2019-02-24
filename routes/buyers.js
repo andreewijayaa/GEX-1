@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const Buyer = require('../models/buyer');
@@ -10,10 +9,13 @@ const Seller = require('../models/seller');
 const bcrypt = require('bcryptjs');
 const upload = require('../services/multer');
 const upload2 = require('../services/multer2');
-const fs = require('fs');
 const singleUpload = upload.single('image');
 const singleUpload2 = upload2.single('image');
 const Offer = require('../models/offer');
+const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
+const keySecret = process.env.STRIPE_SECRET_KEY;
+const stripe = require("stripe")(keySecret);
+
 
 //Register route for buyers by Roni
 //Takes in all required information as JSON
@@ -137,7 +139,7 @@ router.post('/request/:id', (req, res, next) => {
       deadline: req.body.deadline
     });
     //code added by John to add images to requests
-    if (req.body.request_pic != null){
+    if (req.body.request_pic != null) {
       request.request_images.pus(req.body.request_pic);
       console.log("in that if statement");
     }
@@ -160,7 +162,7 @@ router.post('/request/:id', (req, res, next) => {
           // Look for a seller with the same code the buyer has posted a request with
           // find all applicable sellers and email them (Notifcation System) 
           // The email will contain a link to view the Request for sellers 
-          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
+          Seller.find({ 'codes': { $in: post.code } }, (err, applicableSeller) => {
             if (err) { return next(err); }
             console.log('Post Id:' + post.code)
             console.log(applicableSeller);
@@ -183,19 +185,19 @@ router.post('/request/:id', (req, res, next) => {
 
 //Code to add picutres to request. Testing purposes before adding to add request.post
 //by John
-router.post('/requestpicture', function(req, res) {
+router.post('/requestpicture', function (req, res) {
   var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-  jwt.verify(token, config.secret, function(err, decoded) {
-    singleUpload2(req, res, function(err, some) {
+  if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
+  jwt.verify(token, config.secret, function (err, decoded) {
+    singleUpload2(req, res, function (err, some) {
       if (err) {
-        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+        return res.status(422).send({ errors: [{ title: 'Image Upload Error', detail: err.message }] });
       }
       console.log(req.file.location);
-      if (!req.body._id){
-        return res.status(401).send({ success: false, message:'No request id provided.' });
+      if (!req.body._id) {
+        return res.status(401).send({ success: false, message: 'No request id provided.' });
       }
-        return res.json({'imageUrl': req.file.location});
+      return res.json({ 'imageUrl': req.file.location });
     });
   });
 });
@@ -250,26 +252,26 @@ router.post('/update', (req, res /*next*/) => {
         });
       });
       updated.save();
-      res.json({success: true});
+      res.json({ success: true });
     }
   });
 });
 
 //route to add profile picture to account
 //by John
-router.post('/profilepicture', function(req, res) {
+router.post('/profilepicture', function (req, res) {
   var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
-  jwt.verify(token, config.secret, function(err, decoded) {
-    singleUpload(req, res, function(err, some) {
+  if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
+  jwt.verify(token, config.secret, function (err, decoded) {
+    singleUpload(req, res, function (err, some) {
       if (err) {
-        return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}] });
+        return res.status(422).send({ errors: [{ title: 'Image Upload Error', detail: err.message }] });
       }
       console.log(req.file.location);
       Buyer.findById(decoded.data._id, (err, buyer_pic) => {
-        buyer_pic.set({profile_image: req.file.location});
+        buyer_pic.set({ profile_image: req.file.location });
         buyer_pic.save();
-        return res.json({'imageUrl': req.file.location});
+        return res.json({ 'imageUrl': req.file.location });
       });
     });
   });
@@ -296,7 +298,7 @@ router.post('/addToCart', (req, res, next) => {
       // Save item to cart
       buyerToAddCart.offerCart.push(req.body.offerID);
       buyerToAddCart.save();
-      res.json({success: true});
+      res.json({ success: true });
     });
   });
 
@@ -311,28 +313,28 @@ router.get('/retrieveCart', (req, res, next) => {
   jwt.verify(token, config.secret, function (err, decoded) {
     if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
 
-    Buyer.findById( decoded.data._id, (err, buyerViewingCart) => {
+    Buyer.findById(decoded.data._id, (err, buyerViewingCart) => {
       if (err) return handleError(err);
-      if(buyerViewingCart.offerCart == undefined ||  buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
-      
-      Offer.find({'_id': {$in: buyerViewingCart.offerCart}}, (err, offersInCart) => {
+      if (buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0) return res.status(200).send({ success: false, message: 'Cart is Empty.' });
+
+      Offer.find({ '_id': { $in: buyerViewingCart.offerCart } }, (err, offersInCart) => {
         if (err) return res.status(500).send({ success: false, message: 'Offer not found.' });
         var offers = offersInCart;
 
         //Add entity name to the returned object.
-        offersInCart.forEach(function(currentOffer) {
+        offersInCart.forEach(function (currentOffer) {
           offerPriceTotal = offerPriceTotal + currentOffer.price;
           //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-            //offers.provider = SellersOffer.entity_name;
+          //offers.provider = SellersOffer.entity_name;
           //});
         });
         offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
-        orderFees = offerPriceTotal * 0.01 ; //Add fee calculation here
+        orderFees = offerPriceTotal * 0.01; //Add fee calculation here
         orderTotal = offerPriceTotal + orderFees;
         orderFees = Math.round(orderFees * 100) / 100;
         orderTotal = Math.round(orderTotal * 100) / 100;
 
-        return res.status(200).send({ success: true, offersInCart,offerPriceTotal,orderFees,orderTotal});
+        return res.status(200).send({ success: true, offersInCart, offerPriceTotal, orderFees, orderTotal });
       });
     });
   });
@@ -352,7 +354,7 @@ router.post('/offerAccepted', (req, res /*next*/) => {
     else {
       offer.offerAccepted = accepted.offerAccepted;
       offer.save();
-      res.json({success: true});
+      res.json({ success: true });
     }
   });
 });
@@ -370,14 +372,14 @@ router.post('/offerRejected', (req, res /*next*/) => {
     else {
       offer.offerAccepted = removed.offerRemoved;
       offer.save();
-      res.json({success: true});
+      res.json({ success: true });
     }
   });
 });
 
 // Retrieve Cart with offers as objects
 router.post('/removeFromCart', (req, res, next) => {
-  
+
   var token = req.headers['x-access-token'];
   const offer = req.body.offerID;
   if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
@@ -386,89 +388,88 @@ router.post('/removeFromCart', (req, res, next) => {
   jwt.verify(token, config.secret, function (err, decoded) {
     if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
 
-    Buyer.findById( decoded.data._id, (err, buyerViewingCart) => {
+    Buyer.findById(decoded.data._id, (err, buyerViewingCart) => {
       if (err) return handleError(err);
-      if(buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0 ) return res.status(200).send({ success: false , message: 'Cart is Empty.' });
-      
+      if (buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0) return res.status(200).send({ success: false, message: 'Cart is Empty.' });
+
       var index = buyerViewingCart.offerCart.indexOf(offer);
       if (index !== -1) {
         if (index > -1) {
           buyerViewingCart.offerCart.splice(index, 1);
         }
-      } 
+      }
       else {
-        return res.status(500).send({ success: false, msg: "Offer not found in cart."});
+        return res.status(500).send({ success: false, msg: "Offer not found in cart." });
       }
 
       if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
         buyerViewingCart.save((err) => {
           if (err) { return next(err); }
-          return res.status(200).send({ success: true, msg: "Offer removed from cart."});
+          return res.status(200).send({ success: true, msg: "Offer removed from cart." });
         });
-      } 
+      }
       else {
-        return res.status(500).send({ success: false, msg: "Unable to remove offer from cart."});
+        return res.status(500).send({ success: false, msg: "Unable to remove offer from cart." });
       }
     });
   });
 });
 
+router.get('/displayPayment', (req, res) => res.status(300).send({ success: true, msg: { keyPublishable } }));
+
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
-router.post('/checkout', (req, res, next) => {
-  // let offer = {
-  //   stripeEmail: req.body.email,
-  //   stripeToken: req.body.token,
-  //   amount: req.body.amount,
-  //   description: req.body.description
-  // }
+router.post('/charge', (req, res) => {  
+  let offer = {
+    stripeEmail: req.body.email,
+    stripeToken: req.body.token.id,
+    amount: req.body.amount,
+    description: req.body.description
+  };
 
-  // stripe.customers.create({
-  //   email: offer.stripeEmail,
-  //   source: offer.stripeToken
-  // })
-  // .then(customer => stripe.charges.create({
-  //   amount: offer.amount,
-  //   currency: 'usd',
-  //   //title: req.body.product,
-  //   description: offer.description,
-  //   customer: customer.id,
-  //   //source: offer.stripeToken
-  // }))
-
-  var stripe = require("stripe")("sk_test_2AL7EAHq9V423nX52NbhBu6C");
-
-// Create a Charge:
-  stripe.charges.create({
-    amount: 10000,
-    currency: "usd",
-    source: "tok_visa",
-    transfer_group: "{ORDER10}",
-  }).then(function(charge) {
-    // asynchronously called
-  });
-
-  // Create a Transfer to the connected account (later):
-  stripe.transfers.create({
-    amount: 7000,
-    currency: "usd",
-    destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-    transfer_group: "{ORDER10}",
-  }).then(function(transfer) {
-    // asynchronously called
-  });
-
-  // Create a second Transfer to another connected account (later):
-  stripe.transfers.create({
-    amount: 2000,
-    currency: "usd",
-    destination: "{OTHER_CONNECTED_STRIPE_ACCOUNT_ID}",
-    transfer_group: "{ORDER10}",
-  }).then(function(second_transfer) {
-    // asynchronously called
-  });
-
+  stripe.customers.create({
+    email: offer.stripeEmail,
+    source: offer.stripeToken
+  }).then(customer => stripe.charges.create({
+      amount: offer.amount,
+      currency: "usd",
+      description: offer.description,
+      customer: customer.id
+    })).then(charge => res.status(300).send({ success: true, msg: charge }));
 });
+/*
+// Create a Charge:
+stripe.charges.create({
+  amount: 10000,
+  currency: "usd",
+  source: "tok_visa",
+  transfer_group: "{ORDER10}",
+}).then(function (charge) {
+  // asynchronously called
+});
+
+// Create a Transfer to the connected account (later):
+stripe.transfers.create({
+  amount: 7000,
+  currency: "usd",
+  destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
+  transfer_group: "{ORDER10}",
+}).then(function (transfer) {
+  // asynchronously called
+});
+
+// Create a second Transfer to another connected account (later):
+stripe.transfers.create({
+  amount: 2000,
+  currency: "usd",
+  destination: "{OTHER_CONNECTED_STRIPE_ACCOUNT_ID}",
+  transfer_group: "{ORDER10}",
+}).then(function (second_transfer) {
+  // asynchronously called
+});
+*/
+
+
 //Email Verification - RONI
 //Will check the route for a token and search the DB for a user with that 
 //token to activate their account
