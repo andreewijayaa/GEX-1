@@ -1,17 +1,23 @@
 
 .navbar {
-  margin: 0;
-  background-color:white;
-  height: 80px;
+  margin: auto;
+  height: auto;
   position: absulote;
   border: 1px;
+  overflow: visible;
+  z-index: 9999;
+
 }
 
+#navbarSupportedContent {
+  margin-bottom: 2px;
+  padding: 0;
+}
 .navbar-brand{
   max-height: 150px;
   max-width: 200px;
   max-width: 30%;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
   text-align: center;
   position: relative;
@@ -26,7 +32,7 @@
 ul {
   list-style: none;
   display: inline-flex;
-  margin-top: 12px;
+  margin-top: 16px;
   text-align: center;
 
 }
@@ -50,13 +56,15 @@ a {
   font-size: 16px;
   border: none;
   cursor: pointer;
+  border-radius: 3px;
 }
 
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  position: relative;
-  display: inline-block;
+
+  display: flexbox;
+
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -72,6 +80,7 @@ a {
 /* Links inside the dropdown */
 .dropdown-content a {
   color: black;
+  position: relative;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
