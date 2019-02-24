@@ -9,8 +9,8 @@
     &nbsp;
     &nbsp;
     &nbsp;
-    <mat-horizontal-stepper [linear]=false #stepper>
-      <mat-step [stepControl]="firstFormGroup">
+    <mat-horizontal-stepper [linear]=false #stepper id="steps">
+      <mat-step [stepControl]="firstFormGroup" [editable]="false">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Step 1</ng-template>
           <div>
@@ -61,7 +61,7 @@
                     </div>
                   </div>
                   <div>
-                    <button matStepperNext class="float-right btn btn-primary" (click)="AddCode()">Submit and Continue ></button>
+                    <button class="float-right btn btn-primary" (click)="AddCode(stepper)">Submit and Continue ></button>
                   </div>
                 </div>
               </div>
@@ -69,7 +69,7 @@
           </div>
         </form>
       </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
+      <mat-step [stepControl]="secondFormGroup" [editable]="false">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Step 2</ng-template>
           <div>
@@ -83,7 +83,7 @@
                   </div>
                 </form>
                 <div>
-                  <button matStepperNext class="float-right btn btn-primary" (click)="AddDescription()">Submit and Continue ></button>
+                  <button class="float-right btn btn-primary" (click)="AddDescription(stepper)">Submit and Continue ></button>
                 </div>
               </div>
             </div>

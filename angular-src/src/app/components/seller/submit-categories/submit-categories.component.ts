@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { SellerService } from '../../../services/seller.service';
 import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-submit-categories',
   templateUrl: './submit-categories.component.html',
   styleUrls: ['./submit-categories.component.css']
 })
-export class SubmitCategoriesComponent implements OnInit {
+export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   private readonly notifier: NotifierService;
   // Temp codes for MVP - Kurgan
   codes = [
@@ -62,10 +63,6 @@ export class SubmitCategoriesComponent implements OnInit {
   ngOnInit() {
     // Get Seller Information
     this.getSellerInfo();
-    // for the steps
-    this.first = false;
-    this.second = false;
-    this.third = false;
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -86,34 +83,62 @@ export class SubmitCategoriesComponent implements OnInit {
     });
   }
 
-  AddCode() {
+  // To redirect the stepper view to continue where the user left off - Andre
+  @ViewChild('stepper') stepper: MatStepper;
+  ngAfterViewInit() {
+
+    this.sellerService.getSellerProfile().subscribe((data: any) => {
+      this.first = data.data.user_account_setup[0];
+      this.second = data.data.user_account_setup[1];
+      this.third = data.data.user_account_setup[2];
+
+      if (this.second) {
+        setTimeout(() => {
+          this.stepper.selectedIndex = 2;
+        }, 0);
+      } else if (this.first) {
+        setTimeout(() => {
+          this.stepper.selectedIndex = 1;
+        }, 0);
+      } else {
+        setTimeout(() => {
+          this.stepper.selectedIndex = 0;
+        }, 0);
+      }
+    });
+  }
+
+  AddCode(stepper: MatStepper) {
     const code = {
       codes: this.codeArray
     };
+
     if (this.codeArray.length <= 0 ) {
       return this.notifier.notify('error', 'Please select atleast one.');
     }
     this.sellerService.setNewCode(code).subscribe((data: any) => {
       if (data.success) {
         this.notifier.notify('success', 'Your New Code was submitted!');
+        stepper.next();
       } else {
         this.notifier.notify('error', data.msg);
       }
     });
   }
 
-  AddDescription() {
+  AddDescription(stepper: MatStepper) {
     const desc = {
       description: this.description
     };
 
-    if (this.description !== undefined) {
+    if (this.description === undefined) {
       return this.notifier.notify('error', 'Description can not be left blank.');
     }
     // setting description
     this.sellerService.setDescription(desc).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
         this.notifier.notify('success', 'Your Description was submitted!');
+        stepper.next();
       } else { // if it fails
         this.notifier.notify('error', data.msg);
       }
