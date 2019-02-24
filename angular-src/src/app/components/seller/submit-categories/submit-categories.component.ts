@@ -51,7 +51,6 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   first: Boolean;
   second: Boolean;
   third: Boolean;
-  myStepper: MatStepper
 
 
   constructor(private sellerService: SellerService,
