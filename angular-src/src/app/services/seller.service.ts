@@ -257,6 +257,28 @@ export class SellerService {
     }
   }
 
+  // Resend Confirmation Email
+  resendSellerConfirmation(email) {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+      })
+    };
+    const body = {
+      'email': email
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+
   // logging out seller
   sellerLogout() {
     this.sellerToken = null;
