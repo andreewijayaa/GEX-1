@@ -43,7 +43,7 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
+import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
@@ -149,10 +149,12 @@ const customNotifierOptions: NotifierOptions = {
     StipeAccountCreatedFailedDialogComponent,
     BuyerCartComponent,
     ResendComponent,
-    ForgetPasswordComponent
+    ForgetPasswordComponent,
+    StripeNeededDialogComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,
+    StripeNeededDialogComponent,
     OfferSubmittedDialogComponent,
     OfferSubmittedFailedDialogComponent,
     StipeAccountCreatedSuccessDialogComponent,

@@ -136,19 +136,13 @@ router.get("/profile", (req, res) => {
 
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
 // Route to post request to the DB with the information entered by buyer and also information about the buyer submitting the request
-router.post("/request/:id", (req, res, next) => {
-  var token = req.headers["x-access-token"];
-  if (!token)
-    return res
-      .status(401)
-      .send({ success: false, message: "Must login to create request." });
+router.post('/request', (req, res, next) => {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
 
   // Must be a buyer logged in to be able to submit a request
-  jwt.verify(token, config.secret, function(err, decoded) {
-    if (err)
-      return res
-        .status(500)
-        .send({ success: false, message: "Failed to authenticate token." });
+  jwt.verify(token, config.secret, function (err, decoded) {
+    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
     // Create the new request object with the following fields
     var request = new Request({
       buyer_ID: decoded.data._id,
@@ -157,9 +151,10 @@ router.post("/request/:id", (req, res, next) => {
       description: req.body.description,
       deadline: req.body.deadline
     });
+
     //code added by John to add images to requests
     if (req.body.request_pic != null) {
-      request.request_images.pus(req.body.request_pic);
+      request.request_images.push(req.body.request_pic);
       console.log("in that if statement");
     }
     console.log("past if statement");
@@ -171,45 +166,31 @@ router.post("/request/:id", (req, res, next) => {
       if (err) return handleError(err);
       // Save Request
       request.save((err, post) => {
-        if (err) {
-          return next(err);
-        }
+        if (err) { return next(err); }
         //console.log('inside save function');
         buyer_making_request.buyer_requests_byID.push(post._id);
-        buyer_making_request.save(err => {
-          if (err) {
-            return next(err);
-          }
+        buyer_making_request.save((err) => {
+          if (err) { return next(err); }
 
           // MATCHING ALGORITHM BY RONI
           // Look for a seller with the same code the buyer has posted a request with
-          // find all applicable sellers and email them (Notifcation System)
-          // The email will contain a link to view the Request for sellers
-          Seller.find(
-            { codes: { $in: post.code } },
-            (err, applicableSeller) => {
-              if (err) {
-                return next(err);
-              }
-              console.log("Post Id:" + post.code);
-              console.log(applicableSeller);
-              // Loop through all the sellers found and email them independtly
-              // Might need to find a better way of doing this for when there is a large amount of sellers
-              for (i = 0; i < applicableSeller.length; i++) {
-                applicableSeller[i].open_requests.push(post._id);
-                applicableSeller[i].save(err => {
-                  if (err) {
-                    return next(err);
-                  }
-                });
-                sendEmail.NotifySeller(applicableSeller[i], post);
-              }
+          // find all applicable sellers and email them (Notifcation System) 
+          // The email will contain a link to view the Request for sellers 
+          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
+            if (err) { return next(err); }
+            //console.log('Post Id:' + post.code)
+            //console.log(applicableSeller);
+            // Loop through all the sellers found and email them independtly
+            // Might need to find a better way of doing this for when there is a large amount of sellers
+            for (i = 0; i < applicableSeller.length; i++) {
+              applicableSeller[i].open_requests.push(post._id);
+              applicableSeller[i].save((err) => {
+                if (err) { return next(err); }
+              });
+              sendEmail.NotifySellerNewRequest(applicableSeller[i], post);
             }
-          );
-          return res.json({
-            success: true,
-            msg: "Your request was submitted!"
           });
+          return res.json({ success: true, msg: 'Your request was submitted!' });
         });
       });
     });

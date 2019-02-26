@@ -70,8 +70,8 @@ const SellerSchema = mongoose.Schema({
     confirmationToken: {
         type: String
     },
-    stripe_id: {
-        type: String,
+    stripe: {
+        type: Object,
         required: false
     },
     created_at: { type: Date, required: true, default: Date.now }

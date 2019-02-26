@@ -50,8 +50,7 @@ module.exports.NotifySellerNewRequest= function(seller, request, callback){
     templateId: 'd-33099325b30c4edc940590551c708f87',
     dynamic_template_data: {
       name: seller.first_name,
-      requestTitle: request.Title,
-      requestID : process.env.BASE_URL + '/request/' + requestID,
+      requestTitle: request.Title
     },
   };
   //console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);

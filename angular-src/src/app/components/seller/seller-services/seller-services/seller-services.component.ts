@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SellerService } from '../../../../services/seller.service';
 import { NotifierService } from 'angular-notifier';
 import { Local } from 'protractor/built/driverProviders';
-const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/MEANstackPractice/master/images.png";
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
 @Component({
   selector: 'app-seller-services',
   templateUrl: './seller-services.component.html',
@@ -16,20 +16,20 @@ export class SellerServicesComponent implements OnInit {
 
   // Temp codes for MVP - Kurgan
 	codes = [
-    { code: 78965422, name: 'Jewelry', image: 'https://picsum.photos/200', checked: false },
-    { code: 78965423, name: 'Necklaces (Jewelry)', image: 'https://picsum.photos/200', checked: false },
-    { code: 78965424, name: 'Rings (Jewelry)', image: 'https://picsum.photos/200', checked: false },
-    { code: 78965425, name: 'Earrings (Jewelry)', image: 'https://picsum.photos/200', checked: false },
-    { code: 68977451, name: 'Dolls', image: 'https://picsum.photos/200', checked: false },
-    { code: 67887941, name: 'Sculptures', image: 'https://picsum.photos/200', checked: false },
-    { code: 62145331, name: 'Scarves', image: 'https://picsum.photos/200', checked: false },
-    { code: 54887921, name: 'Blankets', image: 'https://picsum.photos/200', checked: false },
-    { code: 52871151, name: 'Socks', image: 'https://picsum.photos/200', checked: false },
-    { code: 50360051, name: 'Pencils', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605401, name: 'Painting', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605402, name: 'Oil (Painting)', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605403, name: 'Watercolor (Painting)', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605404, name: 'Acrlyic (Painting)', image: 'https://picsum.photos/200', checked: false }
+    { code: 78965422, name: 'Jewelry', image: DefaultImageIcon, checked: false },
+    { code: 78965423, name: 'Necklaces (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 78965424, name: 'Rings (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 78965425, name: 'Earrings (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 68977451, name: 'Dolls', image: DefaultImageIcon, checked: false },
+    { code: 67887941, name: 'Sculptures', image: DefaultImageIcon, checked: false },
+    { code: 62145331, name: 'Scarves', image: DefaultImageIcon, checked: false },
+    { code: 54887921, name: 'Blankets', image: DefaultImageIcon, checked: false },
+    { code: 52871151, name: 'Socks', image: DefaultImageIcon, checked: false },
+    { code: 50360051, name: 'Pencils', image: DefaultImageIcon, checked: false },
+    { code: 49605401, name: 'Painting', image: DefaultImageIcon, checked: false },
+    { code: 49605402, name: 'Oil (Painting)', image: DefaultImageIcon, checked: false },
+    { code: 49605403, name: 'Watercolor (Painting)', image: DefaultImageIcon, checked: false },
+    { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
   ];
   submitLabels: String[];
   codeArray: Number[];

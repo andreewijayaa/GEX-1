@@ -176,6 +176,11 @@ export class SellerComponent implements OnInit {
   }
 
   submitOffer(title: any, id: any) {
+    // Seller does not have a stripe account, therefor they can't submit an offer
+    if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
+
+      return this.notifier.notify('error', 'Please register with Stripe first.');
+    }
     let request_title = title;
     var offerTitle;
     var offerDescription;
@@ -202,17 +207,20 @@ export class SellerComponent implements OnInit {
             title: offerPrice,
             description: offerDescription,
             price: offerPrice,
-            request_ID: id
-          }
+            request_ID: id,
+            seller_ID: this.seller._id
+          };
 
-          this.sellerService.postOffer(offer, id).subscribe((data: any) => {
+          this.sellerService.postOffer(offer).subscribe((data: any) => {
             if (data.success) { // if the data succeed to be posted
+              this.notifier.notify('success', data.message);
               const dialogRef = this.dialog;
               dialogRef.open(OfferSubmittedDialogComponent);
               setTimeout(function () {
                 dialogRef.closeAll();
               }, 4000);
             } else { // if it fails
+              this.notifier.notify('error', data.message);
               const dialogRef = this.dialog;
               dialogRef.open(OfferSubmittedFailedDialogComponent);
               setTimeout(function () {
@@ -283,10 +291,10 @@ export class SubmitOfferDialogComponent implements OnInit {
       //price invalid so nothing happens
     }
     else {
-      var price = formatCurrency(this.priceFormControl.value, "en", "$");
+      //var price = formatCurrency(this.priceFormControl.value, "en", "$");
       this.confirmTitle = this.titleFormControl.value;
       this.confirmDescription = this.descriptionFormControl.value;
-      this.confirmPrice = price;
+      this.confirmPrice = this.priceFormControl.value;
       this.submitOffer = true;
     }
   }
@@ -327,3 +335,9 @@ export class StipeAccountCreatedSuccessDialogComponent { }
   templateUrl: 'dialog-content-stripe-created-failed.html'
 })
 export class StipeAccountCreatedFailedDialogComponent { }
+
+@Component({
+  selector: 'dialog-content-offer-stripe',
+  templateUrl: 'dialog-content-offer-stripe.html'
+})
+export class StripeNeededDialogComponent { }
