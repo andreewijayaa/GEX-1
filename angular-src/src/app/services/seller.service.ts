@@ -59,7 +59,7 @@ export class SellerService {
 
 
   // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
-  postOffer(comingOffer, requestID) {
+  postOffer(comingOffer) {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -69,11 +69,11 @@ export class SellerService {
       })
     };
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+      return this.http.post('http://localhost:3000/sellers/makeOffer', comingOffer, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+      return this.http.post('sellers/makeOffer', comingOffer, httpOptions)
       .pipe(map(res => res));
     }
   }

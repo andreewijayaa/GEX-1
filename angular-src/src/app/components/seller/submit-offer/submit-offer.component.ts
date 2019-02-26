@@ -40,7 +40,7 @@ export class SubmitOfferComponent implements OnInit {
     };
 
     // Posting offer feature for seller, connect it to the service for back-end process
-    this.sellerService.postOffer(offer, this.id).subscribe((data: any) => {
+    this.sellerService.postOffer(offer).subscribe((data: any) => {
       if (data.success) { // if the data succeed to be posted
         this.notifier.notify('success', 'Your Offer was submitted!');
         this.router.navigate(['/seller']);

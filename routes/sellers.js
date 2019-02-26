@@ -251,8 +251,8 @@ router.get('/viewactiverequests', (req,res) => {
 //also buyers are not allowed to make offers
 //also the request id has to be valid
 //made by John. Revised by Roni
-  router.post('/makeOffer/:id', (req,res,next) =>{
-    var id = req.body.request_ID;
+  router.post('/makeOffer', (req,res,next) =>{
+    
     //console.log('Request with an offer being added to: ' + id);
     var token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ success: false, message:'Must login to create and offer.' })
@@ -275,12 +275,12 @@ router.get('/viewactiverequests', (req,res) => {
           //console.log(post._id);
             if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
             seller_making_offer.seller_offers_byID.push(post._id);
-            seller_making_offer.open_requests.push(id);//this is the new line added that hopefully fixes the active requests.
+            seller_making_offer.open_requests.push(newOffer.request_ID);//this is the new line added that hopefully fixes the active requests.
             seller_making_offer.save((err) =>{
               if (err) { return next(err); }
               //console.log('New Offer made tied to Seller %s', decoded.data._id);
               //console.log('Request ID is: ' + id);
-              Request.findById(id, (err, request_with_offer) => {
+              Request.findById(newOffer.request_ID, (err, request_with_offer) => {
                 if (err) return handleError(err);
                 //console.log('Found request\n' + request_with_offer);
                 request_with_offer.request_offers_byID.push(post._id);
@@ -345,7 +345,7 @@ router.post('/authenticateStripe', (req, res, next) => {
           });
         });
         // Update the stripe_id with the applicate seller
-        Seller.updateOne({ _id: decoded.data._id }, { $set: { stripe_id: bodyObject.stripe_user_id }}, (err, updatingStripe) => {
+        Seller.updateOne({ _id: decoded.data._id }, { $set: { stripe: bodyObject }}, (err, updatingStripe) => {
           if(err) return res.status(500).send({ success: false, msg: 'Not able to connect with Stripe.' });
           return res.status(200).send({ success: true, msg: 'Stripe account connected successfully!' });
         });
