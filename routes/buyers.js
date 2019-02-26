@@ -520,105 +520,74 @@ router.post("/charge", (req, res) => {
     amount: req.body.amount,
     totalOffers: req.body.totalOffers,
     shippingInfo: req.body.shippingInfo,
-    orderID: req.body.orderID
+    orderID: req.body.orderID,
+    name: req.body.name
   };
 
+  Buyer.findById(purchaseInfo.buyerID, (err, info) => {
+    if (!info)
+      return res.status(405).send({
+        success: false,
+        message: "Could not retrieve buyer to charge purchase."
+      });
+    else if (info.stripeCustomer === false) {
+      console.log("Not a stripe customer yet but will be.");
+      info.stripe_customer = true;
+      stripe.customers
+        .create({
+          email: purchaseInfo.stripeEmail,
+          source: purchaseInfo.stripeToken
+        })
+        .then(customer => {
+          info.stripe_customer_id = customer.id;
+          info.save();
+          stripe.charges
+            .create({
+              amount: purchaseInfo.amount,
+              currency: "usd",
+              description: "Charge for " + purchaseInfo.name + ".",
+              customer: customer.id,
+              receipt_email: purchaseInfo.stripeEmail,
+              metadata: {
+                order_id: purchaseInfo.orderID
+              },
+              transfer_group: purchaseInfo.orderID
+            })
+            .then(charge => res.send({ success: true, charge }));
+        });
+    } else if (info.stripeCustomer === true) {
+      console.log("Is already a stripe customer");
+      stripe.customers
+        .update(info.stripeCustomerId, {
+          source: purchaseInfo.stripeToken
+        })
+        .then(customer =>
+          stripe.charges.create({
+            amount: purchaseInfo.amount,
+            currency: "usd",
+            description: "Charge for " + purchaseInfo.name + ".",
+            receipt_email: purchaseInfo.stripeEmail,
+            customer: customer.id
+          })
+        )
+        .then(charge => res.send({ success: true, charge }));
+    } else {
+      res.json({ success: false, msg: "Could not charge customer" });
+    }
+  });
+
   for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
-    console.log(purchaseInfo.totalOffers[pos].seller_ID);
+    //console.log(purchaseInfo.totalOffers[pos].seller_ID);
+    stripe.transfers
+      .create({
+        amount: purchaseInfo.totalOffers[pos].price * 100,
+        currency: "usd",
+        destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
+        transfer_group: purchaseInfo.orderID
+      })
+      .then(transfer => res.send({ success: true, transfer }));
   }
-  
-  // Buyer.findById(purchaseInfo.buyerID, (err, info) => {
-  //   if (!info)
-  //     return res.status(405).send({
-  //       success: false,
-  //       message: "Could not retrieve buyer to charge purchase."
-  //     });
-  //   else if (info.stripeCustomer === false) {
-  //     console.log("Not a stripe customer yet but will be.");
-  //     info.stripe_customer = true;
-  //     stripe.customers
-  //       .create({
-  //         email: purchaseInfo.stripeEmail,
-  //         source: purchaseInfo.stripeToken
-  //       })
-  //       .then(customer => {
-  //         info.stripe_customer_id = customer.id;
-  //         info.save();
-  //         stripe.charges
-  //           .create({
-  //             amount: purchaseInfo.amount,
-  //             currency: "usd",
-  //             description: purchaseInfo.description,
-  //             customer: customer.id,
-  //             receipt_email: purchaseInfo.stripeEmail,
-  //             metadata: {
-  //               order_id: purchaseInfo.orderID
-  //             },
-  //             transfer_group: purchaseInfo.orderID
-  //           })
-  //           .then(charge => res.send({ success: true, charge }));
-  //       });
-  //   } else if (info.stripeCustomer === true) {
-  //     console.log("Is already a stripe customer");
-  //     stripe.customers
-  //       .update(info.stripeCustomerId, {
-  //         source: purchaseInfo.stripeToken
-  //       })
-  //       .then(customer =>
-  //         stripe.charges.create({
-  //           amount: purchaseInfo.amount,
-  //           currency: "usd",
-  //           description: purchaseInfo.description,
-  //           receipt_email: purchaseInfo.stripeEmail,
-  //           customer: customer.id
-  //         })
-  //       )
-  //       .then(charge => res.send({ success: true, charge }));
-  //   } else {
-  //     res.json({ success: false, msg: "Could not charge customer" });
-  //   }
-  // });
-
-  // for () {
-  //   stripe.transfers.create({
-  //     amount: 7000,
-  //     currency: "usd",
-  //     destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-  //     transfer_group: purchaseInfo.orderID,
-  //   }).then(transfer => res.send({ success: true, transfer}));
-  // }
 });
-/*
-// Create a Charge:
-stripe.charges.create({
-  amount: 10000,
-  currency: "usd",
-  source: "tok_visa",
-  transfer_group: "{ORDER10}",
-}).then(function (charge) {
-  // asynchronously called
-});
-
-// Create a Transfer to the connected account (later):
-stripe.transfers.create({
-  amount: 7000,
-  currency: "usd",
-  destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-  transfer_group: "{ORDER10}",
-}).then(function (transfer) {
-  // asynchronously called
-});
-
-// Create a second Transfer to another connected account (later):
-stripe.transfers.create({
-  amount: 2000,
-  currency: "usd",
-  destination: "{OTHER_CONNECTED_STRIPE_ACCOUNT_ID}",
-  transfer_group: "{ORDER10}",
-}).then(function (second_transfer) {
-  // asynchronously called
-});
-*/
 
 //Email Verification - RONI
 //Will check the route for a token and search the DB for a user with that
@@ -681,7 +650,7 @@ router.post("/resend", (req, res, next) => {
   const email = req.body.email;
 
   Buyer.getBuyerbyEmail(email, (err, buyer) => {
-    if (err) return res.json({ success: false, msg: 'Error.' });
+    if (err) return res.json({ success: false, msg: "Error." });
     if (!buyer) {
       return res.json({ success: false, msg: "User not found." });
     }
@@ -690,7 +659,7 @@ router.post("/resend", (req, res, next) => {
     }
 
     buyer.confirmationToken = jwt.sign({ data: buyer }, config.secret, {
-      expiresIn: '24h'
+      expiresIn: "24h"
     });
     buyer.save(err => {
       if (err) {
@@ -698,7 +667,10 @@ router.post("/resend", (req, res, next) => {
       } else {
         // If account Registred Send Email for Email Verification
         sendEmail.buyerSendVerificationEmail(buyer);
-        return res.json({ success: true, msg: 'A new confirmation email has been sent to ' + email +'.' });
+        return res.json({
+          success: true,
+          msg: "A new confirmation email has been sent to " + email + "."
+        });
       }
     });
   });
