@@ -597,27 +597,28 @@ router.post('/confirmEmail/:token', (req, res, next) => {
 })
 
 // Resend Email Verification -- NOT YET USED/TESTED - RONI
-router.post('/resend/:token', (req,res, next) =>
-{
+router.post('/resend', (req, res, next) => {
   const email = req.body.email;
-
-    Seller.getSellerbyEmail(email, (err, seller) => {
-    if(err) throw err;
-    if(!seller) {
-      return res.json({success: false, msg: 'User not found.'});
+  
+  Seller.getSellerbyEmail(email, (err, seller) => {
+    if (err) return res.json({ success: false, msg: 'Error.' });
+    if (!seller) {
+      return res.json({ success: false, msg: 'User not found.' });
     }
-    if(seller.userConfirmed) {
-      return res.json({success: false, msg: 'Acount is already Activated.'});
+    
+    if (seller.userConfirmed) {
+      return res.json({ success: false, msg: 'Acount is already Activated.' });
     }
-    seller.confirmationToken = jwt.sign({data: 'seller'}, config.secret, {
-      expiresIn: '24h'});
+    seller.confirmationToken = jwt.sign({ data: seller }, config.secret, {
+      expiresIn: '24h'
+    });
     seller.save((err) => {
-      if(err)
-      {
+      if (err) {
         console.log(err);
       } else {
         // If account Registred Send Email for Email Verification
         sendEmail.sellerSendVerificationEmail(seller);
+        return res.json({ success: true, msg: 'A new confirmation email has been sent to ' + email +'.' });
       }
     });
   });

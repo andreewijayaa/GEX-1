@@ -700,22 +700,29 @@ router.post("/resend", (req, res, next) => {
   const email = req.body.email;
 
   Buyer.getBuyerbyEmail(email, (err, buyer) => {
-    if (err) throw err;
+    if (err) return res.json({ success: false, msg: 'Error.' });
     if (!buyer) {
       return res.json({ success: false, msg: "User not found." });
     }
     if (buyer.userConfirmed) {
       return res.json({ success: false, msg: "Acount is already Activated." });
     }
+<<<<<<< HEAD
     buyer.confirmationToken = jwt.sign({ data: "buyer" }, config.secret, {
       expiresIn: "24h"
+=======
+
+    buyer.confirmationToken = jwt.sign({ data: buyer }, config.secret, {
+      expiresIn: '24h'
+>>>>>>> upstream/master
     });
     buyer.save(err => {
       if (err) {
         console.log(err);
       } else {
         // If account Registred Send Email for Email Verification
-        sendEmail.sendVerificationEmail(buyer);
+        sendEmail.buyerSendVerificationEmail(buyer);
+        return res.json({ success: true, msg: 'A new confirmation email has been sent to ' + email +'.' });
       }
     });
   });

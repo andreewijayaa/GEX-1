@@ -1,0 +1,186 @@
+body{
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-user-select: node;
+  height: 100vh;
+  margin: -50px;
+  padding: 0;
+  background-repeat:no-repeat;
+  background-size:cover;
+  overflow-y: hidden;
+}
+
+.clearheader {
+  height: 90px;
+  clear: both;
+}
+
+.clearfooter {
+  height: 50px;
+  clear: both;
+}
+
+h1, label {
+  color: black
+}
+.psw {
+  text-align: center;
+}
+hr {
+  border: 1px solid white;
+}
+
+form {
+
+  position: relative;
+  top: 100px;
+  max-width: 460px;
+  padding: 14px;
+  height: 330px;
+  margin: auto;
+  overflow: hidden;
+  align-content: center;
+  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+
+}
+form:hover {
+  box-shadow: 0 14px 30px 0 rgba(0,0,0,0.2);
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] , input[type=tel] {
+  width: 25rem;
+  height: 3.125rem;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background:#0d0f11;
+  opacity: .65;
+  color: white;
+
+
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: rgb(112, 58, 70);
+  outline: none;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: rgb(17, 112, 221);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 400px;
+  height: 50px;
+  font-size: 16px;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+  opacity:.75;
+  background-color: darkgreen;
+}
+h3 {
+  text-align: center;
+}
+/* Extra style for the cancel button (red) */
+.cancelbtn {
+  width: auto;
+  height: 50px;
+  padding: 10px 18px;
+  background-color: #5f5e5b;
+}
+
+/* Avatar image */
+img.avatar {
+  width: 40%;
+  margin: 34px;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 12px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The "Forgot password" text */
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+
+::placeholder {
+  color: white;
+  opacity: 1; /* Firefox */
+  font-size: 15px;
+  font-weight: 400;
+
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: white;
+ font-size: 15px;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: white;
+ font-size: 15px;
+}
+
+a {
+  color: rgb(45, 133, 216);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.app-loading .spinner {
+  height: 200px;
+  width: 200px;
+  animation: rotate 2s linear infinite;
+  transform-origin: center center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.app-loading .spinner .path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke: blue;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}

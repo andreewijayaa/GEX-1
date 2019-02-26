@@ -47,6 +47,8 @@ import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmitt
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ResendComponent } from './components/activation/resend/resend.component';
+import { ForgetPasswordComponent } from './components/activation/forget-password/forget-password.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -68,7 +70,7 @@ const appRoutes: Routes = [
         resolve: { seller: SellerResolve }},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
-  {path: 'request/:id', component: RequestComponent, resolve: { buyer: BuyerResolve, seller: SellerResolve }},
+  {path: 'resend', component: ResendComponent},
   {path: '**', redirectTo: '/'}
 ];
 
@@ -145,7 +147,9 @@ const customNotifierOptions: NotifierOptions = {
     OfferSubmittedFailedDialogComponent,
     StipeAccountCreatedSuccessDialogComponent,
     StipeAccountCreatedFailedDialogComponent,
-    BuyerCartComponent
+    BuyerCartComponent,
+    ResendComponent,
+    ForgetPasswordComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,

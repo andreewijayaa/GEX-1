@@ -240,6 +240,26 @@ export class BuyerService {
     }
   }
 
+  // Resend Confirmation Email
+  resendBuyerConfirmation(email) {
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+      })
+    };
+    const body = {
+      'email': email
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
   // Load local token
   loadToken() {
     const token = localStorage.getItem('id_token');
