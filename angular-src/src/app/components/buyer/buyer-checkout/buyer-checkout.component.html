@@ -11,98 +11,49 @@
   <div class="row">
     <div class="col-md-8">
       <mat-vertical-stepper linear #stepper>
-        <mat-step [stepControl]="firstFormGroup">
-          <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel>Shipping address</ng-template>
+        <mat-step [stepControl]="billingFormGroup">
+          <form [formGroup]="billingFormGroup">
+            <ng-template matStepLabel>Billing address</ng-template>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <mat-form-field>
-                  <input matInput placeholder="First name" formControlName="firstCtrl" required>
+                  <input matInput placeholder="First name" formControlName="firstName" required>
                 </mat-form-field>
               </div>
               <div class="col-md-6 mb-3">
                 <mat-form-field>
-                  <input matInput placeholder="Last name" formControlName="firstCtrl" required>
+                  <input matInput placeholder="Last name" formControlName="lastName" required>
                 </mat-form-field>
               </div>
             </div>
             <div class="mb-3" style="width: 100%">
               <mat-form-field>
-                <input matInput placeholder="Address 1" formControlName="firstCtrl" required>
+                <input matInput placeholder="Address 1" formControlName="address1" required>
               </mat-form-field>
             </div>
             <div class="mb-3">
               <mat-form-field>
-                <input matInput placeholder="Address 2 (Optional)" formControlName="firstCtrl">
+                <input matInput placeholder="Address 2 (Optional)" formControlName="address2">
               </mat-form-field>
             </div>
             <div class="row">
               <div class="col-md-5 mb-3">
                 <mat-form-field>
-                  <input matInput placeholder="City" formControlName="firstCtrl" required>
+                  <input matInput placeholder="City" formControlName="city" required>
                 </mat-form-field>
               </div>
               <div class="col-md-5 mb-3">
                 <mat-form-field>
-                  <mat-select placeholder="State" formControlName="firstCtrl" required>
-                    <mat-option value>--</mat-option>
-                    <mat-option value="AL">AL</mat-option>
-                    <mat-option value="AK">AK</mat-option>
-                    <mat-option value="AR">AR</mat-option>
-                    <mat-option value="AZ">AZ</mat-option>
-                    <mat-option value="CA">CA</mat-option>
-                    <mat-option value="CO">CO</mat-option>
-                    <mat-option value="CT">CT</mat-option>
-                    <mat-option value="DC">DC</mat-option>
-                    <mat-option value="DE">DE</mat-option>
-                    <mat-option value="FL">FL</mat-option>
-                    <mat-option value="GA">GA</mat-option>
-                    <mat-option value="HI">HI</mat-option>
-                    <mat-option value="IA">IA</mat-option>
-                    <mat-option value="ID">ID</mat-option>
-                    <mat-option value="IL">IL</mat-option>
-                    <mat-option value="IN">IN</mat-option>
-                    <mat-option value="KS">KS</mat-option>
-                    <mat-option value="KY">KY</mat-option>
-                    <mat-option value="LA">LA</mat-option>
-                    <mat-option value="MA">MA</mat-option>
-                    <mat-option value="MD">MD</mat-option>
-                    <mat-option value="ME">ME</mat-option>
-                    <mat-option value="MI">MI</mat-option>
-                    <mat-option value="MN">MN</mat-option>
-                    <mat-option value="MO">MO</mat-option>
-                    <mat-option value="MS">MS</mat-option>
-                    <mat-option value="MT">MT</mat-option>
-                    <mat-option value="NC">NC</mat-option>
-                    <mat-option value="NE">NE</mat-option>
-                    <mat-option value="NH">NH</mat-option>
-                    <mat-option value="NJ">NJ</mat-option>
-                    <mat-option value="NM">NM</mat-option>
-                    <mat-option value="NV">NV</mat-option>
-                    <mat-option value="NY">NY</mat-option>
-                    <mat-option value="ND">ND</mat-option>
-                    <mat-option value="OH">OH</mat-option>
-                    <mat-option value="OK">OK</mat-option>
-                    <mat-option value="OR">OR</mat-option>
-                    <mat-option value="PA">PA</mat-option>
-                    <mat-option value="RI">RI</mat-option>
-                    <mat-option value="SC">SC</mat-option>
-                    <mat-option value="SD">SD</mat-option>
-                    <mat-option value="TN">TN</mat-option>
-                    <mat-option value="TX">TX</mat-option>
-                    <mat-option value="UT">UT</mat-option>
-                    <mat-option value="VT">VT</mat-option>
-                    <mat-option value="VA">VA</mat-option>
-                    <mat-option value="WA">WA</mat-option>
-                    <mat-option value="WI">WI</mat-option>
-                    <mat-option value="WV">WV</mat-option>
-                    <mat-option value="WY">WY</mat-option>
+                  <mat-select placeholder="State" formControlName="state" required>
+                    <mat-option *ngFor="let state of states" [value]="state.label">
+                      {{ state.label }}
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
               <div class="col-md-3 mb-3">
                 <mat-form-field>
-                  <input matInput placeholder="Zip" formControlName="firstCtrl" required>
+                  <input matInput placeholder="Zip" formControlName="zip" required>
                 </mat-form-field>
               </div>
             </div>
@@ -111,21 +62,73 @@
             </div>
           </form>
         </mat-step>
-        <mat-step [completed]="editable" [stepControl]="secondFormGroup">
-          <ng-template matStepLabel>Payment</ng-template>
-          <form [formGroup]="secondFormGroup">
+        <mat-step [stepControl]="shippingFormGroup">
+          <form [formGroup]="shippingFormGroup">
+            <ng-template matStepLabel>Shipping address</ng-template>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="First name" formControlName="firstName" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="Last name" formControlName="lastName" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="mb-3" style="width: 100%">
+              <mat-form-field>
+                <input matInput placeholder="Address 1" formControlName="address1" required>
+              </mat-form-field>
+            </div>
+            <div class="mb-3">
+              <mat-form-field>
+                <input matInput placeholder="Address 2 (Optional)" formControlName="address2">
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="City" formControlName="city" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-5 mb-3">
+                <mat-form-field>
+                  <mat-select placeholder="State" formControlName="state" required>
+                    <mat-option *ngFor="let state of states" [value]="state.label">
+                      {{ state.label }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 mb-3">
+                <mat-form-field>
+                  <input matInput placeholder="Zip" formControlName="zip" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
+              <button mat-button matStepperNext style="background-color: #1761a0; color: white">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [completed]="editable" [stepControl]="paymentFormGroup">
+          <form [formGroup]="paymentFormGroup">
+            <ng-template matStepLabel>Payment</ng-template>
             <mat-form-field>
-              <input matInput placeholder="Cardholder's name" formControlName="secondCtrl" required>
+              <input matInput id="cardHolderName" placeholder="Cardholder's name" formControlName="card" required>
             </mat-form-field>
-              <form #checkout="ngForm" (ngSubmit)="onSubmit(checkout)" class="checkout">
-                <div class="form-row">
-                  <label for="card-info">Please enter your card information:</label>
-                  <div id="card-info" style="width: 100%" #cardInfo></div>
+            <form #checkout="ngForm" (ngSubmit)="onSubmit(checkout)" class="checkout">
+              <div class="form-row">
+                <label for="card-info">Please enter your card information:</label>
+                <div id="card-info" style="width: 100%" #cardInfo></div>
 
-                  <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
-                </div>
-                <button type="submit">Complete Purchase</button>
-              </form>
+                <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+              </div>
+              <button mat-button [disabled]="!paymentFormGroup.valid" type="submit">Complete Purchase</button>
+            </form>
             <div>
               <button mat-button matStepperPrevious style="background-color: #1761a0; color: white; margin-right: 5px;">Back</button>
               <button mat-button (click)="stepper.reset()" style="background-color: #1761a0; color: white">Reset</button>
