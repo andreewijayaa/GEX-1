@@ -1,86 +1,95 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const config = require('../config/database');
-const Buyer = require('../models/buyer');
-const Request = require('../models/request');
-const sendEmail = require('../models/sendEmail');
-const Seller = require('../models/seller');
-const bcrypt = require('bcryptjs');
-const upload = require('../services/multer');
-const upload2 = require('../services/multer2');
-const singleUpload = upload.single('image');
-const singleUpload2 = upload2.single('image');
-const Offer = require('../models/offer');
+const jwt = require("jsonwebtoken");
+const config = require("../config/database");
+const Buyer = require("../models/buyer");
+const Request = require("../models/request");
+const sendEmail = require("../models/sendEmail");
+const Seller = require("../models/seller");
+const bcrypt = require("bcryptjs");
+const upload = require("../services/multer");
+const upload2 = require("../services/multer2");
+const singleUpload = upload.single("image");
+const singleUpload2 = upload2.single("image");
+const Offer = require("../models/offer");
 const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
 const keySecret = process.env.STRIPE_SECRET_KEY;
 const stripe = require("stripe")(keySecret);
 
-
 //Register route for buyers by Roni
 //Takes in all required information as JSON
-router.post('/register', (req, res/*,next*/) => {
+router.post("/register", (req, res /*,next*/) => {
   let newBuyer = new Buyer({
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
     password: req.body.password,
-    confirmationToken: jwt.sign({ data: 'buyer' }, config.secret, {
-      expiresIn: '24h'
+    confirmationToken: jwt.sign({ data: "buyer" }, config.secret, {
+      expiresIn: "24h"
     }) // 1 day
   });
-
 
   //code for detecting registering buyer with the same email. By John
   Buyer.findOne({ email: req.body.email }, (err, foundBuyer) => {
     if (err) return handleError(err); //if err is encountered while searching for buyer
     if (foundBuyer != null) {
-      console.log('Found buyer with email %s', foundBuyer.email);
-      res.json({ success: false, msg: "Failed to register Buyer! Email already used for another account." })
-    }
-    else { //end of code for email detection by John
+      console.log("Found buyer with email %s", foundBuyer.email);
+      res.json({
+        success: false,
+        msg: "Failed to register Buyer! Email already used for another account."
+      });
+    } else {
+      //end of code for email detection by John
       //console.log('New email used, %s',req.body.email);
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)) {
+      if (
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(req.body.email)
+      ) {
         //console.log('New email address %s passed format checking.', req.body.email);
         //Adding buyer to the DB
         Buyer.addBuyer(newBuyer, (err, buyer) => {
           if (err) {
-            res.json({ success: false, msg: "Failed to register Buyer!" })
-          }
-          else {
+            res.json({ success: false, msg: "Failed to register Buyer!" });
+          } else {
             //after buyer was added to DB, send email for verification - RONI
             sendEmail.buyerSendVerificationEmail(buyer);
-            res.json({ success: true, msg: "Buyer Registered!" })
+            res.json({ success: true, msg: "Buyer Registered!" });
           }
         });
-      }
-      else {
+      } else {
         //console.log('New email address %s failed format checking.', req.body.email);
-        res.json({ success: false, msg: "Failed to register Buyer! Email is not valid format." })
+        res.json({
+          success: false,
+          msg: "Failed to register Buyer! Email is not valid format."
+        });
       }
     }
-  })
+  });
 });
 
-
 //Authenticate
-router.post('/login', (req, res, next) => {
+router.post("/login", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
   Buyer.getBuyerbyEmail(email, (err, buyer) => {
     if (err) throw err;
     if (!buyer) {
-      return res.json({ success: false, msg: 'Buyer not found' });
+      return res.json({ success: false, msg: "Buyer not found" });
     }
     //Check email verification - RONI
     if (!buyer.userConfirmed) {
-      return res.json({ success: false, msg: 'Please Activate your account first.' });
+      return res.json({
+        success: false,
+        msg: "Please Activate your account first."
+      });
     }
     //if statement added in by John in case a Seller somehow tries to login as a buyer and gets this far
     if (buyer.account_type != 0) {
-      return res.json({ success: false, msg: 'Your account must be a seller to sign in as a seller.' });
-    }//end of statement added in by John
+      return res.json({
+        success: false,
+        msg: "Your account must be a seller to sign in as a seller."
+      });
+    } //end of statement added in by John
     Buyer.comparePassword(password, buyer.password, (err, isMatch) => {
       if (err) throw err;
       if (isMatch) {
@@ -101,35 +110,45 @@ router.post('/login', (req, res, next) => {
           }
         });
       } else {
-        return res.json({ success: false, msg: 'Wrong password' });
+        return res.json({ success: false, msg: "Wrong password" });
       }
     });
   });
 });
 
 //Profile
-router.get('/profile', (req, res) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
+router.get("/profile", (req, res) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
 
-  jwt.verify(token, config.secret, function (err, decoded) {
-    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
     delete decoded.data.password;
     res.status(200).send(decoded);
-
   });
 });
 
-
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
 // Route to post request to the DB with the information entered by buyer and also information about the buyer submitting the request
-router.post('/request/:id', (req, res, next) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
+router.post("/request/:id", (req, res, next) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to create request." });
 
   // Must be a buyer logged in to be able to submit a request
-  jwt.verify(token, config.secret, function (err, decoded) {
-    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
     // Create the new request object with the following fields
     var request = new Request({
       buyer_ID: decoded.data._id,
@@ -152,101 +171,138 @@ router.post('/request/:id', (req, res, next) => {
       if (err) return handleError(err);
       // Save Request
       request.save((err, post) => {
-        if (err) { return next(err); }
+        if (err) {
+          return next(err);
+        }
         //console.log('inside save function');
         buyer_making_request.buyer_requests_byID.push(post._id);
-        buyer_making_request.save((err) => {
-          if (err) { return next(err); }
+        buyer_making_request.save(err => {
+          if (err) {
+            return next(err);
+          }
 
           // MATCHING ALGORITHM BY RONI
           // Look for a seller with the same code the buyer has posted a request with
-          // find all applicable sellers and email them (Notifcation System) 
-          // The email will contain a link to view the Request for sellers 
-          Seller.find({ 'codes': { $in: post.code } }, (err, applicableSeller) => {
-            if (err) { return next(err); }
-            console.log('Post Id:' + post.code)
-            console.log(applicableSeller);
-            // Loop through all the sellers found and email them independtly
-            // Might need to find a better way of doing this for when there is a large amount of sellers
-            for (i = 0; i < applicableSeller.length; i++) {
-              applicableSeller[i].open_requests.push(post._id);
-              applicableSeller[i].save((err) => {
-                if (err) { return next(err); }
-              });
-              sendEmail.NotifySeller(applicableSeller[i], post);
+          // find all applicable sellers and email them (Notifcation System)
+          // The email will contain a link to view the Request for sellers
+          Seller.find(
+            { codes: { $in: post.code } },
+            (err, applicableSeller) => {
+              if (err) {
+                return next(err);
+              }
+              console.log("Post Id:" + post.code);
+              console.log(applicableSeller);
+              // Loop through all the sellers found and email them independtly
+              // Might need to find a better way of doing this for when there is a large amount of sellers
+              for (i = 0; i < applicableSeller.length; i++) {
+                applicableSeller[i].open_requests.push(post._id);
+                applicableSeller[i].save(err => {
+                  if (err) {
+                    return next(err);
+                  }
+                });
+                sendEmail.NotifySeller(applicableSeller[i], post);
+              }
             }
+          );
+          return res.json({
+            success: true,
+            msg: "Your request was submitted!"
           });
-          return res.json({ success: true, msg: 'Your request was submitted!' });
         });
       });
     });
   });
-})
+});
 
 //Code to add picutres to request. Testing purposes before adding to add request.post
 //by John
-router.post('/requestpicture', function (req, res) {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
-  jwt.verify(token, config.secret, function (err, decoded) {
-    singleUpload2(req, res, function (err, some) {
+router.post("/requestpicture", function(req, res) {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload2(req, res, function(err, some) {
       if (err) {
-        return res.status(422).send({ errors: [{ title: 'Image Upload Error', detail: err.message }] });
+        return res.status(422).send({
+          errors: [{ title: "Image Upload Error", detail: err.message }]
+        });
       }
       console.log(req.file.location);
       if (!req.body._id) {
-        return res.status(401).send({ success: false, message: 'No request id provided.' });
+        return res
+          .status(401)
+          .send({ success: false, message: "No request id provided." });
       }
-      return res.json({ 'imageUrl': req.file.location });
+      return res.json({ imageUrl: req.file.location });
     });
   });
 });
 
 // Retrieve all applicable requests to the logged in buyer
-router.get('/request', (req, res, next) => {
-  var token = req.headers['x-access-token'];
+router.get("/request", (req, res, next) => {
+  var token = req.headers["x-access-token"];
 
-  if (!token) return res.status(401).send({ success: false, message: 'Must login to view requests.' });
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to view requests." });
 
   jwt.verify(token, config.secret, (err, decoded) => {
-    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
     Buyer.findById(decoded.data._id, (err, buyer_viewing_requests) => {
       if (err) return handleError(err);
 
       if (buyer_viewing_requests.buyer_requests_byID != []) {
-        Request.find({ 'buyer_ID': decoded.data._id }, (err, requests) => {
-          if (err) return res.status(500).send({ success: false, message: 'Could not find requests with ID' });
+        Request.find({ buyer_ID: decoded.data._id }, (err, requests) => {
+          if (err)
+            return res.status(500).send({
+              success: false,
+              message: "Could not find requests with ID"
+            });
           res.status(200).send(requests);
         });
-      }
-      else {
-        res.status(500).send({ success: false, message: 'There are no requests to view' });
+      } else {
+        res
+          .status(500)
+          .send({ success: false, message: "There are no requests to view" });
       }
     });
   });
-})
+});
 
 /*
 Profile update - By: Omar
 Will find the buyer by using their id number and update their information accordingly.
 */
-router.post('/update', (req, res /*next*/) => {
+router.post("/update", (req, res /*next*/) => {
   let update = {
     first_name: req.body.fName,
     last_name: req.body.lName,
     password: req.body.pass,
     id: req.body.updater_id
-  }
+  };
 
   Buyer.findById(update.id, (err, updated) => {
     if (!update)
-      return res.status(405).send({ success: false, message: 'could not retrieve buyer info to update.' });
+      return res.status(405).send({
+        success: false,
+        message: "could not retrieve buyer info to update."
+      });
     else {
       updated.first_name = update.first_name;
       updated.last_name = update.last_name;
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(update.password, salt, (err, hash) => {
-          if (err) { throw err; }
+          if (err) {
+            throw err;
+          }
           updated.password = hash;
           updated.save();
         });
@@ -259,19 +315,24 @@ router.post('/update', (req, res /*next*/) => {
 
 //route to add profile picture to account
 //by John
-router.post('/profilepicture', function (req, res) {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message: 'No token provided.' });
-  jwt.verify(token, config.secret, function (err, decoded) {
-    singleUpload(req, res, function (err, some) {
+router.post("/profilepicture", function(req, res) {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload(req, res, function(err, some) {
       if (err) {
-        return res.status(422).send({ errors: [{ title: 'Image Upload Error', detail: err.message }] });
+        return res.status(422).send({
+          errors: [{ title: "Image Upload Error", detail: err.message }]
+        });
       }
       console.log(req.file.location);
       Buyer.findById(decoded.data._id, (err, buyer_pic) => {
         buyer_pic.set({ profile_image: req.file.location });
         buyer_pic.save();
-        return res.json({ 'imageUrl': req.file.location });
+        return res.json({ imageUrl: req.file.location });
       });
     });
   });
@@ -280,13 +341,19 @@ router.post('/profilepicture', function (req, res) {
 Profile update - By: Omar
 Will add the accepted offer to the buyers cart.
 */
-router.post('/addToCart', (req, res, next) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message: 'Must login to create request.' });
+router.post("/addToCart", (req, res, next) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to create request." });
 
   // Must be a buyer logged in to be able to enter an item to cart
-  jwt.verify(token, config.secret, function (err, decoded) {
-    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate token.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
 
     //const offerCart = decoded.data.offer
     //console.log(req.body.offerID);
@@ -301,56 +368,83 @@ router.post('/addToCart', (req, res, next) => {
       res.json({ success: true });
     });
   });
-
 });
 
 // Retrieve Cart with offers as objects
-router.get('/retrieveCart', (req, res, next) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
-  var orderTotal = 0, offerPriceTotal = 0, orderFees = 0;
+router.get("/retrieveCart", (req, res, next) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must Login to view Cart!." });
+  var orderTotal = 0,
+    offerPriceTotal = 0,
+    orderFees = 0;
   // Must be a buyer logged in to be able to enter an item to cart
-  jwt.verify(token, config.secret, function (err, decoded) {
-    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate user." });
 
     Buyer.findById(decoded.data._id, (err, buyerViewingCart) => {
       if (err) return handleError(err);
-      if (buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0) return res.status(200).send({ success: false, message: 'Cart is Empty.' });
+      if (
+        buyerViewingCart.offerCart == undefined ||
+        buyerViewingCart.offerCart.length <= 0
+      )
+        return res
+          .status(200)
+          .send({ success: false, message: "Cart is Empty." });
 
-      Offer.find({ '_id': { $in: buyerViewingCart.offerCart } }, (err, offersInCart) => {
-        if (err) return res.status(500).send({ success: false, message: 'Offer not found.' });
-        var offers = offersInCart;
+      Offer.find(
+        { _id: { $in: buyerViewingCart.offerCart } },
+        (err, offersInCart) => {
+          if (err)
+            return res
+              .status(500)
+              .send({ success: false, message: "Offer not found." });
+          var offers = offersInCart;
 
-        //Add entity name to the returned object.
-        offersInCart.forEach(function (currentOffer) {
-          offerPriceTotal = offerPriceTotal + currentOffer.price;
-          //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-          //offers.provider = SellersOffer.entity_name;
-          //});
-        });
-        offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
-        orderFees = offerPriceTotal * 0.01; //Add fee calculation here
-        orderTotal = offerPriceTotal + orderFees;
-        orderFees = Math.round(orderFees * 100) / 100;
-        orderTotal = Math.round(orderTotal * 100) / 100;
+          //Add entity name to the returned object.
+          offersInCart.forEach(function(currentOffer) {
+            offerPriceTotal = offerPriceTotal + currentOffer.price;
+            //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
+            //offers.provider = SellersOffer.entity_name;
+            //});
+          });
+          offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
+          orderFees = offerPriceTotal * 0.01; //Add fee calculation here
+          orderTotal = offerPriceTotal + orderFees;
+          orderFees = Math.round(orderFees * 100) / 100;
+          orderTotal = Math.round(orderTotal * 100) / 100;
 
-        return res.status(200).send({ success: true, offersInCart, offerPriceTotal, orderFees, orderTotal });
-      });
+          return res.status(200).send({
+            success: true,
+            offersInCart,
+            offerPriceTotal,
+            orderFees,
+            orderTotal
+          });
+        }
+      );
     });
   });
 });
 
-
 // Offer Accepted
-router.post('/offerAccepted', (req, res /*next*/) => {
+router.post("/offerAccepted", (req, res /*next*/) => {
   let accepted = {
     id: req.body.offer_ID,
     offerAccepted: req.body.offer_accepted
-  }
+  };
 
   Offer.findById(accepted.id, (err, offer) => {
     if (!offer)
-      return res.status(405).send({ success: false, message: 'could not retrieve offer info to update.' });
+      return res.status(405).send({
+        success: false,
+        message: "could not retrieve offer info to update."
+      });
     else {
       offer.offerAccepted = accepted.offerAccepted;
       offer.save();
@@ -360,15 +454,18 @@ router.post('/offerAccepted', (req, res /*next*/) => {
 });
 
 // Offer Removed so Rejected
-router.post('/offerRejected', (req, res /*next*/) => {
+router.post("/offerRejected", (req, res /*next*/) => {
   let removed = {
     id: req.body.offer_ID,
     offerRemoved: req.body.offer_removed
-  }
+  };
 
   Offer.findById(removed.id, (err, offer) => {
     if (!offer)
-      return res.status(405).send({ success: false, message: 'could not retrieve offer info to update.' });
+      return res.status(405).send({
+        success: false,
+        message: "could not retrieve offer info to update."
+      });
     else {
       offer.offerAccepted = removed.offerRemoved;
       offer.save();
@@ -378,64 +475,137 @@ router.post('/offerRejected', (req, res /*next*/) => {
 });
 
 // Retrieve Cart with offers as objects
-router.post('/removeFromCart', (req, res, next) => {
-
-  var token = req.headers['x-access-token'];
+router.post("/removeFromCart", (req, res, next) => {
+  var token = req.headers["x-access-token"];
   const offer = req.body.offerID;
-  if (!token) return res.status(401).send({ success: false, message: 'Must Login to view Cart!.' });
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must Login to view Cart!." });
 
   // Must be a buyer logged in to be able to enter an item to cart
-  jwt.verify(token, config.secret, function (err, decoded) {
-    if (err) return res.status(500).send({ success: false, message: 'Failed to authenticate user.' });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate user." });
 
     Buyer.findById(decoded.data._id, (err, buyerViewingCart) => {
       if (err) return handleError(err);
-      if (buyerViewingCart.offerCart == undefined || buyerViewingCart.offerCart.length <= 0) return res.status(200).send({ success: false, message: 'Cart is Empty.' });
+      if (
+        buyerViewingCart.offerCart == undefined ||
+        buyerViewingCart.offerCart.length <= 0
+      )
+        return res
+          .status(200)
+          .send({ success: false, message: "Cart is Empty." });
 
       var index = buyerViewingCart.offerCart.indexOf(offer);
       if (index !== -1) {
         if (index > -1) {
           buyerViewingCart.offerCart.splice(index, 1);
         }
-      }
-      else {
-        return res.status(500).send({ success: false, msg: "Offer not found in cart." });
+      } else {
+        return res
+          .status(500)
+          .send({ success: false, msg: "Offer not found in cart." });
       }
 
       if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
-        buyerViewingCart.save((err) => {
-          if (err) { return next(err); }
-          return res.status(200).send({ success: true, msg: "Offer removed from cart." });
+        buyerViewingCart.save(err => {
+          if (err) {
+            return next(err);
+          }
+          return res
+            .status(200)
+            .send({ success: true, msg: "Offer removed from cart." });
         });
-      }
-      else {
-        return res.status(500).send({ success: false, msg: "Unable to remove offer from cart." });
+      } else {
+        return res
+          .status(500)
+          .send({ success: false, msg: "Unable to remove offer from cart." });
       }
     });
   });
 });
 
-router.get('/displayPayment', (req, res) => res.status(300).send({ success: true, msg: { keyPublishable } }));
-
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
-router.post('/charge', (req, res) => {  
-  let offer = {
+router.post("/charge", (req, res) => {
+  let purchaseInfo = {
+    buyerID: req.body.buyerID,
     stripeEmail: req.body.email,
     stripeToken: req.body.token.id,
     amount: req.body.amount,
-    description: req.body.description
+    totalOffers: req.body.totalOffers,
+    shippingInfo: req.body.shippingInfo,
+    orderID: req.body.orderID
   };
 
-  stripe.customers.create({
-    email: offer.stripeEmail,
-    source: offer.stripeToken
-  }).then(customer => stripe.charges.create({
-      amount: offer.amount,
-      currency: "usd",
-      description: offer.description,
-      customer: customer.id
-    })).then(charge => res.status(300).send({ success: true, msg: charge }));
+  for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
+    console.log(purchaseInfo.totalOffers[pos].seller_ID);
+  }
+  
+  // Buyer.findById(purchaseInfo.buyerID, (err, info) => {
+  //   if (!info)
+  //     return res.status(405).send({
+  //       success: false,
+  //       message: "Could not retrieve buyer to charge purchase."
+  //     });
+  //   else if (info.stripeCustomer === false) {
+  //     console.log("Not a stripe customer yet but will be.");
+  //     info.stripe_customer = true;
+  //     stripe.customers
+  //       .create({
+  //         email: purchaseInfo.stripeEmail,
+  //         source: purchaseInfo.stripeToken
+  //       })
+  //       .then(customer => {
+  //         info.stripe_customer_id = customer.id;
+  //         info.save();
+  //         stripe.charges
+  //           .create({
+  //             amount: purchaseInfo.amount,
+  //             currency: "usd",
+  //             description: purchaseInfo.description,
+  //             customer: customer.id,
+  //             receipt_email: purchaseInfo.stripeEmail,
+  //             metadata: {
+  //               order_id: purchaseInfo.orderID
+  //             },
+  //             transfer_group: purchaseInfo.orderID
+  //           })
+  //           .then(charge => res.send({ success: true, charge }));
+  //       });
+  //   } else if (info.stripeCustomer === true) {
+  //     console.log("Is already a stripe customer");
+  //     stripe.customers
+  //       .update(info.stripeCustomerId, {
+  //         source: purchaseInfo.stripeToken
+  //       })
+  //       .then(customer =>
+  //         stripe.charges.create({
+  //           amount: purchaseInfo.amount,
+  //           currency: "usd",
+  //           description: purchaseInfo.description,
+  //           receipt_email: purchaseInfo.stripeEmail,
+  //           customer: customer.id
+  //         })
+  //       )
+  //       .then(charge => res.send({ success: true, charge }));
+  //   } else {
+  //     res.json({ success: false, msg: "Could not charge customer" });
+  //   }
+  // });
+
+  // for () {
+  //   stripe.transfers.create({
+  //     amount: 7000,
+  //     currency: "usd",
+  //     destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
+  //     transfer_group: purchaseInfo.orderID,
+  //   }).then(transfer => res.send({ success: true, transfer}));
+  // }
 });
 /*
 // Create a Charge:
@@ -469,32 +639,34 @@ stripe.transfers.create({
 });
 */
 
-
 //Email Verification - RONI
-//Will check the route for a token and search the DB for a user with that 
+//Will check the route for a token and search the DB for a user with that
 //token to activate their account
-router.post('/confirmEmail/:token', (req, res, next) => {
+router.post("/confirmEmail/:token", (req, res, next) => {
   Buyer.findOne({ confirmationToken: req.params.token }, (err, buyer) => {
-    if (err || buyer == null) return res.json({ success: false, msg: 'Not able to activate account' });
+    if (err || buyer == null)
+      return res.json({ success: false, msg: "Not able to activate account" });
     var token = req.params.token;
 
     if (buyer.userConfirmed) {
-      return res.json({ success: false, msg: 'Your account is already actived.' });
+      return res.json({
+        success: false,
+        msg: "Your account is already actived."
+      });
     }
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
-        res.json({ success: false, msg: 'Activation link has expired.' });
-
+        res.json({ success: false, msg: "Activation link has expired." });
       } else if (!buyer) {
-        res.json({ success: false, msg: 'Activation link has expired.' });
+        res.json({ success: false, msg: "Activation link has expired." });
       } else if (buyer.userConfirmed) {
-        res.json({ success: false, msg: 'Acount already activated!' });
+        res.json({ success: false, msg: "Acount already activated!" });
       } else {
         // Boolean in buyer DB that indicates if user email has been confirmed or not
         buyer.temptoken = false;
         buyer.userConfirmed = true;
         buyer.confirmationToken = undefined;
-        buyer.save((err) => {
+        buyer.save(err => {
           if (err) {
             console.log(err);
           } else {
@@ -513,33 +685,33 @@ router.post('/confirmEmail/:token', (req, res, next) => {
                 first_name: buyer.first_name,
                 last_name: buyer.last_name,
                 email: buyer.email,
-                msg: 'Account Activate'
+                msg: "Account Activate"
               }
             });
           }
-        })
+        });
       }
-    })
+    });
   });
-})
+});
 
 // Resend Email Verification -- NOT YET USED/TESTED - RONI
-router.post('/resend', (req, res, next) => {
+router.post("/resend", (req, res, next) => {
   const email = req.body.email;
 
   Buyer.getBuyerbyEmail(email, (err, buyer) => {
     if (err) return res.json({ success: false, msg: 'Error.' });
     if (!buyer) {
-      return res.json({ success: false, msg: 'User not found.' });
+      return res.json({ success: false, msg: "User not found." });
     }
     if (buyer.userConfirmed) {
-      return res.json({ success: false, msg: 'Acount is already Activated.' });
+      return res.json({ success: false, msg: "Acount is already Activated." });
     }
 
     buyer.confirmationToken = jwt.sign({ data: buyer }, config.secret, {
       expiresIn: '24h'
     });
-    buyer.save((err) => {
+    buyer.save(err => {
       if (err) {
         console.log(err);
       } else {
@@ -549,6 +721,6 @@ router.post('/resend', (req, res, next) => {
       }
     });
   });
-})
+});
 
 module.exports = router;

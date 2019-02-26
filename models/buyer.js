@@ -48,6 +48,15 @@ const BuyerSchema = mongoose.Schema({
     offerCart: {
         type: [String],
         required: false
+    },
+    stripe_customer: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    stripe_customer_id: {
+        type: String,
+        required: false
     }
 });
 
