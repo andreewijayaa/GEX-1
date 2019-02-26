@@ -707,14 +707,9 @@ router.post("/resend", (req, res, next) => {
     if (buyer.userConfirmed) {
       return res.json({ success: false, msg: "Acount is already Activated." });
     }
-<<<<<<< HEAD
-    buyer.confirmationToken = jwt.sign({ data: "buyer" }, config.secret, {
-      expiresIn: "24h"
-=======
 
     buyer.confirmationToken = jwt.sign({ data: buyer }, config.secret, {
       expiresIn: '24h'
->>>>>>> upstream/master
     });
     buyer.save(err => {
       if (err) {
