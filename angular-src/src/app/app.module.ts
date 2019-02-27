@@ -71,6 +71,7 @@ const appRoutes: Routes = [
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
   {path: 'resend', component: ResendComponent},
+  {path: 'reset', component: ForgetPasswordComponent},
   {path: '**', redirectTo: '/'}
 ];
 

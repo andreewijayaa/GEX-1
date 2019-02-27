@@ -1,3 +1,4 @@
+var randomstring = require("randomstring");
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -5,7 +6,6 @@ const config = require("../config/database");
 const Buyer = require("../models/buyer");
 const Request = require("../models/request");
 const sendEmail = require("../models/sendEmail");
-const Seller = require("../models/seller");
 const bcrypt = require("bcryptjs");
 const upload = require("../services/multer");
 const upload2 = require("../services/multer2");
@@ -180,7 +180,7 @@ router.post('/request', (req, res, next) => {
           // Look for a seller with the same code the buyer has posted a request with
           // find all applicable sellers and email them (Notifcation System) 
           // The email will contain a link to view the Request for sellers 
-          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
+          Buyer.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
             if (err) { return next(err); }
             //console.log('Post Id:' + post.code)
             //console.log(applicableSeller);
@@ -694,6 +694,73 @@ router.post("/resend", (req, res, next) => {
         });
       }
     });
+  });
+});
+
+// Reset password - RONI
+router.post('/reset', (req, res, next) => {
+  const email = req.body.email;
+  
+  Buyer.getBuyerbyEmail(email, (err, buyer) => {
+    if (err) return res.json({ success: false, msg: 'Error.' });
+    if (!buyer) {
+      return res.json({ success: false, msg: 'User not found.' });
+    }
+
+    buyer.resetPasswordToken = randomstring.generate(50);
+
+    buyer.save((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // If account Registred Send Email for Email Verification
+        sendEmail.resetEmail(buyer);
+        return res.json({ success: true, msg: 'Password resent link has been sent to ' + email +'.' });
+      }
+    });
+  });
+})
+
+// Reset password - RONI
+router.post('/reset/:id', (req, res, next) => {
+  const password = req.body.password;
+  Buyer.findOne({resetPasswordToken: req.params.id}, (err, buyer) => {
+    if(err || buyer == null) return res.json({success: false, msg: 'Not able to activate account'});
+    var id = req.params.id;
+
+      if(err)
+      {
+        res.json({success:false, msg: 'Password reset link has expired.'});
+      } else if (!buyer) {
+        res.json({success:false, msg: 'Password reset link has expired.'});
+      } else {
+        buyer.password = password;
+        buyer.resetPasswordToken = undefined;
+        Buyer.changePassword(buyer, (err, buyerNewPass) => {
+          if(err){
+              res.json({success: false, msg:"Failed to change passwor!"})
+          }
+          else {
+              sendEmail.passwordChanged(buyerNewPass);
+
+              const token = jwt.sign({ data: buyer }, config.secret, {
+                expiresIn: 604800 // 1 week
+              });
+  
+              res.json({
+                success: true,
+                token: `${token}`,
+                buyer: {
+                  id: buyer._id,
+                  first_name: buyer.first_name,
+                  last_name: buyer.last_name,
+                  email: buyer.email
+                },
+                msg:'Password changed successfully.'
+              });
+          }
+      });
+      }
   });
 });
 

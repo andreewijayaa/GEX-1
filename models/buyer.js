@@ -54,6 +54,9 @@ const BuyerSchema = mongoose.Schema({
         required: false,
         default: false
     },
+    resetPasswordToken: {
+        type: String
+    },
     stripe_customer_id: {
         type: String,
         required: false
@@ -84,7 +87,15 @@ module.exports.addBuyer = function (newBuyer, callback) {
         });
     });
 }
-
+module.exports.changePassword = function(buyer, callback){
+    bcrypt.genSalt(10,(err, salt) => {
+        bcrypt.hash(buyer.password, salt, (err, hash) => {
+            if(err) {throw err};
+            buyer.password = hash;
+            buyer.save(callback);
+        });
+    });
+}
 // compare inputted password to the buyer hashed password
 module.exports.comparePassword = function (inputtedPassword, hash, callback) {
     bcrypt.compare(inputtedPassword, hash, (err, isMatch) => {

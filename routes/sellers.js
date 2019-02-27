@@ -1,3 +1,4 @@
+var randomstring = require("randomstring");
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -259,40 +260,52 @@ router.get('/viewactiverequests', (req,res) => {
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) return res.status(500).send({success: false, message: 'Failed to authenticate token.'});
       //delete decoded.data.password; //Why are we deleting password here ?? <-Good question I am not sure. I'll comment it out and see if it explodes
+
       let newOffer = new Offer({
         seller_ID:decoded.data._id,
-        //code:req.body.code, //I DONT THINK OFFER NEEDS CODE
         request_ID: req.body.request_ID,
         title:req.body.title,
+        offerStatus:'Pending',
         description:req.body.description,
         price:req.body.price
       });
-      //console.log('created the offer with no problems \n' + newOffer); 
-      Seller.findById(decoded.data._id, (err, seller_making_offer) => {
-        if (err) return handleError(err);//throws err if search for seller fails
-        newOffer.save( (err,post) => {
-          if (err) return res.json(err); 
-          //console.log(post._id);
-            if (err) { res.status(500).send({success: false, message: 'Failed to save Offer.'}); }
-            seller_making_offer.seller_offers_byID.push(post._id);
-            seller_making_offer.open_requests.push(newOffer.request_ID);//this is the new line added that hopefully fixes the active requests.
-            seller_making_offer.save((err) =>{
-              if (err) { return next(err); }
-              //console.log('New Offer made tied to Seller %s', decoded.data._id);
-              //console.log('Request ID is: ' + id);
-              Request.findById(newOffer.request_ID, (err, request_with_offer) => {
-                if (err) return handleError(err);
-                //console.log('Found request\n' + request_with_offer);
-                request_with_offer.request_offers_byID.push(post._id);
-                request_with_offer.offerCount++;
-                request_with_offer.save((err) =>{
-                  if (err){return next(err);}
-                  //console.log('New Offer made tied to Request %s ', request_with_offer._id);
+      // Check if request is expired
+      Request.findById(req.body.request_ID, (err, requestBeingOffered) => { 
+        if(err)  return res.status(500).send({success: false, message: 'Request not found.'});
+        var Today = new Date();
+        console.log(requestBeingOffered.deadline < Today);
+        if(requestBeingOffered.deadline < Today) {
+          return res.status(201).send({success: false, message: 'Request has expired.'});
+        }
+        //console.log('created the offer with no problems \n' + newOffer); 
+        Seller.findById(decoded.data._id, (err, seller_making_offer) => {
+          if (err || seller_making_offer == null) return res.status(404).send({success: false, message: 'Not able to locate seller.'});
+          //console.log(seller_making_offer);
+          if (seller_making_offer.stripe == null) return res.status(500).send({success: false, message: 'Must be registered with Stripe to submit offer.'});
+          // Saving the new offer
+          newOffer.save( (err,post) => {
+            if (err) return res.json(err); 
+            //console.log(post._id);
+              if (err) { res.status(201).send({success: false, message: 'Failed to save Offer.'}); }
+              seller_making_offer.seller_offers_byID.push(post._id);
+              seller_making_offer.open_requests.push(newOffer.request_ID);//this is the new line added that hopefully fixes the active requests.
+              seller_making_offer.save((err) =>{
+                if (err) { return next(err); }
+                //console.log('New Offer made tied to Seller %s', decoded.data._id);
+                Request.findById(newOffer.request_ID, (err, request_with_offer) => {
+                  if (err) return handleError(err);
+                  //console.log('Found request\n' + request_with_offer);
+                  request_with_offer.request_offers_byID.push(post._id);
+                  request_with_offer.offerCount++;
+                  request_with_offer.save((err) =>{
+                    if (err){return next(err);}
+                    //console.log('New Offer made tied to Request %s ', request_with_offer._id);
+                    return res.status(200).send({ success: true, message:'The offer was submitted successfully.' })
+                  });
                 });
               });
             });
-            res.status(201).json(post);
-        });
+          });
       });
   });
 });
@@ -314,7 +327,7 @@ router.post('/authenticateStripe', (req, res, next) => {
     }
     // Data to be sent to stripe
     var postData = {          
-      client_secret: 'sk_test_2AL7EAHq9V423nX52NbhBu6C',
+      client_secret: process.env.CLIENT_SECRET,
       code: req.body.code,
       grant_type: 'authorization_code'
     }
@@ -596,7 +609,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
   });
 })
 
-// Resend Email Verification -- NOT YET USED/TESTED - RONI
+// Resend Email Verification - RONI
 router.post('/resend', (req, res, next) => {
   const email = req.body.email;
   
@@ -624,4 +637,88 @@ router.post('/resend', (req, res, next) => {
   });
 })
 
+// Reset password - RONI
+router.post('/reset', (req, res, next) => {
+  const email = req.body.email;
+  
+  Seller.getSellerbyEmail(email, (err, seller) => {
+    if (err) return res.json({ success: false, msg: 'Error.' });
+    if (!seller) {
+      return res.json({ success: false, msg: 'User not found.' });
+    }
+
+    seller.resetPasswordToken = randomstring.generate(50);
+
+    seller.save((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        // If account Registred Send Email for Email Verification
+        sendEmail.resetEmail(seller);
+        return res.json({ success: true, msg: 'Password resent link has been sent to ' + email +'.' });
+      }
+    });
+  });
+})
+
+// Reset password - RONI
+router.post('/reset/:id', (req, res, next) => {
+  const password = req.body.password;
+  Seller.findOne({resetPasswordToken: req.params.id}, (err, seller) => {
+    if(err || seller == null) return res.json({success: false, msg: 'Password not saved.'});
+    var id = req.params.id;
+      if (!seller) {
+        return res.json({success:false, msg: 'Password reset link has expired.'});
+      } else {
+        seller.password = password;
+        seller.resetPasswordToken = undefined;
+        Seller.changePassword(seller, (err, sellerNewPass) => {
+          if(err){
+              res.json({success: false, msg:"Failed to change passwor!"})
+          }
+          else {
+              sendEmail.passwordChanged(sellerNewPass);
+
+              const token = jwt.sign({data: seller}, config.secret, {
+                expiresIn: 604800 // 1 week
+              });
+
+              res.json({
+                success: true,
+                token: `${token}`,
+                seller: {
+                  id: seller._id,
+                  first_name: seller.first_name,
+                  last_name: seller.last_name,
+                  email: seller.email
+
+                },
+                msg:'Password changed successfully.'
+              });
+          }
+      });
+      }
+  });
+});
+
+router.get('/getStripeRoute', (req, res) => {
+  var token = req.headers['x-access-token'];
+
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    const id = decoded.data._id;
+    const redirect_uri= process.env.BASE_URL + '/seller';
+    const client_id= process.env.STRIPE_CLIENT_ID;
+
+
+    const urlToOpen = 'https://connect.stripe.com/express/oauth/authorize?redirect_uri='
+                            + redirect_uri + '&client_id=' + client_id
+                            + '&state=' + id;
+    
+    return res.status(200).send({ success: true, urlToOpen})
+  });
+});
 module.exports = router;

@@ -17,7 +17,8 @@ const offerSchema = mongoose.Schema({
     required:true
   },
   description:{
-    type:String
+    type:String,
+    required:true
   },
   price:{
     type:Number,
@@ -26,6 +27,10 @@ const offerSchema = mongoose.Schema({
   offerAccepted:{
     type:Boolean,
     default: false
+  },
+  offerStatus:{
+    type:String,
+    required:true
   },
   created_at:{ 
     type: Date, 
