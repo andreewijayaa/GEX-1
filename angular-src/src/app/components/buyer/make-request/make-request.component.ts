@@ -5,8 +5,7 @@ import { Router } from "@angular/router";
 import { NotifierService } from "angular-notifier";
 import { BuyerService } from "../../../services/buyer.service";
 import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-const DefaultImageIcon =
-  "https://raw.githubusercontent.com/ronjonsilver/MEANstackPractice/master/images.png";
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
 class ImageSnippet {
   constructor(public src: string, public file: File) {}
 }
