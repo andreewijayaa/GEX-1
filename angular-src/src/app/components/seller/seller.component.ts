@@ -59,25 +59,25 @@ export class SellerComponent implements OnInit {
       this.state = params['state'];
     });
     // Call stripe backend connect function
-    if(this.code !== undefined && this.state !== undefined)
-    {
+    if (this.code !== undefined && this.state !== undefined) {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
-        if(response.success) {
-          //Display Success stripe Dialog
+        if (response.success) {
+          // Display Success stripe Dialog
+          localStorage.setItem('stripe_connected', 'true');
           const dialogRef = this.dialog;
           dialogRef.open(StipeAccountCreatedSuccessDialogComponent);
           setTimeout(function () {
             dialogRef.closeAll();
           }, 5000);
-          //this.notifier.notify('success', response.msg);
+          this.notifier.notify('success', response.msg);
         } else {
-          //Display fail stripe Dialog
+          // Display fail stripe Dialog
           const dialogRef = this.dialog;
           dialogRef.open(StipeAccountCreatedFailedDialogComponent);
           setTimeout(function () {
             dialogRef.closeAll();
           }, 5000);
-          //this.notifier.notify('error', response.msg);
+          this.notifier.notify('error', response.msg);
         }
       });
     }
@@ -86,7 +86,7 @@ export class SellerComponent implements OnInit {
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
       this.seller = profile.data;
-      //this.loaded_seller = Promise.resolve(true);
+      // this.loaded_seller = Promise.resolve(true);
       this.loader = false;
     },
       err => {
@@ -178,9 +178,9 @@ export class SellerComponent implements OnInit {
   submitOffer(title: any, id: any) {
     // Seller does not have a stripe account, therefor they can't submit an offer
     if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
-
       return this.notifier.notify('error', 'Please register with Stripe first.');
     }
+
     let request_title = title;
     var offerTitle;
     var offerDescription;

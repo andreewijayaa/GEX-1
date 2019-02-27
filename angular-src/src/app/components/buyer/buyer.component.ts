@@ -21,7 +21,7 @@ export class BuyerComponent implements OnInit {
   offerList: Object;
   offerTitleAddToCart: String;
   pushItemToNavbar = 0;
-  offerCart: [String] = [""];
+  offerCart: [String] = [''];
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
@@ -43,7 +43,7 @@ export class BuyerComponent implements OnInit {
   getBuyer() {
     this.buyerService.getBuyerProfile().subscribe((buyerdata: any) => {
       this.buyerProfile = buyerdata;
-      //console.log(this.buyerProfile);
+      // console.log(this.buyerProfile);
     });
   }
 
@@ -54,42 +54,42 @@ export class BuyerComponent implements OnInit {
     if (this.buyer == null) {
       window.location.reload();
     } else {
-      //console.log(this.buyer);
+      // console.log(this.buyer);
     }
   }
 
   expanded(id: any) {
     let requestId = id;
     this.getBuyer();
-    //(<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
+    // (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
     // Make a call to retrieve request information with all offers to that request
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
         this.offerCart = this.buyerProfile['data']['offerCart'];
-        //console.log(this.offerCart);
+        // console.log(this.offerCart);
 
         // used to distinguish between if buyer is viewing the request or a seller
         // to limit access
         if (data.status === 0) {
           //this.status = true; // Buyer
         } else if (data.status === 1) {
-          //this.status = false; // Seller
+          // this.status = false; // Seller
         }
         else {
-          //this.notifier.notify('success', data.msg);
-          //this.router.navigate(['/']);
+          // this.notifier.notify('success', data.msg);
+          // this.router.navigate(['/']);
         }
       } else {
-        //this.notifier.notify('error', data.msg);
-        //this.router.navigate(['/']);
+        // this.notifier.notify('error', data.msg);
+        // this.router.navigate(['/']);
       }
     });
     this.getBuyer();
   }
 
   acceptOffer(element, offer_id) {
-    //const offer_id = document.getElementById('offerId').innerHTML;
+    // const offer_id = document.getElementById('offerId').innerHTML;
     const offerAccepted = {
       offer_ID: offer_id,
       offer_accepted: true
@@ -97,11 +97,11 @@ export class BuyerComponent implements OnInit {
 
     this.buyerService.offerAccepted(offerAccepted).subscribe((data: any) => {
       if (data.success) {
-        //console.log("Offer Accepted Successful.");
+        // console.log("Offer Accepted Successful.");
         (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
       }
       else {
-        //console.log("Offer Accepted NOT Successful.");
+        // console.log("Offer Accepted NOT Successful.");
       }
     });
 
@@ -119,7 +119,7 @@ export class BuyerComponent implements OnInit {
         element.disabled = true;
         this.getBuyer();
       }
-      //(<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
+      // (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
     });
     /*
     const dialogRef = this.dialog.open(AcceptOfferDialogComponent);

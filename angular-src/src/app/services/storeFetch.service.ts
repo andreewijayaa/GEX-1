@@ -45,6 +45,7 @@ export class StoreFetchService {
     var obj = JSON.parse(localStorage.getItem('seller'));
     localStorage.setItem('sellerFirstName', obj['first_name']);
     localStorage.setItem('sellerLastName', obj['last_name']);
+    localStorage.setItem('sc', 'false');
     this.RegisterToken = token;
     this.seller = seller;
   }
