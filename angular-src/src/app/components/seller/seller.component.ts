@@ -53,6 +53,8 @@ export class SellerComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+
+    //this.today = new Date();
     // get params if stripe is sending a redirect
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
