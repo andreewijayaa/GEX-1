@@ -153,8 +153,8 @@ router.post('/request', (req, res, next) => {
     });
 
     //code added by John to add images to requests
-    if (req.body.request_pic != null) {
-      request.request_images.push(req.body.request_pic);
+    if (req.body.request_pic != null){
+      request.request_images = req.body.request_pic;
       console.log("in that if statement");
     }
     console.log("past if statement");
@@ -187,7 +187,7 @@ router.post('/request', (req, res, next) => {
               applicableSeller[i].save((err) => {
                 if (err) { return next(err); }
               });
-              sendEmail.NotifySellerNewRequest(applicableSeller[i], post);
+              //sendEmail.NotifySeller(applicableSeller[i], post);
             }
           });
           return res.json({ success: true, msg: 'Your request was submitted!' });
