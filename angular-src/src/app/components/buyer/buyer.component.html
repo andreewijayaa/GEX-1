@@ -80,6 +80,14 @@ Bryan Vu contributed most of this buyer portal page.
           <mat-panel-title>
             <div [innerHTML]="request.description"></div>
           </mat-panel-title>
+          <mat-panel-title>
+            Request Picture:
+          </mat-panel-title>
+          <mat-panel-title>
+            <img class= "requestimage1" src={{request.request_images[0]}} *ngIf="request.request_images[0]" alt="" width="120" height="120">
+            <img class= "requestimage2" src={{request.request_images[1]}} *ngIf="request.request_images[1]" alt="" width="120" height="120">
+            <img class= "requestimage3" src={{request.request_images[2]}} *ngIf="request.request_images[2]" alt="" width="120" height="120">
+          </mat-panel-title>
           <br>
           <mat-panel-title>
             Offers:

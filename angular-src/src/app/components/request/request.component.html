@@ -23,6 +23,7 @@
         <p><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description: </b>{{request.description}}</p>
         <p><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Offer Count: </b>{{request.offerCount}}</p>
         <p><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Deadline: </b>{{request.deadline}}</p>
+        <p><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Request Image: </b>{{request.request_images[0]}}</p>
         <div *ngIf="!status" class="col-sm-12" style="text-align: right;">
           <button type="button" routerLink="/seller/submit-offer/{{request._id}}" class="btn">Submit New Offer</button>
         </div>
