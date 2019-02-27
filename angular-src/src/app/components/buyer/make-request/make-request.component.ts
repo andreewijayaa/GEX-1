@@ -21,8 +21,6 @@ export class MakeRequestComponent implements OnInit {
   //for image porcessing
   selectedFile: ImageSnippet;
 
-  Image_Urls: String[];
-
   // Temp codes for MVP - Kurgan
   codes = [
     {
@@ -105,7 +103,8 @@ export class MakeRequestComponent implements OnInit {
   codeArray: Number[];
   description: String = "Enter description of desired product";
   deadline: Date;
-  buttonText: String = "Submit Your Request to Sellers on Requiren";
+  buttonText: String = 'Submit Your Request to Sellers on Requiren';
+  Image_Urls: [String] = [""];
 
   public onChange(event): void {
     // Simple deadline selection - Bryan Vu
@@ -197,16 +196,30 @@ export class MakeRequestComponent implements OnInit {
     if (!this.deadline) {
       return this.notifier.notify("error", "Please select a deadline.");
     }
-
+    var request;
     window.scrollTo(1, 1);
     // Request Generated JSON
-    const request = {
+    if (this.Image_Urls[0] == ""){
+    request = {
       title: this.title,
       code: this.codeArray,
       description: this.description,
       deadline: this.deadline
-    };
-    console.log(this.codeArray);
+      };
+    }
+    else{
+      request = {
+      title: this.title,
+      code: this.codeArray,
+      description: this.description,
+      deadline: this.deadline,
+      request_pic: this.Image_Urls
+      };
+    }
+    /*this.Image_Urls.forEach( (an_Image)=> {
+        request.request_images.push(an_Image);
+      });*/
+    //console.log(this.codeArray);
     // Register Request
     this.buyerService.postBuyerRequest(request).subscribe((data: any) => {
       if (data.success) {
@@ -222,19 +235,30 @@ export class MakeRequestComponent implements OnInit {
   // function for updating profile image
   processFile(imageInput: any) {
     debugger;
+    //console.log("Process file called in make request component");
+    console.log(this.Image_Urls.length);
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
     reader.addEventListener("load", (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.buyerService.addRequestImage(this.selectedFile.file).subscribe(
-        res => {
-          this.Image_Urls.push(res["imageUrl"]);
+        (res) => {
+          //console.log("Image url " + res["imageUrl"]);
+          if (this.Image_Urls[0] == ""){
+            this.Image_Urls[0] = res["imageUrl"];
+          }
+          else {
+            this.Image_Urls.push(res["imageUrl"]);
+          }
+          //console.log("There is no way this works inside the function " + this.Image_Urls)
+          //this.Image_Urls.push(res["imageUrl"]);
+          //console.log("The Image url is " + this.Image_Urls[0] );
         },
-        err => {}
-      );
+        (err) => {
+          console.log("an error message");
+        })
     });
-
     reader.readAsDataURL(file);
   }
 }
