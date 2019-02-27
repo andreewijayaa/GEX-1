@@ -154,22 +154,21 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   }
 
   rerouteToStripe() {
-    console.log('Data = ' + this.sellerID);
-    const redirect_uri: string = 'https://powerful-taiga-46416.herokuapp.com/seller';
-    const client_id: string = 'ca_EVl0RHMGrhYGo6GDjWwwn40nmD4aK6AA';
+    var urlToOpen;
 
-
-    const urlToOpen: string = 'https://connect.stripe.com/express/oauth/authorize?redirect_uri='
-                            + redirect_uri + '&client_id=' + client_id
-                            + '&state=' + this.sellerID;
-    let url: string = '';
-    if (!/^http[s]?:\/\//.test(urlToOpen)) {
-        url += 'http://';
-    }
-    console.log(url);
-    url += urlToOpen;
-    window.open(url, '_blank');
-
+    this.sellerService.stripeRoute().subscribe((data:any) => {
+      if(data.success)
+      {
+        urlToOpen= data.urlToOpen;
+        let url: string = '';
+        if (!/^http[s]?:\/\//.test(urlToOpen)) {
+            url += 'http://';
+        }
+        console.log(url);
+        url += urlToOpen;
+        window.open(url, '_blank');
+      }
+    });
   }
 
   labelButton() {

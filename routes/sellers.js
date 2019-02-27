@@ -327,7 +327,7 @@ router.post('/authenticateStripe', (req, res, next) => {
     }
     // Data to be sent to stripe
     var postData = {          
-      client_secret: 'sk_test_2AL7EAHq9V423nX52NbhBu6C',
+      client_secret: process.env.CLIENT_SECRET,
       code: req.body.code,
       grant_type: 'authorization_code'
     }
@@ -701,4 +701,24 @@ router.post('/reset/:id', (req, res, next) => {
   });
 });
 
+router.get('/getStripeRoute', (req, res) => {
+  var token = req.headers['x-access-token'];
+
+  //if they don't have a token
+  if (!token) return res.status(401).send({ success: false, message:'No token provided.' });
+
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    const id = decoded.data._id;
+    const redirect_uri= process.env.BASE_URL + '/seller';
+    const client_id= process.env.STRIPE_CLIENT_ID;
+
+
+    const urlToOpen = 'https://connect.stripe.com/express/oauth/authorize?redirect_uri='
+                            + redirect_uri + '&client_id=' + client_id
+                            + '&state=' + id;
+    
+    return res.status(200).send({ success: true, urlToOpen})
+  });
+});
 module.exports = router;

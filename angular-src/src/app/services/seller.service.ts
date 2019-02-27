@@ -241,6 +241,7 @@ export class SellerService {
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
+        'Content-Type': 'application/json',
         'x-access-token': this.sellerToken
       })
     };
@@ -278,6 +279,24 @@ export class SellerService {
     }
   }
 
+  // Get seller stripe route
+  stripeRoute() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/sellers/getStripeRoute', httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.get('sellers/getStripeRoute', httpOptions)
+      .pipe(map(res => res));
+    }
+  }
 
   // logging out seller
   sellerLogout() {
