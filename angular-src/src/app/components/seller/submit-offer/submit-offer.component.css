@@ -1,10 +1,10 @@
 html, body {
     height: 100%;
-    background-image: url(../../../../../src/assets/logistics2.jpg);
+    /* background-image: url(../../../../../src/assets/logistics2.jpg);
     padding: 0;
     background-repeat:no-repeat;
     background-size:cover;
-    color: white;
+    color: white; */
   }
 
   #container {
