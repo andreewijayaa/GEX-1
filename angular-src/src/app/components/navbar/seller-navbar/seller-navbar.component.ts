@@ -21,6 +21,7 @@ interface ISeller {
   styleUrls: ['./seller-navbar.component.css']
 })
 export class SellerNavbarComponent implements OnInit {
+  seller: any;
   private readonly notifier: NotifierService;
   sellerNavbar = {} as ISeller;
   @Input() logout: Boolean;
@@ -41,7 +42,7 @@ export class SellerNavbarComponent implements OnInit {
     this.sellerNavbar = this.route.snapshot.data['seller'];
     this.sellerNavbar.firstName = this.sellerNavbar['data']['first_name'];
     this.sellerNavbar.lastName = this.sellerNavbar['data']['last_name'];
-    this.sellerNavbar.profilePicture = this.sellerNavbar['data']['profile_image'];
+    this.seller = this.route.snapshot.data['seller'];
     //console.log(this.sellerNavbar.lastName);
   }
 

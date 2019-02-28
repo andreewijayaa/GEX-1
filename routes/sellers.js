@@ -199,6 +199,39 @@ router.get('/viewoffers', (req,res) => {
     });
 });
 
+
+//funciton to delete offers
+//By John
+router.post("/deleteoffer", function(req, res) {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    Offer.findById(req.body.offer_id, (err, offer_being_deleted) => {
+      if (offer_being_deleted.seller_ID != decoded.data._id) {
+        return res.status(500).send({
+          success: false,
+          message: "You must be the owner of this offer to delete it"
+        });
+      }
+      else{
+        /*Offer.findByIdAndRemove(req.body.offer_id, (err, wewlad) => {
+          if (err) {
+            res.send("Error deleting request")
+          }
+          return res.json(wewlad);
+        });*/
+        return res.status(500).send({
+          success: true,
+          message: "A thing to pretend success for testing"
+        });
+      }
+    });
+  });
+});
+
 //route to view active requests made by John
 //uses mongoose to find active requets
 router.get('/viewactiverequests', (req,res) => {

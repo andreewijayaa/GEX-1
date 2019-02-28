@@ -88,6 +88,21 @@ export class BuyerComponent implements OnInit {
     this.getBuyer();
   }
 
+  deleteRequestFunction(request_id_todelete) {
+    //debugger;
+    var request_delete;
+    request_delete = {
+      request_id: request_id_todelete
+    };
+
+    this.buyerService.deleteBuyerRequest(request_delete).subscribe((data: any) => {
+      console.log(data);
+      debugger;
+      window.location.reload();
+    });
+
+  }
+
   acceptOffer(element, offer_id) {
     // const offer_id = document.getElementById('offerId').innerHTML;
     const offerAccepted = {

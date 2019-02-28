@@ -78,6 +78,28 @@ export class SellerService {
     }
   }
 
+  //service to delete request
+  deleteoffer(offer_delete) {
+    //console.log("Delete Request Called");
+    this.loadToken();
+    if (this.sellerToken != null) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'x-access-token': this.sellerToken
+        })
+      };
+      if (process.env.NODE_ENV === 'development') {
+        return this.http.post('http://localhost:3000/sellers/deleteoffer', offer_delete, httpOptions)
+          .pipe(map(res => res));
+      } else {
+        return this.http.post('sellers/deleteoffer', offer_delete, httpOptions)
+          .pipe(map(res => res));
+      }
+    }
+  }
+
+
   // Stripe Service call to connect Seller account with stripe account
   connectStripe(code, state): Observable<any>  {
     this.loadToken();
