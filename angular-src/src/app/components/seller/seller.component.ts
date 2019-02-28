@@ -267,6 +267,21 @@ export class SellerComponent implements OnInit {
     );
   }
 
+  deleteOfferFunction(offer_id_todelete) {
+    //debugger;
+    var offer_delete;
+    offer_delete = {
+      offer_id: offer_id_todelete
+    };
+
+    this.sellerService.deleteoffer(offer_delete).subscribe((data: any) => {
+      console.log(data);
+      debugger;
+      window.location.reload();
+    });
+
+  }
+
   // Tab first configuration
   currentTab = 'requests';
 
