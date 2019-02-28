@@ -59,12 +59,15 @@ Bryan Vu contributed most of this buyer portal page.
             {{request.offerCount}}
           </mat-panel-title>
           <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 90px; color: green">
-            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
-          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 3 && (request.deadline | amDifference: today :'days' : true | number:'1.0-0') > 0" style="width: 90px; color: red">
-            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) <= 3 && (request.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">
+            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
-          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 0" style="width: 90px; color: red">
+          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) < 1 && (request.deadline | amDifference: today :'days' : true) > 0" style="width: 90px; color: orange">
+            Less than 1 day<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+          </mat-panel-title>
+          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) <= 0" style="width: 90px; color: red">
             EXPIRED<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
           </mat-panel-title>
           <mat-panel-title id="selectedRequestId" hidden>
