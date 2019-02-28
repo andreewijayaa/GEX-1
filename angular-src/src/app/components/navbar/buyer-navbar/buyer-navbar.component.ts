@@ -25,6 +25,7 @@ export class BuyerNavbarComponent implements OnInit {
   @Input() itemAdded_RemovedCart = 0;
   @Input() buyer_first_name = localStorage.getItem('buyerFirstName');
   @Input() buyer_last_name = localStorage.getItem('buyerLastName');
+  @Input() buyer_image = localStorage.getItem('profile_image');
   buyerNavbar: IBuyer;
   totalItemsCart = parseInt(localStorage.getItem('buyerCart'), 10);
 

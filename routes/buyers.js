@@ -232,10 +232,17 @@ router.post("/deleterequest", function(req, res) {
     Request.findById(req.body.request_id, (err, request_being_deleted) => {
       //console.log("Buyer ID from login " + decoded.data._id);
       //console.log("Buyer ID from request " + request_being_deleted.buyer_ID);
+      console.log("requests offer count " + request_being_deleted.offerCount);
       if (request_being_deleted.buyer_ID != decoded.data._id) {
         return res.status(500).send({
           success: false,
           message: "You must be the owner of this request to delete it"
+        });
+      }
+      else if ((request_being_deleted.offerCount != 0)){
+        return res.status(500).send({
+          success: false,
+          message: "A Request with offers Cannot be deleted"
         });
       }
       else{

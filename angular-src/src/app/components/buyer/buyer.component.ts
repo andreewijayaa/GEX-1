@@ -96,6 +96,8 @@ export class BuyerComponent implements OnInit {
     };
 
     this.buyerService.deleteBuyerRequest(request_delete).subscribe((data: any) => {
+      console.log(data);
+      debugger;
       window.location.reload();
     });
 
