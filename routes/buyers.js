@@ -15,6 +15,10 @@ const Offer = require("../models/offer");
 const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
 const keySecret = process.env.STRIPE_SECRET_KEY;
 const stripe = require("stripe")(keySecret);
+const Taxjar = require('taxjar');
+const client = new Taxjar({
+  apiKey: process.env.TAXJAR_KEY
+});
 
 //Register route for buyers by Roni
 //Takes in all required information as JSON
@@ -621,6 +625,23 @@ router.post("/charge", (req, res) => {
       })
       .then(transfer => res.send({ success: true, transfer }));
   }
+});
+
+router.post('tax', (req, res) => {
+  // let locationInfo = {
+  //   from_country: req.body.from_country,
+  //   from_zip: req.body.from_zip,
+  //   from_state: req.body.state,
+  //   from_city: 
+  //   from_street:
+  //   to_country:
+  //   to_zip:
+  //   to_state:
+  //   to_city:
+  //   to_street:
+  //   amount:
+  //   shipping:
+  // }; 
 });
 
 //Email Verification - RONI
