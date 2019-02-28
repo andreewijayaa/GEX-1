@@ -21,11 +21,12 @@ interface IBuyer {
 })
 export class BuyerNavbarComponent implements OnInit {
   private readonly notifier: NotifierService;
+  buyer: any;
   @Input() logout: Boolean;
   @Input() itemAdded_RemovedCart = 0;
   @Input() buyer_first_name = localStorage.getItem('buyerFirstName');
   @Input() buyer_last_name = localStorage.getItem('buyerLastName');
-  @Input() buyer_image = localStorage.getItem('profile_image');
+  @Input() buyer_image = localStorage.getItem('buyerpofilepic');
   buyerNavbar: IBuyer;
   totalItemsCart = parseInt(localStorage.getItem('buyerCart'), 10);
 
@@ -44,6 +45,7 @@ export class BuyerNavbarComponent implements OnInit {
     this.buyerNavbar = this.route.snapshot.data['buyer'];
     this.buyerNavbar.firstName = this.buyerNavbar['data']['first_name'];
     this.buyerNavbar.lastName = this.buyerNavbar['data']['last_name'];
+    this.buyer = this.route.snapshot.data['buyer'];
     //this.buyerNavbar.cartItemBadge = localStorage.getItem('buyerCart');
     //console.log(this.counter.length);
   }

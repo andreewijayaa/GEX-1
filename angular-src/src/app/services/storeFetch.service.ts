@@ -34,6 +34,7 @@ export class StoreFetchService {
     localStorage.setItem('buyerCart', obj['offerCart']['length']);
     localStorage.setItem('buyerFirstName', obj['first_name']);
     localStorage.setItem('buyerLastName', obj['last_name']);
+    localStorage.setIten('buyerpofilepic', buyer.data.profile_image)
     this.RegisterToken = token;
     this.buyer = buyer;
   }
