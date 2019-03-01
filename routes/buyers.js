@@ -788,7 +788,9 @@ router.post('/reset/:id', (req, res, next) => {
                   id: buyer._id,
                   first_name: buyer.first_name,
                   last_name: buyer.last_name,
-                  email: buyer.email
+                  email: buyer.email,
+                  profile_image: buyer.profile_image,
+                  offerCart: buyer.offerCart
                 },
                 msg:'Password changed successfully.'
               });
