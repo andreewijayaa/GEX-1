@@ -12,6 +12,7 @@ export class SubmitOfferComponent implements OnInit {
   id: any;
   title: String;
   description: String;
+  delivery: String;
   price: Number;
 
   constructor(private sellerService: SellerService,

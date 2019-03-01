@@ -177,6 +177,35 @@ export class SellerComponent implements OnInit {
 
   }
 
+  refresh() {
+      this.progress1 = 0;
+      this.progress2 = 0;
+      this.progress3 = 0;
+     // Fetching seller profile information from the service to be used in the webpage
+     this.sellerService.getSellerProfile().subscribe((profile: any) => {
+      this.seller = profile.data;
+
+      this.temp = this.seller.user_account_setup;
+      if (this.seller.user_account_setup[0]) {
+        this.progress1 = 100;
+        if (this.seller.user_account_setup[1]) {
+          this.progress2 = 100;
+          if (this.seller.user_account_setup[2]) {
+            this.progress3 = 100;
+          } else {
+            this.progress3 = 50;
+          }
+        } else {
+          this.progress2 = 50;
+        }
+      } else {
+        this.progress1 = 50;
+      }
+    });
+
+    window.location.reload();
+  }
+
   submitOffer(title: any, id: any) {
     // Seller does not have a stripe account, therefor they can't submit an offer
     if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
