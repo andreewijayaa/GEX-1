@@ -15,14 +15,14 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
   &nbsp;
   <h1>Account Management</h1>
   &nbsp;
-  <div class="card">
+  <div class="card contain">
     <div class="card-body">
       &nbsp;
       <form action="/action_page.php">
 
         <div class="row">
 
-        <div class="col">
+        <div class="col-md-4">
           <img class= "profilePicutre" src={{buyer.data.profile_image}} *ngIf="buyer.data.profile_image" alt="" width="120" height="120">
           <img class="profilePicutre" src="https://pofileimages.s3.amazonaws.com/1550791120608" *ngIf="!(buyer.data.profile_image)" alt="" width="120" height="120">
           <div class="form-group">
@@ -68,8 +68,9 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
         </div>
 
 
-        <h4>Payment Information</h4>
-        <p>Add/Edit Cards</p>
+        <h4 style="display: inline-block">Payment Information</h4>
+        &nbsp;
+        <p style="display: inline-block">Add/Edit Cards</p>
 
         <h4>Notification Settings</h4>
 
