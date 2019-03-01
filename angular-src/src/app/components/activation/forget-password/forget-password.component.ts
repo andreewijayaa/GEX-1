@@ -50,7 +50,7 @@ export class ForgetPasswordComponent implements OnInit {
     this.sendReset = false;
 
     // If user is just sending a new password reset email
-    if(this.buyer === undefined && this.seller === undefined && this.reset !== undefined) {
+    if (this.buyer === undefined && this.seller === undefined && this.reset !== undefined) {
       this.sendReset = true;
     } else if (this.buyer !== undefined && this.seller === undefined && this.reset === undefined) {
       this.passwordReset = true;
@@ -75,7 +75,7 @@ export class ForgetPasswordComponent implements OnInit {
     }
 
     // Buyer is trying to reset email
-    if(this.reset === 'buyer') {
+    if (this.reset === 'buyer') {
       this.registerService.forgetPassword(this.email, 0).subscribe((data: any) => {
         if (data.success || !data) {
           this.notifier.notify('success', data.msg);
@@ -98,11 +98,12 @@ export class ForgetPasswordComponent implements OnInit {
 
   setNewPassword() {
 
-    if(this.password === undefined) { return this.notifier.notify('error', 'Please input a valid password.'); }
-    if(this.password !== this.passwordConfirm) { return this.notifier.notify('error', 'Passwords do not match.'); }
+    if (this.password === undefined) { return this.notifier.notify('error', 'Please input a valid password.'); }
+    if (this.password !== this.passwordConfirm) { return this.notifier.notify('error', 'Passwords do not match.'); }
     // Buyer Changing password
     if (this.buyer !== undefined && this.seller === undefined && this.reset === undefined) {
       this.registerService.changePassword(this.buyer, this.password, 0).subscribe((data: any) => {
+        console.log(data);
         if (data.success || !data) {
           this.notifier.notify('success', data.msg);
           this.storeFetchService.storeBuyerData(data.token, data.buyer);
@@ -115,7 +116,7 @@ export class ForgetPasswordComponent implements OnInit {
     // Seller Changing password
     } else if (this.buyer === undefined && this.seller !== undefined && this.reset === undefined) {
 
-      this.registerService.changePassword(this.seller,this.password, 1).subscribe((data: any) => {
+      this.registerService.changePassword(this.seller, this.password, 1).subscribe((data: any) => {
         if (data.success || !data) {
           this.notifier.notify('success', data.msg);
           this.storeFetchService.storeSellerData(data.token, data.seller);

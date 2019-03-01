@@ -56,19 +56,20 @@ export class RegisterService {
       'email': email
     };
     if (process.env.NODE_ENV === 'development') {
-      if(account_type === 0) {
-      return this.http.post('http://localhost:3000/buyers/reset', body, httpOptions)
-      .pipe(map(res => res));
+      if (account_type === 0) {
+        return this.http.post('http://localhost:3000/buyers/reset', body, httpOptions)
+        .pipe(map(res => res));
       } else if (account_type === 1) {
         return this.http.post('http://localhost:3000/sellers/reset', body, httpOptions)
+        .pipe(map(res => res));
       }
     } else {
     // This will return json file fetched from database
-      if(account_type === 0) {
+      if (account_type === 0) {
         return this.http.post('buyers/reset', body, httpOptions)
         .pipe(map(res => res));
         } else if (account_type === 1) {
-          return this.http.post('sellers/reset', body, httpOptions)
+          return this.http.post('sellers/reset', body, httpOptions).pipe(map(res => res));
        }
     }
   }
@@ -84,20 +85,21 @@ export class RegisterService {
       'password': password
     };
     if (process.env.NODE_ENV === 'development') {
-      if(account_type === 0) {
-      return this.http.post('http://localhost:3000/buyers/reset/'+id, body, httpOptions)
-      .pipe(map(res => res));
+      if (account_type === 0) {
+        return this.http.post('http://localhost:3000/buyers/reset/' + id, body, httpOptions )
+        .pipe(map(res => res));
       } else if (account_type === 1) {
-
-        return this.http.post('http://localhost:3000/sellers/reset/'+id, body, httpOptions)
+        return this.http.post('http://localhost:3000/sellers/reset/' + id, body, httpOptions )
+        .pipe(map(res => res));
       }
     } else {
     // This will return json file fetched from database
-      if(account_type === 0) {
-        return this.http.post('buyers/reset/'+id, body, httpOptions)
+      if (account_type === 0) {
+        return this.http.post('buyers/reset/' + id, body, httpOptions)
         .pipe(map(res => res));
         } else if (account_type === 1) {
-          return this.http.post('sellers/reset/'+id, body, httpOptions)
+          return this.http.post('sellers/reset/' + id, body, httpOptions)
+          .pipe(map(res => res));
        }
     }
   }
