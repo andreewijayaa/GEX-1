@@ -27,7 +27,7 @@ export class SellerNavbarComponent implements OnInit {
   @Input() logout: Boolean;
   @Input() seller_first_name = localStorage.getItem('sellerFirstName');
   @Input() seller_last_name = localStorage.getItem('sellerLastName');
-  @Input() seller_profile_pic = localStorage.getItem('sellerProfilePic');
+  //@Input() seller_profile_pic = localStorage.getItem('sellerProfilePic');
 
   constructor(private sellerService: SellerService,
     private storeFetchService: StoreFetchService,
