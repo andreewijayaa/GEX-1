@@ -44,7 +44,65 @@ export class RegisterService {
       .pipe(map(res => res));
     }
   }
-
+  // Forget password - Roni
+  forgetPassword(email, account_type) {
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+      })
+    };
+    //
+    const body = {
+      'email': email
+    };
+    if (process.env.NODE_ENV === 'development') {
+      if (account_type === 0) {
+        return this.http.post('http://localhost:3000/buyers/reset', body, httpOptions)
+        .pipe(map(res => res));
+      } else if (account_type === 1) {
+        return this.http.post('http://localhost:3000/sellers/reset', body, httpOptions)
+        .pipe(map(res => res));
+      }
+    } else {
+    // This will return json file fetched from database
+      if (account_type === 0) {
+        return this.http.post('buyers/reset', body, httpOptions)
+        .pipe(map(res => res));
+        } else if (account_type === 1) {
+          return this.http.post('sellers/reset', body, httpOptions).pipe(map(res => res));
+       }
+    }
+  }
+  // change Password - Roni
+  changePassword(id, password, account_type) {
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+      })
+    };
+    //
+    const body = {
+      'password': password
+    };
+    if (process.env.NODE_ENV === 'development') {
+      if (account_type === 0) {
+        return this.http.post('http://localhost:3000/buyers/reset/' + id, body, httpOptions )
+        .pipe(map(res => res));
+      } else if (account_type === 1) {
+        return this.http.post('http://localhost:3000/sellers/reset/' + id, body, httpOptions )
+        .pipe(map(res => res));
+      }
+    } else {
+    // This will return json file fetched from database
+      if (account_type === 0) {
+        return this.http.post('buyers/reset/' + id, body, httpOptions)
+        .pipe(map(res => res));
+        } else if (account_type === 1) {
+          return this.http.post('sellers/reset/' + id, body, httpOptions)
+          .pipe(map(res => res));
+       }
+    }
+  }
   // Buyer email activation through link, pass in the token with the function call
   activateAccount(token) {
     if (process.env.NODE_ENV === 'development') {

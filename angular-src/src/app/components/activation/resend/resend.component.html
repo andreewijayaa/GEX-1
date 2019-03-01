@@ -1,0 +1,21 @@
+<app-navbar></app-navbar>
+<div class="clearheader"></div>
+<body>
+  <form  class="flex-container">
+    <div class="regular-container">
+      <!-- <img src="assets\gexLogo.png" alt="Avatar" class="avatar">-->
+    <div class="container">
+        <h3>Email Reconfirmation</h3>
+        <br>
+        <label>Input your email to recieve a new email activation link.</label>
+      </div>
+      <hr>
+      <div class="container">
+        <input type="text" [(ngModel)]="email" placeholder="Enter Email" name="email">
+        <a ><button (click)="resendEmail()" type="submit">Resend</button></a><br><br>
+      </div>
+    </div>
+  </form>
+</body>
+<div class="clearfooter"></div>
+

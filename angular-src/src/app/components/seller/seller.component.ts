@@ -3,7 +3,7 @@ import { SellerService } from '../../services/seller.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -53,31 +53,33 @@ export class SellerComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+
+    //this.today = new Date();
     // get params if stripe is sending a redirect
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
       this.state = params['state'];
     });
     // Call stripe backend connect function
-    if(this.code !== undefined && this.state !== undefined)
-    {
+    if (this.code !== undefined && this.state !== undefined) {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
-        if(response.success) {
-          //Display Success stripe Dialog
+        if (response.success) {
+          // Display Success stripe Dialog
+          localStorage.setItem('stripe_connected', 'true');
           const dialogRef = this.dialog;
           dialogRef.open(StipeAccountCreatedSuccessDialogComponent);
           setTimeout(function () {
             dialogRef.closeAll();
           }, 5000);
-          //this.notifier.notify('success', response.msg);
+          this.notifier.notify('success', response.msg);
         } else {
-          //Display fail stripe Dialog
+          // Display fail stripe Dialog
           const dialogRef = this.dialog;
           dialogRef.open(StipeAccountCreatedFailedDialogComponent);
           setTimeout(function () {
             dialogRef.closeAll();
           }, 5000);
-          //this.notifier.notify('error', response.msg);
+          this.notifier.notify('error', response.msg);
         }
       });
     }
@@ -86,7 +88,7 @@ export class SellerComponent implements OnInit {
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
       this.seller = profile.data;
-      //this.loaded_seller = Promise.resolve(true);
+      // this.loaded_seller = Promise.resolve(true);
       this.loader = false;
     },
       err => {
@@ -175,11 +177,46 @@ export class SellerComponent implements OnInit {
 
   }
 
+  refresh() {
+      this.progress1 = 0;
+      this.progress2 = 0;
+      this.progress3 = 0;
+     // Fetching seller profile information from the service to be used in the webpage
+     this.sellerService.getSellerProfile().subscribe((profile: any) => {
+      this.seller = profile.data;
+
+      this.temp = this.seller.user_account_setup;
+      if (this.seller.user_account_setup[0]) {
+        this.progress1 = 100;
+        if (this.seller.user_account_setup[1]) {
+          this.progress2 = 100;
+          if (this.seller.user_account_setup[2]) {
+            this.progress3 = 100;
+          } else {
+            this.progress3 = 50;
+          }
+        } else {
+          this.progress2 = 50;
+        }
+      } else {
+        this.progress1 = 50;
+      }
+    });
+
+    window.location.reload();
+  }
+
   submitOffer(title: any, id: any) {
-    let request_title = title;
-    var offerTitle;
-    var offerDescription;
-    var offerPrice;
+    // Seller does not have a stripe account, therefor they can't submit an offer
+    if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
+      return this.notifier.notify('error', 'Please register with Stripe first.');
+    }
+
+    const request_title = title;
+    let offerTitle: any;
+    let offerDescription: any;
+    let offerPrice: any;
+    let offerShipping: any;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -197,22 +234,27 @@ export class SellerComponent implements OnInit {
           offerTitle = data['title'];
           offerDescription = data['description'];
           offerPrice = data['price'];
+          offerShipping = data['shipping'];
 
           const offer = {
             title: offerPrice,
             description: offerDescription,
             price: offerPrice,
-            request_ID: id
-          }
+            shipPrice: offerShipping,
+            request_ID: id,
+            seller_ID: this.seller._id
+          };
 
-          this.sellerService.postOffer(offer, id).subscribe((data: any) => {
+          this.sellerService.postOffer(offer).subscribe((data: any) => {
             if (data.success) { // if the data succeed to be posted
+              this.notifier.notify('success', data.message);
               const dialogRef = this.dialog;
               dialogRef.open(OfferSubmittedDialogComponent);
               setTimeout(function () {
                 dialogRef.closeAll();
               }, 4000);
             } else { // if it fails
+              this.notifier.notify('error', data.message);
               const dialogRef = this.dialog;
               dialogRef.open(OfferSubmittedFailedDialogComponent);
               setTimeout(function () {
@@ -226,6 +268,21 @@ export class SellerComponent implements OnInit {
         }
       }
     );
+  }
+
+  deleteOfferFunction(offer_id_todelete) {
+    //debugger;
+    var offer_delete;
+    offer_delete = {
+      offer_id: offer_id_todelete
+    };
+
+    this.sellerService.deleteoffer(offer_delete).subscribe((data: any) => {
+      console.log(data);
+      debugger;
+      window.location.reload();
+    });
+
   }
 
   // Tab first configuration
@@ -251,18 +308,22 @@ export class SellerComponent implements OnInit {
   styleUrls: ['./dialog-content-submit-offer.css']
 })
 export class SubmitOfferDialogComponent implements OnInit {
+  @Input() checked: Boolean;
 
   box_title: String;
   box_description: String;
-  titleFormControl = new FormControl('', [Validators.required]);
-  descriptionFormControl = new FormControl('', [Validators.required]);
-  priceFormControl = new FormControl('', [Validators.required]);
+  // titleFormControl = new FormControl('', [Validators.required]);
+  // descriptionFormControl = new FormControl('', [Validators.required]);
+  // priceFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
   loader: boolean;
   submitOffer: boolean;
   confirmTitle: String;
   confirmDescription: String;
   confirmPrice: any;
+  confirmShipping: any;
+  shipping = false;
+  offerFormGroup: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -273,22 +334,27 @@ export class SubmitOfferDialogComponent implements OnInit {
 
   ngOnInit() {
     this.submitOffer = false;
+
+    this.offerFormGroup = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      shipping: [''],
+      price: ['', Validators.required]
+    });
   }
 
   submit() {
-    if ((this.titleFormControl.invalid) || (this.descriptionFormControl.invalid)) {
-      //EMPTY fields so nothing happens
-    }
-    else if ((this.priceFormControl.value <= 0) || (this.priceFormControl.invalid)) {
-      //price invalid so nothing happens
+    if (this.offerFormGroup.controls.shipping.value === '' || this.offerFormGroup.controls.value === null) {
+      this.confirmShipping = 0;
     }
     else {
-      var price = formatCurrency(this.priceFormControl.value, "en", "$");
-      this.confirmTitle = this.titleFormControl.value;
-      this.confirmDescription = this.descriptionFormControl.value;
-      this.confirmPrice = price;
-      this.submitOffer = true;
+      this.confirmShipping = this.offerFormGroup.controls.shipping.value;
     }
+      // var price = formatCurrency(this.priceFormControl.value, "en", "$");
+    this.confirmTitle = this.offerFormGroup.controls.title.value;
+    this.confirmDescription = this.offerFormGroup.controls.description.value;
+    this.confirmPrice = this.offerFormGroup.controls.price.value;
+    this.submitOffer = true;
   }
 
   cancel() {
@@ -296,7 +362,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   confirmDialogSubmit() {
-    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice });
+    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice, shipping: this.confirmShipping});
   }
 
   confirmDialogCancel() {
@@ -327,3 +393,9 @@ export class StipeAccountCreatedSuccessDialogComponent { }
   templateUrl: 'dialog-content-stripe-created-failed.html'
 })
 export class StipeAccountCreatedFailedDialogComponent { }
+
+@Component({
+  selector: 'dialog-content-offer-stripe',
+  templateUrl: 'dialog-content-offer-stripe.html'
+})
+export class StripeNeededDialogComponent { }

@@ -50,8 +50,7 @@ module.exports.NotifySellerNewRequest= function(seller, request, callback){
     templateId: 'd-33099325b30c4edc940590551c708f87',
     dynamic_template_data: {
       name: seller.first_name,
-      requestTitle: request.Title,
-      requestID : process.env.BASE_URL + '/request/' + requestID,
+      requestTitle: request.Title
     },
   };
   //console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);
@@ -115,6 +114,44 @@ module.exports.NotifyBuyerNewOffer= function(buyer, request, callback){
   };
   //console.log('Sent Notification to buyer ' + buyer.email + ' With Request ' + request._id);
   
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
+}
+
+//Function that will take in a USER, and email them their PASSWORD reset token
+module.exports.resetEmail = function(user, callback){
+  var type;
+  if(user.account_type == 1) { type = 'seller'}
+  else if(user.account_type == 0) { type = 'buyer'}
+  const msg = {
+    to: user.email,
+    from: 'do_not_reply@requiren.com',
+    fromname: 'Requiren',
+    templateId: 'd-4d5092053d3f4fa8b99a8902dc7fa88f',
+    dynamic_template_data: {
+      name: user.first_name,
+      tokenID: process.env.BASE_URL + '/reset?' + type+ '=' +user.resetPasswordToken,
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
+}
+
+//Function that will take in a user, and email them that their password has changed
+module.exports.passwordChanged = function(user, callback){
+  const msg = {
+    to: user.email,
+    from: 'do_not_reply@requiren.com',
+    fromname: 'Requiren',
+    templateId: 'd-92cfc5c3ec0f44c5b664d9777639bc16',
+    dynamic_template_data: {
+      name: user.first_name,
+    },
+  };
   sgMail.send(msg).then(() => {
   }).catch((error) => {
     console.log('error', error);

@@ -25,7 +25,14 @@
     <div class="center" *ngIf="seller">
       <div class="w3-container">
         <div class="container" style="margin-top:70px; height:750px; width: 1500px;">
-          <h4>Welcome {{seller.first_name}}!</h4>
+          <div class="row">
+            <div class="column">
+              <h4>Welcome {{seller.first_name}}!</h4>
+            </div>
+            <div class="column">
+              <a href="refresh()">Refresh</a>
+            </div>
+          </div>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua.</p>
           &nbsp;
@@ -133,17 +140,28 @@
                         <mat-panel-title style="width:200px">
                           Active
                         </mat-panel-title>
-                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 100px; color: green">
-                          {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) > 3" style="width: 100px; color: green">
+                          {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
                         </mat-panel-title>
-                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 3 && (request.deadline | amDifference: today :'days' : true | number:'1.0-0') > 0" style="width: 100px; color: red">
-                          {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) <= 3 && (request.deadline | amDifference: today :'days' : true) >= 1" style="width: 100px; color: orange">
+                          {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
                         </mat-panel-title>
-                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 0" style="width: 100px; color: red">
+                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) < 1 && (request.deadline | amDifference: today :'days' : true) > 0" style="width: 100px; color: orange">
+                          Less than 1 day<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+                        </mat-panel-title>
+                        <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) <= 0" style="width: 100px; color: red">
                           EXPIRED<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
                         </mat-panel-title>
                         <mat-panel-title id="requestID" style="width: 100px" hidden>
                           {{request._id}}
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          Request Picture:
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <img class= "requestimage1" src={{request.request_images[0]}} *ngIf="request.request_images[0]" alt="" width="120" height="120">
+                          <img class= "requestimage2" src={{request.request_images[1]}} *ngIf="request.request_images[1]" alt="" width="120" height="120">
+                          <img class= "requestimage3" src={{request.request_images[2]}} *ngIf="request.request_images[2]" alt="" width="120" height="120">
                         </mat-panel-title>
                       </mat-expansion-panel-header>
 
@@ -232,11 +250,14 @@
                           <mat-panel-title style="width:200px">
                             Active
                           </mat-panel-title>
-                          <mat-panel-title *ngIf="(offer.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 100px; color: green">
-                            {{offer.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{offer.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+                          <mat-panel-title *ngIf="(offer.deadline | amDifference: today :'days' : true) > 3" style="width: 100px; color: green">
+                            {{offer.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{offer.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
                           </mat-panel-title>
-                          <mat-panel-title *ngIf="(offer.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 3 && (offer.deadline | amDifference: today :'days' : true | number:'1.0-0') > 0" style="width: 100px; color: red">
-                            {{offer.deadline | amDifference: today :'days' : true | number:'1.0-0'}} days<br>{{offer.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+                          <mat-panel-title *ngIf="(offer.deadline | amDifference: today :'days' : true) <= 3 && (offer.deadline | amDifference: today :'days' : true) >= 1" style="width: 100px; color: orange">
+                            {{offer.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{offer.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
+                          </mat-panel-title>
+                          <mat-panel-title *ngIf="(offer.deadline | amDifference: today :'days' : true) < 1 && (offer.deadline | amDifference: today :'days' : true) > 0" style="width: 100px; color: orange">
+                            Less than 1 day<br>{{offer.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
                           </mat-panel-title>
                           <mat-panel-title *ngIf="(offer.deadline | amDifference: today :'days' : true | number:'1.0-0') <= 0" style="width: 100px; color: red">
                             EXPIRED<br>{{offer.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}

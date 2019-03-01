@@ -70,8 +70,11 @@ const SellerSchema = mongoose.Schema({
     confirmationToken: {
         type: String
     },
-    stripe_id: {
-        type: String,
+    resetPasswordToken: {
+        type: String
+    },
+    stripe: {
+        type: Object,
         required: false
     },
     created_at: { type: Date, required: true, default: Date.now }
@@ -96,6 +99,15 @@ module.exports.addSeller = function(newSeller, callback){
             if(err) {throw err};
             newSeller.password = hash;
             newSeller.save(callback);
+        });
+    });
+}
+module.exports.changePassword = function(seller, callback){
+    bcrypt.genSalt(10,(err, salt) => {
+        bcrypt.hash(seller.password, salt, (err, hash) => {
+            if(err) {throw err};
+            seller.password = hash;
+            seller.save(callback);
         });
     });
 }

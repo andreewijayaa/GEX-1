@@ -16,7 +16,7 @@ import { SubmitOfferComponent } from './components/seller/submit-offer/submit-of
 import { SellerAccountComponent } from './components/seller/seller-account/seller-account.component';
 import { SellerRegisterComponent } from './components/register/SellerRegister/SellerRegister.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ValidateService } from './services/validate.service';
 import { RegisterService } from './services/register.service';
 import { AuthService } from './services/auth.service';
@@ -41,12 +41,14 @@ import { Ng2SearchPipeModule} from 'ng2-search-filter';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab, MatRadioModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SubmitOfferDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
+import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ResendComponent } from './components/activation/resend/resend.component';
+import { ForgetPasswordComponent } from './components/activation/forget-password/forget-password.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -68,7 +70,8 @@ const appRoutes: Routes = [
         resolve: { seller: SellerResolve }},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
-  {path: 'request/:id', component: RequestComponent, resolve: { buyer: BuyerResolve, seller: SellerResolve }},
+  {path: 'resend', component: ResendComponent},
+  {path: 'reset', component: ForgetPasswordComponent},
   {path: '**', redirectTo: '/'}
 ];
 
@@ -145,10 +148,14 @@ const customNotifierOptions: NotifierOptions = {
     OfferSubmittedFailedDialogComponent,
     StipeAccountCreatedSuccessDialogComponent,
     StipeAccountCreatedFailedDialogComponent,
-    BuyerCartComponent
+    BuyerCartComponent,
+    ResendComponent,
+    ForgetPasswordComponent,
+    StripeNeededDialogComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,
+    StripeNeededDialogComponent,
     OfferSubmittedDialogComponent,
     OfferSubmittedFailedDialogComponent,
     StipeAccountCreatedSuccessDialogComponent,
@@ -174,6 +181,7 @@ const customNotifierOptions: NotifierOptions = {
     MatDividerModule,
     MatListModule,
     MatTableModule,
+    MatRadioModule,
     // Site Notifications
     NotifierModule.withConfig (customNotifierOptions),
     HttpClientModule,

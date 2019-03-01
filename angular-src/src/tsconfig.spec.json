@@ -14,5 +14,9 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
+  ],
+  "scripts": [
+    "https://js.stripe.com/v3/",
+    "https://checkout.stripe.com/checkout.js"
   ]
 }

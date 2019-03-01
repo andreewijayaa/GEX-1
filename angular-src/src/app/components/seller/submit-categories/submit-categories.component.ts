@@ -5,7 +5,7 @@ import { SellerService } from '../../../services/seller.service';
 import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
 @Component({
   selector: 'app-submit-categories',
   templateUrl: './submit-categories.component.html',
@@ -15,20 +15,20 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   private readonly notifier: NotifierService;
   // Temp codes for MVP - Kurgan
   codes = [
-    { code: 78965422, name: 'Jewelry', image: 'https://picsum.photos/200', checked: false },
-    { code: 78965423, name: 'Necklaces (Jewelry)', image: 'https://picsum.photos/200', checked: false },
-    { code: 78965424, name: 'Rings (Jewelry)', image: 'https://picsum.photos/200', checked: false },
-    { code: 78965425, name: 'Earrings (Jewelry)', image: 'https://picsum.photos/200', checked: false },
-    { code: 68977451, name: 'Dolls', image: 'https://picsum.photos/200', checked: false },
-    { code: 67887941, name: 'Sculptures', image: 'https://picsum.photos/200', checked: false },
-    { code: 62145331, name: 'Scarves', image: 'https://picsum.photos/200', checked: false },
-    { code: 54887921, name: 'Blankets', image: 'https://picsum.photos/200', checked: false },
-    { code: 52871151, name: 'Socks', image: 'https://picsum.photos/200', checked: false },
-    { code: 50360051, name: 'Pencils', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605401, name: 'Painting', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605402, name: 'Oil (Painting)', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605403, name: 'Watercolor (Painting)', image: 'https://picsum.photos/200', checked: false },
-    { code: 49605404, name: 'Acrlyic (Painting)', image: 'https://picsum.photos/200', checked: false }
+    { code: 78965422, name: 'Jewelry', image: DefaultImageIcon, checked: false },
+    { code: 78965423, name: 'Necklaces (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 78965424, name: 'Rings (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 78965425, name: 'Earrings (Jewelry)', image: DefaultImageIcon, checked: false },
+    { code: 68977451, name: 'Dolls', image: DefaultImageIcon, checked: false },
+    { code: 67887941, name: 'Sculptures', image: DefaultImageIcon, checked: false },
+    { code: 62145331, name: 'Scarves', image: DefaultImageIcon, checked: false },
+    { code: 54887921, name: 'Blankets', image: DefaultImageIcon, checked: false },
+    { code: 52871151, name: 'Socks', image: DefaultImageIcon, checked: false },
+    { code: 50360051, name: 'Pencils', image: DefaultImageIcon, checked: false },
+    { code: 49605401, name: 'Painting', image: DefaultImageIcon, checked: false },
+    { code: 49605402, name: 'Oil (Painting)', image: DefaultImageIcon, checked: false },
+    { code: 49605403, name: 'Watercolor (Painting)', image: DefaultImageIcon, checked: false },
+    { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
   ];
   sellerID: String;
   submitLabels: String[];
@@ -154,22 +154,21 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   }
 
   rerouteToStripe() {
-    console.log('Data = ' + this.sellerID);
-    const redirect_uri: string = 'https://powerful-taiga-46416.herokuapp.com/seller';
-    const client_id: string = 'ca_EVl0RHMGrhYGo6GDjWwwn40nmD4aK6AA';
+    var urlToOpen;
 
-
-    const urlToOpen: string = 'https://connect.stripe.com/express/oauth/authorize?redirect_uri='
-                            + redirect_uri + '&client_id=' + client_id
-                            + '&state=' + this.sellerID;
-    let url: string = '';
-    if (!/^http[s]?:\/\//.test(urlToOpen)) {
-        url += 'http://';
-    }
-    console.log(url);
-    url += urlToOpen;
-    window.open(url, '_blank');
-
+    this.sellerService.stripeRoute().subscribe((data:any) => {
+      if(data.success)
+      {
+        urlToOpen= data.urlToOpen;
+        let url: string = '';
+        if (!/^http[s]?:\/\//.test(urlToOpen)) {
+            url += 'http://';
+        }
+        console.log(url);
+        url += urlToOpen;
+        window.open(url, '_blank');
+      }
+    });
   }
 
   labelButton() {

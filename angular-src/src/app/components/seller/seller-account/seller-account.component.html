@@ -13,20 +13,36 @@
 <!-- Personal Information Card for Sellers -->
 <div class="container">
   &nbsp;
-  <h1 style="color:black">My Account</h1>
+  <h1 style="color:black">Account Management</h1>
   &nbsp;
   <div class="card contain">
     <div class="card-body">
-      <div class="row justify-content-md">
-        <div class="col">
-          <h4>Personal Information</h4>
-        </div>
-        <div class="col">
-          <p style="text-align: right"><a [routerLink]="['/seller/submit-categories']" routerLinkActive="router-link-active" >Add More Information...</a></p>
-        </div>
-      </div>
-      &nbsp;
       <form action="/action_page.php">
+
+        <div class="row">
+
+          <div class="col-md-3">
+            <img class= "profilePicutre" src={{seller.data.profile_image}} *ngIf="seller.data.profile_image" alt="" width="120" height="120">
+            <img class="profilePicutre" src="https://pofileimages.s3.amazonaws.com/1550791120608" *ngIf="!(seller.data.profile_image)" alt="" width="120" height="120">
+            <div class="form-group">
+              <label for="profImage">Update Profile Image:</label>
+              <input #imageInput
+                      type="file"
+                      accept="image/*"
+                      (change) = "processFile(imageInput)">
+            </div>
+          </div>
+
+          <div class="col">
+        <div class="row justify-content-md">
+          <div class="col">
+            <h4>Personal Information</h4>
+          </div>
+          <div class="col">
+            <p style="text-align: right"><a [routerLink]="['/seller/submit-categories']" routerLinkActive="router-link-active" >Add More Information...</a></p>
+          </div>
+        </div>
+        &nbsp;
         <div class="form-group">
           <label for="fName">First Name:</label>
           <input type="text" class="form-control" id="fName" name="firstName" value={{seller_updatedFirstName}} disabled required>
@@ -51,25 +67,26 @@
             <label for="verifyPwd">Confirm Password:</label>
             <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword" required>
         </div>
-        <img class= "profilePicutre" src={{seller.data.profile_image}} alt="" width="40" height="40">
-        <div class="form-group">
-          <label for="profImage">Update Profile Image:</label>
-          <input #imageInput
-                  type="file" 
-                  accept="image/*"
-                  (change) = "processFile(imageInput)">
-        </div>
+
         <div class="form-group">
           <label for="eAddress">Notification Settings:</label>
           <input type="email" class="form-control" id="eAddress" name="emailAddress" value="" disabled required>
         </div>
-        <label id="errorMessage" hidden>{{this.errorMessage}}</label>
-        <br>
-        <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
-        <div class="divider"></div>
-        <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
-        <div class="divider"></div>
-        <button type="button" class="btn saveBtn btn-lg" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
+
+        </div>
+
+        <div class="col-md-3">
+          <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
+          <div class="divider"></div>
+          <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
+          <div class="divider"></div>
+          <button type="button" class="btn saveBtn" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
+          &nbsp;
+          <label id="errorMessage" hidden>{{this.errorMessage}}</label>
+        </div>
+
+        </div>
+
       </form>
 
     </div>

@@ -12,15 +12,12 @@ export class PreactivationComponent implements OnInit {
     private storeFetchService: StoreFetchService) { }
 
   ngOnInit() {
-    // if (this.storeFetchService.buyerIsLoggedIn()) {
-    //   this.router.navigate(['/buyer']);
-    // }
-    // else if (this.storeFetchService.sellerIsLoggedIn()) {
-    //   this.router.navigate(['/seller']);
-    // }
-    // else {
-    //   this.router.navigate(['/']);
-    // }
+    if (this.storeFetchService.buyerIsLoggedIn()) {
+      this.router.navigate(['/buyer']);
+    } else if (this.storeFetchService.sellerIsLoggedIn()) {
+      this.router.navigate(['/seller']);
+    }
+
   }
 
 }

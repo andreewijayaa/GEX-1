@@ -61,6 +61,31 @@ export class BuyerService {
     }
   }
 
+
+  //service to delete request
+  deleteBuyerRequest(request) {
+    //console.log("Delete Request Called");
+    this.loadToken();
+    if (this.buyerToken != null) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'x-access-token': this.buyerToken
+        })
+      };
+      if (process.env.NODE_ENV === 'development') {
+        return this.http.post('http://localhost:3000/buyers/deleterequest', request, httpOptions)
+          .pipe(map(res => res));
+      } else {
+        return this.http.post('buyers/deleterequest', request, httpOptions)
+          .pipe(map(res => res));
+      }
+    } else {
+      this.router.navigate(['/buyer']);
+    }
+  }
+
+
   // Retrieve all buyer requests
   getBuyerRequests() {
     this.loadToken();
@@ -139,10 +164,10 @@ export class BuyerService {
     };
     console.log(offer);
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/checkout', offer, httpOptions)
+      return this.http.post('http://localhost:3000/buyers/charge', offer, httpOptions)
         .pipe(map(res => res));
     } else {
-      return this.http.post('checkout', offer, httpOptions)
+      return this.http.post('buyers/charge', offer, httpOptions)
         .pipe(map(res => res));
     }
   }
@@ -172,7 +197,7 @@ export class BuyerService {
 
   // upload images to request
   addRequestImage(requestPic: File): Observable<Object> {
-    // console.log("profile picutre action taken");
+    console.log("Request Picture has been called in services");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -240,6 +265,26 @@ export class BuyerService {
     }
   }
 
+  // Resend Confirmation Email
+  resendBuyerConfirmation(email) {
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+      })
+    };
+    const body = {
+      'email': email
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
   // Load local token
   loadToken() {
     const token = localStorage.getItem('id_token');

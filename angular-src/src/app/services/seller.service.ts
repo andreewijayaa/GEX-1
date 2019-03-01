@@ -59,7 +59,7 @@ export class SellerService {
 
 
   // Service to post a new offer as a feedback to the request from buyer (front-end to back-end connection)
-  postOffer(comingOffer, requestID) {
+  postOffer(comingOffer) {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -69,14 +69,36 @@ export class SellerService {
       })
     };
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+      return this.http.post('http://localhost:3000/sellers/makeOffer', comingOffer, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/makeOffer/' + this.requestID, comingOffer, httpOptions)
+      return this.http.post('sellers/makeOffer', comingOffer, httpOptions)
       .pipe(map(res => res));
     }
   }
+
+  //service to delete request
+  deleteoffer(offer_delete) {
+    //console.log("Delete Request Called");
+    this.loadToken();
+    if (this.sellerToken != null) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'x-access-token': this.sellerToken
+        })
+      };
+      if (process.env.NODE_ENV === 'development') {
+        return this.http.post('http://localhost:3000/sellers/deleteoffer', offer_delete, httpOptions)
+          .pipe(map(res => res));
+      } else {
+        return this.http.post('sellers/deleteoffer', offer_delete, httpOptions)
+          .pipe(map(res => res));
+      }
+    }
+  }
+
 
   // Stripe Service call to connect Seller account with stripe account
   connectStripe(code, state): Observable<any>  {
@@ -241,6 +263,7 @@ export class SellerService {
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
+        'Content-Type': 'application/json',
         'x-access-token': this.sellerToken
       })
     };
@@ -253,6 +276,46 @@ export class SellerService {
     } else {
     // This will return json file fetched from database
       return this.http.post('sellers/profilepicture', profilePic)
+      .pipe(map(res => res));
+    }
+  }
+
+  // Resend Confirmation Email
+  resendSellerConfirmation(email) {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json'
+      })
+    };
+    const body = {
+      'email': email
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/resend', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  // Get seller stripe route
+  stripeRoute() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type': 'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/sellers/getStripeRoute', httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.get('sellers/getStripeRoute', httpOptions)
       .pipe(map(res => res));
     }
   }
