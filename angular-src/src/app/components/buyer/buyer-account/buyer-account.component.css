@@ -36,7 +36,13 @@
     margin-bottom: -330px;
     position: relative;
   }
-  
+
+  .contain {
+    opacity: 0.85;
+    color: black;
+    background-color:whitesmoke;
+  }
+
   #footer {
     height: 330px;
     position: relative;

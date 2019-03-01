@@ -15,14 +15,13 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
   &nbsp;
   <h1>Account Management</h1>
   &nbsp;
-  <div class="card">
+  <div class="card contain">
     <div class="card-body">
-      &nbsp;
       <form action="/action_page.php">
 
         <div class="row">
 
-        <div class="col">
+        <div class="col-md-4">
           <img class= "profilePicutre" src={{buyer.data.profile_image}} *ngIf="buyer.data.profile_image" alt="" width="120" height="120">
           <img class="profilePicutre" src="https://pofileimages.s3.amazonaws.com/1550791120608" *ngIf="!(buyer.data.profile_image)" alt="" width="120" height="120">
           <div class="form-group">
@@ -36,6 +35,7 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
 
         <div class="col">
           <h4>Personal Information</h4>
+          &nbsp;
         <div class="form-group">
           <label for="fName">First Name:</label>
           <input type="text" class="form-control" id="fName" name="firstName" value={{buyer_updatedFirstName}} disabled
@@ -66,17 +66,20 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
           <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword"
             required>
         </div>
+        &nbsp;
 
 
-        <h4>Payment Information</h4>
-        <p>Add/Edit Cards</p>
+        <div class="row justify-content-md">
+          <div class="col">
+            <h4>Payment Information</h4>
+          </div>
+          <div class="col">
+            <p style="text-align: right">Add/Edit Cards</p>
+          </div>
+        </div>
+        &nbsp;
 
         <h4>Notification Settings</h4>
-
-        </div>
-
-        </div>
-
 
         <label id="errorMessage" hidden>{{this.errorMessage}}</label>
         <br>
@@ -85,6 +88,13 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
         <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
         <div class="divider"></div>
         <button type="button" class="btn saveBtn btn-lg" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: white" hidden>Cancel</button>
+
+        </div>
+
+        </div>
+
+
+
       </form>
 
     </div>
