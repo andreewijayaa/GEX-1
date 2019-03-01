@@ -123,7 +123,7 @@ router.post('/login', (req, res, next) => {
         //provide token in response is login is valid
         if(isMatch){
           const token = jwt.sign({data: seller}, config.secret, {
-            expiresIn: 604800 // 1 week
+            expiresIn: 86400 // 1 Day
           });
 
           res.json({
@@ -621,7 +621,7 @@ router.post('/confirmEmail/:token', (req, res, next) => {
             //If account Registred Send Email for Email Verification Completed
             sendEmail.sellerEmailVerified(seller);
             const token = jwt.sign({data: seller}, config.secret, {
-              expiresIn: 604800 // 1 week
+              expiresIn: 86400 // 1 Day
             });
 
             res.json({
@@ -713,7 +713,7 @@ router.post('/reset/:id', (req, res, next) => {
               sendEmail.passwordChanged(sellerNewPass);
 
               const token = jwt.sign({data: seller}, config.secret, {
-                expiresIn: 604800 // 1 week
+                expiresIn: 86400 // 1 Day
               });
 
               res.json({

@@ -27,6 +27,7 @@
     "aws-sdk": "2.400.0",
     "bcryptjs": "*",
     "body-parser": "*",
+    "bootstrap": "^4.3.1",
     "cors": "*",
     "ejs": "^2.6.1",
     "express": "*",
