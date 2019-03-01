@@ -24,6 +24,10 @@ const offerSchema = mongoose.Schema({
     type:Number,
     required:true
   },
+  shippingPrice: {
+    type:Number,
+    required:true
+  },
   offerAccepted:{
     type:Boolean,
     default: false

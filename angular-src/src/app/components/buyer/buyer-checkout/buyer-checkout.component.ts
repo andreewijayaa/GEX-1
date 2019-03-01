@@ -23,6 +23,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuyerService } from '../../../services/buyer.service';
 import { NotifierService } from 'angular-notifier';
 
+
 @Component({
   selector: 'app-buyer-checkout',
   templateUrl: './buyer-checkout.component.html',

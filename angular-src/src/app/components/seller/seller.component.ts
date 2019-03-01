@@ -208,15 +208,15 @@ export class SellerComponent implements OnInit {
 
   submitOffer(title: any, id: any) {
     // Seller does not have a stripe account, therefor they can't submit an offer
-    // if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
-    //   return this.notifier.notify('error', 'Please register with Stripe first.');
-    // }
+    if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
+      return this.notifier.notify('error', 'Please register with Stripe first.');
+    }
 
-    let request_title = title;
-    let offerTitle;
-    let offerDescription;
-    let offerPrice;
-    let offerShipping;
+    const request_title = title;
+    let offerTitle: any;
+    let offerDescription: any;
+    let offerPrice: any;
+    let offerShipping: any;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
