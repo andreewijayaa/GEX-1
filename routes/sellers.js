@@ -300,7 +300,8 @@ router.get('/viewactiverequests', (req,res) => {
         title:req.body.title,
         offerStatus:'Pending',
         description:req.body.description,
-        price:req.body.price
+        price:req.body.price,
+        shippingPrice: req.body.shipPrice
       });
       // Check if request is expired
       Request.findById(req.body.request_ID, (err, requestBeingOffered) => { 

@@ -23,6 +23,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuyerService } from '../../../services/buyer.service';
 import { NotifierService } from 'angular-notifier';
 
+
 @Component({
   selector: 'app-buyer-checkout',
   templateUrl: './buyer-checkout.component.html',
@@ -136,7 +137,7 @@ export class BuyerCheckoutComponent
         this.orderFees = data.orderFees;
         this.totalPrice = data.orderTotal;
 
-        //CONVERT ALL TO TWO SIG FIGS
+        // CONVERT ALL TO TWO SIG FIGS
         this.offerPriceDisplay = this.offerPrice.toFixed(2);
         this.orderFeesDisplay = this.orderFees.toFixed(2);
         this.totalPriceDisplay = this.totalPrice.toFixed(2);
@@ -217,7 +218,7 @@ export class BuyerCheckoutComponent
     }
     else {
       console.log('Success!', token);
-      // ...send the token to the your backend to process the charge
+      // ...send the token to backend to process the charge
       const obj = {
         token: token,
         name: (<HTMLInputElement>document.getElementById('cardHolderName'))
