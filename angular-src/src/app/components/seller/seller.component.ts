@@ -3,7 +3,7 @@ import { SellerService } from '../../services/seller.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -179,14 +179,15 @@ export class SellerComponent implements OnInit {
 
   submitOffer(title: any, id: any) {
     // Seller does not have a stripe account, therefor they can't submit an offer
-    if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
-      return this.notifier.notify('error', 'Please register with Stripe first.');
-    }
+    // if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
+    //   return this.notifier.notify('error', 'Please register with Stripe first.');
+    // }
 
     let request_title = title;
-    var offerTitle;
-    var offerDescription;
-    var offerPrice;
+    let offerTitle;
+    let offerDescription;
+    let offerPrice;
+    let offerShipping;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -204,11 +205,13 @@ export class SellerComponent implements OnInit {
           offerTitle = data['title'];
           offerDescription = data['description'];
           offerPrice = data['price'];
+          offerShipping = data['shipping'];
 
           const offer = {
             title: offerPrice,
             description: offerDescription,
             price: offerPrice,
+            shipPrice: offerShipping,
             request_ID: id,
             seller_ID: this.seller._id
           };
@@ -276,18 +279,22 @@ export class SellerComponent implements OnInit {
   styleUrls: ['./dialog-content-submit-offer.css']
 })
 export class SubmitOfferDialogComponent implements OnInit {
+  @Input() checked: Boolean;
 
   box_title: String;
   box_description: String;
-  titleFormControl = new FormControl('', [Validators.required]);
-  descriptionFormControl = new FormControl('', [Validators.required]);
-  priceFormControl = new FormControl('', [Validators.required]);
+  // titleFormControl = new FormControl('', [Validators.required]);
+  // descriptionFormControl = new FormControl('', [Validators.required]);
+  // priceFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
   loader: boolean;
   submitOffer: boolean;
   confirmTitle: String;
   confirmDescription: String;
   confirmPrice: any;
+  confirmShipping: any;
+  shipping = false;
+  offerFormGroup: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -298,22 +305,27 @@ export class SubmitOfferDialogComponent implements OnInit {
 
   ngOnInit() {
     this.submitOffer = false;
+
+    this.offerFormGroup = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      shipping: [''],
+      price: ['', Validators.required]
+    });
   }
 
   submit() {
-    if ((this.titleFormControl.invalid) || (this.descriptionFormControl.invalid)) {
-      //EMPTY fields so nothing happens
-    }
-    else if ((this.priceFormControl.value <= 0) || (this.priceFormControl.invalid)) {
-      //price invalid so nothing happens
+    if (this.offerFormGroup.controls.shipping.value === '' || this.offerFormGroup.controls.value === null) {
+      this.confirmShipping = 0;
     }
     else {
-      //var price = formatCurrency(this.priceFormControl.value, "en", "$");
-      this.confirmTitle = this.titleFormControl.value;
-      this.confirmDescription = this.descriptionFormControl.value;
-      this.confirmPrice = this.priceFormControl.value;
-      this.submitOffer = true;
+      this.confirmShipping = this.offerFormGroup.controls.shipping.value;
     }
+      // var price = formatCurrency(this.priceFormControl.value, "en", "$");
+    this.confirmTitle = this.offerFormGroup.controls.title.value;
+    this.confirmDescription = this.offerFormGroup.controls.description.value;
+    this.confirmPrice = this.offerFormGroup.controls.price.value;
+    this.submitOffer = true;
   }
 
   cancel() {
@@ -321,7 +333,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   confirmDialogSubmit() {
-    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice });
+    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice, shipping: this.confirmShipping});
   }
 
   confirmDialogCancel() {
