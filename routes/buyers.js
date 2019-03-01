@@ -98,7 +98,7 @@ router.post("/login", (req, res, next) => {
       if (err) throw err;
       if (isMatch) {
         const token = jwt.sign({ data: buyer }, config.secret, {
-          expiresIn: 604800 // 1 week
+          expiresIn: 86400 // 1 Day
         });
 
         res.json({
@@ -679,7 +679,7 @@ router.post("/confirmEmail/:token", (req, res, next) => {
             sendEmail.buyerEmailVerified(buyer);
             //Automatically login user after account activation
             const token = jwt.sign({ data: buyer }, config.secret, {
-              expiresIn: 604800 // 1 week
+              expiresIn: 86400 // 1 Day
             });
 
             res.json({
@@ -777,8 +777,8 @@ router.post('/reset/:id', (req, res, next) => {
           else {
               sendEmail.passwordChanged(buyerNewPass);
 
-              const token = jwt.sign({ data: buyer }, config.secret, {
-                expiresIn: 604800 // 1 week
+              const token = jwt.sign({ data: buyerNewPass }, config.secret, {
+                expiresIn: 86400 // 1 Day
               });
   
               res.json({
