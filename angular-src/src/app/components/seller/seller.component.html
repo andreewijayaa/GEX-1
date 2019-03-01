@@ -155,6 +155,14 @@
                         <mat-panel-title id="requestID" style="width: 100px" hidden>
                           {{request._id}}
                         </mat-panel-title>
+                        <mat-panel-title>
+                          Request Picture:
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <img class= "requestimage1" src={{request.request_images[0]}} *ngIf="request.request_images[0]" alt="" width="120" height="120">
+                          <img class= "requestimage2" src={{request.request_images[1]}} *ngIf="request.request_images[1]" alt="" width="120" height="120">
+                          <img class= "requestimage3" src={{request.request_images[2]}} *ngIf="request.request_images[2]" alt="" width="120" height="120">
+                        </mat-panel-title>
                       </mat-expansion-panel-header>
 
                       <div class="container" style="border:3px solid black; background-color: #dcdde1">

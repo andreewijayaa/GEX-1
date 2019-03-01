@@ -173,7 +173,7 @@ export class BuyerAccountComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
-
+          
         },
         (err) => {
 

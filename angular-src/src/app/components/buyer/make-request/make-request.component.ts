@@ -234,7 +234,7 @@ export class MakeRequestComponent implements OnInit {
   // By: John
   // function for updating profile image
   processFile(imageInput: any) {
-    debugger;
+    //debugger;
     //console.log("Process file called in make request component");
     console.log(this.Image_Urls.length);
     const file: File = imageInput.files[0];
@@ -251,6 +251,8 @@ export class MakeRequestComponent implements OnInit {
           else {
             this.Image_Urls.push(res["imageUrl"]);
           }
+          //this.Image_Urls.length()
+          this.notifier.notify("success", "You added " + this.Image_Urls.length + " of 3 images");
           //console.log("There is no way this works inside the function " + this.Image_Urls)
           //this.Image_Urls.push(res["imageUrl"]);
           //console.log("The Image url is " + this.Image_Urls[0] );
@@ -260,5 +262,19 @@ export class MakeRequestComponent implements OnInit {
         })
     });
     reader.readAsDataURL(file);
+  }
+
+  deleteImagesFunction(){
+    if (this.Image_Urls[0] == ""){
+      return this.notifier.notify("error", "There are no images to delete");
+    }
+    else if (this.Image_Urls[0].length == 1){
+      this.Image_Urls[0] = "";
+      this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
+    }
+    else{
+      this.Image_Urls.pop();
+    }
+    this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
   }
 }
