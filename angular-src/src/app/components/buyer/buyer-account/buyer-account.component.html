@@ -21,7 +21,7 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
 
         <div class="row">
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <img class= "profilePicutre" src={{buyer.data.profile_image}} *ngIf="buyer.data.profile_image" alt="" width="120" height="120">
           <img class="profilePicutre" src="https://pofileimages.s3.amazonaws.com/1550791120608" *ngIf="!(buyer.data.profile_image)" alt="" width="120" height="120">
           <div class="form-group">
@@ -81,14 +81,16 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
 
         <h4>Notification Settings</h4>
 
-        <label id="errorMessage" hidden>{{this.errorMessage}}</label>
-        <br>
-        <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
-        <div class="divider"></div>
-        <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
-        <div class="divider"></div>
-        <button type="button" class="btn saveBtn btn-lg" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: white" hidden>Cancel</button>
+        </div>
 
+        <div class="col-md-3">
+          <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
+          <div class="divider"></div>
+          <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
+          <div class="divider"></div>
+          <button type="button" class="btn saveBtn" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
+          &nbsp;
+          <label id="errorMessage" hidden>{{this.errorMessage}}</label>
         </div>
 
         </div>
