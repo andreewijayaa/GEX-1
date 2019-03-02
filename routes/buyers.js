@@ -559,7 +559,8 @@ router.post("/charge", (req, res) => {
     totalOffers: req.body.totalOffers,
     shippingInfo: req.body.shippingInfo,
     orderID: req.body.orderID,
-    name: req.body.name
+    name: req.body.name,
+    sellers: req.body.sellers
   };
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {

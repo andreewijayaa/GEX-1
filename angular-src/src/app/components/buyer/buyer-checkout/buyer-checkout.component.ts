@@ -1,5 +1,5 @@
-//By: Omar
-//Buyer checkout page
+// By: Omar
+// Buyer checkout page
 import {
   Component,
   OnInit,
@@ -22,6 +22,7 @@ import {
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BuyerService } from '../../../services/buyer.service';
 import { NotifierService } from 'angular-notifier';
+import { SellerService } from '../../../services/seller.service';
 
 
 @Component({
@@ -51,6 +52,7 @@ export class BuyerCheckoutComponent
   emptyCart: Boolean;
   orderFees: Number;
   editable: Boolean = false;
+  sellerList = [];
 
   //FOR DISPLAY
   offerPriceDisplay: any;
@@ -120,22 +122,28 @@ export class BuyerCheckoutComponent
     private buyerService: BuyerService,
     private notifierService: NotifierService,
     private _formBuilder: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private sellerService: SellerService
   ) {
     this.notifier = notifierService;
   }
 
   ngOnInit() {
     this.buyer = this.route.snapshot.data['buyer'];
-    console.log(this.buyer);
+    // console.log(this.buyer);
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
-        console.log(data);
+        // console.log(data);
         this.emptyCart = false;
         this.offersInCart = data.offersInCart;
         this.offerPrice = data.offerPriceTotal;
         this.orderFees = data.orderFees;
         this.totalPrice = data.orderTotal;
+        // console.log(this.offersInCart);
+        for (let i = 0; i < this.offersInCart['length']; i++) {
+          this.sellerList.push(this.offersInCart[i]['seller_ID']);
+        }
+       // console.log(this.sellerList);
 
         // CONVERT ALL TO TWO SIG FIGS
         this.offerPriceDisplay = this.offerPrice.toFixed(2);
@@ -214,10 +222,10 @@ export class BuyerCheckoutComponent
     const { token, error } = await stripe.createToken(this.card, billingDetails);
 
     if (error) {
-      console.log('Something is wrong:', error);
+      // console.log('Something is wrong:', error);
     }
     else {
-      console.log('Success!', token);
+      // console.log('Success!', token);
       // ...send the token to backend to process the charge
       const obj = {
         token: token,
@@ -229,13 +237,14 @@ export class BuyerCheckoutComponent
         totalOffers: this.offersInCart,
         shippingInfo: shippingDetails,
         orderID: 'ord_' + Math.random().toString(36).substr(2, 10),
+        // sellers: this.sellerList
       };
       this.buyerService.checkout(obj).subscribe((data: any) => {
         if (data.success) {
-          console.log('Charge Successful');
-          console.log(data);
+          // console.log('Charge Successful');
+          // console.log(data);
         } else {
-          console.log('Charge unsuccessful');
+          // console.log('Charge unsuccessful');
         }
       });
     }

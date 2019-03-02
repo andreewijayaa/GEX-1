@@ -62,9 +62,9 @@ export class BuyerService {
   }
 
 
-  //service to delete request
+  // service to delete request
   deleteBuyerRequest(request) {
-    //console.log("Delete Request Called");
+    // console.log("Delete Request Called");
     this.loadToken();
     if (this.buyerToken != null) {
       const httpOptions = {
