@@ -51,7 +51,7 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
           <input type="email" class="form-control" id="eAddress" name="emailAddress" value={{buyer.data.email}}
             disabled required>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="pwd">Password:</label>
           <input type="password" class="form-control" id="pwd" name="password" value={{buyer.data.password}} disabled
             required>
@@ -66,6 +66,7 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
           <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword"
             required>
         </div>
+        -->
         &nbsp;
 
 
@@ -86,9 +87,9 @@ Basic structure (labels, fields, etc) - Bryan Vu-->
         <div class="col-md-3">
           <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
           <div class="divider"></div>
-          <button type="button" class="btn saveBtn btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
+          <button type="button" class="btn btn-primary btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
           <div class="divider"></div>
-          <button type="button" class="btn saveBtn" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
+          <button type="button" class="btn" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
           &nbsp;
           <label id="errorMessage" hidden>{{this.errorMessage}}</label>
         </div>
