@@ -61,6 +61,8 @@ export class BuyerCheckoutComponent
   offerShippingDisplay: any;
   // orderFeesDisplay: any;
   totalPriceDisplay: any;
+  totalBeforeTaxDisplay: any;
+  estimatedTaxDisplay = '----';
 
   states = [
     { label: "AK" },
@@ -150,6 +152,8 @@ export class BuyerCheckoutComponent
        // console.log(this.sellerList);
 
         // CONVERT ALL TO TWO SIG FIGS
+        this.totalBeforeTaxDisplay = this.offerPrice + this.offerShipping;
+        this.totalBeforeTaxDisplay = this.totalBeforeTaxDisplay.toFixed(2);
         this.offerPriceDisplay = this.offerPrice.toFixed(2);
         this.offerShippingDisplay = this.offerShipping.toFixed(2);
         // this.orderFeesDisplay = this.orderFees.toFixed(2);
@@ -236,6 +240,26 @@ export class BuyerCheckoutComponent
       this.error = null;
     }
     this.cd.detectChanges();
+  }
+
+  calculateTax() {
+    const infoObj = {
+      to_country: 'US',
+      to_zip: this.shippingFormGroup['value']['zip'],
+      to_state: this.shippingFormGroup['value']['state'],
+      shipping: this.offerShipping,
+      amount: this.offerPrice
+    };
+    this.buyerService.getTax(infoObj).subscribe((data: any) => {
+      if (data.success) {
+        console.log(data);
+        console.log(data.result.tax.amount_to_collect);
+        this.estimatedTaxDisplay = String('$' + data.result.tax.amount_to_collect);
+        this.totalPriceDisplay = this.totalPrice + data.result.tax.amount_to_collect;
+      } else {
+        console.log(data);
+      }
+    });
   }
 
   async onSubmit(form: NgForm) {
