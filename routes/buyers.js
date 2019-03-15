@@ -558,6 +558,47 @@ router.post("/removeFromCart", (req, res, next) => {
   });
 });
 
+router.post("/tax", (req, res) => {
+  let taxInfo = {
+    from_country: 'US',
+    from_zip: '85304',
+    from_state: 'AZ',
+    from_city: 'Glendale',
+    from_street: '12420 N 43rd Ln',
+    to_country: req.body.to_country,
+    to_zip: req.body.to_zip,
+    to_state: req.body.to_state,
+    shipping: req.body.shipping,
+    amount: req.body.amount
+  }
+
+  client.taxForOrder({
+    from_country: taxInfo.from_country,
+    to_country: taxInfo.to_country,
+    to_zip: taxInfo.to_zip,
+    to_state: taxInfo.to_state,
+    amount: taxInfo.amount,
+    shipping: taxInfo.shipping,
+    nexus_addresses: [
+      {
+        country: 'US',
+        zip: taxInfo.from_zip,
+        state: taxInfo.from_state,
+        city: taxInfo.from_city,
+        street: taxInfo.from_street
+      }
+    ]
+  }).then(function(result) {
+    result.tax;
+    result.tax.amount_to_collect;
+    res.send({ success: true, result});
+  }).catch(function(err) {
+    err.detail;
+    err.status;
+    res.send({ success: false, err})
+  });
+})
+
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
 router.post("/charge", (req, res) => {
@@ -579,7 +620,7 @@ router.post("/charge", (req, res) => {
         success: false,
         message: "Could not retrieve buyer to charge purchase."
       });
-    else if (info.stripeCustomer === false) {
+    else if (info.stripe_customer === false) {
       console.log("Not a stripe customer yet but will be.");
       info.stripe_customer = true;
       stripe.customers
@@ -600,14 +641,14 @@ router.post("/charge", (req, res) => {
               metadata: {
                 order_id: purchaseInfo.orderID
               },
-              transfer_group: purchaseInfo.orderID
+              // transfer_group: purchaseInfo.orderID
             })
             .then(charge => res.send({ success: true, charge }));
         });
-    } else if (info.stripeCustomer === true) {
+    } else if (info.stripe_customer === true) {
       console.log("Is already a stripe customer");
       stripe.customers
-        .update(info.stripeCustomerId, {
+        .update(info.stripe_customer_id, {
           source: purchaseInfo.stripeToken
         })
         .then(customer =>
@@ -625,34 +666,17 @@ router.post("/charge", (req, res) => {
     }
   });
 
-  for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
-    //console.log(purchaseInfo.totalOffers[pos].seller_ID);
-    stripe.transfers
-      .create({
-        amount: purchaseInfo.totalOffers[pos].price * 100,
-        currency: "usd",
-        destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-        transfer_group: purchaseInfo.orderID
-      })
-      .then(transfer => res.send({ success: true, transfer }));
-  }
-});
-
-router.post('tax', (req, res) => {
-  // let locationInfo = {
-  //   from_country: req.body.from_country,
-  //   from_zip: req.body.from_zip,
-  //   from_state: req.body.state,
-  //   from_city: 
-  //   from_street:
-  //   to_country:
-  //   to_zip:
-  //   to_state:
-  //   to_city:
-  //   to_street:
-  //   amount:
-  //   shipping:
-  // }; 
+  // for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
+  //   //console.log(purchaseInfo.totalOffers[pos].seller_ID);
+  //   stripe.transfers
+  //     .create({
+  //       amount: purchaseInfo.totalOffers[pos].price * 100,
+  //       currency: "usd",
+  //       destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
+  //       transfer_group: purchaseInfo.orderID
+  //     })
+  //     .then(transfer => res.send({ success: true, transfer }));
+  // }
 });
 
 //Email Verification - RONI

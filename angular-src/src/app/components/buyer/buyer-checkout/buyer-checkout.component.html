@@ -216,6 +216,7 @@
                 mat-button
                 matStepperNext
                 style="background-color: #3F51B4; color: white"
+                (click)="calculateTax()"
               >
                 Continue
               </button>
@@ -300,11 +301,11 @@
               <hr />
               <p>
                 <small>Total before tax:</small>
-                <span class="price">${{ offerPriceDisplay }}</span>
+                <span class="price">${{ totalBeforeTaxDisplay }}</span>
               </p>
               <p>
                 <small>Estimated tax to be collected:</small>
-                <span class="price">$0.00</span>
+                <span class="price" id="estimatedTax">{{estimatedTaxDisplay}}</span>
               </p>
               <!----<p><small>Estimated fee to be collected:</small> <span class="price">${{orderFeesDisplay}}</span></p>-->
               <hr />
