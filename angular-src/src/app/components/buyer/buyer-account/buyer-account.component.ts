@@ -157,6 +157,10 @@ export class BuyerAccountComponent implements OnInit {
     //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
     //(<HTMLInputElement>document.getElementById('newPwd')).value = '';
     //(<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
+    //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
+    //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
+    (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
+    (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
   }
 
   // By: John
