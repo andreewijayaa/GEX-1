@@ -45,8 +45,8 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = false;
-    (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
+    (<HTMLInputElement>document.getElementById('saveBtn')).hidden = false;
+    (<HTMLInputElement>document.getElementById('editBtn')).hidden = true;
     //(<HTMLInputElement>document.getElementById('verify')).hidden = false;
     //(<HTMLInputElement>document.getElementById('newPass')).hidden = false;
     (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = false;
@@ -153,8 +153,8 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('lName')).disabled = true;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
     //(<HTMLInputElement>document.getElementById('pwd')).disabled = true;
-    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
-    (<HTMLInputElement>document.getElementById('editBtn')).disabled = false;
+    (<HTMLInputElement>document.getElementById('saveBtn')).hidden = true;
+    (<HTMLInputElement>document.getElementById('editBtn')).hidden = false;
     //(<HTMLInputElement>document.getElementById('verify')).hidden = true;
     //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
     //(<HTMLInputElement>document.getElementById('newPwd')).value = '';

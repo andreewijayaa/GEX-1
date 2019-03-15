@@ -35,14 +35,22 @@
 
           <div class="col">
         <div class="row justify-content-md">
-          <div class="col">
+          <div class="col-md-4">
             <h4>Personal Information</h4>
+          </div>
+          <div class="col">
+            <button type="button" class="btn" id="editBtn" (click)="editFunction()" style="background-color: whitesmoke">Edit</button>
+            <button type="button" class="btn btn-primary" id="saveBtn" (click)="saveFunction()" hidden>Save</button>
+            <div class="divider"></div>
+            <button type="button" class="btn saveBtn" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
+
           </div>
           <div class="col">
             <p style="text-align: right"><a [routerLink]="['/seller/submit-categories']" routerLinkActive="router-link-active" >Add More Information...</a></p>
           </div>
         </div>
         &nbsp;
+        <label id="errorMessage" hidden>{{this.errorMessage}}</label>
         <div class="form-group">
           <label for="fName">First Name:</label>
           <input type="text" class="form-control" id="fName" name="firstName" value={{seller_updatedFirstName}} disabled required>
@@ -68,22 +76,13 @@
             <input type="password" placeholder="Confirm Password" class="form-control" id="verifyPwd" name="verifyPassword" required>
         </div>-->
 
-        <div class="form-group">
-          <label for="eAddress">Notification Settings:</label>
-          <input type="email" class="form-control" id="eAddress" name="emailAddress" value="" disabled required>
-        </div>
+        &nbsp;
+        <h4>Notification Settings</h4>
+
 
         </div>
 
-        <div class="col-md-3">
-          <button type="button" class="btn editBtn btn-lg" id="editBtn" (click)="editFunction()">Edit</button>
-          <div class="divider"></div>
-          <button type="button" class="btn btn-primary btn-lg" id="saveBtn" (click)="saveFunction()" disabled=true>Save</button>
-          <div class="divider"></div>
-          <button type="button" class="btn saveBtn" id="cancelBtn" (click)="cancelButtonPressed()" style="background-color: whitesmoke" hidden>Cancel</button>
-          &nbsp;
-          <label id="errorMessage" hidden>{{this.errorMessage}}</label>
-        </div>
+
 
         </div>
 
