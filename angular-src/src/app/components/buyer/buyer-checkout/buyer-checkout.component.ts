@@ -42,6 +42,7 @@ export class BuyerCheckoutComponent
   offerList: Object;
   request_Id: any;
   offerPrice: any;
+  offerShipping: any;
   totalPrice: any;
   isDataAvailable: Boolean = false;
   buyer: any;
@@ -53,10 +54,12 @@ export class BuyerCheckoutComponent
   orderFees: Number;
   editable: Boolean = false;
   sellerList = [];
+  billingSameAsShipping = false;
 
   //FOR DISPLAY
   offerPriceDisplay: any;
-  orderFeesDisplay: any;
+  offerShippingDisplay: any;
+  // orderFeesDisplay: any;
   totalPriceDisplay: any;
 
   states = [
@@ -137,7 +140,8 @@ export class BuyerCheckoutComponent
         this.emptyCart = false;
         this.offersInCart = data.offersInCart;
         this.offerPrice = data.offerPriceTotal;
-        this.orderFees = data.orderFees;
+        this.offerShipping = data.offerShippingTotal;
+        // this.orderFees = data.orderFees;
         this.totalPrice = data.orderTotal;
         // console.log(this.offersInCart);
         for (let i = 0; i < this.offersInCart['length']; i++) {
@@ -147,7 +151,8 @@ export class BuyerCheckoutComponent
 
         // CONVERT ALL TO TWO SIG FIGS
         this.offerPriceDisplay = this.offerPrice.toFixed(2);
-        this.orderFeesDisplay = this.orderFees.toFixed(2);
+        this.offerShippingDisplay = this.offerShipping.toFixed(2);
+        // this.orderFeesDisplay = this.orderFees.toFixed(2);
         this.totalPriceDisplay = this.totalPrice.toFixed(2);
       } else {
         this.notifier.notify('warning', 'Must accept offers to checkout.');
@@ -162,7 +167,8 @@ export class BuyerCheckoutComponent
       address2: [''],
       city: ['', Validators.required],
       state: ['', Validators.required],
-      zip: ['', Validators.required]
+      zip: ['', Validators.required],
+      sameAsShipping: [false]
     });
     this.shippingFormGroup = this._formBuilder.group({
       firstName: ['', Validators.required],
@@ -174,8 +180,42 @@ export class BuyerCheckoutComponent
       zip: ['', Validators.required]
     });
     this.paymentFormGroup = this._formBuilder.group({
-      card: ['', Validators.required]
     });
+  }
+
+  resetBillingForm() {
+    this.billingFormGroup.setValue({
+      firstName: '',
+      lastName: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zip: '',
+      sameAsShipping: false
+    });
+    this.billingSameAsShipping = false;
+  }
+
+  shippingSameBilling() {
+    if (this.billingSameAsShipping === false) {
+      this.billingSameAsShipping = true;
+      this.billingFormGroup.setValue({
+        firstName: this.shippingFormGroup['value']['firstName'],
+        lastName: this.shippingFormGroup['value']['lastName'],
+        address1: this.shippingFormGroup['value']['address1'],
+        address2: this.shippingFormGroup['value']['address2'],
+        city: this.shippingFormGroup['value']['city'],
+        state: this.shippingFormGroup['value']['state'],
+        zip: this.shippingFormGroup['value']['zip'],
+        sameAsShipping: true
+      });
+    }
+    else if (this.billingSameAsShipping === true) {
+      this.billingSameAsShipping = false;
+      this.resetBillingForm();
+    }
+    else { /* do nothing */ }
   }
 
   ngAfterViewInit() {
@@ -200,22 +240,22 @@ export class BuyerCheckoutComponent
 
   async onSubmit(form: NgForm) {
     const billingDetails = {
-      name: (<HTMLInputElement>document.getElementById('cardHolderName')).value,
-      address_line1: this.billingFormGroup['controls']['address1']['value'],
-      address_line2: this.billingFormGroup['controls']['address2']['value'],
-      address_city: this.billingFormGroup['controls']['city']['value'],
-      address_state: this.billingFormGroup['controls']['state']['value'],
-      address_zip: this.billingFormGroup['controls']['zip']['value'],
+      name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
+      address_line1: this.billingFormGroup['value']['address1'],
+      address_line2: this.billingFormGroup['value']['address2'],
+      address_city: this.billingFormGroup['value']['city'],
+      address_state: this.billingFormGroup['value']['state'],
+      address_zip: this.billingFormGroup['value']['zip'],
       address_country: 'US'
     };
 
     const shippingDetails = {
-      name: this.shippingFormGroup['controls']['firstName']['value'] + ' ' + this.shippingFormGroup['controls']['lastName']['value'],
-      address_line1: this.shippingFormGroup['controls']['address1']['value'],
-      address_line2: this.shippingFormGroup['controls']['address2']['value'],
-      address_city: this.shippingFormGroup['controls']['city']['value'],
-      address_state: this.shippingFormGroup['controls']['state']['value'],
-      address_zip: this.shippingFormGroup['controls']['zip']['value'],
+      name: this.shippingFormGroup['value']['firstName'] + ' ' + this.shippingFormGroup['value']['lastName'],
+      address_line1: this.shippingFormGroup['value']['address1'],
+      address_line2: this.shippingFormGroup['value']['address2'],
+      address_city: this.shippingFormGroup['value']['city'],
+      address_state: this.shippingFormGroup['value']['state'],
+      address_zip: this.shippingFormGroup['value']['zip'],
       address_country: 'US'
     };
 
@@ -229,8 +269,7 @@ export class BuyerCheckoutComponent
       // ...send the token to backend to process the charge
       const obj = {
         token: token,
-        name: (<HTMLInputElement>document.getElementById('cardHolderName'))
-          .value,
+        name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
         buyerID: this.buyer['data']['_id'],
         email: this.buyer['data']['email'],
         amount: this.totalPriceDisplay * 100,

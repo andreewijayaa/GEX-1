@@ -405,6 +405,7 @@ router.get("/retrieveCart", (req, res, next) => {
       .send({ success: false, message: "Must Login to view Cart!." });
   var orderTotal = 0,
     offerPriceTotal = 0,
+    offerShippingTotal = 0,
     orderFees = 0;
   // Must be a buyer logged in to be able to enter an item to cart
   jwt.verify(token, config.secret, function(err, decoded) {
@@ -435,21 +436,23 @@ router.get("/retrieveCart", (req, res, next) => {
           //Add entity name to the returned object.
           offersInCart.forEach(function(currentOffer) {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
+            offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
             //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
             //offers.provider = SellersOffer.entity_name;
             //});
           });
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
-          orderFees = offerPriceTotal * 0.01; //Add fee calculation here
-          orderTotal = offerPriceTotal + orderFees;
-          orderFees = Math.round(orderFees * 100) / 100;
+          offerShippingTotal = Math.round(offerShippingTotal * 100) / 100;
+          // orderFees = offerPriceTotal * 0.01; // Add fee calculation here
+          orderTotal = offerPriceTotal + offerShippingTotal;
+          // orderFees = Math.round(orderFees * 100) / 100;
           orderTotal = Math.round(orderTotal * 100) / 100;
 
           return res.status(200).send({
             success: true,
             offersInCart,
             offerPriceTotal,
-            orderFees,
+            offerShippingTotal,
             orderTotal
           });
         }
