@@ -16,6 +16,7 @@ const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
 const keySecret = process.env.STRIPE_SECRET_KEY;
 const stripe = require("stripe")(keySecret);
 const Taxjar = require('taxjar');
+const Seller = require("../models/seller");
 const client = new Taxjar({
   apiKey: process.env.TAXJAR_KEY
 });
@@ -165,11 +166,14 @@ router.post('/request', (req, res, next) => {
     //end of code added by john to add images to request
     // console.log('buyers id is %s', decoded.data._id);
     //Find buyer to attach the request ID to the buyer_requests_byID
+    //console.log(decoded.data._id);
     Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
-      // console.log('inside the find by id function');
+      
+      //console.log(buyer_making_request);
       if (err) return handleError(err);
       // Save Request
       request.save((err, post) => {
+        console.log(post);
         if (err) { return next(err); }
         //console.log('inside save function');
         buyer_making_request.buyer_requests_byID.push(post._id);
@@ -180,19 +184,22 @@ router.post('/request', (req, res, next) => {
           // Look for a seller with the same code the buyer has posted a request with
           // find all applicable sellers and email them (Notifcation System) 
           // The email will contain a link to view the Request for sellers 
-          Buyer.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
+          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
             if (err) { return next(err); }
+
+            //console.log(applicableSeller);
             //console.log('Post Id:' + post.code)
             //console.log(applicableSeller);
             // Loop through all the sellers found and email them independtly
             // Might need to find a better way of doing this for when there is a large amount of sellers
-            for (i = 0; i < applicableSeller.length; i++) {
-              applicableSeller[i].open_requests.push(post._id);
-              applicableSeller[i].save((err) => {
+            applicableSeller.forEach(function(currentSeller) {
+              currentSeller.open_requests.push(post._id);
+              currentSeller.save((err) => {
                 if (err) { return next(err); }
+                sendEmail.NotifySeller(currentSeller, post);
               });
-              //sendEmail.NotifySeller(applicableSeller[i], post);
-            }
+              
+            });
           });
           return res.json({ success: true, msg: 'Your request was submitted!' });
         });
