@@ -101,7 +101,7 @@ export class MakeRequestComponent implements OnInit {
   title: String;
   submitLabels: String[];
   codeArray: Number[];
-  description: String = "Enter description of desired product";
+  description: String = "";
   deadline: Date;
   buttonText: String = 'Submit Your Request to Sellers on Requiren';
   Image_Urls: [String] = [""];
