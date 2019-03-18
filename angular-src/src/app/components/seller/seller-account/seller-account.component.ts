@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SellerService } from '../../../services/seller.service';
 import { ActivatedRoute } from '@angular/router';
+import { NotifierService } from "angular-notifier";
 
 //class for importing image
 class ImageSnippet {
@@ -14,6 +15,7 @@ class ImageSnippet {
 })
 
 export class SellerAccountComponent implements OnInit {
+  private readonly notifier: NotifierService;
   mainLogout: Boolean;
 
   seller: any;
@@ -29,7 +31,9 @@ export class SellerAccountComponent implements OnInit {
   updateSellerLastName = localStorage.getItem('sellerLastName');
 
   constructor(private sellerService: SellerService,
-    private route: ActivatedRoute) { }
+    private notifierService: NotifierService,
+    private route: ActivatedRoute) { this.notifier = notifierService;
+    }
 
   // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
@@ -175,10 +179,10 @@ export class SellerAccountComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.sellerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
-
+          this.notifier.notify("success", "Your Image has uploaded! Login again to update");
         },
         (err) => {
-
+          this.notifier.notify("error", "Your Image has failed to upload");
         })
     });
 
