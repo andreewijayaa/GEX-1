@@ -18,6 +18,7 @@ export class BuyerService {
   offer: any;
   offerCartItem: any;
   offerID: any;
+  taxInfo: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -62,9 +63,9 @@ export class BuyerService {
   }
 
 
-  //service to delete request
+  // service to delete request
   deleteBuyerRequest(request) {
-    //console.log("Delete Request Called");
+    // console.log("Delete Request Called");
     this.loadToken();
     if (this.buyerToken != null) {
       const httpOptions = {
@@ -150,6 +151,21 @@ export class BuyerService {
         .pipe(map(res => res));
     } else {
       return this.http.get('buyers/retrieveCart', httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  getTax(taxInfo) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/tax', taxInfo, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/tax', taxInfo, httpOptions)
         .pipe(map(res => res));
     }
   }

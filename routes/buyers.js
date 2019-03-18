@@ -16,6 +16,7 @@ const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
 const keySecret = process.env.STRIPE_SECRET_KEY;
 const stripe = require("stripe")(keySecret);
 const Taxjar = require('taxjar');
+const Seller = require("../models/seller");
 const client = new Taxjar({
   apiKey: process.env.TAXJAR_KEY
 });
@@ -165,11 +166,14 @@ router.post('/request', (req, res, next) => {
     //end of code added by john to add images to request
     // console.log('buyers id is %s', decoded.data._id);
     //Find buyer to attach the request ID to the buyer_requests_byID
+    //console.log(decoded.data._id);
     Buyer.findById(decoded.data._id, (err, buyer_making_request) => {
-      // console.log('inside the find by id function');
+      
+      //console.log(buyer_making_request);
       if (err) return handleError(err);
       // Save Request
       request.save((err, post) => {
+        console.log(post);
         if (err) { return next(err); }
         //console.log('inside save function');
         buyer_making_request.buyer_requests_byID.push(post._id);
@@ -180,19 +184,22 @@ router.post('/request', (req, res, next) => {
           // Look for a seller with the same code the buyer has posted a request with
           // find all applicable sellers and email them (Notifcation System) 
           // The email will contain a link to view the Request for sellers 
-          Buyer.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
+          Seller.find({ 'codes': { $in: post.code} }, (err, applicableSeller) => {
             if (err) { return next(err); }
+
+            //console.log(applicableSeller);
             //console.log('Post Id:' + post.code)
             //console.log(applicableSeller);
             // Loop through all the sellers found and email them independtly
             // Might need to find a better way of doing this for when there is a large amount of sellers
-            for (i = 0; i < applicableSeller.length; i++) {
-              applicableSeller[i].open_requests.push(post._id);
-              applicableSeller[i].save((err) => {
+            applicableSeller.forEach(function(currentSeller) {
+              currentSeller.open_requests.push(post._id);
+              currentSeller.save((err) => {
                 if (err) { return next(err); }
+                sendEmail.NotifySeller(currentSeller, post);
               });
-              //sendEmail.NotifySeller(applicableSeller[i], post);
-            }
+              
+            });
           });
           return res.json({ success: true, msg: 'Your request was submitted!' });
         });
@@ -398,6 +405,7 @@ router.get("/retrieveCart", (req, res, next) => {
       .send({ success: false, message: "Must Login to view Cart!." });
   var orderTotal = 0,
     offerPriceTotal = 0,
+    offerShippingTotal = 0,
     orderFees = 0;
   // Must be a buyer logged in to be able to enter an item to cart
   jwt.verify(token, config.secret, function(err, decoded) {
@@ -428,21 +436,23 @@ router.get("/retrieveCart", (req, res, next) => {
           //Add entity name to the returned object.
           offersInCart.forEach(function(currentOffer) {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
+            offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
             //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
             //offers.provider = SellersOffer.entity_name;
             //});
           });
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
-          orderFees = offerPriceTotal * 0.01; //Add fee calculation here
-          orderTotal = offerPriceTotal + orderFees;
-          orderFees = Math.round(orderFees * 100) / 100;
+          offerShippingTotal = Math.round(offerShippingTotal * 100) / 100;
+          // orderFees = offerPriceTotal * 0.01; // Add fee calculation here
+          orderTotal = offerPriceTotal + offerShippingTotal;
+          // orderFees = Math.round(orderFees * 100) / 100;
           orderTotal = Math.round(orderTotal * 100) / 100;
 
           return res.status(200).send({
             success: true,
             offersInCart,
             offerPriceTotal,
-            orderFees,
+            offerShippingTotal,
             orderTotal
           });
         }
@@ -548,6 +558,47 @@ router.post("/removeFromCart", (req, res, next) => {
   });
 });
 
+router.post("/tax", (req, res) => {
+  let taxInfo = {
+    from_country: 'US',
+    from_zip: '85304',
+    from_state: 'AZ',
+    from_city: 'Glendale',
+    from_street: '12420 N 43rd Ln',
+    to_country: req.body.to_country,
+    to_zip: req.body.to_zip,
+    to_state: req.body.to_state,
+    shipping: req.body.shipping,
+    amount: req.body.amount
+  }
+
+  client.taxForOrder({
+    from_country: taxInfo.from_country,
+    to_country: taxInfo.to_country,
+    to_zip: taxInfo.to_zip,
+    to_state: taxInfo.to_state,
+    amount: taxInfo.amount,
+    shipping: taxInfo.shipping,
+    nexus_addresses: [
+      {
+        country: 'US',
+        zip: taxInfo.from_zip,
+        state: taxInfo.from_state,
+        city: taxInfo.from_city,
+        street: taxInfo.from_street
+      }
+    ]
+  }).then(function(result) {
+    result.tax;
+    result.tax.amount_to_collect;
+    res.send({ success: true, result});
+  }).catch(function(err) {
+    err.detail;
+    err.status;
+    res.send({ success: false, err})
+  });
+})
+
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
 router.post("/charge", (req, res) => {
@@ -559,7 +610,8 @@ router.post("/charge", (req, res) => {
     totalOffers: req.body.totalOffers,
     shippingInfo: req.body.shippingInfo,
     orderID: req.body.orderID,
-    name: req.body.name
+    name: req.body.name,
+    sellers: req.body.sellers
   };
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
@@ -568,7 +620,7 @@ router.post("/charge", (req, res) => {
         success: false,
         message: "Could not retrieve buyer to charge purchase."
       });
-    else if (info.stripeCustomer === false) {
+    else if (info.stripe_customer === false) {
       console.log("Not a stripe customer yet but will be.");
       info.stripe_customer = true;
       stripe.customers
@@ -589,14 +641,14 @@ router.post("/charge", (req, res) => {
               metadata: {
                 order_id: purchaseInfo.orderID
               },
-              transfer_group: purchaseInfo.orderID
+              // transfer_group: purchaseInfo.orderID
             })
             .then(charge => res.send({ success: true, charge }));
         });
-    } else if (info.stripeCustomer === true) {
+    } else if (info.stripe_customer === true) {
       console.log("Is already a stripe customer");
       stripe.customers
-        .update(info.stripeCustomerId, {
+        .update(info.stripe_customer_id, {
           source: purchaseInfo.stripeToken
         })
         .then(customer =>
@@ -614,34 +666,17 @@ router.post("/charge", (req, res) => {
     }
   });
 
-  for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
-    //console.log(purchaseInfo.totalOffers[pos].seller_ID);
-    stripe.transfers
-      .create({
-        amount: purchaseInfo.totalOffers[pos].price * 100,
-        currency: "usd",
-        destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-        transfer_group: purchaseInfo.orderID
-      })
-      .then(transfer => res.send({ success: true, transfer }));
-  }
-});
-
-router.post('tax', (req, res) => {
-  // let locationInfo = {
-  //   from_country: req.body.from_country,
-  //   from_zip: req.body.from_zip,
-  //   from_state: req.body.state,
-  //   from_city: 
-  //   from_street:
-  //   to_country:
-  //   to_zip:
-  //   to_state:
-  //   to_city:
-  //   to_street:
-  //   amount:
-  //   shipping:
-  // }; 
+  // for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
+  //   //console.log(purchaseInfo.totalOffers[pos].seller_ID);
+  //   stripe.transfers
+  //     .create({
+  //       amount: purchaseInfo.totalOffers[pos].price * 100,
+  //       currency: "usd",
+  //       destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
+  //       transfer_group: purchaseInfo.orderID
+  //     })
+  //     .then(transfer => res.send({ success: true, transfer }));
+  // }
 });
 
 //Email Verification - RONI

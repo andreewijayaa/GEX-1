@@ -32,6 +32,8 @@
     "ejs": "^2.6.1",
     "express": "*",
     "gridfs-stream": "^1.1.1",
+    "gulp": "^4.0.0",
+    "gulp-ng-config": "^1.5.1",
     "jsonwebtoken": "*",
     "method-override": "^3.0.0",
     "mongoose": "^5.4.9",

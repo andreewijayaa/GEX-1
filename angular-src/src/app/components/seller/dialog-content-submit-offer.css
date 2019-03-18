@@ -16,3 +16,7 @@ mat-list {
     border: 3px solid limegreen;
     overflow: auto;
 }
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
