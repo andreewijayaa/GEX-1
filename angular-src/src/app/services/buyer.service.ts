@@ -206,7 +206,7 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('buyers/profilepicture', profilePic)
+      return this.http.post('buyers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
@@ -227,7 +227,7 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('buyers/requestpicture', requestPic)
+      return this.http.post('buyers/requestpicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
