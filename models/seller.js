@@ -43,7 +43,7 @@ const SellerSchema = mongoose.Schema({
     codes: {
       type: [Number]
     },
-    billing_address: {
+    address: {
         type: [String]
     },
     seller_offers_byID: {
