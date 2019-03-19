@@ -955,3 +955,41 @@ router.get("/getStripeRoute", (req, res) => {
   });
 });
 module.exports = router;
+
+//let seller to archive requests
+//code by Andre
+router.post("/addArchive", (req, res) => {
+  console.log('add archive called');
+  var token = req.headers["x-access-token"];
+
+  //if they don't have a token
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+    if (req.body.request_ID == null) {
+      //console.log('No description added');
+      return res
+        .status(500)
+        .send({ success: false, message: "No new archived item" });
+    }
+    console.log('adding this request to archive: ' + req.body.request_ID);
+    Seller.findById(decoded.data._id, (err, seller_descipt) => {
+      if (err) return handleError(err);
+      seller_descipt.set({ archived_request: req.body.request_ID });
+      seller_descipt.save(err => {
+        if (err) return handleError(err);
+        return res.json({
+          success: true,
+          message: "Attempted to archive a request"
+        });
+      });
+    });
+  });
+});

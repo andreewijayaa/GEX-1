@@ -325,4 +325,24 @@ export class SellerService {
     this.sellerToken = null;
     this.seller = null;
   }
+
+  // Service to post a new description for seller
+  addArchive(requestID) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/addArchive', requestID, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/addArchive', requestID, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
 }

@@ -285,6 +285,24 @@ export class SellerComponent implements OnInit {
 
   }
 
+  AddArchive(id: any) {
+    const requestID = {
+      request_ID: id
+    };
+
+    if (id === undefined) {
+      return this.notifier.notify('error', 'something wrong here');
+    }
+    // setting description
+    this.sellerService.addArchive(requestID).subscribe((data: any) => {
+      if (data.success === true) { // if the data succeed to be posted
+        this.notifier.notify('success', 'This Request was archived!');
+      } else { // if it fails
+        this.notifier.notify('error', data.msg);
+      }
+    });
+  }
+
   // Tab first configuration
   currentTab = 'requests';
 

@@ -175,7 +175,7 @@
                         </mat-panel-title>
                         &nbsp;
                         <div class="col-sm-12" style="text-align: right;">
-                          <button type="button" class="btn btn-warning">Archive</button>
+                          <button type="button" (click)="AddArchive(request._id)" class="btn btn-warning">Archive</button>
                           &nbsp;
                           <button type="button" (click)="submitOffer(request.title, request._id)" class="btn btn-primary">Submit
                             New Offer</button>
