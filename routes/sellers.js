@@ -982,7 +982,8 @@ router.post("/addArchive", (req, res) => {
     console.log('adding this request to archive: ' + req.body.request_ID);
     Seller.findById(decoded.data._id, (err, seller_descipt) => {
       if (err) return handleError(err);
-      seller_descipt.set({ archived_request: req.body.request_ID });
+      seller_descipt.archived_request.push(req.body.request_ID);
+      //seller_descipt.set({ archived_request: req.body.request_ID });
       seller_descipt.save(err => {
         if (err) return handleError(err);
         return res.json({
@@ -992,4 +993,32 @@ router.post("/addArchive", (req, res) => {
       });
     });
   });
+
+//route to get archived requests made by Andre
+//uses mongoose to find archived requets
+router.get("/getArchivedRequests", (req, res) => {
+  var token = req.headers["x-access-token"];
+
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to view archived requests." });
+  jwt.verify(token, config.secret, (err, decoded) => {
+    Seller.findById(decoded.data._id, (err, seller_viewing_requests) => {
+      Request.find(
+        { _id: { $in: seller_viewing_requests.archived_request } },
+        (err, archived_request) => {
+          if (err)
+            return res
+              .status(500)
+              .send({
+                success: false,
+                message: "Could not find any archived requests"
+              });
+          res.status(200).send(archived_request);
+        }
+      );
+    });
+  });
+});
 });

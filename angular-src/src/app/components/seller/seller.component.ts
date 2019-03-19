@@ -42,6 +42,7 @@ export class SellerComponent implements OnInit {
   progress2: any;
   progress3: any;
   temp: any;
+  archivedRequests: Object;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -108,6 +109,15 @@ export class SellerComponent implements OnInit {
     // Fetching seller active requests from the service to be used in the webpage
     this.sellerService.getActiveRequests().subscribe((requests: any) => {
       this.activeRequests = requests;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+
+    // Fetching seller archived requests from the service to be used in the webpage
+    this.sellerService.getArchivedRequests().subscribe((archived: any) => {
+      this.archivedRequests = archived;
     },
       err => {
         console.log(err);

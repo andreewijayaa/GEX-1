@@ -345,4 +345,22 @@ export class SellerService {
       .pipe(map(res => res));
     }
   }
+
+    // Service to get archived requests from buyers associated with seller's code
+    getArchivedRequests() {
+      this.loadToken();
+      // Tokens needed to fetch data from database
+      const httpOptions = {
+        headers: new HttpHeaders ({
+          'Content-Type':  'application/json',
+          'x-access-token': this.sellerToken
+        })
+      };
+      if (process.env.NODE_ENV === 'development') {
+        return this.http.get('http://localhost:3000/sellers/getArchivedRequests', httpOptions).pipe(map(res => res));
+      } else {
+      // This will return json file fetched from database
+      return this.http.get('sellers/getArchivedRequests', httpOptions).pipe(map(res => res));
+      }
+    }
 }
