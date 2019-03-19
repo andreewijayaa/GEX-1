@@ -41,7 +41,7 @@ import { Ng2SearchPipeModule} from 'ng2-search-filter';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab, MatRadioModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab, MatRadioModule, MatCheckboxModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
@@ -182,6 +182,7 @@ const customNotifierOptions: NotifierOptions = {
     MatListModule,
     MatTableModule,
     MatRadioModule,
+    MatCheckboxModule,
     // Site Notifications
     NotifierModule.withConfig (customNotifierOptions),
     HttpClientModule,

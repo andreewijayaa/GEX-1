@@ -18,6 +18,7 @@ export class BuyerService {
   offer: any;
   offerCartItem: any;
   offerID: any;
+  taxInfo: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
@@ -154,6 +155,21 @@ export class BuyerService {
     }
   }
 
+  getTax(taxInfo) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/tax', taxInfo, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/tax', taxInfo, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
   // By: Omar
   // Sends the checkout information to server checkout route in app.js
   checkout(offer) {
@@ -190,7 +206,7 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('buyers/profilepicture', profilePic)
+      return this.http.post('buyers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
@@ -211,7 +227,7 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('buyers/requestpicture', requestPic)
+      return this.http.post('buyers/requestpicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }

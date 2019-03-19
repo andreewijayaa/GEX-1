@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BuyerService } from '../../../services/buyer.service';
 import { ActivatedRoute } from '@angular/router';
+import { NotifierService } from "angular-notifier";
 import { SellerAccountComponent } from '../../seller/seller-account/seller-account.component';
 
 class ImageSnippet {
@@ -13,7 +14,7 @@ class ImageSnippet {
   styleUrls: ['./buyer-account.component.css']
 })
 export class BuyerAccountComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   //for image porcessing
   selectedFile: ImageSnippet;
 
@@ -29,7 +30,8 @@ export class BuyerAccountComponent implements OnInit {
   updateBuyerLastName = localStorage.getItem('buyerLastName');
 
   constructor(private buyerService: BuyerService,
-    private route: ActivatedRoute) { }
+    private notifierService: NotifierService,
+    private route: ActivatedRoute) {this.notifier = notifierService; }
 
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
@@ -44,8 +46,8 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = false;
-    (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
+    (<HTMLInputElement>document.getElementById('saveBtn')).hidden = false;
+    (<HTMLInputElement>document.getElementById('editBtn')).hidden = true;
     //(<HTMLInputElement>document.getElementById('verify')).hidden = false;
     //(<HTMLInputElement>document.getElementById('newPass')).hidden = false;
     (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = false;
@@ -151,8 +153,8 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('lName')).disabled = true;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
     //(<HTMLInputElement>document.getElementById('pwd')).disabled = true;
-    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
-    (<HTMLInputElement>document.getElementById('editBtn')).disabled = false;
+    (<HTMLInputElement>document.getElementById('saveBtn')).hidden = true;
+    (<HTMLInputElement>document.getElementById('editBtn')).hidden = false;
     //(<HTMLInputElement>document.getElementById('verify')).hidden = true;
     //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
     //(<HTMLInputElement>document.getElementById('newPwd')).value = '';
@@ -173,10 +175,10 @@ export class BuyerAccountComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
-
+          this.notifier.notify("success", "Your Image has uploaded! Login again to update");
         },
         (err) => {
-
+          this.notifier.notify("error", "Your Image has failed to upload :( ");
         })
     });
 

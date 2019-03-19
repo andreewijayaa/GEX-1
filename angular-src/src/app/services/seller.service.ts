@@ -260,10 +260,10 @@ export class SellerService {
   //By John
   setProfilePicture(profilePic: File): Observable<Object>{
     //console.log("profile picutre action taken");
+    debugger;
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
-        'Content-Type': 'application/json',
         'x-access-token': this.sellerToken
       })
     };
@@ -275,7 +275,7 @@ export class SellerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/profilepicture', profilePic)
+      return this.http.post('sellers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
