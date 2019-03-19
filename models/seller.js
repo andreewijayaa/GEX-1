@@ -65,7 +65,7 @@ const SellerSchema = mongoose.Schema({
     profile_image: {
         type : String,
         required: false,
-        deafault: "https://pofileimages.s3.amazonaws.com/155079112060"
+        default: "https://pofileimages.s3.amazonaws.com/1550791120608"
     },
     confirmationToken: {
         type: String
