@@ -129,7 +129,7 @@ app.post('/checkout', (req, res, next) => {
   }))
 });*/
 
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV === 'production') {
   // For all GET requests, send back index.html
   // so that PathLocationStrategy can be used
   app.get('/*', function(req, res) {
