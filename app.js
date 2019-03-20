@@ -38,7 +38,6 @@ mongoose.connect(config.database, { useNewUrlParser: true, promiseLibrary: requi
   .then(() => console.log(`Connected to database ${config.database}`))
   .catch((err) => console.log(`Database error: ${err}`));
 
-
 const app = express();
 
 const buyers = require('./routes/buyers');
@@ -103,31 +102,6 @@ app.use('/sellers', sellers);
 
 //requests route
 app.use('/requests', requests);
-
-/*
-// By: Omar
-// Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
-app.post('/checkout', (req, res, next) => {
-  let offer = {
-    stripeEmail: req.body.email,
-    stripeToken: req.body.token,
-    amount: req.body.amount,
-    description: req.body.description
-  }
-
-  stripe.customers.create({
-    email: offer.stripeEmail,
-    source: offer.stripeToken
-  })
-  .then(customer => stripe.charges.create({
-    amount: offer.amount,
-    currency: 'usd',
-    //title: req.body.product,
-    description: offer.description,
-    customer: customer.id,
-    //source: offer.stripeToken
-  }))
-});*/
 
 if (process.env.NODE_ENV == 'production') {
   // For all GET requests, send back index.html

@@ -22,10 +22,19 @@ const addressSchema = mongoose.Schema({
         type: String,
         required : true,
     },
-    street: {
+    street1: {
         type: String,
         required : true,
-    }
+    },
+    street2: {
+        type: String,
+        required: false
+    },
+    company: {
+        type: String,
+        required: false
+    },
+    created_at: { type: Date, required: true, default: Date.now }
 });
 
 const Address = module.exports = mongoose.model('Address', addressSchema);
