@@ -959,7 +959,7 @@ module.exports = router;
 //let seller to archive requests
 //code by Andre
 router.post("/addArchive", (req, res) => {
-  console.log('add archive called');
+  //console.log('add archive called');
   var token = req.headers["x-access-token"];
 
   //if they don't have a token
@@ -979,11 +979,10 @@ router.post("/addArchive", (req, res) => {
         .status(500)
         .send({ success: false, message: "No new archived item" });
     }
-    console.log('adding this request to archive: ' + req.body.request_ID);
+    //console.log('adding this request to archive: ' + req.body.request_ID);
     Seller.findById(decoded.data._id, (err, seller_descipt) => {
       if (err) return handleError(err);
       seller_descipt.archived_request.push(req.body.request_ID);
-      //seller_descipt.set({ archived_request: req.body.request_ID });
       seller_descipt.save(err => {
         if (err) return handleError(err);
         return res.json({
@@ -993,6 +992,7 @@ router.post("/addArchive", (req, res) => {
       });
     });
   });
+});
 
 //route to get archived requests made by Andre
 //uses mongoose to find archived requets
@@ -1021,4 +1021,47 @@ router.get("/getArchivedRequests", (req, res) => {
     });
   });
 });
+
+//let seller to delete an archived requests
+//code by Andre
+router.post("/deleteArchive", (req, res) => {
+  //console.log('delete archive called');
+  var token = req.headers["x-access-token"];
+
+  //if they don't have a token
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+    if (req.body.request_ID == null) {
+      //console.log('No description added');
+      return res
+        .status(500)
+        .send({ success: false, message: "No new archived item" });
+    }
+    //console.log('deleting this request from archive: ' + req.body.request_ID);
+    Seller.findByIdAndUpdate(
+      decoded.data._id,
+      { $pullAll: { archived_request: [req.body.request_ID] } },
+      (error_1, seller_removing_archived) => {
+        if (err)
+          return res
+            .status(500)
+            .send({
+              success: false,
+              message: "Something went wrong when finding seller."
+            });
+        res.json({
+          success: true,
+          msg: "Attempted to remove archived request from account!"
+        });
+      }
+    );
+  });
 });

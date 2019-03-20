@@ -377,7 +377,7 @@
                         </mat-panel-title>
                         &nbsp;
                         <div class="col-sm-12" style="text-align: right;">
-                          <button type="button" class="btn btn-danger">Delete</button>
+                          <button type="button" (click)="deleteArchive(archived._id)" class="btn btn-danger">Delete</button>
                           &nbsp;
                           <button type="button" (click)="submitOffer(archived.title, archived._id)" class="btn btn-primary">Submit New Offer</button>
                         </div>
