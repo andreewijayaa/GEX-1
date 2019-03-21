@@ -253,7 +253,7 @@ router.post("/deleterequest", function(req, res) {
         });
       }
       else if ((request_being_deleted.offerCount != 0)){
-        return res.status(500).send({
+        return res.status(201).send({
           success: false,
           message: "A Request with offers Cannot be deleted"
         });

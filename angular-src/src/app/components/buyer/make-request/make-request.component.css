@@ -161,6 +161,11 @@
   stroke: blue;
 }
 
+.img-preview-container{
+  background-color: #f7f7f7;
+  position:relative;
+}
+
 @keyframes rotate {
   100% {
     transform: rotate(360deg);

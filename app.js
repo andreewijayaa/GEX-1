@@ -103,7 +103,11 @@ app.use('/sellers', sellers);
 //requests route
 app.use('/requests', requests);
 
+<<<<<<< HEAD
 if (process.env.NODE_ENV == 'production') {
+=======
+if (process.env.NODE_ENV === 'production') {
+>>>>>>> upstream/master
   // For all GET requests, send back index.html
   // so that PathLocationStrategy can be used
   app.get('/*', function(req, res) {
