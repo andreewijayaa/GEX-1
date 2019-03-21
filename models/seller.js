@@ -77,7 +77,10 @@ const SellerSchema = mongoose.Schema({
         type: Object,
         required: false
     },
-    created_at: { type: Date, required: true, default: Date.now }
+    created_at: { type: Date, required: true, default: Date.now },
+    archived_request: {
+        type: [String]
+    }
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
