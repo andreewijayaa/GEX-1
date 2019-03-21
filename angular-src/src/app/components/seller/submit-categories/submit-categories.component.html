@@ -10,7 +10,7 @@
     &nbsp;
     &nbsp;
     <mat-horizontal-stepper [linear]=false #stepper id="steps">
-      <mat-step [stepControl]="firstFormGroup" [editable]="false">
+      <mat-step [stepControl]="firstFormGroup" [editable]="false" completed="false">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Step 1</ng-template>
           <div>
@@ -45,7 +45,7 @@
                             <label id="piclabel">{{code.name}}</label>
                           </div>
                           <div *ngIf="codeArray.indexOf(code.code) === -1">
-                            <input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/>
+                            <li><input type="checkbox" name="code" value={{code.code}} id={{code.code}} (change)="onCheckboxChange(code,$event)"/></li>
                             <label id="piclabel" for={{code.code}}><img src={{code.image}} /></label>
                             <label id="piclabel">{{code.name}}</label>
                           </div>
@@ -61,7 +61,7 @@
                     </div>
                   </div>
                   <div>
-                    <button class="float-right btn btn-primary" (click)="AddCode(stepper)">Submit and Continue ></button>
+                    <button class="float-right btn btn-primary" (click)="AddCode(stepper)" style="background-color: rgb(56, 72, 177); color: white">Submit and Continue ></button>
                   </div>
                 </div>
               </div>
@@ -83,7 +83,7 @@
                   </div>
                 </form>
                 <div>
-                  <button class="float-right btn btn-primary" (click)="AddDescription(stepper)">Submit and Continue ></button>
+                  <button class="float-right btn btn-primary" (click)="AddDescription(stepper)" style="background-color: rgb(56, 72, 177); color: white">Submit and Continue ></button>
                 </div>
               </div>
             </div>
@@ -99,7 +99,7 @@
             &nbsp;
             &nbsp;
             &nbsp;
-            <h2 align="center" style="color:blue;">Stripe Payment</h2>
+            <h2 align="center" style="color:rgb(73, 159, 224);">Stripe Payment</h2>
             &nbsp;
             <h5 align="center">Connect with Stripe for any transactions</h5>
             <label>Stripe is the easiest way to accept credit cards. Process major international debit or credit cards, including
@@ -117,7 +117,7 @@
         </div>
         &nbsp;
         <div>
-          <button matStepperNext class="float-right btn btn-primary" routerLink="/seller" routerLinkActive="router-link-active">Finish!</button>
+          <button matStepperNext class="float-right btn btn-primary" routerLink="/seller" routerLinkActive="router-link-active" style="background-color: rgb(56, 72, 177); color: white">Finish!</button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>

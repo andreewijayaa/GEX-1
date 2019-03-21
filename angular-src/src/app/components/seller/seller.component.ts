@@ -42,6 +42,7 @@ export class SellerComponent implements OnInit {
   progress2: any;
   progress3: any;
   temp: any;
+  archivedRequests: Object;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -108,6 +109,15 @@ export class SellerComponent implements OnInit {
     // Fetching seller active requests from the service to be used in the webpage
     this.sellerService.getActiveRequests().subscribe((requests: any) => {
       this.activeRequests = requests;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+
+    // Fetching seller archived requests from the service to be used in the webpage
+    this.sellerService.getArchivedRequests().subscribe((archived: any) => {
+      this.archivedRequests = archived;
     },
       err => {
         console.log(err);
@@ -283,6 +293,44 @@ export class SellerComponent implements OnInit {
       window.location.reload();
     });
 
+  }
+
+  AddArchive(id: any) {
+    const requestID = {
+      request_ID: id
+    };
+
+    if (id === undefined) {
+      return this.notifier.notify('error', 'something wrong here');
+    }
+    // setting description
+    this.sellerService.addArchive(requestID).subscribe((data: any) => {
+      if (data.success === true) { // if the data succeed to be posted
+        window.location.reload();
+        this.notifier.notify('success', 'This Request was archived!');
+      } else { // if it fails
+        this.notifier.notify('error', data.msg);
+      }
+    });
+  }
+
+  deleteArchive(id: any) {
+    const requestID = {
+      request_ID: id
+    };
+
+    if (id === undefined) {
+      return this.notifier.notify('error', 'something wrong here');
+    }
+    // setting description
+    this.sellerService.deleteArchive(requestID).subscribe((data: any) => {
+      if (data.success === true) { // if the data succeed to be posted
+        window.location.reload();
+        this.notifier.notify('success', 'This Request was deleted from archive!');
+      } else { // if it fails
+        this.notifier.notify('error', data.msg);
+      }
+    });
   }
 
   // Tab first configuration

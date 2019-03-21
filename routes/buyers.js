@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/database");
 const Buyer = require("../models/buyer");
 const Request = require("../models/request");
+const Address = require("../models/address");
+const Order = require("../models/order");
 const sendEmail = require("../models/sendEmail");
 const bcrypt = require("bcryptjs");
 const upload = require("../services/multer");
@@ -196,9 +198,8 @@ router.post('/request', (req, res, next) => {
               currentSeller.open_requests.push(post._id);
               currentSeller.save((err) => {
                 if (err) { return next(err); }
-                sendEmail.NotifySeller(currentSeller, post);
               });
-              
+              sendEmail.NotifySellerNewRequest(currentSeller, post);
             });
           });
           return res.json({ success: true, msg: 'Your request was submitted!' });

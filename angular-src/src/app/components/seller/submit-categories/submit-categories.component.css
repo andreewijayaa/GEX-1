@@ -112,7 +112,10 @@ label img {
 .btnMid {
   align-self: center;
   text-align: center;
+}
 
+::ng-deep .mat-horizontal-stepper-header {
+  pointer-events: none !important;
 }
 
 .app-loading .spinner {
