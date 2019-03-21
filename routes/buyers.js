@@ -198,9 +198,8 @@ router.post('/request', (req, res, next) => {
               currentSeller.open_requests.push(post._id);
               currentSeller.save((err) => {
                 if (err) { return next(err); }
-                sendEmail.NotifySeller(currentSeller, post);
               });
-              
+              sendEmail.NotifySellerNewRequest(currentSeller, post);
             });
           });
           return res.json({ success: true, msg: 'Your request was submitted!' });
