@@ -326,15 +326,15 @@ router.post("/update", (req, res /*next*/) => {
     else {
       updated.first_name = update.first_name;
       updated.last_name = update.last_name;
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(update.password, salt, (err, hash) => {
-          if (err) {
-            throw err;
-          }
-          updated.password = hash;
-          updated.save();
-        });
-      });
+      // bcrypt.genSalt(10, (err, salt) => {
+      //   bcrypt.hash(update.password, salt, (err, hash) => {
+      //     if (err) {
+      //       throw err;
+      //     }
+      //     updated.password = hash;
+      //     updated.save();
+      //   });
+      // });
       updated.save();
       res.json({ success: true });
     }
