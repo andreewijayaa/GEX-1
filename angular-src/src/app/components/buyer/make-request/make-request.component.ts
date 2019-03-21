@@ -242,6 +242,7 @@ export class MakeRequestComponent implements OnInit {
 
     reader.addEventListener("load", (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
+      //debugger;
       this.buyerService.addRequestImage(this.selectedFile.file).subscribe(
         (res) => {
           //console.log("Image url " + res["imageUrl"]);
@@ -268,13 +269,14 @@ export class MakeRequestComponent implements OnInit {
     if (this.Image_Urls[0] == ""){
       return this.notifier.notify("error", "There are no images to delete");
     }
-    else if (this.Image_Urls[0].length == 1){
+    else if (this.Image_Urls.length == 1){
+      //debugger;
       this.Image_Urls[0] = "";
-      this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
+      this.notifier.notify("success", "You now have " + 0 + " of 3 images left");
     }
     else{
       this.Image_Urls.pop();
+      this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
     }
-    this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
   }
 }

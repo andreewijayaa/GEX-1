@@ -4,6 +4,7 @@ import { BuyerService } from '../../services/buyer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { MatDialog } from '@angular/material';
+import { NotifierService } from "angular-notifier";
 
 
 @Component({
@@ -12,6 +13,7 @@ import { MatDialog } from '@angular/material';
   styleUrls: ['./buyer.component.css']
 })
 export class BuyerComponent implements OnInit {
+  private readonly notifier: NotifierService;
   buyer: Object;
   buyerProfile: Object;
   requestList: Object;
@@ -28,7 +30,8 @@ export class BuyerComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private requestService: RequestService,
-    private dialog: MatDialog) { }
+    private notifierService: NotifierService,
+    private dialog: MatDialog) { this.notifier = notifierService;}
 
   // showing buyer info when buyer portal page loads - Bryan Vu
 
@@ -98,7 +101,11 @@ export class BuyerComponent implements OnInit {
     this.buyerService.deleteBuyerRequest(request_delete).subscribe((data: any) => {
       console.log(data);
       debugger;
-      window.location.reload();
+      if (data.success == false){
+        this.notifier.notify('error', data.message);
+      }else{
+        window.location.reload();
+      }
     });
 
   }
