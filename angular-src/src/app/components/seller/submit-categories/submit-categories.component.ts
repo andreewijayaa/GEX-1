@@ -6,6 +6,7 @@ import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
+
 @Component({
   selector: 'app-submit-categories',
   templateUrl: './submit-categories.component.html',
@@ -52,6 +53,10 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   second: Boolean;
   third: Boolean;
 
+  // To redirect the stepper view to continue where the user left off - Andre
+  @ViewChild('stepper') stepper: MatStepper;
+  // Tab first configuration
+  currentTab = 'step1';
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -83,27 +88,22 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // To redirect the stepper view to continue where the user left off - Andre
-  @ViewChild('stepper') stepper: MatStepper;
   ngAfterViewInit() {
-
     this.sellerService.getSellerProfile().subscribe((data: any) => {
-      this.first = data.data.user_account_setup[0];
-      this.second = data.data.user_account_setup[1];
-      this.third = data.data.user_account_setup[2];
+      if (data) {
+        this.first = data.data.user_account_setup[0];
+        this.second = data.data.user_account_setup[1];
+        this.third = data.data.user_account_setup[2];
 
-      if (this.second) {
-        setTimeout(() => {
-          this.stepper.selectedIndex = 2;
-        }, 0);
-      } else if (this.first) {
-        setTimeout(() => {
-          this.stepper.selectedIndex = 1;
-        }, 0);
+        if (this.second) {
+            this.stepper.selectedIndex = 2;
+        } else if (this.first) {
+            this.stepper.selectedIndex = 1;
+        } else {
+            this.stepper.selectedIndex = 0;
+        }
       } else {
-        setTimeout(() => {
-          this.stepper.selectedIndex = 0;
-        }, 0);
+        console.log('could not retrieve stepper index');
       }
     });
   }
@@ -216,8 +216,6 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
     }
   }
 
-    // Tab first configuration
-    currentTab = 'step1';
 
     // when the user changes tabs
     step1(currentTab) {

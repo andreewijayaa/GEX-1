@@ -29,14 +29,14 @@ const orderSchema = mongoose.Schema({
     created_at : { type: Date, required: true, default: Date.now }
 });
 
-const Order = module.exports = mongoose.model('Request', orderSchema);
+const Order = module.exports = mongoose.model('Order', orderSchema);
 
-module.exports.createRequest = function(newOrder, callback){
+module.exports.createOrder = function(newOrder, callback){
     newOrder.save(callback);
 }
 
 module.exports.getOrderbyId = function(id, callback){
-    Request.findById(id, callback);
+    Order.findById(id, callback);
 }
 
 module.exports.getOrderbyBuyer = function(buyerID, callback){

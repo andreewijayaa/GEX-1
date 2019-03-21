@@ -38,7 +38,6 @@ mongoose.connect(config.database, { useNewUrlParser: true, promiseLibrary: requi
   .then(() => console.log(`Connected to database ${config.database}`))
   .catch((err) => console.log(`Database error: ${err}`));
 
-
 const app = express();
 
 const buyers = require('./routes/buyers');
@@ -104,6 +103,9 @@ app.use('/sellers', sellers);
 //requests route
 app.use('/requests', requests);
 
+<<<<<<< HEAD
+if (process.env.NODE_ENV == 'production') {
+=======
 /*
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
@@ -130,6 +132,7 @@ app.post('/checkout', (req, res, next) => {
 });*/
 
 if (process.env.NODE_ENV === 'production') {
+>>>>>>> upstream/master
   // For all GET requests, send back index.html
   // so that PathLocationStrategy can be used
   app.get('/*', function(req, res) {

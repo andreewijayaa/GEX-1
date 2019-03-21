@@ -5,7 +5,7 @@ const config = require('../config/database');
 
 //Seller Schema
 const SellerSchema = mongoose.Schema({
-    account_type:{
+    account_type: {
       type: Number,
       default: 1
     },
@@ -43,7 +43,7 @@ const SellerSchema = mongoose.Schema({
     codes: {
       type: [Number]
     },
-    billing_address: {
+    address: {
         type: [String]
     },
     seller_offers_byID: {
@@ -84,6 +84,7 @@ const SellerSchema = mongoose.Schema({
 });
 
 const Seller = module.exports = mongoose.model('Seller', SellerSchema);
+
 // Retrieve Seller by ID
 module.exports.getSellerbyId = function(id, callback){
     Seller.findById(id, callback);
@@ -105,6 +106,7 @@ module.exports.addSeller = function(newSeller, callback){
         });
     });
 }
+
 module.exports.changePassword = function(seller, callback){
     bcrypt.genSalt(10,(err, salt) => {
         bcrypt.hash(seller.password, salt, (err, hash) => {
@@ -114,6 +116,7 @@ module.exports.changePassword = function(seller, callback){
         });
     });
 }
+
 // compare inputted password to the seller hashed password
 module.exports.comparePassword = function (inputtedPassword, hash, callback){
     bcrypt.compare(inputtedPassword, hash, (err, isMatch) => {
