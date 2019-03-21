@@ -63,8 +63,8 @@ including the fields and labels.
       <div class="form-group">
         <!--*ngIf="selectedFile" src="url('+ selectedFile.src +')"-->
         <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[0]}} alt="" width="120" height="120">
-        <img class="RequestImageDisplay" *ngIf="this.Image_Urls[1]" src={{this.Image_Urls[1]}} alt="" width="120" height="120">
-        <img class="RequestImageDisplay" *ngIf="this.Image_Urls[2]" src={{this.Image_Urls[2]}} alt="" width="120" height="120">
+        <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[1]}} alt="" width="120" height="120">
+        <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[2]}} alt="" width="120" height="120">
       </div>
         <hr>
         <div class="form-group row">
