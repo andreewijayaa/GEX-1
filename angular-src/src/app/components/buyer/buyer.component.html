@@ -46,6 +46,9 @@ Bryan Vu contributed most of this buyer portal page.
     </table>
 
     <mat-accordion>
+      <p align="center" *ngIf="requestList.length == 0">
+        You have not made any product requests yet.
+      </p>
       <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 25, currentPage: p}"
         (opened)="expanded(request._id)">
         <mat-expansion-panel-header style="text-align:center">
