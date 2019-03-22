@@ -12,7 +12,7 @@ const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/mas
   templateUrl: './submit-categories.component.html',
   styleUrls: ['./submit-categories.component.css']
 })
-export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
+export class SubmitCategoriesComponent implements OnInit {
   private readonly notifier: NotifierService;
   // Temp codes for MVP - Kurgan
   codes = [
@@ -32,8 +32,8 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
     { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
   ];
   sellerID: String;
-  submitLabels: String[];
-  codeArray: Number[];
+  submitLabels = [];
+  codeArray = [];
   code: Number;
   codeList: [Number];
   None: Boolean;
@@ -67,33 +67,26 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   // On initialization process of the webpage
   ngOnInit() {
     // Get Seller Information
-    this.getSellerInfo();
+    this.getSellerProfileInfo();
+    this.getSellerCodes();
+
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
-    this.submitLabels = [];
-    this.codeArray = [];
     this.None = false;
     // Get seller codes
-    this.sellerService.getCode().subscribe((data: any) => {
-      if (data.success) {
-        if (data.codeList.length === 0) { // Seller does not have any codes yet
-        } else {
-          this.codeArray = data.codeList;
-        }
-      }
-    });
   }
 
-  ngAfterViewInit() {
+  getSellerProfileInfo() {
     this.sellerService.getSellerProfile().subscribe((data: any) => {
-      if (data) {
-        this.first = data.data.user_account_setup[0];
-        this.second = data.data.user_account_setup[1];
-        this.third = data.data.user_account_setup[2];
+      if (data.success) {
+        this.sellerID = data.seller_found._id;
+        this.first = data.seller_found.user_account_setup[0];
+        this.second = data.seller_found.user_account_setup[1];
+        this.third = data.seller_found.user_account_setup[2];
 
         if (this.second) {
             this.stepper.selectedIndex = 2;
@@ -103,7 +96,18 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
             this.stepper.selectedIndex = 0;
         }
       } else {
-        console.log('could not retrieve stepper index');
+        console.log('Could not retrieve seller profile info');
+      }
+    });
+  }
+
+  getSellerCodes() {
+    this.sellerService.getCode().subscribe((data: any) => {
+      if (data.success) {
+        if (data.codeList.length === 0) { // Seller does not have any codes yet
+        } else {
+          this.codeArray = data.codeList;
+        }
       }
     });
   }
@@ -141,14 +145,6 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
         stepper.next();
       } else { // if it fails
         this.notifier.notify('error', data.msg);
-      }
-    });
-  }
-
-  getSellerInfo() {
-    this.sellerService.getSellerProfile().subscribe((data: any) => {
-      if (data) {
-        this.sellerID = data.data._id;
       }
     });
   }

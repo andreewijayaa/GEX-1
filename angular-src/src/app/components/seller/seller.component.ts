@@ -99,11 +99,11 @@ export class SellerComponent implements OnInit {
             this.progress2 = 100;
             if (this.seller.user_account_setup[2]) {
               this.progress3 = 100;
-            } 
+            }
             else { this.progress3 = 50; }
-          } 
+          }
           else { this.progress2 = 50; }
-        } 
+        }
         else { this.progress1 = 50; }
 
         if (this.seller.user_account_setup[0]
@@ -115,8 +115,7 @@ export class SellerComponent implements OnInit {
           this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
             if (offers.success) {
               this.offerList = offers.offers;
-            }
-            else {
+            } else {
               console.log('Could not fetch offers');
             }
           },
@@ -124,13 +123,12 @@ export class SellerComponent implements OnInit {
             console.log(err);
             return false;
           });
-          
+
           // Fetching seller active requests from the service to be used in the webpage
           this.sellerService.getActiveRequests().subscribe((requests: any) => {
             if (requests.success) {
               this.activeRequests = requests.active_requests;
-            }
-            else {
+            } else {
               console.log('could not fetch requests');
             }
           },
@@ -175,35 +173,6 @@ export class SellerComponent implements OnInit {
     this.progress1 = 0;
     this.progress2 = 0;
     this.progress3 = 0;
-  }
-
-  refresh() {
-      this.progress1 = 0;
-      this.progress2 = 0;
-      this.progress3 = 0;
-     // Fetching seller profile information from the service to be used in the webpage
-     this.sellerService.getSellerProfile().subscribe((profile: any) => {
-      this.seller = profile.data;
-
-      this.temp = this.seller.user_account_setup;
-      if (this.seller.user_account_setup[0]) {
-        this.progress1 = 100;
-        if (this.seller.user_account_setup[1]) {
-          this.progress2 = 100;
-          if (this.seller.user_account_setup[2]) {
-            this.progress3 = 100;
-          } else {
-            this.progress3 = 50;
-          }
-        } else {
-          this.progress2 = 50;
-        }
-      } else {
-        this.progress1 = 50;
-      }
-    });
-
-    window.location.reload();
   }
 
   submitOffer(title: any, id: any) {

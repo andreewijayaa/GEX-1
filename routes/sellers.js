@@ -75,11 +75,11 @@ router.post("/register", (req, res, next) => {
 Profile update - By: Omar
 Will find the seller by using their id number and update their information accordingly.
 */
-router.post("/update", (req, res /*next*/) => {
+router.post("/update", (req, res) => {
+  const io = req.app.get('io');
   let update = {
     first_name: req.body.fName,
     last_name: req.body.lName,
-    password: req.body.pass,
     id: req.body.updater_id
   };
 
@@ -94,17 +94,10 @@ router.post("/update", (req, res /*next*/) => {
     else {
       updated.first_name = update.first_name;
       updated.last_name = update.last_name;
-      // bcrypt.genSalt(10, (err, salt) => {
-      //   bcrypt.hash(update.password, salt, (err, hash) => {
-      //     if (err) {
-      //       throw err;
-      //     }
-      //     updated.password = hash;
-      //     updated.save();
-      //   });
-      // });
-      updated.save();
-      res.json({ success: true });
+      updated.save().then(() => {
+        io.emit('updatedSellerProfileInfo');
+        res.json({ success: true });
+      });
     }
   });
 });
@@ -600,6 +593,7 @@ router.post("/addDescription", (req, res) => {
 //code to add profile picture to account
 //By John
 router.post("/profilepicture", function(req, res) {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -617,7 +611,9 @@ router.post("/profilepicture", function(req, res) {
       //console.log(req.file.location);
       Seller.findById(decoded.data._id, (err, seller_pic) => {
         seller_pic.set({ profile_image: req.file.location });
-        seller_pic.save();
+        seller_pic.save().then(() => {
+          io.emit('updatedSellerProfileInfo');
+        });
         return res.json({ imageUrl: req.file.location });
       });
     });
