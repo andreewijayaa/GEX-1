@@ -24,6 +24,7 @@ export class BuyerComponent implements OnInit {
   offerTitleAddToCart: String;
   pushItemToNavbar = 0;
   offerCart: [String] = [''];
+  buyer_firstName: any;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
@@ -36,7 +37,7 @@ export class BuyerComponent implements OnInit {
   // showing buyer info when buyer portal page loads - Bryan Vu
 
   ngOnInit() {
-    this.buyer = this.route.snapshot.data['buyer'];
+    //this.buyer = this.route.snapshot.data['buyer'];
     this.getBuyer();
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
       this.requestList = requests;
@@ -45,8 +46,13 @@ export class BuyerComponent implements OnInit {
 
   getBuyer() {
     this.buyerService.getBuyerProfile().subscribe((buyerdata: any) => {
-      this.buyerProfile = buyerdata;
-      // console.log(this.buyerProfile);
+      if (buyerdata.success) {
+        this.buyerProfile = buyerdata.buyer_found;
+        this.buyer_firstName = buyerdata.buyer_found.first_name;
+      }
+      else {
+        console.log('Could not retreive buyer profile data');
+      }
     });
   }
 
@@ -69,7 +75,7 @@ export class BuyerComponent implements OnInit {
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
-        this.offerCart = this.buyerProfile['data']['offerCart'];
+        this.offerCart = this.buyerProfile['offerCart'];
         // console.log(this.offerCart);
 
         // used to distinguish between if buyer is viewing the request or a seller
@@ -141,28 +147,6 @@ export class BuyerComponent implements OnInit {
         element.disabled = true;
         this.getBuyer();
       }
-      // (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
     });
-    /*
-    const dialogRef = this.dialog.open(AcceptOfferDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      //console.log(`Dialog result: ${result}`);
-      //console.log(this.buyer);
-      const offer_id = document.getElementById('offerId').innerHTML;
-      const offerToCart = {
-        offerID: offer_id
-      }
-      this.buyerService.addOfferToBuyerCart(offerToCart).subscribe((data: any) => {
-        if (data.success)
-          var prevItems = localStorage.getItem('buyerCart');
-          var newItem = 1;
-          var newTotalItems = parseInt(prevItems, 10) + newItem;
-          localStorage.setItem('buyerCart', newTotalItems.toString());
-          this.pushItemToNavbar = 1;
-          (<HTMLButtonElement>document.getElementById("acceptOfferButton")).disabled = true;
-       });
-    });
-    */
   }
 }

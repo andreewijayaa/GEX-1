@@ -126,19 +126,24 @@ router.post("/login", (req, res, next) => {
 //Profile
 router.get("/profile", (req, res) => {
   var token = req.headers["x-access-token"];
+
   if (!token)
     return res
       .status(401)
-      .send({ success: false, message: "No token provided." });
+      .send({ success: false, message: "Must login to get profile information." });
 
-  jwt.verify(token, config.secret, function(err, decoded) {
+  jwt.verify(token, config.secret, (err, decoded) => {
     if (err)
       return res
         .status(500)
         .send({ success: false, message: "Failed to authenticate token." });
-    delete decoded.data.password;
-    res.status(200).send(decoded);
+    Buyer.findById(decoded.data._id, (err, buyer_found) => {
+      if (err) return handleError(err);
+      //console.log(buyer_found);
+      res.status(200).send({ success: true, buyer_found });
+    });
   });
+
 });
 
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
@@ -308,13 +313,14 @@ router.get("/request", (req, res, next) => {
 Profile update - By: Omar
 Will find the buyer by using their id number and update their information accordingly.
 */
-router.post("/update", (req, res /*next*/) => {
+router.post("/update", (req, res) => {
   let update = {
     first_name: req.body.fName,
     last_name: req.body.lName,
     password: req.body.pass,
     id: req.body.updater_id
   };
+  console.log(update);
 
   Buyer.findById(update.id, (err, updated) => {
     if (!update)
@@ -325,17 +331,8 @@ router.post("/update", (req, res /*next*/) => {
     else {
       updated.first_name = update.first_name;
       updated.last_name = update.last_name;
-      // bcrypt.genSalt(10, (err, salt) => {
-      //   bcrypt.hash(update.password, salt, (err, hash) => {
-      //     if (err) {
-      //       throw err;
-      //     }
-      //     updated.password = hash;
-      //     updated.save();
-      //   });
-      // });
       updated.save();
-      res.json({ success: true });
+      return res.json({ success: true });
     }
   });
 });

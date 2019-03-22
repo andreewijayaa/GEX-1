@@ -22,7 +22,7 @@ export class SellerService {
   }
 
   // Service to fetch seller profile from database (front-end to back-end connection)
-  getSellerProfile(): Observable<any> {
+  getSellerProfile() {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -256,11 +256,10 @@ export class SellerService {
     }
   }
 
-  //allow user to upload profile picture
-  //By John
+  // allow user to upload profile picture
+  // By John
   setProfilePicture(profilePic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
-    debugger;
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({

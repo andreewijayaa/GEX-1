@@ -22,8 +22,11 @@ export class SellerAccountComponent implements OnInit {
   seller_id: String;
   seller_updatedFirstName = localStorage.getItem('sellerFirstName');
   seller_updatedLastName = localStorage.getItem('sellerLastName');
-  //seller_updatedPassword: String;
   errorMessage: String;
+  seller_profile_image: any;
+  seller_firstName: any;
+  seller_lastName: any;
+  seller_email: any;
 
   //for image porcessing
   selectedFile: ImageSnippet;
@@ -37,8 +40,19 @@ export class SellerAccountComponent implements OnInit {
 
   // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
-    this.seller = this.route.snapshot.data['seller'];
-    this.seller_id = this.seller.data._id;
+    this.sellerService.getSellerProfile().subscribe((data:any) => {
+      if (data.success) {
+        this.seller = data.seller_found;
+        this.seller_id = this.seller._id;
+        this.seller_profile_image = this.seller.profile_image;
+        this.seller_firstName = this.seller.first_name;
+        this.seller_lastName = this.seller.last_name;
+        this.seller_email = this.seller.email;
+      }
+      else {
+        console.log('Could not retrieve seller profile info');
+      }
+    });
     this.mainLogout = true;
   }
 
@@ -51,8 +65,6 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
     (<HTMLInputElement>document.getElementById('saveBtn')).hidden = false;
     (<HTMLInputElement>document.getElementById('editBtn')).hidden = true;
-    //(<HTMLInputElement>document.getElementById('verify')).hidden = false;
-    //(<HTMLInputElement>document.getElementById('newPass')).hidden = false;
     (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = false;
 
   }
@@ -70,15 +82,8 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('fName')).disabled = true;
       (<HTMLInputElement>document.getElementById('lName')).disabled = true;
       (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-      //(<HTMLInputElement>document.getElementById('pwd')).disabled = true;
       (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
       (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
-      //(<HTMLInputElement>document.getElementById('verify')).hidden = true;
-      //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
-      //(<HTMLInputElement>document.getElementById('newPwd')).value = '';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
-      //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     }
     else {
       // Could not update profile
@@ -90,8 +95,6 @@ export class SellerAccountComponent implements OnInit {
   updateSellerData(): Boolean {
     const newFName = (<HTMLInputElement>document.getElementById('fName')).value;
     const newLName = (<HTMLInputElement>document.getElementById('lName')).value;
-    //const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
-    //const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
 
     if (newFName === "" || newLName === "") { //|| newPass === "" || confirm === "") {
       this.errorMessage = "One of the following fields is empty! Please fill in all highlighted empty fields.";
@@ -99,27 +102,14 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
       (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Red';
       (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Red';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
     }
-    //else if (newPass !== confirm) {
-      //this.errorMessage = "Passwords do not match!";
-      //(<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
-      //(<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
-      //(<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
-      //(<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
-    //}
     else {
       this.seller_updatedFirstName = (<HTMLInputElement>document.getElementById('fName')).value;
       this.seller_updatedLastName = (<HTMLInputElement>document.getElementById('lName')).value;
-      //this.seller_updatedPassword = confirm;
       const update = {
         "updater_id": this.seller_id,
         "fName": this.seller_updatedFirstName,
         "lName": this.seller_updatedLastName
-        //"pass": this.seller_updatedPassword
       }
 
       this.sellerService.updateSellerProfile(update).subscribe((data: any) => {
@@ -135,8 +125,6 @@ export class SellerAccountComponent implements OnInit {
           (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
           (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
           (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
-          //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
-          //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
           return true;
         }
         else {
@@ -156,15 +144,8 @@ export class SellerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('fName')).disabled = true;
     (<HTMLInputElement>document.getElementById('lName')).disabled = true;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-    //(<HTMLInputElement>document.getElementById('pwd')).disabled = true;
     (<HTMLInputElement>document.getElementById('saveBtn')).hidden = true;
     (<HTMLInputElement>document.getElementById('editBtn')).hidden = false;
-    //(<HTMLInputElement>document.getElementById('verify')).hidden = true;
-    //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
-    //(<HTMLInputElement>document.getElementById('newPwd')).value = '';
-    //(<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-    //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
-    //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
   }
