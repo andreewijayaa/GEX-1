@@ -100,6 +100,10 @@ export class ForgetPasswordComponent implements OnInit {
 
     if (this.password === undefined) { return this.notifier.notify('error', 'Please input a valid password.'); }
     if (this.password !== this.passwordConfirm) { return this.notifier.notify('error', 'Passwords do not match.'); }
+    if (!this.validateService.validatePassword(this.password)){
+      this.notifier.notify('error', 'Password does not meet requirements');
+      return false;
+    }
     // Buyer Changing password
     if (this.buyer !== undefined && this.seller === undefined && this.reset === undefined) {
       this.registerService.changePassword(this.buyer, this.password, 0).subscribe((data: any) => {

@@ -67,6 +67,11 @@ export class SellerRegisterComponent implements OnInit {
       return false;
     }
 
+    if (!this.validateService.validatePassword(seller.password)){
+      this.notifier.notify('error', 'Password does not meet requirements');
+      return false;
+    }
+
     // Register Seller
     this.registerService.RegisterSeller(seller).subscribe((data: any) => {
       if (data.success) { // must know if its a successful register **

@@ -11,7 +11,13 @@
                 <p>Seller? <a routerLink="/seller-register" routerLinkActive="active"> Register here.</a></p>
                 <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
                 <input type="text" placeholder="Enter Last Name" [(ngModel)]="last_name" name="last_name" required>
-                <input type="password" placeholder="Enter Password" [(ngModel)]="password" name="psw" required>
+                <p>Passwords must contain</p>
+                <ul>
+                    <li>at least one number</li>
+                    <li>at least one uppercase and lowercase letter</li>
+                    <li>at least 8 or more characters.</li>
+                </ul>
+                <input type="password" placeholder="Enter Password" [(ngModel)]="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="psw" required>
                 <p>By creating an account you agree to our <a routerLink="/" routerLinkActive="active">Terms & Privacy</a>.</p>
                 <button type="submit" class="btn" routerLink="/buyer-register" routerLinkActive="active">Register</button>
                 <p>Already have an account? <a routerLink="/login" routerLinkActive="active">Login</a>.</p>
