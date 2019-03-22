@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SellerService } from '../../../services/seller.service';
 import { ActivatedRoute } from '@angular/router';
 import { NotifierService } from "angular-notifier";
+import * as io from 'socket.io-client';
+
 
 //class for importing image
 class ImageSnippet {
@@ -16,8 +18,8 @@ class ImageSnippet {
 
 export class SellerAccountComponent implements OnInit {
   private readonly notifier: NotifierService;
+  socket;
   mainLogout: Boolean;
-
   seller: any;
   seller_id: String;
   seller_updatedFirstName = localStorage.getItem('sellerFirstName');
@@ -28,19 +30,27 @@ export class SellerAccountComponent implements OnInit {
   seller_lastName: any;
   seller_email: any;
 
-  //for image porcessing
+  // for image porcessing
   selectedFile: ImageSnippet;
   updateSellerFirstName = localStorage.getItem('sellerFirstName');
   updateSellerLastName = localStorage.getItem('sellerLastName');
 
   constructor(private sellerService: SellerService,
     private notifierService: NotifierService,
-    private route: ActivatedRoute) { this.notifier = notifierService;
+    private route: ActivatedRoute) { this.notifier = notifierService; this.socket = io('http://localhost:3000');
     }
 
   // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
-    this.sellerService.getSellerProfile().subscribe((data:any) => {
+    this.getSellerProfile();
+    this.socket.on('updatedSellerProfileInfo', ()  => {
+      this.getSellerProfile();
+    });
+    this.mainLogout = true;
+  }
+
+  getSellerProfile() {
+    this.sellerService.getSellerProfile().subscribe((data: any) => {
       if (data.success) {
         this.seller = data.seller_found;
         this.seller_id = this.seller._id;
@@ -48,12 +58,10 @@ export class SellerAccountComponent implements OnInit {
         this.seller_firstName = this.seller.first_name;
         this.seller_lastName = this.seller.last_name;
         this.seller_email = this.seller.email;
-      }
-      else {
+      } else {
         console.log('Could not retrieve seller profile info');
       }
     });
-    this.mainLogout = true;
   }
 
   // Function for edit button
@@ -84,33 +92,29 @@ export class SellerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
       (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
       (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
-    }
-    else {
+    } else {
       // Could not update profile
     }
   }
 
-  // By: Omar
-  // This function has not been fully implemented yet. Once this gets completed it will help tie the frontend and backend of this page together.
   updateSellerData(): Boolean {
     const newFName = (<HTMLInputElement>document.getElementById('fName')).value;
     const newLName = (<HTMLInputElement>document.getElementById('lName')).value;
 
-    if (newFName === "" || newLName === "") { //|| newPass === "" || confirm === "") {
-      this.errorMessage = "One of the following fields is empty! Please fill in all highlighted empty fields.";
-      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
+    if (newFName === '' || newLName === '') {
+      this.errorMessage = 'One of the following fields is empty! Please fill in all highlighted empty fields.';
+      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = 'Red';
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
       (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Red';
       (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Red';
-    }
-    else {
+    } else {
       this.seller_updatedFirstName = (<HTMLInputElement>document.getElementById('fName')).value;
       this.seller_updatedLastName = (<HTMLInputElement>document.getElementById('lName')).value;
       const update = {
-        "updater_id": this.seller_id,
-        "fName": this.seller_updatedFirstName,
-        "lName": this.seller_updatedLastName
-      }
+        'updater_id': this.seller_id,
+        'fName': this.seller_updatedFirstName,
+        'lName': this.seller_updatedLastName
+      };
 
       this.sellerService.updateSellerProfile(update).subscribe((data: any) => {
         if (data.success) {
@@ -119,17 +123,19 @@ export class SellerAccountComponent implements OnInit {
           this.updateSellerFirstName = localStorage.getItem('sellerFirstName');
           this.updateSellerLastName = localStorage.getItem('sellerLastName');
 
-          this.errorMessage = "Account updated successfully!";
+          this.errorMessage = 'Account updated successfully!';
           (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
           (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
-          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
+          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = 'Green';
           (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
           (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
+          (<HTMLInputElement>document.getElementById('fName')).disabled = true;
+          (<HTMLInputElement>document.getElementById('lName')).disabled = true;
+          (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
           return true;
-        }
-        else {
-          this.errorMessage = "Something went wrong. Your information could not be updated. Please refresh the page and try again.";
-          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
+        } else {
+          this.errorMessage = 'Something went wrong. Your information could not be updated. Please refresh the page and try again.';
+          (<HTMLInputElement>document.getElementById('errorMessage')).style.color = 'Red';
         }
       });
     }
@@ -152,7 +158,7 @@ export class SellerAccountComponent implements OnInit {
 
   // By: John
   // function for updating profile image
-  processFile(imageInput: any){
+  processFile(imageInput: any) {
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
@@ -160,11 +166,11 @@ export class SellerAccountComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.sellerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
-          this.notifier.notify("success", "Your Image has uploaded! Login again to update");
+          this.notifier.notify('success', 'Your Image has uploaded! Login again to update');
         },
         (err) => {
-          this.notifier.notify("error", "Your Image has failed to upload");
-        })
+          this.notifier.notify('error', 'Your Image has failed to upload');
+        });
     });
 
     reader.readAsDataURL(file);
