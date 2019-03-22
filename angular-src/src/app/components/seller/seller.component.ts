@@ -32,8 +32,8 @@ export class SellerComponent implements OnInit {
   state: String;
   seller: any;
   requestList: Object;
-  offerList: Object;
-  activeRequests: Object;
+  offerList = [];
+  activeRequests = [];
   loader: boolean;
   dialogLoader: boolean;
   accountSetup: Number;
@@ -113,7 +113,12 @@ export class SellerComponent implements OnInit {
 
           // Fetching seller offer history from the s ervice to be used in the webpage
           this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
-            this.offerList = offers;
+            if (offers.success) {
+              this.offerList = offers.offers;
+            }
+            else {
+              console.log('Could not fetch offers');
+            }
           },
           err => {
             console.log(err);
@@ -122,12 +127,32 @@ export class SellerComponent implements OnInit {
           
           // Fetching seller active requests from the service to be used in the webpage
           this.sellerService.getActiveRequests().subscribe((requests: any) => {
-            this.activeRequests = requests;
+            if (requests.success) {
+              this.activeRequests = requests.active_requests;
+            }
+            else {
+              console.log('could not fetch requests');
+            }
           },
           err => {
             console.log(err);
             return false;
           });
+
+          // Fetching seller archived requests from the service to be used in the webpage
+          this.sellerService.getArchivedRequests().subscribe((archived: any) => {
+            if (archived.success) {
+              this.archivedRequests = archived.archived_request;
+            }
+            else {
+              console.log('Could not fetch archieved requests');
+            }
+          },
+          err => {
+            console.log(err);
+            return false;
+          });
+
         } else { // DISPLAY THE BAR ON THE MAIN PAGE
           let count;
           for (let i = 0; i < 3; i++) {
@@ -139,35 +164,8 @@ export class SellerComponent implements OnInit {
         }
       }
       else {
-        console.log('Could not retrieve seller profile info for navbar.')
+        console.log('Could not retrieve seller profile info.')
       }
-    },
-    err => {
-      console.log(err);
-      return false;
-    });
-
-    // Fetching seller offer history from the service to be used in the webpage
-    this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
-      this.offerList = offers;
-    },
-    err => {
-      console.log(err);
-      return false;
-    });
-
-    // Fetching seller active requests from the service to be used in the webpage
-    this.sellerService.getActiveRequests().subscribe((requests: any) => {
-      this.activeRequests = requests;
-    },
-    err => {
-      console.log(err);
-      return false;
-    });
-
-    // Fetching seller archived requests from the service to be used in the webpage
-    this.sellerService.getArchivedRequests().subscribe((archived: any) => {
-      this.archivedRequests = archived;
     },
     err => {
       console.log(err);
@@ -239,7 +237,7 @@ export class SellerComponent implements OnInit {
           offerShipping = data['shipping'];
 
           const offer = {
-            title: offerPrice,
+            title: offerTitle,
             description: offerDescription,
             price: offerPrice,
             shipPrice: offerShipping,
@@ -280,8 +278,8 @@ export class SellerComponent implements OnInit {
     };
 
     this.sellerService.deleteoffer(offer_delete).subscribe((data: any) => {
-      console.log(data);
-      debugger;
+      // console.log(data);
+      // debugger;
       window.location.reload();
     });
 

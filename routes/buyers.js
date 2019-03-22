@@ -298,7 +298,7 @@ router.get("/request", (req, res, next) => {
               success: false,
               message: "Could not find requests with ID"
             });
-          res.status(200).send(requests);
+          res.status(200).send({ success: true, requests });
         });
       } else {
         res

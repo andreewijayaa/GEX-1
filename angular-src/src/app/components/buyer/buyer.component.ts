@@ -16,7 +16,7 @@ export class BuyerComponent implements OnInit {
   private readonly notifier: NotifierService;
   buyer: Object;
   buyerProfile: Object;
-  requestList: Object;
+  requestList = [];
   loaded: Promise<boolean>;
   loading: Boolean;
   panelOpenState = false;
@@ -40,7 +40,12 @@ export class BuyerComponent implements OnInit {
     //this.buyer = this.route.snapshot.data['buyer'];
     this.getBuyer();
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
-      this.requestList = requests;
+      if (requests.success) {
+        this.requestList = requests['requests'];
+      }
+      else {
+        console.log('could not fetch buyer requests');
+      }
     });
   }
 
@@ -106,7 +111,7 @@ export class BuyerComponent implements OnInit {
 
     this.buyerService.deleteBuyerRequest(request_delete).subscribe((data: any) => {
       console.log(data);
-      debugger;
+      // debugger;
       if (data.success == false){
         this.notifier.notify('error', data.message);
       }else{

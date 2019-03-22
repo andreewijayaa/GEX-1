@@ -117,7 +117,7 @@
                   <table class="table table-striped table-sm" style="background-color: #282d32; color: white">
                     <thead>
                       <tr style="text-align:center">
-                        <th>Name</th>
+                        <th>Title</th>
                         <th style="width: 400px;">Status</th>
                         <th style="width: 400px;">Deadline</th>
                       </tr>
@@ -125,7 +125,7 @@
                   </table>
 
                   <mat-accordion>
-                    <p align="center" *ngIf="activeRequests.length == 0">
+                    <p align="center" *ngIf="activeRequests.length === 0">
                       You haven't subscibed to any active requests yet.
                     </p>
                     <mat-expansion-panel id="requestExpansionId" *ngFor="let request of activeRequests | filter:sfilter | paginate: {itemsPerPage: 25, currentPage: pr}">
@@ -230,7 +230,7 @@
                     <table class="table table-striped table-sm" style="background-color: #282d32; color: white">
                       <thead>
                         <tr style="text-align:center">
-                          <th>Name</th>
+                          <th>Title</th>
                           <th style="width: 400px;">Status</th>
                           <th style="width: 400px;">Deadline</th>
                         </tr>
@@ -238,7 +238,7 @@
                     </table>
 
                     <mat-accordion>
-                      <p align="center" *ngIf="offerList.length == 0">
+                      <p align="center" *ngIf="offerList.length === 0">
                         You haven't made any product offers yet.
                       </p>
                       <mat-expansion-panel id="requestExpansionId" *ngFor="let offer of offerList | filter:ofilter | paginate: {itemsPerPage: 25, currentPage: po}">
@@ -333,7 +333,7 @@
                   <table class="table table-striped table-sm" style="background-color: #282d32; color: white">
                     <thead>
                       <tr style="text-align:center">
-                        <th>Name</th>
+                        <th>Title</th>
                         <th style="width: 400px;">Status</th>
                         <th style="width: 400px;">Deadline</th>
                       </tr>

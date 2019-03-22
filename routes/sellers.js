@@ -230,7 +230,7 @@ router.get("/viewoffers", (req, res) => {
                 success: false,
                 message: "Could not find offers with ID"
               });
-          res.status(200).send(offers);
+          res.status(200).send({ success: true, offers });
         });
       } else {
         res
@@ -300,7 +300,7 @@ router.get("/viewactiverequests", (req, res) => {
                 success: false,
                 message: "Could not find any active requests"
               });
-          res.status(200).send(active_requests);
+          res.status(200).send({ success: true, active_requests });
         }
       );
     });
@@ -1014,7 +1014,7 @@ router.get("/getArchivedRequests", (req, res) => {
                 success: false,
                 message: "Could not find any archived requests"
               });
-          res.status(200).send(archived_request);
+          res.status(200).send({ success: true, archived_request });
         }
       );
     });
