@@ -31,8 +31,6 @@ import { BuyerAuthGuard } from './buyerAuth.guard';
 import { SellerAuthGuard } from './sellerAuth.guard';
 import { SellerServicesComponent } from './components/seller/seller-services/seller-services/seller-services.component';
 import { RequestComponent } from './components/request/request.component';
-import { BuyerResolve } from './services/buyer.resolve';
-import { SellerResolve } from './services/seller.resolve';
 import { resolve } from 'path';
 import { SubmitCategoriesComponent } from './components/seller/submit-categories/submit-categories.component';
 import { BuyerCheckoutComponent } from './components/buyer/buyer-checkout/buyer-checkout.component';
@@ -56,18 +54,16 @@ const appRoutes: Routes = [
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'seller-login', component: SellerLoginComponent},
-  {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
-  {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
-  {path: 'buyer/cart', component: BuyerCartComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve }},
-  {path: 'buyer/checkout', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard],
-        resolve: { buyer: BuyerResolve }},
-  {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard], resolve: { buyer: BuyerResolve}},
-  {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
-  {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
-  {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
-  {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard], resolve: { seller: SellerResolve }},
-  {path: 'seller/submit-categories', component: SubmitCategoriesComponent, canActivate: [SellerAuthGuard],
-        resolve: { seller: SellerResolve }},
+  {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/cart', component: BuyerCartComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/checkout', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/submit-categories', component: SubmitCategoriesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
   {path: 'resend', component: ResendComponent},
@@ -191,7 +187,7 @@ const customNotifierOptions: NotifierOptions = {
     CKEditorModule,
     MomentModule
   ],
-  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, BuyerResolve, SellerResolve, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
+  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
 
 })

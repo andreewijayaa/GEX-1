@@ -29,6 +29,7 @@ const ejs = require('ejs')._express;
 const multer = require("multer");
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
+const http = require('http');
 
 mongoose.set('useCreateIndex', true);
 

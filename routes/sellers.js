@@ -35,7 +35,7 @@ router.post("/register", (req, res, next) => {
   Seller.findOne({ email: req.body.email }, (err, foundSeller) => {
     if (err) return handleError(err);
     if (foundSeller != null) {
-      console.log("Found seller with email %s", foundSeller.email);
+      // console.log("Found seller with email %s", foundSeller.email);
       res.json({
         success: false,
         msg:
@@ -158,23 +158,22 @@ router.post("/login", (req, res, next) => {
 
 // Profile
 router.get("/profile", (req, res) => {
-  //to view profile, user must have a JWT-token in the request header
   var token = req.headers["x-access-token"];
 
-  //if they don't have a token
   if (!token)
     return res
       .status(401)
-      .send({ success: false, message: "No token provided." });
+      .send({ success: false, message: "Must be logged in to access profile info." });
 
-  //otherwise verify the token and return user data in a response
-  jwt.verify(token, config.secret, function(err, decoded) {
+  jwt.verify(token, config.secret, (err, decoded) => {
     if (err)
       return res
         .status(500)
         .send({ success: false, message: "Failed to authenticate token." });
-    delete decoded.data.password;
-    res.status(200).send(decoded);
+    Seller.findById(decoded.data._id, (err, seller_found) => {
+      if (err) handleError(err);
+      res.status(200).send({ success: true, seller_found });
+    });
   });
 });
 
@@ -231,7 +230,7 @@ router.get("/viewoffers", (req, res) => {
                 success: false,
                 message: "Could not find offers with ID"
               });
-          res.status(200).send(offers);
+          res.status(200).send({ success: true, offers });
         });
       } else {
         res
@@ -301,7 +300,7 @@ router.get("/viewactiverequests", (req, res) => {
                 success: false,
                 message: "Could not find any active requests"
               });
-          res.status(200).send(active_requests);
+          res.status(200).send({ success: true, active_requests });
         }
       );
     });
@@ -375,7 +374,7 @@ router.post("/makeOffer", (req, res, next) => {
           .status(500)
           .send({ success: false, message: "Request not found." });
       var Today = new Date();
-      console.log(requestBeingOffered.deadline < Today);
+      // console.log(requestBeingOffered.deadline < Today);
       if (requestBeingOffered.deadline < Today) {
         return res
           .status(201)
@@ -1015,7 +1014,7 @@ router.get("/getArchivedRequests", (req, res) => {
                 success: false,
                 message: "Could not find any archived requests"
               });
-          res.status(200).send(archived_request);
+          res.status(200).send({ success: true, archived_request });
         }
       );
     });

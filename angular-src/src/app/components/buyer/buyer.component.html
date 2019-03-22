@@ -6,12 +6,12 @@
 Bryan Vu contributed most of this buyer portal page.
 -->
 
-<div class="container-fluid" *ngIf="buyer">
+<div class="container-fluid">
   &nbsp;
   <div class="container">
     <div class="row justify-content-md">
       <div>
-        <h4 class="page-header">Welcome {{buyer['data']['first_name']}}!</h4>
+        <h4 class="page-header">Welcome {{buyer_firstName}}!</h4>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
           dolore magna aliqua.</p>
       </div>
@@ -24,7 +24,7 @@ Bryan Vu contributed most of this buyer portal page.
 
     <div class="row justify-content-md" ng-cloak>
       <div class="col">
-        <h3>{{buyer['data']['first_name']}}'s Requests</h3>
+        <h3>{{buyer_firstName}}'s Requests</h3>
       </div>
       <div class="input-group col searchBox">
         <input type="text" class="form-control" placeholder="Search Requests" [(ngModel)]="filter">

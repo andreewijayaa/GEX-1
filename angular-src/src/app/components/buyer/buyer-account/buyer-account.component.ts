@@ -24,19 +24,33 @@ export class BuyerAccountComponent implements OnInit {
   buyer_id: String;
   buyer_updatedFirstName = localStorage.getItem('buyerFirstName');
   buyer_updatedLastName = localStorage.getItem('buyerLastName');
-  //buyer_updatedPassword: String;
+  buyer_profile_image: any;
+  buyer_firstName: any;
+  buyer_lastName: any;
+  buyer_email: any;
   errorMessage: String;
   updateBuyerFirstName = localStorage.getItem('buyerFirstName');
   updateBuyerLastName = localStorage.getItem('buyerLastName');
-
+  
   constructor(private buyerService: BuyerService,
     private notifierService: NotifierService,
     private route: ActivatedRoute) {this.notifier = notifierService; }
 
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
-    this.buyer = this.route.snapshot.data['buyer'];
-    this.buyer_id = this.buyer.data._id;
+    this.buyerService.getBuyerProfile().subscribe((data:any) => {
+      if (data.success) {
+        this.buyer = data.buyer_found;
+        this.buyer_id = this.buyer._id
+        this.buyer_profile_image = this.buyer.profile_image;
+        this.buyer_firstName = this.buyer.first_name;
+        this.buyer_lastName = this.buyer.last_name;
+        this.buyer_email = this.buyer.email;
+      }
+      else {
+        console.log('Could not fetch buyer profile info');
+      }
+    });
     this.buyerLogout = true;
   }
 
@@ -48,8 +62,6 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
     (<HTMLInputElement>document.getElementById('saveBtn')).hidden = false;
     (<HTMLInputElement>document.getElementById('editBtn')).hidden = true;
-    //(<HTMLInputElement>document.getElementById('verify')).hidden = false;
-    //(<HTMLInputElement>document.getElementById('newPass')).hidden = false;
     (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = false;
   }
 
@@ -61,19 +73,11 @@ export class BuyerAccountComponent implements OnInit {
     var success = this.updateBuyerData();
 
     if (success) {
-      //(<HTMLInputElement>document.getElementById('pwd')).value = (<HTMLInputElement>document.getElementById('newPwd')).value;
       (<HTMLInputElement>document.getElementById('fName')).disabled = true;
       (<HTMLInputElement>document.getElementById('lName')).disabled = true;
       (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-      //(<HTMLInputElement>document.getElementById('pwd')).disabled = true;
       (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
       (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
-      //(<HTMLInputElement>document.getElementById('verify')).hidden = true;
-      //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
-      //(<HTMLInputElement>document.getElementById('newPwd')).value = '';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
-      //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     }
     else {
       // Could not update profile
@@ -85,8 +89,6 @@ export class BuyerAccountComponent implements OnInit {
   updateBuyerData(): Boolean {
     const newFName = (<HTMLInputElement>document.getElementById('fName')).value;
     const newLName = (<HTMLInputElement>document.getElementById('lName')).value;
-    //const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
-    //const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
 
     if (newFName === "" || newLName === "") { // || newPass === "" || confirm === "") {
       this.errorMessage = "One of the following fields is empty! Please fill in all highlighted empty fields.";
@@ -94,32 +96,20 @@ export class BuyerAccountComponent implements OnInit {
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
       (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Red';
       (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Red';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
     }
-    //else if (newPass !== confirm) {
-      //this.errorMessage = "Passwords do not match!";
-      //(<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
-      //(<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
-      //(<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
-      //(<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
-      //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
-    //}
     else {
       this.buyer_updatedFirstName = (<HTMLInputElement>document.getElementById('fName')).value;
       this.buyer_updatedLastName = (<HTMLInputElement>document.getElementById('lName')).value;
-      //this.buyer_updatedPassword = confirm;
+      
+      console.log(this.buyer_updatedFirstName);
       const update = {
         "updater_id": this.buyer_id,
         "fName": this.buyer_updatedFirstName,
         "lName": this.buyer_updatedLastName,
-        //"pass": this.buyer_updatedPassword
       }
 
       this.buyerService.updateBuyerProfile(update).subscribe((data: any) => {
         if (data.success) {
-          //console.log('Buyer Account Update Successful.');
           localStorage.setItem('buyerFirstName', this.buyer_updatedFirstName);
           localStorage.setItem('buyerLastName', this.buyer_updatedLastName);
           this.updateBuyerFirstName = localStorage.getItem('buyerFirstName');
@@ -131,8 +121,6 @@ export class BuyerAccountComponent implements OnInit {
           (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
           (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
           (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
-          //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
-          //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
           return true;
         }
         else {
@@ -152,15 +140,8 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('fName')).disabled = true;
     (<HTMLInputElement>document.getElementById('lName')).disabled = true;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-    //(<HTMLInputElement>document.getElementById('pwd')).disabled = true;
     (<HTMLInputElement>document.getElementById('saveBtn')).hidden = true;
     (<HTMLInputElement>document.getElementById('editBtn')).hidden = false;
-    //(<HTMLInputElement>document.getElementById('verify')).hidden = true;
-    //(<HTMLInputElement>document.getElementById('newPass')).hidden = true;
-    //(<HTMLInputElement>document.getElementById('newPwd')).value = '';
-    //(<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-    //(<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
-    //(<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
   }
