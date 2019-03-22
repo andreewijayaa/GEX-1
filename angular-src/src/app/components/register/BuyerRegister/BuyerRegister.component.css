@@ -15,16 +15,19 @@ form {
   color: black;
   border: none;
   width: 433px;
-  height: 630px;
+  height: 730px;
   position: relative;
   text-align: center;
   margin: auto;
   margin-top: 60px;
-  overflow: hidden;
+  overflow: visible;
   align-content: center;
   box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
 
+}
+li{
+  list-style: none;
 }
 form:hover {
   box-shadow: 0 14px 30px 0 rgba(0,0,0,0.2);
