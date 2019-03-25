@@ -301,6 +301,34 @@ router.get("/viewactiverequests", (req, res) => {
   });
 });
 
+// Still needs to be worked on.
+router.get("/getAddress", (req, res) => {
+  var token = req.headers["x-access-token"];
+
+  if (!token)
+  return res
+    .status(401)
+    .send({ success: false, message: "Must login to get address." });
+
+    jwt.verify(token, config.secret, (err, decoded) => {
+      Address.getAddressBySellerId(decoded.data._id, (err, seller_viewing_requests) => {
+        Request.find(
+          { _id: { $in: seller_viewing_requests.open_requests } },
+          (err, active_requests) => {
+            if (err)
+              return res
+                .status(500)
+                .send({
+                  success: false,
+                  message: "Could not find any address for this seller"
+                });
+            res.status(200).send({ success: true, active_requests });
+          }
+        );
+      });
+    });
+});
+
 // // This will be used to check account setup - By Roni
 // router.post('/accountSetup', (req,res) => {
 //   var token = req.headers['x-access-token'];
@@ -339,7 +367,7 @@ router.get("/viewactiverequests", (req, res) => {
 //also the request id has to be valid
 //made by John. Revised by Roni
 router.post("/makeOffer", (req, res, next) => {
-  //console.log('Request with an offer being added to: ' + id);
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -409,17 +437,9 @@ router.post("/makeOffer", (req, res, next) => {
               //console.log('Found request\n' + request_with_offer);
               request_with_offer.request_offers_byID.push(post._id);
               request_with_offer.offerCount++;
-              request_with_offer.save(err => {
-                if (err) {
-                  return next(err);
-                }
-                //console.log('New Offer made tied to Request %s ', request_with_offer._id);
-                return res
-                  .status(200)
-                  .send({
-                    success: true,
-                    message: "The offer was submitted successfully."
-                  });
+              request_with_offer.save().then(() => {
+                io.emit('updatedSellerProfileInfo');
+                return res.status(200).send({ success: true, message: 'The offer was submitted successfully!' });
               });
             });
           });
@@ -431,6 +451,7 @@ router.post("/makeOffer", (req, res, next) => {
 
 // Connect Stripe account to Seller account
 router.post("/authenticateStripe", (req, res, next) => {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"]; // Get Token
   if (!token)
     return res.status(401).send({ success: false, message: "Invalid Access." }); //Invalid Token
@@ -480,11 +501,9 @@ router.post("/authenticateStripe", (req, res, next) => {
       if (bodyObject.stripe_user_id !== undefined) {
         //Update seller account setup - We know that seller has added stripe
         Seller.findById(decoded.data._id, (err, seller_adding_stripe) => {
-          seller_adding_stripe.user_account_setup.set(2, true);
-          seller_adding_stripe.save(err => {
-            if (err) {
-              return next(err);
-            }
+          seller_adding_stripe.user_account_setup.set(3, true);
+          seller_adding_stripe.save().then(() => {
+            io.emit('updatedSellerProfileInfo');
           });
         });
         // Update the stripe_id with the applicate seller
@@ -592,9 +611,7 @@ router.post("/addDescription", (req, res) => {
 });
 
 router.post("/addAddress", (req, res) => {
-  var token = req.headers["x-access-token"];
-
-  var address_to_add = {
+  var newAddress = new Address ({
     sellerID: req.body.seller_id,
     country: req.body.country,
     zip: req.body.zip,
@@ -603,53 +620,41 @@ router.post("/addAddress", (req, res) => {
     street1: req.body.street_1,
     street2: req.body.street_2,
     company: req.body.company
-  };
+  });
 
-  console.log(address_to_add);
+  var token = req.headers["x-access-token"];
 
-  // Address.createAddress(address_to_add, (error, seller) => {
-  //   if (err) {
-  //     res.json({ success: false, msg: "Failed to add address to address schema!" });
-  //   } else {
-  //     // send Seller a verification email
-  //     // upon successful registration
-  //     sendEmail.sellerSendVerificationEmail(seller);
-  //     res.json({ success: true, msg: "Seller Registered!" });
-  //   }
-  // });
+  //if they don't have a token
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
 
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
 
-  // //if they don't have a token
-  // if (!token)
-  //   return res
-  //     .status(401)
-  //     .send({ success: false, message: "No token provided." });
-  // //otherwise verify the token and return user data in a response
-  // jwt.verify(token, config.secret, function(err, decoded) {
-  //   if (err)
-  //     return res
-  //       .status(500)
-  //       .send({ success: false, message: "Failed to authenticate token." });
-  //   if (req.body.description == null) {
-  //     //console.log('No description added');
-  //     return res
-  //       .status(500)
-  //       .send({ success: false, message: "No description added" });
-  //   }
-  //   //console.log('adding this description: ' + req.body.description);
-  //   Seller.findById(decoded.data._id, (err, seller_descipt) => {
-  //     if (err) return handleError(err);
-  //     seller_descipt.set({ description: req.body.description });
-  //     seller_descipt.user_account_setup.set(1, true);
-  //     seller_descipt.save(function(err, updatedSeller) {
-  //       if (err) return handleError(err);
-  //       return res.json({
-  //         success: true,
-  //         message: "Attempted to add desciption"
-  //       });
-  //     });
-  //   });
-  // });
+    Seller.findById(req.body.seller_id, (err, seller) => {
+      if (err) return handleError(err);
+      Address.createAddress(newAddress, (err, address) => {
+        if (err) {
+          res.json({ success: false, msg: "Failed to add address to address schema!" });
+        } else {
+          seller.user_account_setup.set(2, true);
+          seller.save(function(err, updatedSeller) {
+            if (err) return handleError(err);
+            return res.json({
+              success: true,
+              message: "Address added and seller account updated."
+            })
+          });
+        }
+      });
+    });
+  });
 });
 
 //code to add profile picture to account
@@ -1017,7 +1022,7 @@ module.exports = router;
 //let seller to archive requests
 //code by Andre
 router.post("/addArchive", (req, res) => {
-  //console.log('add archive called');
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
 
   //if they don't have a token
@@ -1041,8 +1046,8 @@ router.post("/addArchive", (req, res) => {
     Seller.findById(decoded.data._id, (err, seller_descipt) => {
       if (err) return handleError(err);
       seller_descipt.archived_request.push(req.body.request_ID);
-      seller_descipt.save(err => {
-        if (err) return handleError(err);
+      seller_descipt.save().then(() => {
+        io.emit('updatedSellerProfileInfo');
         return res.json({
           success: true,
           message: "Attempted to archive a request"

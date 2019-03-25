@@ -314,10 +314,10 @@ Profile update - By: Omar
 Will find the buyer by using their id number and update their information accordingly.
 */
 router.post("/update", (req, res) => {
+  const io = req.app.get('io');
   let update = {
     first_name: req.body.fName,
     last_name: req.body.lName,
-    password: req.body.pass,
     id: req.body.updater_id
   };
   console.log(update);
@@ -331,8 +331,10 @@ router.post("/update", (req, res) => {
     else {
       updated.first_name = update.first_name;
       updated.last_name = update.last_name;
-      updated.save();
-      return res.json({ success: true });
+      updated.save().then(() => {
+        io.emit('updatedBuyerProfileInfo');
+        res.json({ success: true });
+      });
     }
   });
 });
@@ -340,6 +342,7 @@ router.post("/update", (req, res) => {
 //route to add profile picture to account
 //by John
 router.post("/profilepicture", function(req, res) {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -352,11 +355,13 @@ router.post("/profilepicture", function(req, res) {
           errors: [{ title: "Image Upload Error", detail: err.message }]
         });
       }
-      console.log(req.file.location);
+      // console.log(req.file.location);
       Buyer.findById(decoded.data._id, (err, buyer_pic) => {
         buyer_pic.set({ profile_image: req.file.location });
-        buyer_pic.save();
-        return res.json({ imageUrl: req.file.location });
+        buyer_pic.save().then(() => {
+          io.emit('updatedBuyerProfileInfo');
+          res.json({ success: true, imageUrl: req.file.location });
+        });
       });
     });
   });

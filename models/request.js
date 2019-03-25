@@ -39,7 +39,7 @@ const RequestSchema = mongoose.Schema({
 const Request = module.exports = mongoose.model('Request', RequestSchema);
 
 module.exports.createRequest = function(newRequest, callback){
-  newRquest.save(callback);
+  newRequest.save(callback);
 }
 
 module.exports.getRequestbyId = function(id, callback){
