@@ -20,14 +20,10 @@ export class BuyerNavbarComponent implements OnInit {
   socket;
   buyer: any;
   @Input() logout: Boolean;
-  @Input() itemAdded_RemovedCart = 0;
-  @Input() buyer_first_name;
-  @Input() buyer_last_name;
   profile_image: any;
   buyer_firstName: any;
   buyer_lastName: any;
-  buyer_cart: any;
-  totalItemsCart = parseInt(localStorage.getItem('buyerCart'), 10);
+  buyer_cart: any = {};
 
   constructor(private storeFetchService: StoreFetchService,
     private router: Router,
@@ -42,9 +38,12 @@ export class BuyerNavbarComponent implements OnInit {
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application buyer related pages.
     this.titleService.setTitle('Buyer | Requiren');
-
+    this.buyer_cart = [];
     this.getBuyerProfile();
     this.socket.on('updatedBuyerProfileInfo', () => {
+      this.getBuyerProfile();
+    });
+    this.socket.on('updatedBuyerCartInfo', () => {
       this.getBuyerProfile();
     });
   }
@@ -55,8 +54,7 @@ export class BuyerNavbarComponent implements OnInit {
         this.buyer_firstName = data.buyer_found.first_name;
         this.buyer_lastName = data.buyer_found.last_name;
         this.profile_image = data.buyer_found.profile_image;
-        this.buyer_cart = data.buyer_found['offerCart'];
-        console.log(this.buyer_cart);
+        this.buyer_cart = data.buyer_found.offerCart;
       } else {
         console.log('Could not retrieve buyer profile info for navbar.');
       }

@@ -123,6 +123,7 @@ export class BuyerService {
   }
 
   addOfferToBuyerCart(offerCartItem) {
+    this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -140,6 +141,7 @@ export class BuyerService {
   // By Roni
   // Retreive buyer shopping cart
   retrieveBuyerCart() {
+    this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

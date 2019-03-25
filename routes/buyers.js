@@ -371,6 +371,7 @@ Profile update - By: Omar
 Will add the accepted offer to the buyers cart.
 */
 router.post("/addToCart", (req, res, next) => {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -393,8 +394,10 @@ router.post("/addToCart", (req, res, next) => {
       if (err) return handleError(err);
       // Save item to cart
       buyerToAddCart.offerCart.push(req.body.offerID);
-      buyerToAddCart.save();
-      res.json({ success: true });
+      buyerToAddCart.save().then(() => {
+        io.emit('updatedBuyerProfileInfo');
+        res.json({ success: true });
+      });
     });
   });
 });
@@ -436,7 +439,7 @@ router.get("/retrieveCart", (req, res, next) => {
               .send({ success: false, message: "Offer not found." });
           var offers = offersInCart;
 
-          //Add entity name to the returned object.
+          // Add entity name to the returned object.
           offersInCart.forEach(function(currentOffer) {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
             offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
@@ -446,9 +449,7 @@ router.get("/retrieveCart", (req, res, next) => {
           });
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
           offerShippingTotal = Math.round(offerShippingTotal * 100) / 100;
-          // orderFees = offerPriceTotal * 0.01; // Add fee calculation here
           orderTotal = offerPriceTotal + offerShippingTotal;
-          // orderFees = Math.round(orderFees * 100) / 100;
           orderTotal = Math.round(orderTotal * 100) / 100;
 
           return res.status(200).send({
@@ -508,6 +509,7 @@ router.post("/offerRejected", (req, res /*next*/) => {
 
 // Retrieve Cart with offers as objects
 router.post("/removeFromCart", (req, res, next) => {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   const offer = req.body.offerID;
   if (!token)
@@ -544,13 +546,11 @@ router.post("/removeFromCart", (req, res, next) => {
       }
 
       if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
-        buyerViewingCart.save(err => {
-          if (err) {
-            return next(err);
-          }
+        buyerViewingCart.save().then(() => {
+          io.emit('updatedBuyerCartInfo');
           return res
-            .status(200)
-            .send({ success: true, msg: "Offer removed from cart." });
+          .status(200)
+          .send({ success: true, msg: "Offer removed from cart." });
         });
       } else {
         return res

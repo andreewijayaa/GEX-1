@@ -24,15 +24,14 @@ export class BuyerAccountComponent implements OnInit {
   buyer: any;
   buyerLogout: Boolean;
   buyer_id: String;
-  buyer_updatedFirstName = localStorage.getItem('buyerFirstName');
-  buyer_updatedLastName = localStorage.getItem('buyerLastName');
+  buyer_updatedFirstName: any;
+  buyer_updatedLastName: any;
   buyer_profile_image: any;
   buyer_firstName: any;
   buyer_lastName: any;
   buyer_email: any;
   errorMessage: String;
-  updateBuyerFirstName = localStorage.getItem('buyerFirstName');
-  updateBuyerLastName = localStorage.getItem('buyerLastName');
+
 
   constructor(private buyerService: BuyerService,
     private notifierService: NotifierService,
@@ -116,11 +115,6 @@ export class BuyerAccountComponent implements OnInit {
 
       this.buyerService.updateBuyerProfile(update).subscribe((data: any) => {
         if (data.success) {
-          localStorage.setItem('buyerFirstName', this.buyer_updatedFirstName);
-          localStorage.setItem('buyerLastName', this.buyer_updatedLastName);
-          this.updateBuyerFirstName = localStorage.getItem('buyerFirstName');
-          this.updateBuyerLastName = localStorage.getItem('buyerLastName');
-
           this.errorMessage = "Account updated successfully!";
           (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
           (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
