@@ -57,6 +57,7 @@ export class SubmitCategoriesComponent implements OnInit {
   first: Boolean;
   second: Boolean;
   third: Boolean;
+  fourth: Boolean;
 
   // To redirect the stepper view to continue where the user left off - Andre
   @ViewChild('stepper') stepper: MatStepper;
@@ -93,8 +94,11 @@ export class SubmitCategoriesComponent implements OnInit {
         this.first = data.seller_found.user_account_setup[0];
         this.second = data.seller_found.user_account_setup[1];
         this.third = data.seller_found.user_account_setup[2];
+        this.fourth = data.seller_found.user_account_setup[3];
 
-        if (this.second) {
+        if (this.third) {
+          this.stepper.selectedIndex = 3;
+        } else if (this.second) {
             this.stepper.selectedIndex = 2;
         } else if (this.first) {
             this.stepper.selectedIndex = 1;
@@ -167,13 +171,6 @@ export class SubmitCategoriesComponent implements OnInit {
       company: this.company
     };
 
-    console.log(add);
-
-    // if (this.postal_code === undefined || this.state === undefined
-    //   || this.city === undefined || this.street_address1 === undefined) {
-    //   return this.notifier.notify('error', 'One or more fields missing. Please fill in all fields.');
-    // }
-
     if (this.postal_code === '' || this.postal_code === undefined) {
       return this.notifier.notify('error', 'Postal code field missing.');
     } else if (this.state === '' || this.state === undefined) {
@@ -185,21 +182,20 @@ export class SubmitCategoriesComponent implements OnInit {
     } else {
       this.sellerService.addSellerAddress(add).subscribe((data: any) => {
         if (data.success) {
-
+          this.notifier.notify('success', 'Your address was submitted!');
+          stepper.next();
         } else {
-
+          this.notifier.notify('error', data.msg);
         }
       });
-      //stepper.next();
     }
   }
 
   rerouteToStripe() {
     var urlToOpen;
 
-    this.sellerService.stripeRoute().subscribe((data:any) => {
-      if(data.success)
-      {
+    this.sellerService.stripeRoute().subscribe((data: any) => {
+      if (data.success) {
         urlToOpen= data.urlToOpen;
         let url: string = '';
         if (!/^http[s]?:\/\//.test(urlToOpen)) {
@@ -266,6 +262,9 @@ export class SubmitCategoriesComponent implements OnInit {
       this.currentTab = currentTab;
     }
     step3(currentTab) {
+      this.currentTab = currentTab;
+    }
+    step4(currentTab) {
       this.currentTab = currentTab;
     }
 

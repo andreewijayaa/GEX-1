@@ -10,6 +10,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { invalid } from '@angular/compiler/src/render3/view/util';
 import { NotifierService } from 'angular-notifier';
 import { formatCurrency } from '@angular/common';
+import * as io from 'socket.io-client';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -27,6 +28,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class SellerComponent implements OnInit {
 
   // Variables declaration
+  socket;
   private readonly notifier: NotifierService;
   code: String;
   state: String;
@@ -51,6 +53,7 @@ export class SellerComponent implements OnInit {
     notifierService: NotifierService,
     private router: Router) {
     this.notifier = notifierService;
+    this.socket = io('http://localhost:3000');
   }
 
   // On initialization process of the webpage
@@ -65,7 +68,6 @@ export class SellerComponent implements OnInit {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
         if (response.success) {
           // Display Success stripe Dialog
-          localStorage.setItem('stripe_connected', 'true');
           const dialogRef = this.dialog;
           dialogRef.open(StipeAccountCreatedSuccessDialogComponent);
           setTimeout(function () {
@@ -85,6 +87,18 @@ export class SellerComponent implements OnInit {
     }
 
     this.loader = true;
+
+    this.getSellerProfile();
+    this.socket.on('updatedSellerProfileInfo', ()  => {
+      this.getSellerProfile();
+    });
+
+    this.progress1 = 0;
+    this.progress2 = 0;
+    this.progress3 = 0;
+  }
+
+  getSellerProfile() {
     // Fetching seller profile information from the service to be used in the webpage
     this.sellerService.getSellerProfile().subscribe((profile: any) => {
       if (profile.success) {
@@ -96,16 +110,20 @@ export class SellerComponent implements OnInit {
         if (this.seller.user_account_setup[0]) {
           this.progress1 = 100;
           if (this.seller.user_account_setup[1]) {
-            this.progress2 = 100;
+            this.progress2 = 50;
             if (this.seller.user_account_setup[2]) {
-              this.progress3 = 100;
-            } else { this.progress3 = 50; }
-          } else { this.progress2 = 50; }
+              this.progress2 = 100;
+              if (this.seller.user_account_setup[3]) {
+                this.progress3 = 100;
+              } else { this.progress3 = 50; }
+            } else { this.progress2 = 50; }
+          } else { this.progress2 = 25; }
         } else { this.progress1 = 50; }
 
         if (this.seller.user_account_setup[0]
           && this.seller.user_account_setup[1]
-          && this.seller.user_account_setup[2]) {
+          && this.seller.user_account_setup[2]
+          && this.seller.user_account_setup[3]) {
           this.accountSetupBool = true;
 
           // Fetching seller offer history from the s ervice to be used in the webpage
@@ -157,17 +175,13 @@ export class SellerComponent implements OnInit {
           this.accountSetup = count / 100;
         }
       } else {
-        console.log('Could not retrieve seller profile info.')
+        console.log('Could not retrieve seller profile info.');
       }
     },
     err => {
       console.log(err);
       return false;
     });
-
-    this.progress1 = 0;
-    this.progress2 = 0;
-    this.progress3 = 0;
   }
 
   submitOffer(title: any, id: any) {
@@ -260,7 +274,6 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.addArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
-        window.location.reload();
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);
