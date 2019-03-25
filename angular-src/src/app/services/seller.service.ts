@@ -237,7 +237,9 @@ export class SellerService {
     }
   }
 
-  setBillingAddress(billingAddress) {
+
+
+  addSellerAddress(address) {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -247,11 +249,11 @@ export class SellerService {
       })
     };
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
+      return this.http.post('http://localhost:3000/sellers/addAddress', address, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/addBillingAddress', billingAddress)
+      return this.http.post('sellers/addAddress', address)
       .pipe(map(res => res));
     }
   }

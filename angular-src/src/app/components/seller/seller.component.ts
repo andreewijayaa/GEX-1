@@ -99,12 +99,9 @@ export class SellerComponent implements OnInit {
             this.progress2 = 100;
             if (this.seller.user_account_setup[2]) {
               this.progress3 = 100;
-            }
-            else { this.progress3 = 50; }
-          }
-          else { this.progress2 = 50; }
-        }
-        else { this.progress1 = 50; }
+            } else { this.progress3 = 50; }
+          } else { this.progress2 = 50; }
+        } else { this.progress1 = 50; }
 
         if (this.seller.user_account_setup[0]
           && this.seller.user_account_setup[1]
@@ -141,8 +138,7 @@ export class SellerComponent implements OnInit {
           this.sellerService.getArchivedRequests().subscribe((archived: any) => {
             if (archived.success) {
               this.archivedRequests = archived.archived_request;
-            }
-            else {
+            } else {
               console.log('Could not fetch archieved requests');
             }
           },
@@ -160,8 +156,7 @@ export class SellerComponent implements OnInit {
           }
           this.accountSetup = count / 100;
         }
-      }
-      else {
+      } else {
         console.log('Could not retrieve seller profile info.')
       }
     },
