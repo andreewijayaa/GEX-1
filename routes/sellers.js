@@ -5,6 +5,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const config = require("../config/database");
 const Seller = require("../models/seller");
+const Address = require("../models/address");
 const Request = require("../models/request");
 const Offer = require("../models/offer");
 const sendEmail = require("../models/sendEmail");
@@ -25,7 +26,7 @@ router.post("/register", (req, res, next) => {
     position: req.body.position,
     phone_number: req.body.phone_number,
     password: req.body.password,
-    user_account_setup: [false, false, false],
+    user_account_setup: [false, false, false, false],
     confirmationToken: jwt.sign({ data: "seller" }, config.secret, {
       expiresIn: "24h"
     }) // 1 day
@@ -590,6 +591,67 @@ router.post("/addDescription", (req, res) => {
   });
 });
 
+router.post("/addAddress", (req, res) => {
+  var token = req.headers["x-access-token"];
+
+  var address_to_add = {
+    sellerID: req.body.seller_id,
+    country: req.body.country,
+    zip: req.body.zip,
+    state: req.body.state,
+    city: req.body.city,
+    street1: req.body.street_1,
+    street2: req.body.street_2,
+    company: req.body.company
+  };
+
+  console.log(address_to_add);
+
+  // Address.createAddress(address_to_add, (error, seller) => {
+  //   if (err) {
+  //     res.json({ success: false, msg: "Failed to add address to address schema!" });
+  //   } else {
+  //     // send Seller a verification email
+  //     // upon successful registration
+  //     sendEmail.sellerSendVerificationEmail(seller);
+  //     res.json({ success: true, msg: "Seller Registered!" });
+  //   }
+  // });
+
+
+  // //if they don't have a token
+  // if (!token)
+  //   return res
+  //     .status(401)
+  //     .send({ success: false, message: "No token provided." });
+  // //otherwise verify the token and return user data in a response
+  // jwt.verify(token, config.secret, function(err, decoded) {
+  //   if (err)
+  //     return res
+  //       .status(500)
+  //       .send({ success: false, message: "Failed to authenticate token." });
+  //   if (req.body.description == null) {
+  //     //console.log('No description added');
+  //     return res
+  //       .status(500)
+  //       .send({ success: false, message: "No description added" });
+  //   }
+  //   //console.log('adding this description: ' + req.body.description);
+  //   Seller.findById(decoded.data._id, (err, seller_descipt) => {
+  //     if (err) return handleError(err);
+  //     seller_descipt.set({ description: req.body.description });
+  //     seller_descipt.user_account_setup.set(1, true);
+  //     seller_descipt.save(function(err, updatedSeller) {
+  //       if (err) return handleError(err);
+  //       return res.json({
+  //         success: true,
+  //         message: "Attempted to add desciption"
+  //       });
+  //     });
+  //   });
+  // });
+});
+
 //code to add profile picture to account
 //By John
 router.post("/profilepicture", function(req, res) {
@@ -640,59 +702,60 @@ router.post("/profilepicture", function(req, res) {
 
 //let's seller's add billing addres to account
 //code by John
-router.post("/addBillingAddress", (req, res) => {
-  //console.log('add billing address called');
-  var token = req.headers["x-access-token"];
+// router.post("/addAddress", (req, res) => {
+//   //console.log('add billing address called');
+//   var token = req.headers["x-access-token"];
 
-  //if they don't have a token
-  if (!token)
-    return res
-      .status(401)
-      .send({ success: false, message: "No token provided." });
-  //otherwise verify the token and return user data in a response
-  jwt.verify(token, config.secret, function(err, decoded) {
-    if (err)
-      return res
-        .status(500)
-        .send({ success: false, message: "Failed to authenticate token." });
-    Seller.update(
-      { _id: decoded.data._id },
-      { $set: { billing_address: [] } },
-      function(err, something) {
-        if (err) return handleError(err);
-        Seller.findById(decoded.data._id, (err, seller_bill) => {
-          //seller_bill.set({user_account_setup : true});
-          if (err) return handleError(err);
-          /*var new_address = 
-          {
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            street_address: req.body.street_address,
-            city: req.body.city,
-            country: req.body.country,
-            state_province: req.body.state_province,
-            postal_code: req.body.postal_code
-          };*/
-          seller_bill.billing_address.push(req.body.first_name);
-          seller_bill.billing_address.push(req.body.last_name);
-          seller_bill.billing_address.push(req.body.street_address);
-          seller_bill.billing_address.push(req.body.city);
-          seller_bill.billing_address.push(req.body.country);
-          seller_bill.billing_address.push(req.body.state_province);
-          seller_bill.billing_address.push(req.body.postal_code);
-          seller_bill.save(function(err, updatedSeller) {
-            if (err) return handleError(err);
-            //console.log('Success billing!');
-            return res.json({
-              success: true,
-              message: "Attempted to add billing address "
-            });
-          });
-        });
-      }
-    );
-  });
-});
+//   //if they don't have a token
+//   if (!token)
+//     return res
+//       .status(401)
+//       .send({ success: false, message: "No token provided." });
+//   //otherwise verify the token and return user data in a response
+//   jwt.verify(token, config.secret, function(err, decoded) {
+//     if (err)
+//       return res
+//         .status(500)
+//         .send({ success: false, message: "Failed to authenticate token." });
+//     Seller.update(
+//       { _id: decoded.data._id },
+//       { $set: { billing_address: [] } },
+//       function(err, something) {
+//         if (err) return handleError(err);
+//         Seller.findById(decoded.data._id, (err, seller_bill) => {
+//           //seller_bill.set({user_account_setup : true});
+//           if (err) return handleError(err);
+//           var seller_business_address = 
+//           {
+//             sellerID: req.body.seller_id,
+//             street_address1: req.body.street_1,
+//             street_address2: req.body.street_2,
+//             city: req.body.city,
+//             country: req.body.country,
+//             state_province: req.body.state,
+//             postal_code: req.body.zip,
+//             company: req.body.company
+//           };
+//           seller_bill.billing_address.push(req.body.first_name);
+//           seller_bill.billing_address.push(req.body.last_name);
+//           seller_bill.billing_address.push(req.body.street_address);
+//           seller_bill.billing_address.push(req.body.city);
+//           seller_bill.billing_address.push(req.body.country);
+//           seller_bill.billing_address.push(req.body.state_province);
+//           seller_bill.billing_address.push(req.body.postal_code);
+//           seller_bill.save(function(err, updatedSeller) {
+//             if (err) return handleError(err);
+//             //console.log('Success billing!');
+//             return res.json({
+//               success: true,
+//               message: "Attempted to add billing address "
+//             });
+//           });
+//         });
+//       }
+//     );
+//   });
+// });
 
 //code to remove codes from sellers
 //made by John

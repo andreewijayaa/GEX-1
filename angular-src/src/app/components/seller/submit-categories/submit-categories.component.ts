@@ -5,6 +5,7 @@ import { SellerService } from '../../../services/seller.service';
 import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
+import { forkJoin } from 'rxjs';
 const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
 
 @Component({
@@ -31,6 +32,7 @@ export class SubmitCategoriesComponent implements OnInit {
     { code: 49605403, name: 'Watercolor (Painting)', image: DefaultImageIcon, checked: false },
     { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
   ];
+  seller: any;
   sellerID: String;
   submitLabels = [];
   codeArray = [];
@@ -40,10 +42,13 @@ export class SubmitCategoriesComponent implements OnInit {
   codeNames: any[];
   first_name: String;
   last_name: String;
-  street_address: String;
+  company: String;
+  street_address1: String;
+  street_address2: String;
   city: String;
   country: String;
-  state_province: String;
+  zip: String;
+  state: String;
   postal_code: String;
   description: any;
   buttonText: String = 'Subscribe to any products on Requiren';
@@ -83,6 +88,7 @@ export class SubmitCategoriesComponent implements OnInit {
   getSellerProfileInfo() {
     this.sellerService.getSellerProfile().subscribe((data: any) => {
       if (data.success) {
+        this.seller = data.seller_found;
         this.sellerID = data.seller_found._id;
         this.first = data.seller_found.user_account_setup[0];
         this.second = data.seller_found.user_account_setup[1];
@@ -149,6 +155,45 @@ export class SubmitCategoriesComponent implements OnInit {
     });
   }
 
+  AddAddress(stepper: MatStepper) {
+    const add = {
+      seller_id: this.sellerID,
+      country: 'US',
+      zip: this.postal_code,
+      state: this.state,
+      city: this.city,
+      street_1: this.street_address1,
+      street_2: this.street_address2,
+      company: this.company
+    };
+
+    console.log(add);
+
+    // if (this.postal_code === undefined || this.state === undefined
+    //   || this.city === undefined || this.street_address1 === undefined) {
+    //   return this.notifier.notify('error', 'One or more fields missing. Please fill in all fields.');
+    // }
+
+    if (this.postal_code === '' || this.postal_code === undefined) {
+      return this.notifier.notify('error', 'Postal code field missing.');
+    } else if (this.state === '' || this.state === undefined) {
+      return this.notifier.notify('error', 'State field missing.');
+    } else if (this.city === '' || this.city === undefined) {
+      return this.notifier.notify('error', 'City field missing.');
+    } else if (this.street_address1 === '' || this.street_address1 === undefined) {
+      return this.notifier.notify('error', 'Address 1 field missing.');
+    } else {
+      this.sellerService.addSellerAddress(add).subscribe((data: any) => {
+        if (data.success) {
+
+        } else {
+
+        }
+      });
+      //stepper.next();
+    }
+  }
+
   rerouteToStripe() {
     var urlToOpen;
 
@@ -188,8 +233,8 @@ export class SubmitCategoriesComponent implements OnInit {
         }
       }
     }
-    var rem = slsize - 3;
-    var remd = rem.toString();
+    const rem = slsize - 3;
+    const remd = rem.toString();
     if (slsize > 3) {
       btnTxt = btnTxt + '(+' + remd + ' more) ';
     }
