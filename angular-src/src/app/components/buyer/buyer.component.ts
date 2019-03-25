@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { MatDialog } from '@angular/material';
 import { NotifierService } from "angular-notifier";
+import * as io from 'socket.io-client';
 
 
 @Component({
@@ -13,6 +14,7 @@ import { NotifierService } from "angular-notifier";
   styleUrls: ['./buyer.component.css']
 })
 export class BuyerComponent implements OnInit {
+  socket;
   private readonly notifier: NotifierService;
   buyer: Object;
   buyerProfile: Object;
@@ -22,7 +24,6 @@ export class BuyerComponent implements OnInit {
   panelOpenState = false;
   offerList: Object;
   offerTitleAddToCart: String;
-  pushItemToNavbar = 0;
   offerCart: [String] = [''];
   buyer_firstName: any;
 
@@ -32,18 +33,20 @@ export class BuyerComponent implements OnInit {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private notifierService: NotifierService,
-    private dialog: MatDialog) { this.notifier = notifierService;}
+    private dialog: MatDialog) { this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
 
   // showing buyer info when buyer portal page loads - Bryan Vu
 
   ngOnInit() {
-    //this.buyer = this.route.snapshot.data['buyer'];
     this.getBuyer();
+    this.socket.on('updatedBuyerProfileInfo', () => {
+      this.getBuyer();
+    });
+
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
       if (requests.success) {
         this.requestList = requests['requests'];
-      }
-      else {
+      } else {
         console.log('could not fetch buyer requests');
       }
     });
@@ -54,8 +57,8 @@ export class BuyerComponent implements OnInit {
       if (buyerdata.success) {
         this.buyerProfile = buyerdata.buyer_found;
         this.buyer_firstName = buyerdata.buyer_found.first_name;
-      }
-      else {
+        this.offerCart = buyerdata.buyer_found['offerCart'];
+      } else {
         console.log('Could not retreive buyer profile data');
       }
     });
@@ -114,7 +117,7 @@ export class BuyerComponent implements OnInit {
       // debugger;
       if (data.success == false){
         this.notifier.notify('error', data.message);
-      }else{
+      } else {
         window.location.reload();
       }
     });
@@ -126,31 +129,27 @@ export class BuyerComponent implements OnInit {
     const offerAccepted = {
       offer_ID: offer_id,
       offer_accepted: true
-    }
+    };
 
     this.buyerService.offerAccepted(offerAccepted).subscribe((data: any) => {
       if (data.success) {
         // console.log("Offer Accepted Successful.");
         (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
-      }
-      else {
+      } else {
         // console.log("Offer Accepted NOT Successful.");
       }
     });
 
     const offerToCart = {
       offerID: offer_id
-    }
+    };
     this.buyerService.addOfferToBuyerCart(offerToCart).subscribe((data: any) => {
       if (data.success) {
-        var prevItems = localStorage.getItem('buyerCart');
-        var newItem = 1;
-        var newTotalItems = parseInt(prevItems, 10) + newItem;
-        localStorage.setItem('buyerCart', newTotalItems.toString());
-        this.pushItemToNavbar = 1;
         element.textContent = 'Offer Accepted';
         element.disabled = true;
-        this.getBuyer();
+        this.notifier.notify('success', 'Offer successfully added to your cart!');
+      } else {
+        this.notifier.notify('error', 'Unable to add offer to cart.');
       }
     });
   }
