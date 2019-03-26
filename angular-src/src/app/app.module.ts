@@ -42,7 +42,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule,
   MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule,
   MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule,
-  MatTab, MatRadioModule, MatCheckboxModule } from '@angular/material';
+  MatTab, MatRadioModule, MatCheckboxModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent,
@@ -193,6 +193,8 @@ const customNotifierOptions: NotifierOptions = {
     MatTableModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatPaginatorModule,
+    MatSortModule,
     // Site Notifications
     NotifierModule.withConfig (customNotifierOptions),
     HttpClientModule,

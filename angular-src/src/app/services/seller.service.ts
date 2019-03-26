@@ -39,6 +39,21 @@ export class SellerService {
     }
   }
 
+  getSellerById(sellerId) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/sellers/sellerById/' + sellerId, httpOptions)
+      .pipe(map(res => res));
+    } else {
+      return this.http.get('seller/sellerById/' + sellerId, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // Service to fetch offers history of the logged in user (front-end to back-end connection)
   getSellerOffersHistory() {
     this.loadToken();

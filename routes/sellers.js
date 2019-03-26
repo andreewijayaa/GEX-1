@@ -70,6 +70,26 @@ router.post("/register", (req, res, next) => {
   });
 });
 
+router.get("/sellerById/:sellerId", (req, res) => {
+  Seller.findById(req.params.sellerId, (err, seller) => {
+    if (!seller)
+      return res
+        .status(405)
+        .send({
+          succes: false,
+          message: "Could not retrieve seller info."
+        });
+    else {
+      return res
+        .status(200)
+        .send({ 
+          success: true,
+          seller 
+        });
+    }
+  });
+});
+
 /*
 Profile update - By: Omar
 Will find the seller by using their id number and update their information accordingly.

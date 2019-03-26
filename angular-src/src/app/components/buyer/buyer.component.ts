@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RegisterService } from '../../services/register.service';
 import { BuyerService } from '../../services/buyer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService } from '../../services/request.service';
-import { MatDialog } from '@angular/material';
+import { SellerService } from '../../services/seller.service';
+import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { NotifierService } from 'angular-notifier';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import * as io from 'socket.io-client';
@@ -55,13 +56,19 @@ export class BuyerComponent implements OnInit {
   offerTitleAddToCart: String;
   offerCart: [String] = [''];
   buyer_firstName: any;
+  sellerInfo: any;
+  seller_firstName: String;
+  seller_lastName: String;
 
-  dataSourceRequests = [];
+  dataSourceRequests = new MatTableDataSource(this.requestList);
   dataSourceOffers = [];
   columnsToGetRequestInfo = ['title', 'status', 'offerCount', 'deadline'];
   columnsToGetOfferInfo = ['title', 'created_at', 'shippingPrice', 'price'];
   expandedRequestElement: RequestElement | null;
   expandedOfferElement: OfferElement | null;
+
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
@@ -69,6 +76,7 @@ export class BuyerComponent implements OnInit {
     private route: ActivatedRoute,
     private requestService: RequestService,
     private notifierService: NotifierService,
+    private sellerService: SellerService,
     private dialog: MatDialog) { this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
 
   // showing buyer info when buyer portal page loads - Bryan Vu
@@ -82,11 +90,14 @@ export class BuyerComponent implements OnInit {
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
       if (requests.success) {
         this.requestList = requests['requests'];
-        this.dataSourceRequests = requests['requests'];
+        this.dataSourceRequests = new MatTableDataSource(requests['requests']);
       } else {
         console.log('could not fetch buyer requests');
       }
     });
+
+    // this.dataSourceRequests.paginator = this.paginator;
+    // this.dataSourceRequests.sort = this.sort;
   }
 
   getBuyer() {
@@ -112,35 +123,40 @@ export class BuyerComponent implements OnInit {
     }
   }
 
+  searchFilter(filterValue: string) {
+    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+
+    // if (this.dataSourceRequests.paginator) {
+    //   this.dataSourceRequests.paginator.firstPage();
+    // }
+  }
+
   expanded(id: any) {
-    let requestId = id;
+    const requestId = id;
     this.getBuyer();
-    // (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
     // Make a call to retrieve request information with all offers to that request
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
         this.dataSourceOffers = data.offers;
         this.offerCart = this.buyerProfile['offerCart'];
-        // console.log(this.offerCart);
-
-        // used to distinguish between if buyer is viewing the request or a seller
-        // to limit access
-        if (data.status === 0) {
-          //this.status = true; // Buyer
-        } else if (data.status === 1) {
-          // this.status = false; // Seller
-        }
-        else {
-          // this.notifier.notify('success', data.msg);
-          // this.router.navigate(['/']);
-        }
       } else {
-        // this.notifier.notify('error', data.msg);
-        // this.router.navigate(['/']);
+        console.log('could not fetch request data');
       }
     });
-    this.getBuyer();
+  }
+
+  expandedOffer(id: any) {
+    const sellerId = id;
+    this.sellerService.getSellerById(sellerId).subscribe((data: any) => {
+      if (data.success) {
+        this.sellerInfo = data.seller;
+        this.seller_firstName = data.seller.first_name;
+        this.seller_lastName = data.seller.last_name;
+      } else {
+        console.log('Could not get seller info');
+      }
+    });
   }
 
   deleteRequestFunction(request_id_todelete) {
@@ -152,7 +168,7 @@ export class BuyerComponent implements OnInit {
 
     this.buyerService.deleteBuyerRequest(request_delete).subscribe((data: any) => {
       // debugger;
-      if (data.success == false){
+      if (data.success == false) {
         this.notifier.notify('error', data.message);
       } else {
         window.location.reload();
