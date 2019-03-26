@@ -445,7 +445,6 @@ router.get("/retrieveCart", (req, res, next) => {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
             offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
             //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-            //offers.provider = SellersOffer.entity_name;
             //});
           });
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;

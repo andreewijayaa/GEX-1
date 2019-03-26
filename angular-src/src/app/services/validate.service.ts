@@ -21,7 +21,7 @@ export class ValidateService {
     // tslint:disable-next-line:triple-equals
     if (seller.first_name == undefined || seller.last_name == undefined || seller.email == undefined || seller.password == undefined
       // tslint:disable-next-line:triple-equals
-      || seller.entity_name == undefined || seller.position == undefined || seller.phone_number == undefined) {
+      || seller.phone_number == undefined) {
         return false;
       } else {
         return true;
