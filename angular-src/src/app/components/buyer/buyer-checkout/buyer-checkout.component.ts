@@ -134,8 +134,15 @@ export class BuyerCheckoutComponent
   }
 
   ngOnInit() {
-    this.buyer = this.route.snapshot.data['buyer'];
-    // console.log(this.buyer);
+
+    this.buyerService.getBuyerProfile().subscribe((data: any) => {
+      if (data.success) {
+        this.buyer = data.buyer_found;
+      } else {
+        console.log('Error: could not fetch buyer information');
+      }
+    });
+
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
         // console.log(data);
@@ -297,15 +304,15 @@ export class BuyerCheckoutComponent
         const obj = {
           token: token,
           name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
-          buyerID: this.buyer['data']['_id'],
-          email: this.buyer['data']['email'],
+          buyerID: this.buyer._id,
+          email: this.buyer.email,
           amount: this.totalPriceDisplay * 100,
           totalOffers: this.offersInCart,
           shippingInfo: shippingDetails,
           orderID: orderNumber
           // sellers: this.sellerList
         };
-        
+
         this.buyerService.checkout(obj).subscribe((data1: any) => {
           if (data.success) {
             // console.log('Charge Successful');
