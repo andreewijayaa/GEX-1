@@ -305,6 +305,7 @@ export class BuyerCheckoutComponent
           orderID: orderNumber
           // sellers: this.sellerList
         };
+        
         this.buyerService.checkout(obj).subscribe((data1: any) => {
           if (data.success) {
             // console.log('Charge Successful');
