@@ -180,7 +180,6 @@ export class BuyerService {
         'Content-Type': 'application/json'
       })
     };
-    console.log(offer);
     if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/charge', offer, httpOptions)
         .pipe(map(res => res));
