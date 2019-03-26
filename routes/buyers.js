@@ -719,7 +719,7 @@ router.post("/confirmEmail/:token", (req, res, next) => {
             const token = jwt.sign({ data: buyer }, config.secret, {
               expiresIn: 86400 // 1 Day
             });
-
+    
             res.json({
               success: true,
               token: `${token}`,
@@ -728,8 +728,10 @@ router.post("/confirmEmail/:token", (req, res, next) => {
                 first_name: buyer.first_name,
                 last_name: buyer.last_name,
                 email: buyer.email,
-                msg: "Account Activate"
-              }
+                profile_image: buyer.profile_image,
+                offerCart: buyer.offerCart
+              },
+              msg: "Account Activated."
             });
           }
         });
