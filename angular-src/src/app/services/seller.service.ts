@@ -365,6 +365,32 @@ export class SellerService {
     }
   }
 
+  // Update Password function
+  updatePassword(oldPass, newPass, newPassConfirm) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    const body = {
+      'oldPassword': oldPass,
+      'newPassword': newPass,
+      'newPasswordConfirm': newPassConfirm
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // Service to delete an archived request
   deleteArchive(requestID) {
     this.loadToken();

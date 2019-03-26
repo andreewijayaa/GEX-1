@@ -740,6 +740,61 @@ router.post("/confirmEmail/:token", (req, res, next) => {
   });
 });
 
+// Password Update Route
+router.post("/updatePassword", (req,res, next) => {
+  // Get the body info, to updated and confirm the new password
+  const oldPass = req.body.oldPassword;
+  const newPass = req.body.newPassword;
+  const newPassConfirm = req.body.newPasswordConfirm;
+  var token = req.headers["x-access-token"];
+
+
+  // Check if there is a logged token 
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Please login." });
+
+  // Verify the token
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err)
+      return res.status(500).send({ success: false, message: "Failed to authenticate token." });
+      //Make sure all fields are not null
+      if (oldPass == undefined || newPass == undefined || newPassConfirm == undefined ||
+        oldPass == "" || newPass == "" || newPassConfirm == "") {
+        return res.json({ success: false, msg: "Please complete all required fields." });
+      }
+      // Find the buyer that is trying to update their password
+      Buyer.findById(decoded.data._id, (err, buyerChangingPassword) => {
+        // Check if the inputted old password matches the saved password in DB
+        Buyer.comparePassword(oldPass, buyerChangingPassword.password, (err, isMatch) => {
+        if (err) throw err;
+        // saved password and entered old password match
+        if (isMatch) {
+          // Make sure that the password confirmation is valid
+          if(newPass == newPassConfirm) {
+            buyerChangingPassword.password = newPass;
+            // Now Bycrpt the new password and save to DB - Not checking if the new password is the same as old password
+            Buyer.changePassword(buyerChangingPassword, (err, buyerNewPass) => {
+              if(err) {
+                res.json({success: false, msg:"Failed to update password!"});
+              } else {
+                sendEmail.passwordChanged(buyerNewPass);
+                res.json({success: true, msg:"Password updated successfully!"});
+              }
+            });
+          } else {
+            return res.json({ success: false, msg: "New passwords do not match." });
+          }
+        } else {
+          return res.json({ success: false, msg: "Old password did not match." });
+        }
+  
+      });
+    });
+  });
+});
+
 // Resend Email Verification -- NOT YET USED/TESTED - RONI
 router.post("/resend", (req, res, next) => {
   const email = req.body.email;
@@ -812,7 +867,7 @@ router.post('/reset/:id', (req, res, next) => {
         buyer.resetPasswordToken = undefined;
         Buyer.changePassword(buyer, (err, buyerNewPass) => {
           if(err){
-              res.json({success: false, msg:"Failed to change passwor!"})
+              res.json({success: false, msg:"Failed to change password!"})
           }
           else {
               sendEmail.passwordChanged(buyerNewPass);

@@ -302,6 +302,32 @@ export class BuyerService {
       .pipe(map(res => res));
     }
   }
+
+  // Update Password function
+  updatePassword(oldPass, newPass, newPassConfirm) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    const body = {
+      'oldPassword': oldPass,
+      'newPassword': newPass,
+      'newPasswordConfirm': newPassConfirm
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // Load local token
   loadToken() {
     const token = localStorage.getItem('id_token');
