@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
         this.notifier.notify('success', 'You are now logged in.');
       } else {
         this.notifier.notify('error', data.msg);
-        if(data.msg === 'Please Activate your account first.') {
+        if (data.msg === 'Please Activate your account first.') {
           this.router.navigate(['/resend']);
         }
       }

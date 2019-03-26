@@ -81,7 +81,7 @@ router.post("/login", (req, res, next) => {
   Buyer.getBuyerbyEmail(email, (err, buyer) => {
     if (err) throw err;
     if (!buyer) {
-      return res.json({ success: false, msg: "Buyer not found" });
+      return res.json({ success: false, msg: "Unable to find account with provided email." });
     }
     //Check email verification - RONI
     if (!buyer.userConfirmed) {
