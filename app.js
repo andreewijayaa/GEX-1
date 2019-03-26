@@ -29,6 +29,9 @@ const ejs = require('ejs')._express;
 const multer = require("multer");
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
+const http = require('http');
+const socketIO = require('socket.io');
+
 
 mongoose.set('useCreateIndex', true);
 
@@ -114,7 +117,16 @@ app.all('*', function(req, res) {
   res.redirect(process.env.BASE_URL);
   
 });
+
+const server = http.createServer(app);
+const io = socketIO(server);
+app.set('io', io);
+
+io.on('connection', (socket) => {
+  //console.log('Connected to Socket');
+});
+
 // Start Server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log('Server started on port '+port);
 });

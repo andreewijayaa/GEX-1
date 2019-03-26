@@ -126,19 +126,24 @@ router.post("/login", (req, res, next) => {
 //Profile
 router.get("/profile", (req, res) => {
   var token = req.headers["x-access-token"];
+
   if (!token)
     return res
       .status(401)
-      .send({ success: false, message: "No token provided." });
+      .send({ success: false, message: "Must login to get profile information." });
 
-  jwt.verify(token, config.secret, function(err, decoded) {
+  jwt.verify(token, config.secret, (err, decoded) => {
     if (err)
       return res
         .status(500)
         .send({ success: false, message: "Failed to authenticate token." });
-    delete decoded.data.password;
-    res.status(200).send(decoded);
+    Buyer.findById(decoded.data._id, (err, buyer_found) => {
+      if (err) return handleError(err);
+      //console.log(buyer_found);
+      res.status(200).send({ success: true, buyer_found });
+    });
   });
+
 });
 
 // Create Request AKA BUYER SUBMIT REQUEST By Roni
@@ -293,7 +298,7 @@ router.get("/request", (req, res, next) => {
               success: false,
               message: "Could not find requests with ID"
             });
-          res.status(200).send(requests);
+          res.status(200).send({ success: true, requests });
         });
       } else {
         res
@@ -308,13 +313,14 @@ router.get("/request", (req, res, next) => {
 Profile update - By: Omar
 Will find the buyer by using their id number and update their information accordingly.
 */
-router.post("/update", (req, res /*next*/) => {
+router.post("/update", (req, res) => {
+  const io = req.app.get('io');
   let update = {
     first_name: req.body.fName,
     last_name: req.body.lName,
-    password: req.body.pass,
     id: req.body.updater_id
   };
+  console.log(update);
 
   Buyer.findById(update.id, (err, updated) => {
     if (!update)
@@ -325,17 +331,10 @@ router.post("/update", (req, res /*next*/) => {
     else {
       updated.first_name = update.first_name;
       updated.last_name = update.last_name;
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(update.password, salt, (err, hash) => {
-          if (err) {
-            throw err;
-          }
-          updated.password = hash;
-          updated.save();
-        });
+      updated.save().then(() => {
+        io.emit('updatedBuyerProfileInfo');
+        res.json({ success: true });
       });
-      updated.save();
-      res.json({ success: true });
     }
   });
 });
@@ -343,6 +342,7 @@ router.post("/update", (req, res /*next*/) => {
 //route to add profile picture to account
 //by John
 router.post("/profilepicture", function(req, res) {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -355,11 +355,13 @@ router.post("/profilepicture", function(req, res) {
           errors: [{ title: "Image Upload Error", detail: err.message }]
         });
       }
-      console.log(req.file.location);
+      // console.log(req.file.location);
       Buyer.findById(decoded.data._id, (err, buyer_pic) => {
         buyer_pic.set({ profile_image: req.file.location });
-        buyer_pic.save();
-        return res.json({ imageUrl: req.file.location });
+        buyer_pic.save().then(() => {
+          io.emit('updatedBuyerProfileInfo');
+          res.json({ success: true, imageUrl: req.file.location });
+        });
       });
     });
   });
@@ -369,6 +371,7 @@ Profile update - By: Omar
 Will add the accepted offer to the buyers cart.
 */
 router.post("/addToCart", (req, res, next) => {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -391,8 +394,10 @@ router.post("/addToCart", (req, res, next) => {
       if (err) return handleError(err);
       // Save item to cart
       buyerToAddCart.offerCart.push(req.body.offerID);
-      buyerToAddCart.save();
-      res.json({ success: true });
+      buyerToAddCart.save().then(() => {
+        io.emit('updatedBuyerProfileInfo');
+        res.json({ success: true });
+      });
     });
   });
 });
@@ -434,7 +439,7 @@ router.get("/retrieveCart", (req, res, next) => {
               .send({ success: false, message: "Offer not found." });
           var offers = offersInCart;
 
-          //Add entity name to the returned object.
+          // Add entity name to the returned object.
           offersInCart.forEach(function(currentOffer) {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
             offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
@@ -443,9 +448,7 @@ router.get("/retrieveCart", (req, res, next) => {
           });
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
           offerShippingTotal = Math.round(offerShippingTotal * 100) / 100;
-          // orderFees = offerPriceTotal * 0.01; // Add fee calculation here
           orderTotal = offerPriceTotal + offerShippingTotal;
-          // orderFees = Math.round(orderFees * 100) / 100;
           orderTotal = Math.round(orderTotal * 100) / 100;
 
           return res.status(200).send({
@@ -505,6 +508,7 @@ router.post("/offerRejected", (req, res /*next*/) => {
 
 // Retrieve Cart with offers as objects
 router.post("/removeFromCart", (req, res, next) => {
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   const offer = req.body.offerID;
   if (!token)
@@ -541,13 +545,11 @@ router.post("/removeFromCart", (req, res, next) => {
       }
 
       if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
-        buyerViewingCart.save(err => {
-          if (err) {
-            return next(err);
-          }
+        buyerViewingCart.save().then(() => {
+          io.emit('updatedBuyerCartInfo');
           return res
-            .status(200)
-            .send({ success: true, msg: "Offer removed from cart." });
+          .status(200)
+          .send({ success: true, msg: "Offer removed from cart." });
         });
       } else {
         return res

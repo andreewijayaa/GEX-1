@@ -8,12 +8,7 @@ import { StoreFetchService } from '../../../services/storeFetch.service';
 import { NotifierService } from 'angular-notifier';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-
-interface ISeller {
-    firstName: String,
-    lastName: String,
-    profilePicture: String
-}
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-seller-navbar',
@@ -21,29 +16,43 @@ interface ISeller {
   styleUrls: ['./seller-navbar.component.css']
 })
 export class SellerNavbarComponent implements OnInit {
+  socket;
   seller: any;
   private readonly notifier: NotifierService;
-  sellerNavbar = {} as ISeller;
   @Input() logout: Boolean;
   @Input() seller_first_name = localStorage.getItem('sellerFirstName');
   @Input() seller_last_name = localStorage.getItem('sellerLastName');
-  //@Input() seller_profile_pic = localStorage.getItem('sellerProfilePic');
+  profile_image: any;
+  seller_firstName: any;
+  seller_lastName: any;
 
   constructor(private sellerService: SellerService,
     private storeFetchService: StoreFetchService,
     private notifierService: NotifierService,
     private router: Router,
     private titleService: Title,
-    private route: ActivatedRoute) {      this.notifier = notifierService;}
+    private route: ActivatedRoute) { this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application seller related pages.
-    this.titleService.setTitle("Seller | Requiren");
-    this.sellerNavbar = this.route.snapshot.data['seller'];
-    this.sellerNavbar.firstName = this.sellerNavbar['data']['first_name'];
-    this.sellerNavbar.lastName = this.sellerNavbar['data']['last_name'];
-    this.seller = this.route.snapshot.data['seller'];
-    //console.log(this.sellerNavbar.lastName);
+    this.titleService.setTitle('Seller | Requiren');
+    this.getSellerProfileInfo();
+    this.socket.on('updatedSellerProfileInfo', ()  => {
+      this.getSellerProfileInfo();
+    });
+  }
+
+  getSellerProfileInfo() {
+    this.sellerService.getSellerProfile().subscribe((data:any) => {
+      if (data.success) {
+        this.seller = data.seller_found;
+        this.profile_image = data.seller_found.profile_image;
+        this.seller_firstName = data.seller_found.first_name;
+        this.seller_lastName = data.seller_found.last_name;
+      } else {
+        console.log('Could not retrieve seller profile info for navbar.');
+      }
+    });
   }
 
   // This function logs out the current user when they click logout on the navbar. Every user, when they log in, gets stored locally so this funciton

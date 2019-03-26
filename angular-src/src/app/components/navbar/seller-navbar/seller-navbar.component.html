@@ -7,13 +7,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
         <a class="nav-item">
-            <img class="img-circle" src={{seller.data.profile_image}} *ngIf="seller.data.profile_image" alt="" width="40" height="40">
-            <img class="img-circle" src= {{seller.data.profile_image}} *ngIf="!(seller.data.profile_image)" alt="" width="40" height="40">
+            <img class="img-circle" src={{profile_image}} *ngIf="profile_image" alt="" width="40" height="40">
+            <img class="img-circle" src= {{profile_image}} *ngIf="!(profile_image)" alt="" width="40" height="40">
         </a>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" routerLink="/seller" routerLinkActive="active" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false" style="font-size: 18px">
-          {{seller_first_name}} {{seller_last_name}}
+          {{seller_firstName}} {{seller_lastName}}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" routerLink="/seller/seller-services" routerLinkActive="active-link">My Services/New Service</a>

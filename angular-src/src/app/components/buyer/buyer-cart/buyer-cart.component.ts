@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BuyerService } from '../../../services/buyer.service';
 import { NotifierService } from 'angular-notifier';
 import {ChangeDetectorRef} from '@angular/core';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-buyer-cart',
@@ -10,8 +11,9 @@ import {ChangeDetectorRef} from '@angular/core';
   styleUrls: ['./buyer-cart.component.css']
 })
 export class BuyerCartComponent implements OnInit {
+  socket;
   buyer: Object;
-  offersInCart: [String];
+  offersInCart = [];
   emptyCart: Boolean;
   orderTotal: Number;
   orderFees: Number;
@@ -23,13 +25,14 @@ export class BuyerCartComponent implements OnInit {
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private buyerService: BuyerService,
-    private cd : ChangeDetectorRef) { this.notifier = notifierService;}
+    private cd: ChangeDetectorRef) { this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
 
   ngOnInit() {
     window.scrollTo(0, 0);
-    this.buyer = this.route.snapshot.data['buyer'];
     this.getCart();
-    //this.offerid = this.buyer['data']['offerCart'];
+    this.socket.on('updatedBuyerCartInfo', () => {
+      this.getCart();
+    });
   }
 
 getCart() {
@@ -39,9 +42,7 @@ getCart() {
       this.offersInCart = data.offersInCart;
       this.offersPriceTotal = data.offerPriceTotal;
       this.offersShippingTotal = data.offerShippingTotal;
-      // this.orderFees = data.orderFees;
       this.orderTotal = data.orderTotal;
-      console.log(this.offersInCart);
     } else {
       this.notifier.notify('warning', 'Must accept offers to view cart.');
       this.router.navigate(['/buyer']);
@@ -52,31 +53,23 @@ getCart() {
     const offerRemoved = {
       offer_ID: offerid,
       offer_removed: false
-    }
+    };
     this.buyerService.offerRejected(offerRemoved).subscribe((data: any) => {
       if (data.success) {
         //console.log("Offer Removed Successful.");
-      }
-      else {
+      } else {
         //console.log("Offer Removed NOT Successful.");
       }
     });
 
     const offer_ID = {
       offerID : offerid
-    }
+    };
     this.buyerService.removeOfferFromCart(offer_ID).subscribe((data: any) => {
-      if (data.success)
-      {
-        console.log("offer removed from cart");
-        this.removeItemNavbar = -1;
-        var itemCountBefore = localStorage.getItem('buyerCart');
-        var itemRemovedCount = parseInt(itemCountBefore) - 1;
-        localStorage.setItem('buyerCart', itemRemovedCount.toString());
-        this.notifier.notify('success', data.msg);
-        this.getCart();
-        //this.cd.detectChanges();
+      if (data.success) {
+        this.notifier.notify('success', 'Offer successfully removed from your cart.');
       } else {
+        this.notifier.notify('error', 'Unable to remove offer from your cart.');
       }
     });
 

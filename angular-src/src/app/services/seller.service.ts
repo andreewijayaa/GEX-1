@@ -22,7 +22,7 @@ export class SellerService {
   }
 
   // Service to fetch seller profile from database (front-end to back-end connection)
-  getSellerProfile(): Observable<any> {
+  getSellerProfile() {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -237,7 +237,9 @@ export class SellerService {
     }
   }
 
-  setBillingAddress(billingAddress) {
+
+
+  addSellerAddress(address) {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -247,20 +249,19 @@ export class SellerService {
       })
     };
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
+      return this.http.post('http://localhost:3000/sellers/addAddress', address, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/addBillingAddress', billingAddress)
+      return this.http.post('sellers/addAddress', address)
       .pipe(map(res => res));
     }
   }
 
-  //allow user to upload profile picture
-  //By John
+  // allow user to upload profile picture
+  // By John
   setProfilePicture(profilePic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
-    debugger;
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({

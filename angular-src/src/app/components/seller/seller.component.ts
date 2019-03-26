@@ -10,6 +10,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { invalid } from '@angular/compiler/src/render3/view/util';
 import { NotifierService } from 'angular-notifier';
 import { formatCurrency } from '@angular/common';
+import * as io from 'socket.io-client';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -27,13 +28,14 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class SellerComponent implements OnInit {
 
   // Variables declaration
+  socket;
   private readonly notifier: NotifierService;
   code: String;
   state: String;
   seller: any;
   requestList: Object;
-  offerList: Object;
-  activeRequests: Object;
+  offerList = [];
+  activeRequests = [];
   loader: boolean;
   dialogLoader: boolean;
   accountSetup: Number;
@@ -43,6 +45,7 @@ export class SellerComponent implements OnInit {
   progress3: any;
   temp: any;
   archivedRequests: Object;
+  seller_firstName: any;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -50,12 +53,11 @@ export class SellerComponent implements OnInit {
     notifierService: NotifierService,
     private router: Router) {
     this.notifier = notifierService;
+    this.socket = io('http://localhost:3000');
   }
 
   // On initialization process of the webpage
   ngOnInit() {
-
-    //this.today = new Date();
     // get params if stripe is sending a redirect
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
@@ -66,7 +68,6 @@ export class SellerComponent implements OnInit {
       this.sellerService.connectStripe(this.code, this.state).subscribe((response: any) => {
         if (response.success) {
           // Display Success stripe Dialog
-          localStorage.setItem('stripe_connected', 'true');
           const dialogRef = this.dialog;
           dialogRef.open(StipeAccountCreatedSuccessDialogComponent);
           setTimeout(function () {
@@ -86,134 +87,101 @@ export class SellerComponent implements OnInit {
     }
 
     this.loader = true;
-    // Fetching seller profile information from the service to be used in the webpage
-    this.sellerService.getSellerProfile().subscribe((profile: any) => {
-      this.seller = profile.data;
-      // this.loaded_seller = Promise.resolve(true);
-      this.loader = false;
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
 
-    // Fetching seller offer history from the service to be used in the webpage
-    this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
-      this.offerList = offers;
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
-
-    // Fetching seller active requests from the service to be used in the webpage
-    this.sellerService.getActiveRequests().subscribe((requests: any) => {
-      this.activeRequests = requests;
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
-
-    // Fetching seller archived requests from the service to be used in the webpage
-    this.sellerService.getArchivedRequests().subscribe((archived: any) => {
-      this.archivedRequests = archived;
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
-
-      this.progress1 = 0;
-      this.progress2 = 0;
-      this.progress3 = 0;
-    // Fetching seller profile information from the service to be used in the webpage
-    this.sellerService.getSellerProfile().subscribe((profile: any) => {
-      this.seller = profile.data;
-
-      this.temp = this.seller.user_account_setup;
-      if (this.seller.user_account_setup[0]) {
-        this.progress1 = 100;
-        if (this.seller.user_account_setup[1]) {
-          this.progress2 = 100;
-          if (this.seller.user_account_setup[2]) {
-            this.progress3 = 100;
-          } else {
-            this.progress3 = 50;
-          }
-        } else {
-          this.progress2 = 50;
-        }
-      } else {
-        this.progress1 = 50;
-      }
-
-      if (this.seller.user_account_setup[0]
-        && this.seller.user_account_setup[1]
-        && this.seller.user_account_setup[2]) {
-        this.accountSetupBool = true;
-        // Fetching seller offer history from the s ervice to be used in the webpage
-        this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
-          this.offerList = offers;
-        },
-          err => {
-            console.log(err);
-            return false;
-          });
-        // Fetching seller active requests from the service to be used in the webpage
-        this.sellerService.getActiveRequests().subscribe((requests: any) => {
-          this.activeRequests = requests;
-        },
-          err => {
-            console.log(err);
-            return false;
-          });
-      } else { // DISPLAY THE BAR ON THE MAIN PAGE
-        let count;
-        for (let i = 0; i < 3; i++) {
-          if (this.seller.user_account_setup[i] === true) {
-            count++;
-          }
-        }
-        this.accountSetup = count / 100;
-      }
-
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
-    // Check if account has been setup
-
-  }
-
-  refresh() {
-      this.progress1 = 0;
-      this.progress2 = 0;
-      this.progress3 = 0;
-     // Fetching seller profile information from the service to be used in the webpage
-     this.sellerService.getSellerProfile().subscribe((profile: any) => {
-      this.seller = profile.data;
-
-      this.temp = this.seller.user_account_setup;
-      if (this.seller.user_account_setup[0]) {
-        this.progress1 = 100;
-        if (this.seller.user_account_setup[1]) {
-          this.progress2 = 100;
-          if (this.seller.user_account_setup[2]) {
-            this.progress3 = 100;
-          } else {
-            this.progress3 = 50;
-          }
-        } else {
-          this.progress2 = 50;
-        }
-      } else {
-        this.progress1 = 50;
-      }
+    this.getSellerProfile();
+    this.socket.on('updatedSellerProfileInfo', ()  => {
+      this.getSellerProfile();
     });
 
-    window.location.reload();
+    this.progress1 = 0;
+    this.progress2 = 0;
+    this.progress3 = 0;
+  }
+
+  getSellerProfile() {
+    // Fetching seller profile information from the service to be used in the webpage
+    this.sellerService.getSellerProfile().subscribe((profile: any) => {
+      if (profile.success) {
+        this.seller = profile.seller_found;
+        this.seller_firstName = profile.seller_found.first_name;
+        this.loader = false;
+
+        this.temp = this.seller.user_account_setup;
+        if (this.seller.user_account_setup[0]) {
+          this.progress1 = 100;
+          if (this.seller.user_account_setup[1]) {
+            this.progress2 = 50;
+            if (this.seller.user_account_setup[2]) {
+              this.progress2 = 100;
+              if (this.seller.user_account_setup[3]) {
+                this.progress3 = 100;
+              } else { this.progress3 = 50; }
+            } else { this.progress2 = 50; }
+          } else { this.progress2 = 25; }
+        } else { this.progress1 = 50; }
+
+        if (this.seller.user_account_setup[0]
+          && this.seller.user_account_setup[1]
+          && this.seller.user_account_setup[2]
+          && this.seller.user_account_setup[3]) {
+          this.accountSetupBool = true;
+
+          // Fetching seller offer history from the s ervice to be used in the webpage
+          this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
+            if (offers.success) {
+              this.offerList = offers.offers;
+            } else {
+              console.log('Could not fetch offers');
+            }
+          },
+          err => {
+            console.log(err);
+            return false;
+          });
+
+          // Fetching seller active requests from the service to be used in the webpage
+          this.sellerService.getActiveRequests().subscribe((requests: any) => {
+            if (requests.success) {
+              this.activeRequests = requests.active_requests;
+            } else {
+              console.log('could not fetch requests');
+            }
+          },
+          err => {
+            console.log(err);
+            return false;
+          });
+
+          // Fetching seller archived requests from the service to be used in the webpage
+          this.sellerService.getArchivedRequests().subscribe((archived: any) => {
+            if (archived.success) {
+              this.archivedRequests = archived.archived_request;
+            } else {
+              console.log('Could not fetch archieved requests');
+            }
+          },
+          err => {
+            console.log(err);
+            return false;
+          });
+
+        } else { // DISPLAY THE BAR ON THE MAIN PAGE
+          let count;
+          for (let i = 0; i < 3; i++) {
+            if (this.seller.user_account_setup[i] === true) {
+            count++;
+            }
+          }
+          this.accountSetup = count / 100;
+        }
+      } else {
+        console.log('Could not retrieve seller profile info.');
+      }
+    },
+    err => {
+      console.log(err);
+      return false;
+    });
   }
 
   submitOffer(title: any, id: any) {
@@ -247,7 +215,7 @@ export class SellerComponent implements OnInit {
           offerShipping = data['shipping'];
 
           const offer = {
-            title: offerPrice,
+            title: offerTitle,
             description: offerDescription,
             price: offerPrice,
             shipPrice: offerShipping,
@@ -288,8 +256,8 @@ export class SellerComponent implements OnInit {
     };
 
     this.sellerService.deleteoffer(offer_delete).subscribe((data: any) => {
-      console.log(data);
-      debugger;
+      // console.log(data);
+      // debugger;
       window.location.reload();
     });
 
@@ -306,7 +274,6 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.addArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
-        window.location.reload();
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);

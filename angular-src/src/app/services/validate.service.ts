@@ -34,4 +34,9 @@ export class ValidateService {
     return re.test(String(email).toLowerCase());
   }
 
+  validatePassword(password){
+    var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+    return re.test(password);
+  }
+
 }

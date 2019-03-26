@@ -58,13 +58,13 @@ including the fields and labels.
                   (change) = "processFile(imageInput)">
         </div>
         <div class="form-group">
-        <button type="button" class="btn btn-warning btn-sm" id="deleteBtn" (click)="deleteImagesFunction()">Delete Last Uploaded Image</button>
+        <button type="button" class="btn-warning btn-sm" id="deleteBtn" (click)="deleteImagesFunction()">Delete Last Uploaded Image</button>
       </div>
       <div class="form-group">
         <!--*ngIf="selectedFile" src="url('+ selectedFile.src +')"-->
         <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[0]}} alt="" width="120" height="120">
-        <img class="RequestImageDisplay" *ngIf="this.Image_Urls[1]" src={{this.Image_Urls[1]}} alt="" width="120" height="120">
-        <img class="RequestImageDisplay" *ngIf="this.Image_Urls[2]" src={{this.Image_Urls[2]}} alt="" width="120" height="120">
+        <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[1]}} alt="" width="120" height="120">
+        <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[2]}} alt="" width="120" height="120">
       </div>
         <hr>
         <div class="form-group row">

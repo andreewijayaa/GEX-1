@@ -5,14 +5,15 @@ import { SellerService } from '../../../services/seller.service';
 import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
+import { forkJoin } from 'rxjs';
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png?token=AjGwr9AEAkdP2Vs8YyLNcgAMU2Q-WOocks5coW24wA%3D%3D";
 
 @Component({
   selector: 'app-submit-categories',
   templateUrl: './submit-categories.component.html',
   styleUrls: ['./submit-categories.component.css']
 })
-export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
+export class SubmitCategoriesComponent implements OnInit {
   private readonly notifier: NotifierService;
   // Temp codes for MVP - Kurgan
   codes = [
@@ -31,19 +32,23 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
     { code: 49605403, name: 'Watercolor (Painting)', image: DefaultImageIcon, checked: false },
     { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
   ];
+  seller: any;
   sellerID: String;
-  submitLabels: String[];
-  codeArray: Number[];
+  submitLabels = [];
+  codeArray = [];
   code: Number;
   codeList: [Number];
   None: Boolean;
   codeNames: any[];
   first_name: String;
   last_name: String;
-  street_address: String;
+  company: String;
+  street_address1: String;
+  street_address2: String;
   city: String;
   country: String;
-  state_province: String;
+  zip: String;
+  state: String;
   postal_code: String;
   description: any;
   buttonText: String = 'Subscribe to any products on Requiren';
@@ -52,6 +57,7 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   first: Boolean;
   second: Boolean;
   third: Boolean;
+  fourth: Boolean;
 
   // To redirect the stepper view to continue where the user left off - Andre
   @ViewChild('stepper') stepper: MatStepper;
@@ -67,35 +73,32 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
   // On initialization process of the webpage
   ngOnInit() {
     // Get Seller Information
-    this.getSellerInfo();
+    this.getSellerProfileInfo();
+    this.getSellerCodes();
+
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
-    this.submitLabels = [];
-    this.codeArray = [];
     this.None = false;
     // Get seller codes
-    this.sellerService.getCode().subscribe((data: any) => {
-      if (data.success) {
-        if (data.codeList.length === 0) { // Seller does not have any codes yet
-        } else {
-          this.codeArray = data.codeList;
-        }
-      }
-    });
   }
 
-  ngAfterViewInit() {
+  getSellerProfileInfo() {
     this.sellerService.getSellerProfile().subscribe((data: any) => {
-      if (data) {
-        this.first = data.data.user_account_setup[0];
-        this.second = data.data.user_account_setup[1];
-        this.third = data.data.user_account_setup[2];
+      if (data.success) {
+        this.seller = data.seller_found;
+        this.sellerID = data.seller_found._id;
+        this.first = data.seller_found.user_account_setup[0];
+        this.second = data.seller_found.user_account_setup[1];
+        this.third = data.seller_found.user_account_setup[2];
+        this.fourth = data.seller_found.user_account_setup[3];
 
-        if (this.second) {
+        if (this.third) {
+          this.stepper.selectedIndex = 3;
+        } else if (this.second) {
             this.stepper.selectedIndex = 2;
         } else if (this.first) {
             this.stepper.selectedIndex = 1;
@@ -103,7 +106,18 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
             this.stepper.selectedIndex = 0;
         }
       } else {
-        console.log('could not retrieve stepper index');
+        console.log('Could not retrieve seller profile info');
+      }
+    });
+  }
+
+  getSellerCodes() {
+    this.sellerService.getCode().subscribe((data: any) => {
+      if (data.success) {
+        if (data.codeList.length === 0) { // Seller does not have any codes yet
+        } else {
+          this.codeArray = data.codeList;
+        }
       }
     });
   }
@@ -145,20 +159,43 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getSellerInfo() {
-    this.sellerService.getSellerProfile().subscribe((data: any) => {
-      if (data) {
-        this.sellerID = data.data._id;
-      }
-    });
+  AddAddress(stepper: MatStepper) {
+    const add = {
+      seller_id: this.sellerID,
+      country: 'US',
+      zip: this.postal_code,
+      state: this.state,
+      city: this.city,
+      street_1: this.street_address1,
+      street_2: this.street_address2,
+      company: this.company
+    };
+
+    if (this.postal_code === '' || this.postal_code === undefined) {
+      return this.notifier.notify('error', 'Postal code field missing.');
+    } else if (this.state === '' || this.state === undefined) {
+      return this.notifier.notify('error', 'State field missing.');
+    } else if (this.city === '' || this.city === undefined) {
+      return this.notifier.notify('error', 'City field missing.');
+    } else if (this.street_address1 === '' || this.street_address1 === undefined) {
+      return this.notifier.notify('error', 'Address 1 field missing.');
+    } else {
+      this.sellerService.addSellerAddress(add).subscribe((data: any) => {
+        if (data.success) {
+          this.notifier.notify('success', 'Your address was submitted!');
+          stepper.next();
+        } else {
+          this.notifier.notify('error', data.msg);
+        }
+      });
+    }
   }
 
   rerouteToStripe() {
     var urlToOpen;
 
-    this.sellerService.stripeRoute().subscribe((data:any) => {
-      if(data.success)
-      {
+    this.sellerService.stripeRoute().subscribe((data: any) => {
+      if (data.success) {
         urlToOpen= data.urlToOpen;
         let url: string = '';
         if (!/^http[s]?:\/\//.test(urlToOpen)) {
@@ -192,8 +229,8 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    var rem = slsize - 3;
-    var remd = rem.toString();
+    const rem = slsize - 3;
+    const remd = rem.toString();
     if (slsize > 3) {
       btnTxt = btnTxt + '(+' + remd + ' more) ';
     }
@@ -225,6 +262,9 @@ export class SubmitCategoriesComponent implements OnInit, AfterViewInit {
       this.currentTab = currentTab;
     }
     step3(currentTab) {
+      this.currentTab = currentTab;
+    }
+    step4(currentTab) {
       this.currentTab = currentTab;
     }
 

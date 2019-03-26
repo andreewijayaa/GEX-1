@@ -10,6 +10,12 @@
         </div>
         <hr>
         <input type="text" placeholder="Enter Email" [(ngModel)]="email" name="email" required>
+        <p>Passwords must contain:</p>
+        <ul>
+          <li>at least one number</li>
+          <li>at least one uppercase and lowercase letter</li>
+          <li>at least 8 or more characters.</li>
+      </ul>
         <input type="password" placeholder="Enter Password" [(ngModel)]="password" name="psw" required>
         <input type="password" placeholder="Confirm Password" [(ngModel)]="confirmPassword" name="psw" required>
         <input type="text" placeholder="Enter First Name" [(ngModel)]="first_name" name="first_name" required>
