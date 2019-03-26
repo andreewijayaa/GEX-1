@@ -25,14 +25,6 @@ const SellerSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    entity_name: {
-        type: String,
-        required: true
-    },
-    position: {
-        type: String,
-        required: true
-    },
     description: {
         type: String,
     },
