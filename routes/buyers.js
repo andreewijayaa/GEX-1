@@ -851,7 +851,7 @@ router.post('/reset', (req, res, next) => {
 })
 
 // Generate Order Number
-router.post('/generateOrderNumber', (req, res, next) => {
+router.get('/generateOrderNumber', (req, res, next) => {
   var orderNum;
   var token = req.headers["x-access-token"];
   // Check if there is a logged token 
@@ -871,9 +871,6 @@ router.post('/generateOrderNumber', (req, res, next) => {
 
       orderNum = 'R-'+Math.random().toString().substr(2, 5) + '-' + Math.random().toString().substr(2, 3); 
       
-
-      console.log('Order number = ' + orderNum);
-
       // Search for an order with the same orderNumber, avoiding duplicate order numbers
       Order.findOne({'orderNumber': orderNum}, (err, fetchedOrders) => {
         if (err) return getNumber();
