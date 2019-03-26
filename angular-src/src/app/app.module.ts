@@ -39,15 +39,24 @@ import { Ng2SearchPipeModule} from 'ng2-search-filter';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule, MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule, MatTab, MatRadioModule, MatCheckboxModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule,
+  MatSelectModule, MatExpansionModule, MatBadgeModule, MatDialogModule,
+  MatProgressSpinnerModule, MatDividerModule, MatListModule, MatTableModule,
+  MatTab, MatRadioModule, MatCheckboxModule } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
+import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent,
+   OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent,
+    StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
+
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { ResendComponent } from './components/activation/resend/resend.component';
 import { ForgetPasswordComponent } from './components/activation/forget-password/forget-password.component';
+import { BuyerUpdatePasswordComponent } from './components/buyer/buyer-update-password/buyer-update-password.component';
+import { SellerUpdatePasswordComponent } from './components/seller/seller-update-password/seller-update-password.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -58,12 +67,14 @@ const appRoutes: Routes = [
   {path: 'buyer', component: BuyerComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/buyer-account', component: BuyerAccountComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/cart', component: BuyerCartComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/updatePass', component: BuyerUpdatePasswordComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/checkout', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/updatePass', component: SellerUpdatePasswordComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/submit-categories', component: SubmitCategoriesComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
@@ -76,44 +87,44 @@ const appRoutes: Routes = [
 // TYPES
 // default, error, info, success, warning
 const customNotifierOptions: NotifierOptions = {
-	position: {
-		horizontal: {
-			position: 'left',
-			distance: 12
-		},
-		vertical: {
-			position: 'bottom',
-			distance: 12,
-			gap: 10
-		}
-	},
-	theme: 'material',
-	behaviour: {
-		autoHide: 3000,
-		onClick: false,
-		onMouseover: 'pauseAutoHide',
-		showDismissButton: true,
-		stacking: 4
-	},
-	animations: {
-		enabled: true,
-		show: {
-			preset: 'slide',
-			speed: 300,
-			easing: 'ease'
-		},
-		hide: {
-			preset: 'fade',
-			speed: 300,
-			easing: 'ease',
-			offset: 50
-		},
-		shift: {
-			speed: 300,
-			easing: 'ease'
-		},
-		overlap: 150
-	}
+  position: {
+    horizontal: {
+      position: 'left',
+      distance: 12
+    },
+    vertical: {
+      position: 'bottom',
+      distance: 12,
+      gap: 10
+    }
+  },
+  theme: 'material',
+  behaviour: {
+    autoHide: 3000,
+    onClick: false,
+    onMouseover: 'pauseAutoHide',
+    showDismissButton: true,
+    stacking: 4
+  },
+  animations: {
+    enabled: true,
+    show: {
+      preset: 'slide',
+      speed: 300,
+      easing: 'ease'
+    },
+    hide: {
+      preset: 'fade',
+      speed: 300,
+      easing: 'ease',
+      offset: 50
+    },
+    shift: {
+      speed: 300,
+      easing: 'ease'
+    },
+    overlap: 150
+  }
 };
 
 @NgModule({
@@ -148,7 +159,9 @@ const customNotifierOptions: NotifierOptions = {
     BuyerCartComponent,
     ResendComponent,
     ForgetPasswordComponent,
-    StripeNeededDialogComponent
+    StripeNeededDialogComponent,
+    BuyerUpdatePasswordComponent,
+    SellerUpdatePasswordComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,
@@ -188,7 +201,8 @@ const customNotifierOptions: NotifierOptions = {
     CKEditorModule,
     MomentModule
   ],
-  providers: [ValidateService, RegisterService, AuthService, StoreFetchService, SellerService, Title, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
+  providers: [ValidateService, RegisterService, AuthService,
+    StoreFetchService, SellerService, Title, {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
   bootstrap: [AppComponent]
 
 })
