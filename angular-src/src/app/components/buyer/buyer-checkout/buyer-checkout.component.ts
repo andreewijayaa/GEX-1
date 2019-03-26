@@ -287,29 +287,34 @@ export class BuyerCheckoutComponent
 
     if (error) {
       // console.log('Something is wrong:', error);
-    }
-    else {
+    } else {
       // console.log('Success!', token);
       // ...send the token to backend to process the charge
-      const obj = {
-        token: token,
-        name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
-        buyerID: this.buyer['data']['_id'],
-        email: this.buyer['data']['email'],
-        amount: this.totalPriceDisplay * 100,
-        totalOffers: this.offersInCart,
-        shippingInfo: shippingDetails,
-        orderID: 'ord_' + Math.random().toString(36).substr(2, 10),
-        // sellers: this.sellerList
-      };
-      this.buyerService.checkout(obj).subscribe((data: any) => {
-        if (data.success) {
-          // console.log('Charge Successful');
-          // console.log(data);
-        } else {
-          // console.log('Charge unsuccessful');
-        }
+      this.buyerService.getOrderNumber().subscribe((data: any) => {
+        const orderNumber = data;
+        console.log(orderNumber);
+
+        const obj = {
+          token: token,
+          name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
+          buyerID: this.buyer['data']['_id'],
+          email: this.buyer['data']['email'],
+          amount: this.totalPriceDisplay * 100,
+          totalOffers: this.offersInCart,
+          shippingInfo: shippingDetails,
+          orderID: orderNumber
+          // sellers: this.sellerList
+        };
+        
+        this.buyerService.checkout(obj).subscribe((data1: any) => {
+          if (data.success) {
+            // console.log('Charge Successful');
+            // console.log(data);
+          } else {
+            // console.log('Charge unsuccessful');
+          }
       });
+    });
     }
   }
 }

@@ -507,7 +507,7 @@ router.post("/offerRejected", (req, res /*next*/) => {
   });
 });
 
-// Retrieve Cart with offers as objects
+// Remove offer from Cart
 router.post("/removeFromCart", (req, res, next) => {
   const io = req.app.get('io');
   var token = req.headers["x-access-token"];
@@ -849,6 +849,39 @@ router.post('/reset', (req, res, next) => {
     });
   });
 })
+
+// Generate Order Number
+router.get('/generateOrderNumber', (req, res, next) => {
+  var orderNum;
+  var token = req.headers["x-access-token"];
+  // Check if there is a logged token 
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Please login." });
+
+  // Verify the token
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) return res.status(500).send({ success: false, message: "Failed to authenticate token." });
+
+    getNumber();
+
+    // Generating random number string function, it will be called recursively
+    function getNumber() {
+
+      orderNum = 'R-'+Math.random().toString().substr(2, 5) + '-' + Math.random().toString().substr(2, 3); 
+      
+      // Search for an order with the same orderNumber, avoiding duplicate order numbers
+      Order.findOne({'orderNumber': orderNum}, (err, fetchedOrders) => {
+        if (err) return getNumber();
+        if(fetchedOrders != null) return getNumber();
+        else if (fetchedOrders == null) return res.json(orderNum);
+      });
+    }
+  });
+});
+
+
 
 // Reset password - RONI
 router.post('/reset/:id', (req, res, next) => {

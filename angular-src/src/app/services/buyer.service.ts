@@ -190,6 +190,24 @@ export class BuyerService {
     }
   }
 
+  // Generate Order Number service
+  getOrderNumber() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/buyers/generateOrderNumber', httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/generateOrderNumber', httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
   // allow user to upload profile picture
   // By John
   setProfilePicture(profilePic: File): Observable<Object> {
