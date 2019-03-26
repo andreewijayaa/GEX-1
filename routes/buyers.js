@@ -161,7 +161,8 @@ router.post('/request', (req, res, next) => {
       code: req.body.code,
       title: req.body.title,
       description: req.body.description,
-      deadline: req.body.deadline
+      deadline: req.body.deadline,
+      status: "awaiting offers"
     });
 
     //code added by John to add images to requests

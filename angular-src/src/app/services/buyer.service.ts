@@ -241,7 +241,6 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    console.log(offerID);
     if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
         .pipe(map(res => res));
