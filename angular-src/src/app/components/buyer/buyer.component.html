@@ -209,11 +209,13 @@ Bryan Vu contributed most of this buyer portal page.
       <span *ngIf="column === 'deadline'">Time Remaining</span>
     </th>
      <td mat-cell *matCellDef="let element">
-        <ng-template *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true | number:'1.0-0') > 3; else next1" style="width: 90px; color: green">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
-        <ng-template #next1 *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true) <= 3 && (element.deadline | amDifference: today :'days' : true) >= 1; else next2" style="width: 90px; color: orange">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
-        <ng-template #next2 *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true) < 1 && (element.deadline | amDifference: today :'days' : true) > 0; else next3" style="width: 90px; color: orange">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
-        <ng-template #next3 *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true) <= 0; else other_content" style="width: 90px; color: red">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
-        <ng-template #other_content>{{element[column]}}</ng-template>
+        <span *ngIf="column === 'deadline'; else other;">
+            <span *ngIf="(element.deadline | amDifference: today :'days' : true | number:'1.0-0') >= 3" style="width: 90px; color: green" style="width: 90px; color: green">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+            <span *ngIf="(element.deadline | amDifference: today :'days' : true) < 3 && (element.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+            <span *ngIf="(element.deadline | amDifference: today :'days' : true) < 1 && (element.deadline | amDifference: today :'days' : true) > 0" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+            <span *ngIf="(element.deadline | amDifference: today :'days' : true) <= 0" style="width: 90px; color: red">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+          </span>
+        <ng-template #other>{{element[column]}}</ng-template>
      </td>
    </ng-container>
 
@@ -257,7 +259,15 @@ Bryan Vu contributed most of this buyer portal page.
                           <span *ngIf="column === 'shippingPrice'">Shipping Price</span>
                           <span *ngIf="column === 'price'">Offer Price</span>
                           </th>
-                          <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                          <td mat-cell *matCellDef="let element">
+                              <span *ngIf="column === 'created_at'">
+                                  <span *ngIf="element.created_at">{{element.created_at | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+                                </span>
+                                <span *ngIf="column === 'shippingPrice'; else other;">
+                                    <span>${{element.shippingPrice}}</span>
+                                  </span>
+                              <ng-template #other>{{element[column]}}</ng-template>
+                          </td>
                         </ng-container>
 
                         <!-- Expanded Offer Column - The detail row is made up of this one column that spans across all columns -->
