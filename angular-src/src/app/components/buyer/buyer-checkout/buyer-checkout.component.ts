@@ -287,8 +287,7 @@ export class BuyerCheckoutComponent
 
     if (error) {
       // console.log('Something is wrong:', error);
-    }
-    else {
+    } else {
       // console.log('Success!', token);
       // ...send the token to backend to process the charge
       const obj = {
