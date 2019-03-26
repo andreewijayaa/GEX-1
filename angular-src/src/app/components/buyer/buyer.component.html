@@ -5,7 +5,7 @@
 <!--
 Bryan Vu contributed most of this buyer portal page.
 -->
-
+<body>
 <div class="container-fluid">
   &nbsp;
   <div class="container">
@@ -32,7 +32,7 @@ Bryan Vu contributed most of this buyer portal page.
     </div>
   </div>
   &nbsp;
-  <li class="card container">
+  <!-----<li class="card container">
     &nbsp;
     <table class="table table-striped table-sm" style="background-color: #282d32; color: white">
       <thead>
@@ -140,7 +140,7 @@ Bryan Vu contributed most of this buyer portal page.
               </mat-panel-title>
               <mat-panel-title *ngIf="offerCart.indexOf(offer._id) !== -1" style="margin-left: 85%">
                 <button [disabled]="true" mat-button style="background-color: #006400; color: white;">Offer In Cart</button>
-              </mat-panel-title>-->
+              </mat-panel-title>-
               <mat-panel-title style="margin-left: 85%">
                 <button *ngIf="offer.offerAccepted === true" mat-button (click)="acceptOffer($event.target, offer._id)"
                   id="acceptOfferButton" style="background-color: #4cd137; color: white;" disabled>Offer Accepted</button>
@@ -160,7 +160,154 @@ Bryan Vu contributed most of this buyer portal page.
     <pagination-controls (pageChange)="p = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
       autoHide="true">
     </pagination-controls>
-  </li>
+  </li>--
+  </div>
+    <div class="container">
+      <table mat-table
+        [dataSource]="dataSourceRequests"
+        class="mat-elevation-z8">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Title</th>
+          <td mat-cell *matCellDef="let element">{{element.title}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Status</th>
+            <td mat-cell *matCellDef="let element">{{element.status}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="offerCount">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Offers</th>
+            <td mat-cell *matCellDef="let element">{{element.offerCount}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="deadline">
+            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Time Remaining</th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="(element.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 90px; color: green">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+              <span *ngIf="(element.deadline | amDifference: today :'days' : true) <= 3 && (element.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+              <span *ngIf="(element.deadline | amDifference: today :'days' : true) < 1 && (element.deadline | amDifference: today :'days' : true) > 0" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+              <span *ngIf="(element.deadline | amDifference: today :'days' : true) <= 0" style="width: 90px; color: red">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+      </table>
+  </div>-->
 </div>
+
+    <div class="container">
+        <table mat-table
+        [dataSource]="dataSourceRequests" multiTemplateDataRows
+        class="mat-elevation-z8">
+   <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToGetRequestInfo">
+     <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+      <span *ngIf="column === 'title'">Title</span>
+      <span *ngIf="column === 'status'">Status</span>
+      <span *ngIf="column === 'offerCount'">Offers</span>
+      <span *ngIf="column === 'deadline'">Time Remaining</span>
+    </th>
+     <td mat-cell *matCellDef="let element">
+        <ng-template *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true | number:'1.0-0') > 3; else next1" style="width: 90px; color: green">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
+        <ng-template #next1 *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true) <= 3 && (element.deadline | amDifference: today :'days' : true) >= 1; else next2" style="width: 90px; color: orange">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
+        <ng-template #next2 *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true) < 1 && (element.deadline | amDifference: today :'days' : true) > 0; else next3" style="width: 90px; color: orange">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
+        <ng-template #next3 *ngIf="column === 'deadline' && (element['deadline'] | amDifference: today :'days' : true) <= 0; else other_content" style="width: 90px; color: red">{{element['deadline'] | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element['deadline'] | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</ng-template>
+        <ng-template #other_content>{{element[column]}}</ng-template>
+     </td>
+   </ng-container>
+
+   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+   <ng-container matColumnDef="expandedDetail">
+     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToGetRequestInfo.length">
+       <div class="example-element-detail"
+            [@detailExpand]="element == expandedRequestElement ? 'expanded' : 'collapsed'">
+            <div class="container" style="border:3px solid #7f8fa6; background-color:azure">
+                &nbsp;
+                <div *ngIf="element.request_images[0]">
+                  <h6>Request Pictures:</h6>
+                    <img class= "requestimage1" src={{element.request_images[0]}} *ngIf="element.request_images[0]" alt="" width="120" height="120">
+                    &nbsp;
+                    <img class= "requestimage2" src={{element.request_images[1]}} *ngIf="element.request_images[1]" alt="" width="120" height="120">
+                    &nbsp;
+                    <img class= "requestimage3" src={{element.request_images[2]}} *ngIf="element.request_images[2]" alt="" width="120" height="120">
+                 </div>
+                 <div *ngIf="!element.request_images[0]">
+                    <h6>No Request Pictures Submitted.</h6>
+                  </div>
+                 &nbsp;
+                 <div>
+                    <h6>Request Description:</h6>
+                    <div [innerHTML]="element.description"></div>
+                    <button type="button" class="pull-right btn-danger btn-sm float-sm-right" id="editBtn" (click)="deleteRequestFunction(element._id)">Delete Request</button>
+                    &nbsp;
+                 </div>
+                 &nbsp;
+                 <div>
+                   <h6>Offers for "{{element.title}}" Request:</h6>
+                 </div>
+                 <div class="container">
+                    <table mat-table
+                    [dataSource]="dataSourceOffers" multiTemplateDataRows
+                    class="mat-elevation-z8">
+                      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToGetOfferInfo">
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+                          <span *ngIf="column === 'title'">Title</span>
+                          <span *ngIf="column === 'created_at'">Submission date</span>
+                          <span *ngIf="column === 'shippingPrice'">Shipping Price</span>
+                          <span *ngIf="column === 'price'">Offer Price</span>
+                          </th>
+                          <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                        </ng-container>
+
+                        <!-- Expanded Offer Column - The detail row is made up of this one column that spans across all columns -->
+                        <ng-container matColumnDef="expandedDetail">
+                          <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToGetOfferInfo.length">
+                            <div class="example-element-detail"
+                            [@detailExpand]="element == expandedOfferElement ? 'expanded' : 'collapsed'">
+                              <div class="container" style="border:3px solid #7f8fa6; background-color:azure">
+                                &nbsp;
+                                <div>
+                                    <h6>Offer Description:</h6>
+                                    <div [innerHTML]="element.description"></div>
+                                    &nbsp;
+                                    <button mat-button *ngIf="element.offerAccepted" class="pull-right btn-danger btn-sm float-sm-right" (click)="acceptOffer($event.target, element._id)" id="acceptOfferButton" style="background-color:limegreen; color: white;" disabled>Offer Accepted</button>
+                                    <button mat-button *ngIf="!element.offerAccepted" class="pull-right btn-danger btn-sm float-sm-right" (click)="acceptOffer($event.target, element._id)" id="acceptOfferButton" style="background-color:slateblue; color: white;">Accept Offer</button>
+                                    &nbsp;
+                                 </div>
+                                 &nbsp;
+                              </div>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="columnsToGetOfferInfo"></tr>
+                        <tr mat-row *matRowDef="let element; columns: columnsToGetOfferInfo;"
+                          class="example-element-row"
+                          [class.example-expanded-row]="expandedOfferElement === element"
+                          (click)="expandedOfferElement = expandedOfferElement === element ? null : element">
+                        </tr>
+                        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+                        </table>
+                        &nbsp;
+                 </div>
+                 &nbsp;
+            </div>
+       </div>
+     </td>
+   </ng-container>
+
+   <tr mat-header-row *matHeaderRowDef="columnsToGetRequestInfo"></tr>
+   <tr mat-row *matRowDef="let element; columns: columnsToGetRequestInfo;" (click)="expanded(element._id)"
+       class="example-element-row"
+       [class.example-expanded-row]="expandedRequestElement === element"
+       (click)="expandedRequestElement = expandedRequestElement === element ? null : element">
+   </tr>
+   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+ </table>
+    </div>
+
+
+</body>
 
 <div class="clearfooter"></div>

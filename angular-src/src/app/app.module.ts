@@ -43,6 +43,7 @@ import { MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, M
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SubmitOfferDialogComponent, StripeNeededDialogComponent, OfferSubmittedDialogComponent, OfferSubmittedFailedDialogComponent, StipeAccountCreatedSuccessDialogComponent, StipeAccountCreatedFailedDialogComponent } from './components/seller/seller.component';
 import { BuyerCartComponent } from './components/buyer/buyer-cart/buyer-cart.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { ResendComponent } from './components/activation/resend/resend.component';

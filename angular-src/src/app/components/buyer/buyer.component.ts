@@ -4,14 +4,43 @@ import { BuyerService } from '../../services/buyer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { MatDialog } from '@angular/material';
-import { NotifierService } from "angular-notifier";
+import { NotifierService } from 'angular-notifier';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import * as io from 'socket.io-client';
+import { relative } from 'path';
 
+export interface RequestElement {
+  title: String;
+  status: String;
+  offerCount: String;
+  deadline: String;
+  description: String;
+  request_images: [String];
+  _id: String;
+}
+
+export interface OfferElement {
+  title: String;
+  description: String;
+  price: String;
+  shippingPrice: String;
+  offerStatus: String;
+  created_at: String;
+  _id: String;
+  offerAccepted: Boolean;
+}
 
 @Component({
   selector: 'app-buyer',
   templateUrl: './buyer.component.html',
-  styleUrls: ['./buyer.component.css']
+  styleUrls: ['./buyer.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class BuyerComponent implements OnInit {
   socket;
@@ -26,6 +55,13 @@ export class BuyerComponent implements OnInit {
   offerTitleAddToCart: String;
   offerCart: [String] = [''];
   buyer_firstName: any;
+
+  dataSourceRequests = [];
+  dataSourceOffers = [];
+  columnsToGetRequestInfo = ['title', 'status', 'offerCount', 'deadline'];
+  columnsToGetOfferInfo = ['title', 'created_at', 'shippingPrice', 'price'];
+  expandedRequestElement: RequestElement | null;
+  expandedOfferElement: OfferElement | null;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
@@ -46,6 +82,7 @@ export class BuyerComponent implements OnInit {
     this.buyerService.getBuyerRequests().subscribe((requests: any) => {
       if (requests.success) {
         this.requestList = requests['requests'];
+        this.dataSourceRequests = requests['requests'];
       } else {
         console.log('could not fetch buyer requests');
       }
@@ -83,6 +120,7 @@ export class BuyerComponent implements OnInit {
     this.requestService.getRequest(requestId).subscribe((data: any) => {
       if (data.success) {
         this.offerList = data.offers;
+        this.dataSourceOffers = data.offers;
         this.offerCart = this.buyerProfile['offerCart'];
         // console.log(this.offerCart);
 
@@ -113,7 +151,6 @@ export class BuyerComponent implements OnInit {
     };
 
     this.buyerService.deleteBuyerRequest(request_delete).subscribe((data: any) => {
-      console.log(data);
       // debugger;
       if (data.success == false){
         this.notifier.notify('error', data.message);
@@ -135,8 +172,10 @@ export class BuyerComponent implements OnInit {
       if (data.success) {
         // console.log("Offer Accepted Successful.");
         (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
+        (<HTMLButtonElement>document.getElementById('acceptOfferButton')).innerHTML = 'Offer Accepted';
+        this.notifier.notify('success', 'Offer was successfully accepted.');
       } else {
-        // console.log("Offer Accepted NOT Successful.");
+        this.notifier.notify('error', 'Offer was unable to be accepted.');
       }
     });
 

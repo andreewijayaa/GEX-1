@@ -18,6 +18,10 @@ const RequestSchema = mongoose.Schema({
     type:String,
     required: true
   },
+  status: {
+    type: String,
+    required: true
+  },
   deadline:{
     type:Date
   },
