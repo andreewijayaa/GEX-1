@@ -201,6 +201,7 @@ Bryan Vu contributed most of this buyer portal page.
         <table mat-table
         [dataSource]="dataSourceRequests" multiTemplateDataRows
         class="mat-elevation-z8">
+
    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToGetRequestInfo">
      <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
       <span *ngIf="column === 'title'">Title</span>
@@ -311,6 +312,13 @@ Bryan Vu contributed most of this buyer portal page.
                         </tr>
                         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
                         </table>
+                        <div *ngIf="dataSourceOffers.length === 0" class="float-center">
+                            <div class="card" style="border-color:#7f8fa6; border-width: 3px; text-align: center">
+                              &nbsp;
+                                <h6>You do not have an offers yet for this request.</h6>
+                                &nbsp;
+                            </div>
+                           </div>
                         &nbsp;
                  </div>
                  &nbsp;
@@ -327,6 +335,13 @@ Bryan Vu contributed most of this buyer portal page.
    </tr>
    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
  </table>
+ <div *ngIf="dataSourceRequests.filteredData.length === 0" class="float-center">
+  <div class="card" style="border-color:#7f8fa6; border-width: 3px; text-align: center">
+    &nbsp;
+      <h6>You have not made any product requests yet.</h6>
+      &nbsp;
+  </div>
+ </div>
     </div>
 
 
