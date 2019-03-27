@@ -57,6 +57,7 @@ import { ResendComponent } from './components/activation/resend/resend.component
 import { ForgetPasswordComponent } from './components/activation/forget-password/forget-password.component';
 import { BuyerUpdatePasswordComponent } from './components/buyer/buyer-update-password/buyer-update-password.component';
 import { SellerUpdatePasswordComponent } from './components/seller/seller-update-password/seller-update-password.component';
+import { OrderConfirmComponent } from './components/buyer/order-confirm/order-confirm.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -70,6 +71,7 @@ const appRoutes: Routes = [
   {path: 'buyer/updatePass', component: BuyerUpdatePasswordComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/checkout', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/orderConfirm/:order', component: OrderConfirmComponent, canActivate: [BuyerAuthGuard]},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
@@ -161,7 +163,8 @@ const customNotifierOptions: NotifierOptions = {
     ForgetPasswordComponent,
     StripeNeededDialogComponent,
     BuyerUpdatePasswordComponent,
-    SellerUpdatePasswordComponent
+    SellerUpdatePasswordComponent,
+    OrderConfirmComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,

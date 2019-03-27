@@ -613,9 +613,12 @@ router.post("/charge", (req, res) => {
     totalOffers: req.body.totalOffers,
     shippingInfo: req.body.shippingInfo,
     orderID: req.body.orderID,
-    name: req.body.name,
-    sellers: req.body.sellers
+    name: req.body.name
   };
+
+  //console.log(purchaseInfo);
+
+
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
     if (!info)
@@ -641,12 +644,14 @@ router.post("/charge", (req, res) => {
               description: "Charge for " + purchaseInfo.name + ".",
               customer: customer.id,
               receipt_email: purchaseInfo.stripeEmail,
-              metadata: {
-                order_id: purchaseInfo.orderID
-              },
-              // transfer_group: purchaseInfo.orderID
+              // metadata: {
+              //   order_id: purchaseInfo.orderID
+              // },
+              transfer_group: purchaseInfo.orderID
             })
-            .then(charge => res.send({ success: true, charge }));
+            .then(function(charge) {
+              // asynchronously called
+            });
         });
     } else if (info.stripe_customer === true) {
       console.log("Is already a stripe customer");
@@ -663,10 +668,32 @@ router.post("/charge", (req, res) => {
             customer: customer.id
           })
         )
-        .then(charge => res.send({ success: true, charge }));
+        .then(function(charge) {
+          // asynchronously called
+        });
     } else {
       res.json({ success: false, msg: "Could not charge customer" });
     }
+
+    // Create Transactions
+    purchaseInfo.totalOffers.forEach(offer => {
+
+      const totalAmount = (offer.price + offer.shippingPrice);
+      console.log('Amount = '+totalAmount)
+      Seller.findById(offer.seller_ID, (err, seller) => {
+      if (seller.stripe.stripe_user_id == null || seller.stripe.stripe_user_id == undefined) return res.json({ success: false, msg: "Unable To complete Transaction." });
+      
+      // Create a Transfer to the connected account (later):
+      stripe.transfers.create({
+        amount: totalAmount,
+        currency: "usd",
+        destination: seller.stripe.stripe_user_id,
+        transfer_group: purchaseInfo.orderID,
+      }).then(function(transfer) {
+        // asynchronously called
+      });
+    });
+  });
   });
 
   // for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
