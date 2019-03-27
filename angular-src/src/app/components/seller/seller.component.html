@@ -123,7 +123,7 @@
 
                   <mat-accordion>
                     <p align="center" *ngIf="activeRequests.length === 0">
-                      You haven't subscibed to any active requests yet.
+                      No active requests to see here.
                     </p>
                     <mat-expansion-panel id="requestExpansionId" *ngFor="let request of activeRequests | filter:sfilter | paginate: {itemsPerPage: 25, currentPage: pr}">
                       <mat-expansion-panel-header style="text-align:center">
@@ -236,7 +236,7 @@
 
                     <mat-accordion>
                       <p align="center" *ngIf="offerList.length === 0">
-                        You haven't made any product offers yet.
+                        No product offers to see here.
                       </p>
                       <mat-expansion-panel id="requestExpansionId" *ngFor="let offer of offerList | filter:ofilter | paginate: {itemsPerPage: 25, currentPage: po}">
                         <mat-expansion-panel-header style="text-align:center">
@@ -339,7 +339,7 @@
 
                   <mat-accordion>
                     <p align="center" *ngIf="offerList.length == 0">
-                      You don't have any archived offers yet.
+                      No archived requests to see here.
                     </p>
                     <mat-expansion-panel id="archivedRequestExpansionId" *ngFor="let archived of archivedRequests | filter:sfilter | paginate: {itemsPerPage: 25, currentPage: pr}">
                       <mat-expansion-panel-header style="text-align:center">
