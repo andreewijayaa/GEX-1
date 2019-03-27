@@ -312,6 +312,7 @@ export class BuyerCheckoutComponent
           orderID: orderNumber
           // sellers: this.sellerList
         };
+        console.log(this.offersInCart);
 
         this.buyerService.checkout(obj).subscribe((data1: any) => {
           if (data.success) {
