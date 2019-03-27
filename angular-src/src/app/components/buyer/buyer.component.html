@@ -27,7 +27,7 @@ Bryan Vu contributed most of this buyer portal page.
         <h3>{{buyer_firstName}}'s Requests</h3>
       </div>
       <div class="input-group col searchBox">
-        <input type="text" class="form-control" placeholder="Search Requests" [(ngModel)]="filter">
+        <input type="text" class="form-control" placeholder="Search Requests" (keyup)="searchFilter($event.target.value)">
       </div>
     </div>
   </div>
@@ -201,6 +201,7 @@ Bryan Vu contributed most of this buyer portal page.
         <table mat-table
         [dataSource]="dataSourceRequests" multiTemplateDataRows
         class="mat-elevation-z8">
+
    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToGetRequestInfo">
      <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
       <span *ngIf="column === 'title'">Title</span>
@@ -261,12 +262,18 @@ Bryan Vu contributed most of this buyer portal page.
                           </th>
                           <td mat-cell *matCellDef="let element">
                               <span *ngIf="column === 'created_at'">
-                                  <span *ngIf="element.created_at">{{element.created_at | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+                                  <span>{{element.created_at | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
                                 </span>
-                                <span *ngIf="column === 'shippingPrice'; else other;">
+                                <span *ngIf="column === 'shippingPrice'">
                                     <span>${{element.shippingPrice}}</span>
                                   </span>
-                              <ng-template #other>{{element[column]}}</ng-template>
+                                  <span *ngIf="column === 'title'">
+                                      <span>{{element.title}}</span>
+                                    </span>
+                                  <span *ngIf="column === 'price'; else other">
+                                      <span>${{element.price}}</span>
+                                    </span>
+                              <ng-template #other></ng-template>
                           </td>
                         </ng-container>
 
@@ -277,9 +284,15 @@ Bryan Vu contributed most of this buyer portal page.
                             [@detailExpand]="element == expandedOfferElement ? 'expanded' : 'collapsed'">
                               <div class="container" style="border:3px solid #7f8fa6; background-color:azure">
                                 &nbsp;
+                                &nbsp;
+                                <div>
+                                  <h6>Seller Name:</h6>
+                                  <span>{{seller_firstName}} {{seller_lastName}}</span>
+                                </div>
+                                &nbsp;
                                 <div>
                                     <h6>Offer Description:</h6>
-                                    <div [innerHTML]="element.description"></div>
+                                    <div class="float-center" [innerHTML]="element.description"></div>
                                     &nbsp;
                                     <button mat-button *ngIf="element.offerAccepted" class="pull-right btn-danger btn-sm float-sm-right" (click)="acceptOffer($event.target, element._id)" id="acceptOfferButton" style="background-color:limegreen; color: white;" disabled>Offer Accepted</button>
                                     <button mat-button *ngIf="!element.offerAccepted" class="pull-right btn-danger btn-sm float-sm-right" (click)="acceptOffer($event.target, element._id)" id="acceptOfferButton" style="background-color:slateblue; color: white;">Accept Offer</button>
@@ -292,13 +305,20 @@ Bryan Vu contributed most of this buyer portal page.
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="columnsToGetOfferInfo"></tr>
-                        <tr mat-row *matRowDef="let element; columns: columnsToGetOfferInfo;"
+                        <tr mat-row *matRowDef="let element; columns: columnsToGetOfferInfo;" (click)="expandedOffer(element.seller_ID)"
                           class="example-element-row"
                           [class.example-expanded-row]="expandedOfferElement === element"
                           (click)="expandedOfferElement = expandedOfferElement === element ? null : element">
                         </tr>
                         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
                         </table>
+                        <div *ngIf="dataSourceOffers.length === 0" class="float-center">
+                            <div class="card" style="border-color:#7f8fa6; border-width: 3px; text-align: center">
+                              &nbsp;
+                                <h6>You do not have an offers yet for this request.</h6>
+                                &nbsp;
+                            </div>
+                           </div>
                         &nbsp;
                  </div>
                  &nbsp;
@@ -315,6 +335,13 @@ Bryan Vu contributed most of this buyer portal page.
    </tr>
    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
  </table>
+ <div *ngIf="dataSourceRequests.filteredData.length === 0" class="float-center">
+  <div class="card" style="border-color:#7f8fa6; border-width: 3px; text-align: center">
+    &nbsp;
+      <h6>You have not made any product requests yet.</h6>
+      &nbsp;
+  </div>
+ </div>
     </div>
 
 
