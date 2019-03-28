@@ -42,7 +42,7 @@ module.exports.sellerEmailVerified = function(user, callback){
 
 //Function that will take in a seller, and request ID then email applicable sellers with a link to the request
 //Used Upon buyer submitting a new request
-module.exports.NotifySellerNewRequest= function(seller, request, callback){
+module.exports.NotifySellerNewRequest= function(seller, request, callback) {
   const msg = {
     to: seller.email,
     from: 'do_not_reply@requiren.com',

@@ -275,6 +275,7 @@ export class SellerComponent implements OnInit {
     let offerDescription: any;
     let offerPrice: any;
     let offerShipping: any;
+    let offerCompletion: any;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -293,6 +294,7 @@ export class SellerComponent implements OnInit {
           offerDescription = data['description'];
           offerPrice = data['price'];
           offerShipping = data['shipping'];
+          offerCompletion = data['completion'];
 
           const offer = {
             title: offerTitle,
@@ -320,8 +322,7 @@ export class SellerComponent implements OnInit {
               }, 4000);
             }
           });
-        }
-        else {
+        } else {
           //do nothing
         }
       }
@@ -416,8 +417,11 @@ export class SubmitOfferDialogComponent implements OnInit {
   confirmDescription: String;
   confirmPrice: any;
   confirmShipping: any;
+  confirmCompletion: String;
   shipping = false;
   offerFormGroup: FormGroup;
+// tslint:disable-next-line: max-line-length
+  completionPlaceholder = 'If your offer is purchased, when can you complete & have it delivered by?';
 
   constructor(
     private fb: FormBuilder,
@@ -432,6 +436,7 @@ export class SubmitOfferDialogComponent implements OnInit {
     this.offerFormGroup = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      completion: ['', Validators.required],
       shipping: [''],
       price: ['', Validators.required]
     });
@@ -447,6 +452,7 @@ export class SubmitOfferDialogComponent implements OnInit {
       // var price = formatCurrency(this.priceFormControl.value, "en", "$");
     this.confirmTitle = this.offerFormGroup.controls.title.value;
     this.confirmDescription = this.offerFormGroup.controls.description.value;
+    this.confirmCompletion = this.offerFormGroup.controls.completion.value;
     this.confirmPrice = this.offerFormGroup.controls.price.value;
     this.submitOffer = true;
   }
@@ -456,7 +462,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   confirmDialogSubmit() {
-    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice, shipping: this.confirmShipping});
+    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, completion: this.confirmCompletion, price: this.confirmPrice, shipping: this.confirmShipping});
   }
 
   confirmDialogCancel() {

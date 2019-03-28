@@ -467,9 +467,11 @@ router.get("/retrieveCart", (req, res, next) => {
 
 // Offer Accepted
 router.post("/offerAccepted", (req, res /*next*/) => {
+  const io = req.app.get('io');
   let accepted = {
     id: req.body.offer_ID,
-    offerAccepted: req.body.offer_accepted
+    offerAccepted: req.body.offer_accepted,
+    requestId: req.body.request_id
   };
 
   Offer.findById(accepted.id, (err, offer) => {
@@ -480,8 +482,23 @@ router.post("/offerAccepted", (req, res /*next*/) => {
       });
     else {
       offer.offerAccepted = accepted.offerAccepted;
-      offer.save();
-      res.json({ success: true });
+      offer.offerStatus = "Accepted, awaiting payment";
+      offer.save().then(() => {
+        io.emit('updatedBuyerProfileInfo');
+        Request.findById(accepted.requestId, (err, request) => {
+          if (!request) {
+            return res.status(405).send({
+              success: false,
+              message: "offer accepted but could not update request status"
+            });
+          } else {
+            request.status = 'offer(s) accepted';
+            request.accepted_offers_byID.push(accepted.id);
+            request.save();
+            res.json({ success: true });
+          }
+        });
+      });
     }
   });
 });
@@ -490,7 +507,8 @@ router.post("/offerAccepted", (req, res /*next*/) => {
 router.post("/offerRejected", (req, res /*next*/) => {
   let removed = {
     id: req.body.offer_ID,
-    offerRemoved: req.body.offer_removed
+    offerRemoved: req.body.offer_removed,
+    requestId: req.body.request_ID
   };
 
   Offer.findById(removed.id, (err, offer) => {
@@ -501,8 +519,15 @@ router.post("/offerRejected", (req, res /*next*/) => {
       });
     else {
       offer.offerAccepted = removed.offerRemoved;
-      offer.save();
-      res.json({ success: true });
+      offer.save().then(() => {
+        Request.findById(removed.requestId, (err, request) => {
+          request.accepted_offers_byID.forEach(offerID => {
+            
+          });
+          console.log(request);
+          res.json({ success: true });
+        });
+      });
     }
   });
 });
@@ -548,6 +573,7 @@ router.post("/removeFromCart", (req, res, next) => {
       if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
         buyerViewingCart.save().then(() => {
           io.emit('updatedBuyerCartInfo');
+          Request.findById()
           return res
           .status(200)
           .send({ success: true, msg: "Offer removed from cart." });
