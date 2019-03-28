@@ -406,7 +406,8 @@ router.post("/makeOffer", (req, res, next) => {
       offerStatus: "Pending",
       description: req.body.description,
       price: req.body.price,
-      shippingPrice: req.body.shipPrice
+      shippingPrice: req.body.shipPrice,
+      expected_completion: req.body.expected_completion
     });
     // Check if request is expired
     Request.findById(req.body.request_ID, (err, requestBeingOffered) => {
