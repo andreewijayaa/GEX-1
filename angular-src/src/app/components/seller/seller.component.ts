@@ -352,6 +352,7 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.addArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
+        window.location.reload();
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);
