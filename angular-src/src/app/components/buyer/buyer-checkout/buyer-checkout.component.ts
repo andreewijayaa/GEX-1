@@ -38,28 +38,27 @@ export class BuyerCheckoutComponent
   error: string;
 
   private readonly notifier: NotifierService;
-  selectedOfferId: any;
-  offerList: Object;
-  request_Id: any;
+
+
+
   offerPrice: any;
   offerShipping: any;
   totalPrice: any;
-  isDataAvailable: Boolean = false;
+
   buyer: any;
   billingFormGroup: FormGroup;
   shippingFormGroup: FormGroup;
   paymentFormGroup: FormGroup;
   offersInCart: [String];
   emptyCart: Boolean;
-  orderFees: Number;
-  editable: Boolean = false;
-  sellerList = [];
+
+
   billingSameAsShipping = false;
+  stripeFees: Number;
 
   //FOR DISPLAY
   offerPriceDisplay: any;
   offerShippingDisplay: any;
-  // orderFeesDisplay: any;
   totalPriceDisplay: any;
   totalBeforeTaxDisplay: any;
   estimatedTaxDisplay = '----';
@@ -140,33 +139,31 @@ export class BuyerCheckoutComponent
         this.buyer = data.buyer_found;
       } else {
         console.log('Error: could not fetch buyer information');
+        this.router.navigate(['/']);
       }
     });
 
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
-        // console.log(data);
-        this.emptyCart = false;
-        this.offersInCart = data.offersInCart;
-        this.offerPrice = data.offerPriceTotal;
-        this.offerShipping = data.offerShippingTotal;
-        // this.orderFees = data.orderFees;
-        this.totalPrice = data.orderTotal;
-        // console.log(this.offersInCart);
-        for (let i = 0; i < this.offersInCart['length']; i++) {
-          this.sellerList.push(this.offersInCart[i]['seller_ID']);
-        }
-       // console.log(this.sellerList);
 
-        // CONVERT ALL TO TWO SIG FIGS
+
+        this.emptyCart = false; // Will be used as a pre condition
+        this.offersInCart = data.offersInCart; //Object of all the objects of offers in cart
+        this.offerPrice = data.offerPriceTotal; // Total price of those offers
+        this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
+
+        this.totalPrice = data.orderTotal; // Offers price + shipping price
+
+
+
+        // CONVERT ALL TO TWO SIG FIGS - For displaying purposes
         this.totalBeforeTaxDisplay = this.offerPrice + this.offerShipping;
         this.totalBeforeTaxDisplay = this.totalBeforeTaxDisplay.toFixed(2);
         this.offerPriceDisplay = this.offerPrice.toFixed(2);
         this.offerShippingDisplay = this.offerShipping.toFixed(2);
-        // this.orderFeesDisplay = this.orderFees.toFixed(2);
-        this.totalPriceDisplay = this.totalPrice.toFixed(2);
+        this.totalPriceDisplay = '----';
       } else {
-        this.notifier.notify('warning', 'Must accept offers to checkout.');
+        this.notifier.notify('warning', 'Must have offers in cart to checkout.');
         this.router.navigate(['/buyer']);
       }
     });
@@ -259,10 +256,23 @@ export class BuyerCheckoutComponent
     };
     this.buyerService.getTax(infoObj).subscribe((data: any) => {
       if (data.success) {
-        console.log(data);
-        console.log(data.result.tax.amount_to_collect);
-        this.estimatedTaxDisplay = String('$' + data.result.tax.amount_to_collect);
-        this.totalPriceDisplay = this.totalPrice + data.result.tax.amount_to_collect;
+
+        // Used to calculate stripe fee
+        var totalPriceWithTax = this.totalPrice + data.result.tax.amount_to_collect
+
+        //STRIPE: in the US (assuming standard US pricing of 2.9% + 30¢ per successful charge)
+        var stripeFee = ((totalPriceWithTax*0.029) + 0.30);
+        stripeFee = (Math.round(stripeFee * 100) / 100);
+
+        // Tax and Stripe Fee added up
+        var totalFees = data.result.tax.amount_to_collect + stripeFee;
+
+        var totalamountwithFees = totalFees + this.totalPrice;
+        totalamountwithFees = (Math.round(totalamountwithFees * 100) / 100);
+        this.totalPrice = totalamountwithFees;
+        this.estimatedTaxDisplay = String('$' + totalFees);
+        this.totalPriceDisplay = '$' + totalamountwithFees;
+
       } else {
         console.log(data);
       }
@@ -306,13 +316,13 @@ export class BuyerCheckoutComponent
           name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
           buyerID: this.buyer._id,
           email: this.buyer.email,
-          amount: this.totalPriceDisplay,
+          amount: this.totalPrice,
           totalOffers: this.offersInCart,
           shippingInfo: shippingDetails,
           orderID: orderNumber
           // sellers: this.sellerList
         };
-        console.log(this.offersInCart);
+        console.log(obj);
 
         this.buyerService.checkout(obj).subscribe((data1: any) => {
           if (data.success) {

@@ -412,17 +412,17 @@ router.get("/retrieveCart", (req, res, next) => {
       .send({ success: false, message: "Must Login to view Cart!." });
   var orderTotal = 0,
     offerPriceTotal = 0,
-    offerShippingTotal = 0,
-    orderFees = 0;
+    offerShippingTotal = 0;
   // Must be a buyer logged in to be able to enter an item to cart
   jwt.verify(token, config.secret, function(err, decoded) {
     if (err)
       return res
         .status(500)
         .send({ success: false, message: "Failed to authenticate user." });
-
+    // Find the buyer that is trying to retrieve Cart
     Buyer.findById(decoded.data._id, (err, buyerViewingCart) => {
       if (err) return handleError(err);
+      //Check to make sure buyer has offers in cart
       if (
         buyerViewingCart.offerCart == undefined ||
         buyerViewingCart.offerCart.length <= 0
@@ -430,7 +430,7 @@ router.get("/retrieveCart", (req, res, next) => {
         return res
           .status(200)
           .send({ success: false, message: "Cart is Empty." });
-
+      // Fetch the offers by getting the offer id from buyers cart
       Offer.find(
         { _id: { $in: buyerViewingCart.offerCart } },
         (err, offersInCart) => {
@@ -440,13 +440,13 @@ router.get("/retrieveCart", (req, res, next) => {
               .send({ success: false, message: "Offer not found." });
           var offers = offersInCart;
 
-          // Add entity name to the returned object.
+          // Add the total price of offers / and the shipping for those offers 
           offersInCart.forEach(function(currentOffer) {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
             offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
-            //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-            //});
           });
+
+          
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
           offerShippingTotal = Math.round(offerShippingTotal * 100) / 100;
           orderTotal = offerPriceTotal + offerShippingTotal;
@@ -602,7 +602,7 @@ router.post("/tax", (req, res) => {
   });
 })
 
-// By: Omar
+// By: Omar (Stripe Charge) & Roni (Transfer algorithm)
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
 router.post("/charge", (req, res) => {
 
@@ -621,57 +621,49 @@ router.post("/charge", (req, res) => {
 
   };
 
-  //console.log(purchaseInfo);
-
-
-
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
 
     //******************************************************************* */
     // Create Transactions
     function processTransaction(Charge_id){
+
         // Iterate through all the offers passed in with the charge
         purchaseInfo.totalOffers.forEach(offer => {
+
           // Calculate the total amount + Stripe fee + Requiren fee
-          const totalAmount = (purchaseInfo.amount);
-
-          //STRIPE: in the US (assuming standard US pricing of 2.9% + 30¢ per successful charge) 
-          // Wrong here in the calculation
-          var stripeFee = ((totalAmount*0.029) + 0.30); 
-          stripeFee = (Math.round(stripeFee * 100) / 100);
-          stripeFee = (stripeFee*100);
-
+          const totalAmount = offer.price + offer.shippingPrice;
+          console.log('totalAmount = ' + totalAmount);
           //Requiren Fee 
           var requirenFee = (totalAmount*0.030); 
           requirenFee = (Math.round(requirenFee * 100) / 100);
           requirenFee = (requirenFee*100);
-
+          console.log('requirenFee = ' + requirenFee);
           //Getting the final seller payment amount
-          var totalChargedAmount = (totalAmount*100);
-          totalChargedAmount = (totalChargedAmount-stripeFee);
-          totalChargedAmount = (totalChargedAmount-requirenFee);
-          
+          var sellerProfit = (totalAmount*100);
+          sellerProfit = (sellerProfit-requirenFee);
+          console.log('sellerProfit = ' + sellerProfit);
           // Fetch Seller Stripe ID 
           Seller.findById(offer.seller_ID, (err, seller) => {
           if (seller.stripe.stripe_user_id == null || seller.stripe.stripe_user_id == undefined) return res.json({ success: false, msg: "Unable To complete Transaction." });
           
           // Create a Transfer to the connected account (later):
           stripe.transfers.create({
-            amount: totalChargedAmount,
+            amount: sellerProfit,
             currency: "usd",
             destination: seller.stripe.stripe_user_id,
             source_transaction: Charge_id, // Used to make sure that the the amounts being trasitioned will not exceed the initial charge amount
           }, function(err, result) { 
             if (err) return console.log(err)
-            console.log(result);
               if(result != null) {
+                
                 if(result.id != null) {
+
                   var offerPurchased = {
                     id: result.id,
                     offerID: offer.id,
                     offerFulfillmentStatus: 'Ordered',
                     GroudID: result.transfer_group,
-                    sellerProfit: (result.amount/100)
+                    sellerProfit: (result.amount/100).toFixed(2)
                   };
                   offerIDarray.push(offerPurchased);
                   offerCounter++;
