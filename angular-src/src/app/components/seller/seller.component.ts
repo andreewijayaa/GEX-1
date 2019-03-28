@@ -72,6 +72,7 @@ export class SellerComponent implements OnInit {
   progress1: any;
   progress2: any;
   progress3: any;
+  progress4: any;
   temp: any;
   archivedRequests = [];
   seller_firstName: any;
@@ -137,6 +138,7 @@ export class SellerComponent implements OnInit {
     this.progress1 = 0;
     this.progress2 = 0;
     this.progress3 = 0;
+    this.progress4 = 0;
   }
 
   getSellerProfile() {
@@ -151,14 +153,14 @@ export class SellerComponent implements OnInit {
         if (this.seller.user_account_setup[0]) {
           this.progress1 = 100;
           if (this.seller.user_account_setup[1]) {
-            this.progress2 = 50;
+            this.progress2 = 100;
             if (this.seller.user_account_setup[2]) {
-              this.progress2 = 100;
+              this.progress3 = 100;
               if (this.seller.user_account_setup[3]) {
-                this.progress3 = 100;
-              } else { this.progress3 = 50; }
-            } else { this.progress2 = 50; }
-          } else { this.progress2 = 25; }
+                this.progress4 = 100;
+              } else { this.progress4 = 50; }
+            } else { this.progress3 = 50; }
+          } else { this.progress2 = 50; }
         } else { this.progress1 = 50; }
 
         if (this.seller.user_account_setup[0]
