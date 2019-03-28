@@ -1,14 +1,16 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
+import { RequestService } from '../../services/request.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource, MatTab } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { invalid } from '@angular/compiler/src/render3/view/util';
 import { NotifierService } from 'angular-notifier';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import { formatCurrency } from '@angular/common';
 import * as io from 'socket.io-client';
 
@@ -27,6 +29,8 @@ export interface OfferElement {
   shippingPrice: String;
   offerStatus: String;
   offerAccepted: String;
+  created_at: Date;
+  request_ID: String;
 }
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -40,7 +44,14 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-seller',
   templateUrl: './seller.component.html',
-  styleUrls: ['./seller.component.css']
+  styleUrls: ['./seller.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class SellerComponent implements OnInit {
 
@@ -69,7 +80,7 @@ export class SellerComponent implements OnInit {
   dataSourceArchived = new MatTableDataSource(this.archivedRequests);
 
   displayRequestColumns = ['title', 'status', 'deadline'];
-  displayOfferColumns = ['title', 'offerStatus', 'offerAccepted'];
+  displayOfferColumns = ['title', 'offerStatus', 'created_at'];
   displayArchivedColumns = ['title', 'status', 'deadline'];
   expandedRequestElement: RequestElement | null;
   expandedOfferElement: OfferElement | null;
@@ -79,6 +90,7 @@ export class SellerComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     notifierService: NotifierService,
+    private requestService: RequestService,
     private router: Router) {
     this.notifier = notifierService;
     this.socket = io('http://localhost:3000');
@@ -158,6 +170,8 @@ export class SellerComponent implements OnInit {
           this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
             if (offers.success) {
               this.offerList = offers.offers;
+              this.dataSourceOffers = new MatTableDataSource(offers.offers);
+              // console.log(this.dataSourceOffers);
             } else {
               console.log('Could not fetch offers');
             }
@@ -171,6 +185,8 @@ export class SellerComponent implements OnInit {
           this.sellerService.getActiveRequests().subscribe((requests: any) => {
             if (requests.success) {
               this.activeRequests = requests.active_requests;
+              this.dataSourceRequests = new MatTableDataSource(requests.active_requests);
+              // console.log(this.dataSourceRequests);
             } else {
               console.log('could not fetch requests');
             }
@@ -184,6 +200,8 @@ export class SellerComponent implements OnInit {
           this.sellerService.getArchivedRequests().subscribe((archived: any) => {
             if (archived.success) {
               this.archivedRequests = archived.archived_request;
+              this.dataSourceArchived = new MatTableDataSource(archived.archived_request);
+              // console.log(this.dataSourceArchived);
             } else {
               console.log('Could not fetch archieved requests');
             }
@@ -221,7 +239,7 @@ export class SellerComponent implements OnInit {
   }
 
   searchArchivedFilter(filterValue: string) {
-    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+    this.dataSourceArchived.filter = filterValue.trim().toLowerCase();
   }
 
   expandedRequest(id: any) {
@@ -229,7 +247,15 @@ export class SellerComponent implements OnInit {
   }
 
   expandedOffer(id: any) {
-
+    const requestId = id;
+    // Make a call to retrieve request information with all offers to that request
+    this.requestService.getRequest(requestId).subscribe((data: any) => {
+      if (data.success) {
+        console.log(data);
+      } else {
+        console.log('could not fetch request data');
+      }
+    });
   }
 
   expandedArchived(id: any) {
