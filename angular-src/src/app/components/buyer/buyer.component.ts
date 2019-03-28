@@ -9,6 +9,7 @@ import { NotifierService } from 'angular-notifier';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import * as io from 'socket.io-client';
 import { relative } from 'path';
+import { timeInterval } from 'rxjs/operators';
 
 export interface RequestElement {
   title: String;
@@ -29,6 +30,7 @@ export interface OfferElement {
   created_at: String;
   _id: String;
   offerAccepted: Boolean;
+  expected_completion: String;
 }
 
 @Component({
@@ -59,6 +61,7 @@ export class BuyerComponent implements OnInit {
   sellerInfo: any;
   seller_firstName: String;
   seller_lastName: String;
+  offerAccepted: Boolean;
 
   dataSourceRequests = new MatTableDataSource(this.requestList);
   dataSourceOffers = [];
@@ -67,7 +70,7 @@ export class BuyerComponent implements OnInit {
   expandedRequestElement: RequestElement | null;
   expandedOfferElement: OfferElement | null;
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private registerService: RegisterService,
@@ -96,7 +99,7 @@ export class BuyerComponent implements OnInit {
       }
     });
 
-    // this.dataSourceRequests.paginator = this.paginator;
+    this.dataSourceRequests.paginator = this.paginator;
     // this.dataSourceRequests.sort = this.sort;
   }
 
@@ -177,19 +180,19 @@ export class BuyerComponent implements OnInit {
 
   }
 
-  acceptOffer(element, offer_id) {
-    // const offer_id = document.getElementById('offerId').innerHTML;
+  acceptOffer(element, offer_id, request_id) {
     const offerAccepted = {
       offer_ID: offer_id,
-      offer_accepted: true
+      offer_accepted: true,
+      request_id: request_id
     };
 
     this.buyerService.offerAccepted(offerAccepted).subscribe((data: any) => {
       if (data.success) {
-        // console.log("Offer Accepted Successful.");
-        (<HTMLButtonElement>document.getElementById('acceptOfferButton')).disabled = true;
-        (<HTMLButtonElement>document.getElementById('acceptOfferButton')).innerHTML = 'Offer Accepted';
         this.notifier.notify('success', 'Offer was successfully accepted.');
+        setTimeout(function() {
+          window.location.reload();
+        }, 2000);
       } else {
         this.notifier.notify('error', 'Offer was unable to be accepted.');
       }

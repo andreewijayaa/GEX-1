@@ -33,7 +33,7 @@
                 <div class="columnLabel">
                   <label>Your Account Progress: </label>
                 </div>
-                <div class="column">
+                <div class="columnProgress">
                   <div class="progress">
                     <div id="prog1" class="bar progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progress1"
                     [style.width.%]="progress1">
@@ -41,7 +41,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="column">
+                <div class="columnProgress">
                   <div class="progress">
                     <div class="bar progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progress2"
                     [style.width.%]="progress2">
@@ -49,10 +49,18 @@
                     </div>
                   </div>
                 </div>
-                <div class="column">
+                <div class="columnProgress">
                   <div class="progress">
                     <div class="bar progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progress3"
                     [style.width.%]="progress3">
+                      Business Address
+                    </div>
+                  </div>
+                </div>
+                <div class="columnProgress">
+                  <div class="progress">
+                    <div class="bar progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progress4"
+                    [style.width.%]="progress4">
                       Connect with Stripe
                     </div>
                   </div>
@@ -211,14 +219,6 @@
                         <mat-panel-title id="requestID" style="width: 100px" hidden>
                           {{request._id}}
                         </mat-panel-title>
-                        <mat-panel-title>
-                          Request Picture:
-                        </mat-panel-title>
-                        <mat-panel-title>
-                          <img class= "requestimage1" src={{request.request_images[0]}} *ngIf="request.request_images[0]" alt="" width="120" height="120">
-                          <img class= "requestimage2" src={{request.request_images[1]}} *ngIf="request.request_images[1]" alt="" width="120" height="120">
-                          <img class= "requestimage3" src={{request.request_images[2]}} *ngIf="request.request_images[2]" alt="" width="120" height="120">
-                        </mat-panel-title>
                       </mat-expansion-panel-header>
 
                       <div class="container" style="border:3px solid black; background-color: #dcdde1">
@@ -228,6 +228,14 @@
                         </mat-panel-title>
                         <mat-panel-title>
                           <div [innerHTML]="request.description"></div>
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <b>Request Picture:</b>
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <img class= "requestimage1" src={{request.request_images[0]}} *ngIf="request.request_images[0]" alt="" width="120" height="120">
+                          <img class= "requestimage2" src={{request.request_images[1]}} *ngIf="request.request_images[1]" alt="" width="120" height="120">
+                          <img class= "requestimage3" src={{request.request_images[2]}} *ngIf="request.request_images[2]" alt="" width="120" height="120">
                         </mat-panel-title>
                         &nbsp;
                         <div class="col-sm-12" style="text-align: right;">
@@ -289,7 +297,7 @@
                             <div class="container" style="border:3px solid #7f8fa6; background-color:azure">
                               &nbsp;
                               <div>
-                                <h6>Price:</h6>
+                                <h6>Your Offer Price:</h6>
                                 <div>${{element.price}}</div>
                               </div>
                               &nbsp;
@@ -301,7 +309,12 @@
                               <div>
                                 <h6>Offer Description:</h6>
                                 <div [innerHTML]="element.description"></div>
-                                &nbsp;
+                              </div>
+                              &nbsp;
+                              <div>
+                                  <h6>Completion & Delivery Promise:</h6>
+                                  <div [innerHTML]="element.expected_completion"></div>
+                                  &nbsp;
                               </div>
                             </div>
                           </div>
@@ -452,7 +465,7 @@
                                 <h6>Request Description:</h6>
                                 <div [innerHTML]="element.description"></div>
                                 <div class="col-sm-12" style="text-align: right;">
-                                  <button type="button" (click)="deleteArchive(archived._id)" class="btn btn-danger">Delete</button>
+                                  <button type="button" (click)="deleteArchive(element._id)" class="btn btn-danger">Delete</button>
                                     &nbsp;
                                   <button type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary">Submit New Offer</button>
                                 </div>
@@ -495,7 +508,7 @@
                   </table>
 
                   <mat-accordion>
-                    <p align="center" *ngIf="offerList.length == 0">
+                    <p align="center" *ngIf="archivedRequests.length === 0">
                       No archived requests to see here.
                     </p>
                     <mat-expansion-panel id="archivedRequestExpansionId" *ngFor="let archived of archivedRequests | filter:sfilter | paginate: {itemsPerPage: 25, currentPage: pr}">
@@ -530,6 +543,14 @@
                         </mat-panel-title>
                         <mat-panel-title>
                           <div [innerHTML]="archived.description"></div>
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <b>Request Picture:</b>
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <img class= "requestimage1" src={{archived.request_images[0]}} *ngIf="archived.request_images[0]" alt="" width="120" height="120">
+                          <img class= "requestimage2" src={{archived.request_images[1]}} *ngIf="archived.request_images[1]" alt="" width="120" height="120">
+                          <img class= "requestimage3" src={{archived.request_images[2]}} *ngIf="archived.request_images[2]" alt="" width="120" height="120">
                         </mat-panel-title>
                         &nbsp;
                         <div class="col-sm-12" style="text-align: right;">

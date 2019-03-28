@@ -31,6 +31,7 @@ export interface OfferElement {
   offerAccepted: String;
   created_at: Date;
   request_ID: String;
+  expected_completion: String;
 }
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -71,6 +72,7 @@ export class SellerComponent implements OnInit {
   progress1: any;
   progress2: any;
   progress3: any;
+  progress4: any;
   temp: any;
   archivedRequests = [];
   seller_firstName: any;
@@ -136,6 +138,7 @@ export class SellerComponent implements OnInit {
     this.progress1 = 0;
     this.progress2 = 0;
     this.progress3 = 0;
+    this.progress4 = 0;
   }
 
   getSellerProfile() {
@@ -150,14 +153,14 @@ export class SellerComponent implements OnInit {
         if (this.seller.user_account_setup[0]) {
           this.progress1 = 100;
           if (this.seller.user_account_setup[1]) {
-            this.progress2 = 50;
+            this.progress2 = 100;
             if (this.seller.user_account_setup[2]) {
-              this.progress2 = 100;
+              this.progress3 = 100;
               if (this.seller.user_account_setup[3]) {
-                this.progress3 = 100;
-              } else { this.progress3 = 50; }
-            } else { this.progress2 = 50; }
-          } else { this.progress2 = 25; }
+                this.progress4 = 100;
+              } else { this.progress4 = 50; }
+            } else { this.progress3 = 50; }
+          } else { this.progress2 = 50; }
         } else { this.progress1 = 50; }
 
         if (this.seller.user_account_setup[0]
@@ -273,6 +276,7 @@ export class SellerComponent implements OnInit {
     let offerDescription: any;
     let offerPrice: any;
     let offerShipping: any;
+    let offerCompletion: any;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -291,6 +295,7 @@ export class SellerComponent implements OnInit {
           offerDescription = data['description'];
           offerPrice = data['price'];
           offerShipping = data['shipping'];
+          offerCompletion = data['completion'];
 
           const offer = {
             title: offerTitle,
@@ -298,7 +303,8 @@ export class SellerComponent implements OnInit {
             price: offerPrice,
             shipPrice: offerShipping,
             request_ID: id,
-            seller_ID: this.seller._id
+            seller_ID: this.seller._id,
+            expected_completion: offerCompletion
           };
 
           this.sellerService.postOffer(offer).subscribe((data: any) => {
@@ -318,8 +324,7 @@ export class SellerComponent implements OnInit {
               }, 4000);
             }
           });
-        }
-        else {
+        } else {
           //do nothing
         }
       }
@@ -354,7 +359,7 @@ export class SellerComponent implements OnInit {
       if (data.success === true) { // if the data succeed to be posted
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
-        this.notifier.notify('error', data.msg);
+        this.notifier.notify('error', 'Something went wrong. Request undable to be archived.');
       }
     });
   }
@@ -370,7 +375,6 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.deleteArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
-        window.location.reload();
         this.notifier.notify('success', 'This Request was deleted from archive!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);
@@ -415,8 +419,11 @@ export class SubmitOfferDialogComponent implements OnInit {
   confirmDescription: String;
   confirmPrice: any;
   confirmShipping: any;
+  confirmCompletion: String;
   shipping = false;
   offerFormGroup: FormGroup;
+// tslint:disable-next-line: max-line-length
+  completionPlaceholder = 'If your offer is purchased, when can you complete & have it delivered by?';
 
   constructor(
     private fb: FormBuilder,
@@ -431,6 +438,7 @@ export class SubmitOfferDialogComponent implements OnInit {
     this.offerFormGroup = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      completion: ['', Validators.required],
       shipping: [''],
       price: ['', Validators.required]
     });
@@ -446,6 +454,7 @@ export class SubmitOfferDialogComponent implements OnInit {
       // var price = formatCurrency(this.priceFormControl.value, "en", "$");
     this.confirmTitle = this.offerFormGroup.controls.title.value;
     this.confirmDescription = this.offerFormGroup.controls.description.value;
+    this.confirmCompletion = this.offerFormGroup.controls.completion.value;
     this.confirmPrice = this.offerFormGroup.controls.price.value;
     this.submitOffer = true;
   }
@@ -455,7 +464,8 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   confirmDialogSubmit() {
-    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice, shipping: this.confirmShipping});
+    // tslint:disable-next-line: max-line-length
+    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, completion: this.confirmCompletion, price: this.confirmPrice, shipping: this.confirmShipping});
   }
 
   confirmDialogCancel() {

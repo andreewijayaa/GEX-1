@@ -312,6 +312,7 @@ router.get("/viewactiverequests", (req, res) => {
                 success: false,
                 message: "Could not find any active requests"
               });
+
           res.status(200).send({ success: true, active_requests });
         }
       );
@@ -405,7 +406,8 @@ router.post("/makeOffer", (req, res, next) => {
       offerStatus: "Pending",
       description: req.body.description,
       price: req.body.price,
-      shippingPrice: req.body.shipPrice
+      shippingPrice: req.body.shipPrice,
+      expected_completion: req.body.expected_completion
     });
     // Check if request is expired
     Request.findById(req.body.request_ID, (err, requestBeingOffered) => {
@@ -1116,16 +1118,29 @@ router.post("/addArchive", (req, res) => {
         .send({ success: false, message: "No new archived item" });
     }
     //console.log('adding this request to archive: ' + req.body.request_ID);
-    Seller.findById(decoded.data._id, (err, seller_descipt) => {
-      if (err) return handleError(err);
+    Seller.findById(decoded.data._id, (err1, seller_descipt) => {
+      if (err1) return handleError(err1);
       seller_descipt.archived_request.push(req.body.request_ID);
       seller_descipt.save().then(() => {
         io.emit('updatedSellerProfileInfo');
-        return res.json({
-          success: true,
-          message: "Attempted to archive a request"
-        });
-      });
+        Seller.findByIdAndUpdate(
+          decoded.data._id,
+          { $pullAll: { open_requests: [req.body.request_ID] } },
+          (error_1, seller_removing_archived) => {
+            if (err)
+              return res
+                .status(500)
+                .send({
+                  success: false,
+                  message: "Something went wrong when finding seller."
+                });
+            res.json({
+              success: true,
+              msg: "Attempted to remove request from active to be archived"
+            });
+          }
+        );
+      });;
     });
   });
 });
@@ -1161,7 +1176,7 @@ router.get("/getArchivedRequests", (req, res) => {
 //let seller to delete an archived requests
 //code by Andre
 router.post("/deleteArchive", (req, res) => {
-  //console.log('delete archive called');
+  const io = req.app.get('io');
   var token = req.headers["x-access-token"];
 
   //if they don't have a token
@@ -1182,22 +1197,29 @@ router.post("/deleteArchive", (req, res) => {
         .send({ success: false, message: "No new archived item" });
     }
     //console.log('deleting this request from archive: ' + req.body.request_ID);
-    Seller.findByIdAndUpdate(
-      decoded.data._id,
-      { $pullAll: { archived_request: [req.body.request_ID] } },
-      (error_1, seller_removing_archived) => {
-        if (err)
-          return res
-            .status(500)
-            .send({
-              success: false,
-              message: "Something went wrong when finding seller."
+    Seller.findById(decoded.data._id, (err2, seller_descipt) => {
+      if (err2) return handleError(err2);
+      seller_descipt.open_requests.push(req.body.request_ID);
+      seller_descipt.save().then(() => {
+        io.emit('updatedSellerProfileInfo');
+        Seller.findByIdAndUpdate(
+          decoded.data._id,
+          { $pullAll: { archived_request: [req.body.request_ID] } },
+          (error_1, seller_removing_archived) => {
+            if (err)
+              return res
+                .status(500)
+                .send({
+                  success: false,
+                  message: "Something went wrong when finding seller."
+                });
+            res.json({
+              success: true,
+              msg: "Attempted to remove archived request from account!"
             });
-        res.json({
-          success: true,
-          msg: "Attempted to remove archived request from account!"
-        });
-      }
-    );
+          }
+        );
+      });
+    });
   });
 });
