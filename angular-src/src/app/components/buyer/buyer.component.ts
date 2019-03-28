@@ -69,7 +69,7 @@ export class BuyerComponent implements OnInit {
   expandedRequestElement: RequestElement | null;
   expandedOfferElement: OfferElement | null;
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private registerService: RegisterService,
@@ -98,7 +98,7 @@ export class BuyerComponent implements OnInit {
       }
     });
 
-    // this.dataSourceRequests.paginator = this.paginator;
+    this.dataSourceRequests.paginator = this.paginator;
     // this.dataSourceRequests.sort = this.sort;
   }
 
