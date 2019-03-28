@@ -46,7 +46,7 @@
           </div>
           <tbody *ngIf="!emptyCart">
             <tr class="text-truncate" *ngFor="let offer of offersInCart">
-              <td style="height: 113px;">{{offer.title}}<br><button class="btn btn-primary border-white" type="removeButton" (click)="removeOfferFromCart(offer._id)"
+              <td style="height: 113px;">{{offer.title}}<br><button class="btn btn-primary border-white" type="removeButton" (click)="removeOfferFromCart(offer._id, offer.request_ID)"
                   style="background-color: rgba(255,255,255,0.4);color: #0072c6;padding: 2px;font-size: 11px;">Remove</button>
               </td>
               <td class="text-center">Seller Name</td>
