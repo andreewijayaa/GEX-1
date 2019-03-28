@@ -30,6 +30,7 @@ export interface OfferElement {
   created_at: String;
   _id: String;
   offerAccepted: Boolean;
+  expected_completion: String;
 }
 
 @Component({

@@ -297,7 +297,7 @@
                             <div class="container" style="border:3px solid #7f8fa6; background-color:azure">
                               &nbsp;
                               <div>
-                                <h6>Price:</h6>
+                                <h6>Your Offer Price:</h6>
                                 <div>${{element.price}}</div>
                               </div>
                               &nbsp;
@@ -309,7 +309,12 @@
                               <div>
                                 <h6>Offer Description:</h6>
                                 <div [innerHTML]="element.description"></div>
-                                &nbsp;
+                              </div>
+                              &nbsp;
+                              <div>
+                                  <h6>Completion & Delivery Promise:</h6>
+                                  <div [innerHTML]="element.expected_completion"></div>
+                                  &nbsp;
                               </div>
                             </div>
                           </div>
