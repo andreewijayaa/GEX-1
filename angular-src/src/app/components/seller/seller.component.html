@@ -151,7 +151,8 @@
                               <div class="col-sm-12" style="text-align: right;">
                                 <button type="button" (click)="AddArchive(element._id)" class="btn btn-warning">Archive</button>
                                 &nbsp;
-                                <button type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary">Submit New Offer</button>
+                                <button *ngIf="sellerMadeOffer" type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary" style="background-color: green; color: white" disabled>Offer Submitted</button>
+                                <button *ngIf="!sellerMadeOffer" type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary">Submit New Offer</button>
                               </div>
                               &nbsp;
                             </div>
@@ -160,7 +161,7 @@
                       </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayRequestColumns"></tr>
-                    <tr mat-row *matRowDef="let element; columns: displayRequestColumns;" (click)="expandedRequest(element._id)"
+                    <tr mat-row *matRowDef="let element; columns: displayRequestColumns;" (click)="expandedRequest(element.list_of_sellers_submitted_offers)"
                       class="example-element-row"
                       [class.example-expanded-row]="expandedRequestElement === element"
                       (click)="expandedRequestElement = expandedRequestElement === element ? null : element">
@@ -465,9 +466,10 @@
                                 <h6>Request Description:</h6>
                                 <div [innerHTML]="element.description"></div>
                                 <div class="col-sm-12" style="text-align: right;">
-                                  <button type="button" (click)="deleteArchive(element._id)" class="btn btn-danger">Delete</button>
-                                    &nbsp;
-                                  <button type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary">Submit New Offer</button>
+                                  <button type="button" (click)="deleteArchive(element._id)" class="btn btn-danger">Unarchive</button>
+                                  &nbsp;
+                                  <button *ngIf="sellerMadeOffer" type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary" style="background-color: green; color: white" disabled>Offer Submitted</button>
+                                  <button *ngIf="!sellerMadeOffer" type="button" (click)="submitOffer(element.title, element._id)" class="btn btn-primary">Submit New Offer</button>
                                 </div>
                                 &nbsp;
                               </div>
@@ -476,7 +478,7 @@
                         </td>
                       </ng-container>
                       <tr mat-header-row *matHeaderRowDef="displayArchivedColumns"></tr>
-                      <tr mat-row *matRowDef="let element; columns: displayArchivedColumns;" (click)="expandedArchived(element._id)"
+                      <tr mat-row *matRowDef="let element; columns: displayArchivedColumns;" (click)="expandedArchived(element.list_of_sellers_submitted_offers)"
                         class="example-element-row"
                         [class.example-expanded-row]="expandedArchivedElement === element"
                         (click)="expandedArchivedElement = expandedArchivedElement === element ? null : element">

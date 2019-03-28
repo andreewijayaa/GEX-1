@@ -32,6 +32,7 @@ export interface OfferElement {
   created_at: Date;
   request_ID: String;
   expected_completion: String;
+  list_of_sellers_submitted_offers: [String];
 }
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -62,6 +63,7 @@ export class SellerComponent implements OnInit {
   code: String;
   state: String;
   seller: any;
+  sellerID: any;
   requestList: Object;
   offerList = [];
   activeRequests = [];
@@ -76,6 +78,7 @@ export class SellerComponent implements OnInit {
   temp: any;
   archivedRequests = [];
   seller_firstName: any;
+  sellerMadeOffer: Boolean = false;
 
   dataSourceRequests = new MatTableDataSource(this.activeRequests);
   dataSourceOffers = new MatTableDataSource(this.offerList);
@@ -147,6 +150,7 @@ export class SellerComponent implements OnInit {
       if (profile.success) {
         this.seller = profile.seller_found;
         this.seller_firstName = profile.seller_found.first_name;
+        this.sellerID = profile.seller_found._id;
         this.loader = false;
 
         this.temp = this.seller.user_account_setup;
@@ -245,8 +249,18 @@ export class SellerComponent implements OnInit {
     this.dataSourceArchived.filter = filterValue.trim().toLowerCase();
   }
 
-  expandedRequest(id: any) {
+  expandedRequest(listOfSellers: any) {
+    this.sellerMadeOffer = false;
+    listOfSellers.forEach(element => {
+      if (element === this.sellerID) {
+        this.sellerMadeOffer = true;
+      }
+    });
+    if (this.sellerMadeOffer === true) {
 
+    } else {
+      this.sellerMadeOffer = false;
+    }
   }
 
   expandedOffer(id: any) {
@@ -261,8 +275,18 @@ export class SellerComponent implements OnInit {
     });
   }
 
-  expandedArchived(id: any) {
+  expandedArchived(listOfSellers: any) {
+    this.sellerMadeOffer = false;
+    listOfSellers.forEach(element => {
+      if (element === this.sellerID) {
+        this.sellerMadeOffer = true;
+      }
+    });
+    if (this.sellerMadeOffer === true) {
 
+    } else {
+      this.sellerMadeOffer = false;
+    }
   }
 
   submitOffer(title: any, id: any) {

@@ -31,6 +31,9 @@ const RequestSchema = mongoose.Schema({
   accepted_offers_byID: {
     type:[String]
   },
+  list_of_sellers_submitted_offers: {
+    type: [String]
+  },
   offerCount: {
     type:Number,
     default: 0,

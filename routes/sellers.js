@@ -457,6 +457,8 @@ router.post("/makeOffer", (req, res, next) => {
               //console.log('Found request\n' + request_with_offer);
               request_with_offer.request_offers_byID.push(post._id);
               request_with_offer.offerCount++;
+              request_with_offer.status = "Pending Offers";
+              request_with_offer.list_of_sellers_submitted_offers.push(newOffer.seller_ID);
               request_with_offer.save().then(() => {
                 io.emit('updatedSellerProfileInfo');
                 return res.status(200).send({ success: true, message: 'The offer was submitted successfully!' });
