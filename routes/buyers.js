@@ -605,6 +605,10 @@ router.post("/tax", (req, res) => {
 // By: Omar
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
 router.post("/charge", (req, res) => {
+
+  var offerIDarray = [];
+  var offerCounter = 0;
+
   let purchaseInfo = {
     buyerID: req.body.buyerID,
     stripeEmail: req.body.email,
@@ -614,6 +618,7 @@ router.post("/charge", (req, res) => {
     shippingInfo: req.body.shippingInfo,
     orderID: req.body.orderID,
     name: req.body.name
+
   };
 
   //console.log(purchaseInfo);
@@ -621,6 +626,85 @@ router.post("/charge", (req, res) => {
 
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
+
+    //******************************************************************* */
+    // Create Transactions
+    function processTransaction(Charge_id){
+        // Iterate through all the offers passed in with the charge
+        purchaseInfo.totalOffers.forEach(offer => {
+          // Calculate the total amount + Stripe fee + Requiren fee
+          const totalAmount = (purchaseInfo.amount);
+
+          //STRIPE: in the US (assuming standard US pricing of 2.9% + 30¢ per successful charge) 
+          // Wrong here in the calculation
+          var stripeFee = ((totalAmount*0.029) + 0.30); 
+          stripeFee = (Math.round(stripeFee * 100) / 100);
+          stripeFee = (stripeFee*100);
+
+          //Requiren Fee 
+          var requirenFee = (totalAmount*0.030); 
+          requirenFee = (Math.round(requirenFee * 100) / 100);
+          requirenFee = (requirenFee*100);
+
+          //Getting the final seller payment amount
+          var totalChargedAmount = (totalAmount*100);
+          totalChargedAmount = (totalChargedAmount-stripeFee);
+          totalChargedAmount = (totalChargedAmount-requirenFee);
+          
+          // Fetch Seller Stripe ID 
+          Seller.findById(offer.seller_ID, (err, seller) => {
+          if (seller.stripe.stripe_user_id == null || seller.stripe.stripe_user_id == undefined) return res.json({ success: false, msg: "Unable To complete Transaction." });
+          
+          // Create a Transfer to the connected account (later):
+          stripe.transfers.create({
+            amount: totalChargedAmount,
+            currency: "usd",
+            destination: seller.stripe.stripe_user_id,
+            source_transaction: Charge_id, // Used to make sure that the the amounts being trasitioned will not exceed the initial charge amount
+          }, function(err, result) { 
+            if (err) return console.log(err)
+            console.log(result);
+              if(result != null) {
+                if(result.id != null) {
+                  var offerPurchased = {
+                    id: result.id,
+                    offerID: offer.id,
+                    offerFulfillmentStatus: 'Ordered',
+                    GroudID: result.transfer_group,
+                    sellerProfit: (result.amount/100)
+                  };
+                  offerIDarray.push(offerPurchased);
+                  offerCounter++;
+
+                  if(offerCounter == purchaseInfo.totalOffers.length) {
+                    // After paying all the sellers, now we create the order and save it in the DB
+                    let newOrder = new Order({
+                      buyerID: purchaseInfo.buyerID,
+                      orderNumber: purchaseInfo.orderID,
+                      offersPurchased: offerIDarray,
+                      totalPrice: purchaseInfo.amount,
+                      stripeChargeID: Charge_id,
+                      shippingAddress: purchaseInfo.shippingInfo,
+                    });
+
+                    // Save the new order
+                    newOrder.save(function(err, savingOrder) {
+                      if (err) return handleError(err);
+                      console.log(newOrder);
+                      return res.json({
+                        success: true,
+                        message: "New order has been successfully placed."
+                      })
+                    });
+                  }
+                }
+              }
+          });
+        });
+      });
+    }
+    //******************************************************************* */
+
     if (!info)
       return res.status(405).send({
         success: false,
@@ -639,19 +723,21 @@ router.post("/charge", (req, res) => {
           info.save();
           stripe.charges
             .create({
-              amount: purchaseInfo.amount,
+              amount: (purchaseInfo.amount*100),
               currency: "usd",
               description: "Charge for " + purchaseInfo.name + ".",
               customer: customer.id,
               receipt_email: purchaseInfo.stripeEmail,
-              // metadata: {
-              //   order_id: purchaseInfo.orderID
-              // },
-              transfer_group: purchaseInfo.orderID
-            })
-            .then(function(charge) {
-              // asynchronously called
+              source_transaction: purchaseInfo.orderID
+            }, function(err, result) { 
+              if (err) return console.log(err);
+              if(result != null) {
+                if(result.paid) {
+                  processTransaction(result.id);
+                }
+              }
             });
+            //.then(charge => res.send({ success: true, charge }));
         });
     } else if (info.stripe_customer === true) {
       console.log("Is already a stripe customer");
@@ -659,54 +745,27 @@ router.post("/charge", (req, res) => {
         .update(info.stripe_customer_id, {
           source: purchaseInfo.stripeToken
         })
-        .then(customer =>
+        .then(customer => {
           stripe.charges.create({
-            amount: purchaseInfo.amount,
+            amount: (purchaseInfo.amount*100),
             currency: "usd",
             description: "Charge for " + purchaseInfo.name + ".",
             receipt_email: purchaseInfo.stripeEmail,
             customer: customer.id
-          })
-        )
-        .then(function(charge) {
-          // asynchronously called
+          }, function(err, result) { 
+            if (err) return console.log(err);
+            if(result != null) {
+              if(result.paid) {
+                processTransaction(result.id);
+              }
+            }
+          });
         });
+        //.then(charge => res.send({ success: true, charge }));
     } else {
       res.json({ success: false, msg: "Could not charge customer" });
     }
-
-    // Create Transactions
-    purchaseInfo.totalOffers.forEach(offer => {
-
-      const totalAmount = (offer.price + offer.shippingPrice);
-      console.log('Amount = '+totalAmount)
-      Seller.findById(offer.seller_ID, (err, seller) => {
-      if (seller.stripe.stripe_user_id == null || seller.stripe.stripe_user_id == undefined) return res.json({ success: false, msg: "Unable To complete Transaction." });
-      
-      // Create a Transfer to the connected account (later):
-      stripe.transfers.create({
-        amount: totalAmount,
-        currency: "usd",
-        destination: seller.stripe.stripe_user_id,
-        transfer_group: purchaseInfo.orderID,
-      }).then(function(transfer) {
-        // asynchronously called
-      });
-    });
   });
-  });
-
-  // for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
-  //   //console.log(purchaseInfo.totalOffers[pos].seller_ID);
-  //   stripe.transfers
-  //     .create({
-  //       amount: purchaseInfo.totalOffers[pos].price * 100,
-  //       currency: "usd",
-  //       destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-  //       transfer_group: purchaseInfo.orderID
-  //     })
-  //     .then(transfer => res.send({ success: true, transfer }));
-  // }
 });
 
 //Email Verification - RONI
