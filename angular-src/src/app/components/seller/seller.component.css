@@ -132,8 +132,8 @@ body, html {
   min-height: 100%;
 }
 
-.column {
-  width: 269px;
+.columnProgress {
+  width: 202px;
   height: 40px;
   float: left;
   padding: 10px;
