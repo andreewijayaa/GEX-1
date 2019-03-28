@@ -162,7 +162,7 @@ router.post('/request', (req, res, next) => {
       title: req.body.title,
       description: req.body.description,
       deadline: req.body.deadline,
-      status: "awaiting offers"
+      status: "Awaiting offers"
     });
 
     //code added by John to add images to requests
@@ -492,7 +492,7 @@ router.post("/offerAccepted", (req, res /*next*/) => {
               message: "offer accepted but could not update request status"
             });
           } else {
-            request.status = 'offer(s) accepted';
+            request.status = 'Offer(s) accepted';
             request.accepted_offers_byID.push(accepted.id);
             request.save();
             res.json({ success: true });
@@ -520,11 +520,22 @@ router.post("/offerRejected", (req, res /*next*/) => {
     else {
       offer.offerAccepted = removed.offerRemoved;
       offer.save().then(() => {
+        var newRequestOffersList = [];
         Request.findById(removed.requestId, (err, request) => {
           request.accepted_offers_byID.forEach(offerID => {
-            
+            if (offerID == removed.id) {
+
+            } else {
+              newRequestOffersList.push(offerID);
+            }
           });
-          console.log(request);
+          request.accepted_offers_byID = newRequestOffersList;
+          if (request.accepted_offers_byID.length == 0 || request.accepted_offers_byID === undefined) {
+            request.status = 'Pending offers';
+          } else {
+            request.status = 'Offer(s) accepted';
+          }
+          request.save();
           res.json({ success: true });
         });
       });
