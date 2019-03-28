@@ -61,14 +61,19 @@ export class SellerComponent implements OnInit {
   progress2: any;
   progress3: any;
   temp: any;
-  archivedRequests: Object;
+  archivedRequests = [];
   seller_firstName: any;
 
   dataSourceRequests = new MatTableDataSource(this.activeRequests);
   dataSourceOffers = new MatTableDataSource(this.offerList);
-  displayRequestColumns = [];
-  displayOfferColumns = [];
-  displayArchivedColumns = [];
+  dataSourceArchived = new MatTableDataSource(this.archivedRequests);
+
+  displayRequestColumns = ['title', 'status', 'deadline'];
+  displayOfferColumns = ['title', 'offerStatus', 'offerAccepted'];
+  displayArchivedColumns = ['title', 'status', 'deadline'];
+  expandedRequestElement: RequestElement | null;
+  expandedOfferElement: OfferElement | null;
+  expandedArchivedElement: RequestElement | null;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -205,6 +210,30 @@ export class SellerComponent implements OnInit {
       console.log(err);
       return false;
     });
+  }
+
+  searchRequestFilter(filterValue: string) {
+    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchOfferFilter(filterValue: string) {
+    this.dataSourceOffers.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchArchivedFilter(filterValue: string) {
+    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+  }
+
+  expandedRequest(id: any) {
+
+  }
+
+  expandedOffer(id: any) {
+
+  }
+
+  expandedArchived(id: any) {
+
   }
 
   submitOffer(title: any, id: any) {
