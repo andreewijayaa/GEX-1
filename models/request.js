@@ -28,6 +28,9 @@ const RequestSchema = mongoose.Schema({
   request_offers_byID:{
     type:[String]
   },
+  accepted_offers_byID: {
+    type:[String]
+  },
   offerCount: {
     type:Number,
     default: 0,

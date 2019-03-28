@@ -39,26 +39,27 @@ export class BuyerCartComponent implements OnInit {
 getCart() {
   this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
     if (data.success) {
-      console.log(data);
       this.emptyCart = false;
       this.offersInCart = data.offersInCart;
       this.offersPriceTotal = data.offerPriceTotal;
       this.offersShippingTotal = data.offerShippingTotal;
       this.orderTotal = data.orderTotal;
+      console.log(data);
     } else {
       this.notifier.notify('warning', 'Must accept offers to view cart.');
       this.router.navigate(['/buyer']);
     }
   });
 }
-  removeOfferFromCart(offerid) {
+  removeOfferFromCart(offerid, requestid) {
     const offerRemoved = {
       offer_ID: offerid,
-      offer_removed: false
+      offer_removed: false,
+      request_ID: requestid
     };
     this.buyerService.offerRejected(offerRemoved).subscribe((data: any) => {
       if (data.success) {
-        //console.log("Offer Removed Successful.");
+        console.log("Offer Removed Successful.");
       } else {
         //console.log("Offer Removed NOT Successful.");
       }
