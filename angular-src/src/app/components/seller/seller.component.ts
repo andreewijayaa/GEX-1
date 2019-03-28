@@ -44,7 +44,7 @@ export class SellerComponent implements OnInit {
   progress2: any;
   progress3: any;
   temp: any;
-  archivedRequests: Object;
+  archivedRequests = [];
   seller_firstName: any;
 
   constructor(private sellerService: SellerService,
@@ -274,6 +274,7 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.addArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
+        window.location.reload();
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);
