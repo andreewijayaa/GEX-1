@@ -352,10 +352,9 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.addArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
-        window.location.reload();
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
-        this.notifier.notify('error', data.msg);
+        this.notifier.notify('error', 'Something went wrong. Request undable to be archived.');
       }
     });
   }
@@ -371,7 +370,6 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.deleteArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
-        window.location.reload();
         this.notifier.notify('success', 'This Request was deleted from archive!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);
