@@ -19,7 +19,8 @@ export class BuyerCartComponent implements OnInit {
   orderFees: Number;
   offersPriceTotal: Number;
   offersShippingTotal: Number;
-  removeItemNavbar = 0;
+  sellerIds = [];
+
   private readonly notifier: NotifierService;
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -38,6 +39,7 @@ export class BuyerCartComponent implements OnInit {
 getCart() {
   this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
     if (data.success) {
+      console.log(data);
       this.emptyCart = false;
       this.offersInCart = data.offersInCart;
       this.offersPriceTotal = data.offerPriceTotal;

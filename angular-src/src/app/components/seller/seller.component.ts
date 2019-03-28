@@ -3,7 +3,7 @@ import { SellerService } from '../../services/seller.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton } from '@angular/material';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -11,6 +11,23 @@ import { invalid } from '@angular/compiler/src/render3/view/util';
 import { NotifierService } from 'angular-notifier';
 import { formatCurrency } from '@angular/common';
 import * as io from 'socket.io-client';
+
+export interface RequestElement {
+  title: String;
+  status: String;
+  deadline: String;
+  description: String;
+  request_images: [String];
+}
+
+export interface OfferElement {
+  title: String;
+  description: String;
+  price: String;
+  shippingPrice: String;
+  offerStatus: String;
+  offerAccepted: String;
+}
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -44,8 +61,19 @@ export class SellerComponent implements OnInit {
   progress2: any;
   progress3: any;
   temp: any;
-  archivedRequests: Object;
+  archivedRequests = [];
   seller_firstName: any;
+
+  dataSourceRequests = new MatTableDataSource(this.activeRequests);
+  dataSourceOffers = new MatTableDataSource(this.offerList);
+  dataSourceArchived = new MatTableDataSource(this.archivedRequests);
+
+  displayRequestColumns = ['title', 'status', 'deadline'];
+  displayOfferColumns = ['title', 'offerStatus', 'offerAccepted'];
+  displayArchivedColumns = ['title', 'status', 'deadline'];
+  expandedRequestElement: RequestElement | null;
+  expandedOfferElement: OfferElement | null;
+  expandedArchivedElement: RequestElement | null;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -182,6 +210,30 @@ export class SellerComponent implements OnInit {
       console.log(err);
       return false;
     });
+  }
+
+  searchRequestFilter(filterValue: string) {
+    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchOfferFilter(filterValue: string) {
+    this.dataSourceOffers.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchArchivedFilter(filterValue: string) {
+    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+  }
+
+  expandedRequest(id: any) {
+
+  }
+
+  expandedOffer(id: any) {
+
+  }
+
+  expandedArchived(id: any) {
+
   }
 
   submitOffer(title: any, id: any) {
