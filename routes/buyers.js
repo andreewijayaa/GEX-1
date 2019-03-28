@@ -623,10 +623,7 @@ router.post("/charge", (req, res) => {
 
   //console.log(purchaseInfo);
 
-
-
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
-
     //******************************************************************* */
     // Create Transactions
     function processTransaction(Charge_id){
