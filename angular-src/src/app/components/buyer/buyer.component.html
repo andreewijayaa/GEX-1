@@ -293,6 +293,11 @@ Bryan Vu contributed most of this buyer portal page.
                                 <div>
                                     <h6>Offer Description:</h6>
                                     <div class="float-center" [innerHTML]="offer_element.description"></div>
+                                 </div>
+                                 &nbsp;
+                                 <div>
+                                    <h6>Completion & Delivery Promise:</h6>
+                                    <div class="float-center" [innerHTML]="offer_element.expected_completion"></div>
                                     &nbsp;
                                     <button mat-button *ngIf="offer_element.offerAccepted" class="pull-right btn-danger btn-sm float-sm-right" (click)="acceptOffer($event.target, offer_element._id, element._id)" id="acceptOfferButton" style="background-color:limegreen; color: white;" disabled>Offer Accepted</button>
                                     <button mat-button *ngIf="!offer_element.offerAccepted" class="pull-right btn-danger btn-sm float-sm-right" (click)="acceptOffer($event.target, offer_element._id, element._id)" id="acceptOfferButton" style="background-color:slateblue; color: white;">Accept Offer</button>

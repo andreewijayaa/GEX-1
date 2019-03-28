@@ -31,6 +31,7 @@ export interface OfferElement {
   offerAccepted: String;
   created_at: Date;
   request_ID: String;
+  expected_completion: String;
 }
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -300,7 +301,8 @@ export class SellerComponent implements OnInit {
             price: offerPrice,
             shipPrice: offerShipping,
             request_ID: id,
-            seller_ID: this.seller._id
+            seller_ID: this.seller._id,
+            expected_completion: offerCompletion
           };
 
           this.sellerService.postOffer(offer).subscribe((data: any) => {
@@ -460,6 +462,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   confirmDialogSubmit() {
+    // tslint:disable-next-line: max-line-length
     this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, completion: this.confirmCompletion, price: this.confirmPrice, shipping: this.confirmShipping});
   }
 
