@@ -306,7 +306,7 @@ export class BuyerCheckoutComponent
           name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
           buyerID: this.buyer._id,
           email: this.buyer.email,
-          amount: this.totalPriceDisplay * 100,
+          amount: this.totalPriceDisplay,
           totalOffers: this.offersInCart,
           shippingInfo: shippingDetails,
           orderID: orderNumber

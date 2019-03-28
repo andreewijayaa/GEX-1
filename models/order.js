@@ -6,24 +6,20 @@ const orderSchema = mongoose.Schema({
         type: String,
         required : true,
     },
-    status: {
-        type: String,
-        required: true,
-    },
     orderNumber: {
         type: String,
         required: true
     },
-    offersID: {
-        type: [String],
+    offersPurchased: {
+        type: [Object],
         required: true,
     },
     totalPrice: {
         type: Number,
         required : true,
     },
-    paymentInfo: {
-        type: Object,
+    stripeChargeID: {
+        type: String,
         required : true,
     },
     shippingAddress: {
