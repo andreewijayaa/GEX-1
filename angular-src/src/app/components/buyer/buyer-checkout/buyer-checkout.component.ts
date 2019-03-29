@@ -39,8 +39,6 @@ export class BuyerCheckoutComponent
 
   private readonly notifier: NotifierService;
 
-
-
   offerPrice: any;
   offerShipping: any;
   totalPrice: any;
@@ -56,7 +54,7 @@ export class BuyerCheckoutComponent
   billingSameAsShipping = false;
   stripeFees: Number;
 
-  //FOR DISPLAY
+  // FOR DISPLAY
   offerPriceDisplay: any;
   offerShippingDisplay: any;
   totalPriceDisplay: any;
@@ -64,56 +62,56 @@ export class BuyerCheckoutComponent
   estimatedTaxDisplay = '----';
 
   states = [
-    { label: "AK" },
-    { label: "AL" },
-    { label: "AZ" },
-    { label: "AR" },
-    { label: "CA" },
-    { label: "CO" },
-    { label: "CT" },
-    { label: "DE" },
-    { label: "FL" },
-    { label: "GA" },
-    { label: "HI" },
-    { label: "ID" },
-    { label: "IL" },
-    { label: "IN" },
-    { label: "IA" },
-    { label: "KS" },
-    { label: "KY" },
-    { label: "LA" },
-    { label: "ME" },
-    { label: "MD" },
-    { label: "MA" },
-    { label: "MI" },
-    { label: "MN" },
-    { label: "MS" },
-    { label: "MO" },
-    { label: "MT" },
-    { label: "NE" },
-    { label: "NV" },
-    { label: "NH" },
-    { label: "NJ" },
-    { label: "NM" },
-    { label: "NY" },
-    { label: "NC" },
-    { label: "ND" },
-    { label: "OH" },
-    { label: "OK" },
-    { label: "OR" },
-    { label: "PA" },
-    { label: "RI" },
-    { label: "SC" },
-    { label: "SD" },
-    { label: "TN" },
-    { label: "TX" },
-    { label: "UT" },
-    { label: "VT" },
-    { label: "VA" },
-    { label: "WA" },
-    { label: "WV" },
-    { label: "WI" },
-    { label: "WY" }
+    { label: 'AK' },
+    { label: 'AL' },
+    { label: 'AZ' },
+    { label: 'AR' },
+    { label: 'CA' },
+    { label: 'CO' },
+    { label: 'CT' },
+    { label: 'DE' },
+    { label: 'FL' },
+    { label: 'GA' },
+    { label: 'HI' },
+    { label: 'ID' },
+    { label: 'IL' },
+    { label: 'IN' },
+    { label: 'IA' },
+    { label: 'KS' },
+    { label: 'KY' },
+    { label: 'LA' },
+    { label: 'ME' },
+    { label: 'MD' },
+    { label: 'MA' },
+    { label: 'MI' },
+    { label: 'MN' },
+    { label: 'MS' },
+    { label: 'MO' },
+    { label: 'MT' },
+    { label: 'NE' },
+    { label: 'NV' },
+    { label: 'NH' },
+    { label: 'NJ' },
+    { label: 'NM' },
+    { label: 'NY' },
+    { label: 'NC' },
+    { label: 'ND' },
+    { label: 'OH' },
+    { label: 'OK' },
+    { label: 'OR' },
+    { label: 'PA' },
+    { label: 'RI' },
+    { label: 'SC' },
+    { label: 'SD' },
+    { label: 'TN' },
+    { label: 'TX' },
+    { label: 'UT' },
+    { label: 'VT' },
+    { label: 'VA' },
+    { label: 'WA' },
+    { label: 'WV' },
+    { label: 'WI' },
+    { label: 'WY' }
   ];
 
   constructor(
@@ -137,24 +135,22 @@ export class BuyerCheckoutComponent
     this.buyerService.getBuyerProfile().subscribe((data: any) => {
       if (data.success) {
         this.buyer = data.buyer_found;
+        console.log(this.buyer);
       } else {
         console.log('Error: could not fetch buyer information');
         this.router.navigate(['/']);
       }
     });
 
+
+
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
-
-
         this.emptyCart = false; // Will be used as a pre condition
-        this.offersInCart = data.offersInCart; //Object of all the objects of offers in cart
+        this.offersInCart = data.offersInCart; // Object of all the objects of offers in cart
         this.offerPrice = data.offerPriceTotal; // Total price of those offers
         this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
-
         this.totalPrice = data.orderTotal; // Offers price + shipping price
-
-
 
         // CONVERT ALL TO TWO SIG FIGS - For displaying purposes
         this.totalBeforeTaxDisplay = this.offerPrice + this.offerShipping;
@@ -218,12 +214,10 @@ export class BuyerCheckoutComponent
         zip: this.shippingFormGroup['value']['zip'],
         sameAsShipping: true
       });
-    }
-    else if (this.billingSameAsShipping === true) {
+    } else if (this.billingSameAsShipping === true) {
       this.billingSameAsShipping = false;
       this.resetBillingForm();
-    }
-    else { /* do nothing */ }
+    } else { /* do nothing */ }
   }
 
   ngAfterViewInit() {

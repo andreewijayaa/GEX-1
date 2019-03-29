@@ -64,28 +64,42 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-6"></div>
-    <div class="col-md-6 text-right" style="height: 138px; left: 20%">
-      <ul class="text-left" style="width: 318px;padding: 8px;">
-        <li>Offer Total:<span class="price" style="margin-left: 135px">${{offersPriceTotal}}</span></li>
-        <!----<li>Fees:<span class="price" style="margin-left: 177px">${{orderFees}}</span></li>-->
-        <li>Shipping Total:<span class="price" style="margin-left: 113px">${{offersShippingTotal}}</span></li>
-        <li>
+  <div class="container" style="text-align: left">
+      <div class="row">
+        <div class="col-md-4 mb-3"></div>
+        <div class="col-md-4 mb-3"></div>
+        <div class="col-md-4">
+          <p style="font-weight: bold">
+              offer total:
+              <span class="price" style="font-weight: normal">${{offersPriceTotal}}</span>
+          </p>
+          <p style="font-weight: bold">
+              shipping & handling total:
+              <span class="price" style="font-weight: normal">${{offersShippingTotal}}</span>
+          </p>
           <hr>
-        </li>
-        <li style="font-weight: bold; font-size: 15px">Order Total before Tax & Fees:<span class="price" style="margin-left: 185px">${{orderTotal}}</span></li>
-      </ul>
-    </div>
+          <p style="font-weight: bold">
+              subtotal:
+              <span class="price" style="font-weight: normal">${{orderTotal}}</span>
+          </p>
+        </div>
+      </div>
   </div>
-  <br><br>
-  <div class="col-md-6 text-right" style="left: 50%">
-    <button type="button" class="btn btn-secondary btn-lg" id="goBack" routerLink="/" routerLinkActive="active">Accept
-      more Offers</button>
-    &nbsp;
-    <button type="button" class="btn btn-primary btn-lg" id="Continue" routerLink="/buyer/checkout" routerLinkActive="active">Continue
-      to Checkout</button>
+  &nbsp;
+  <div class="container" style="text-align: left">
+    <div class="row">
+      <div class="col-md-4 mb-3"></div>
+      <div class="col-md-4 mb-3"></div>
+      <div class="col-md-4 mb-3">
+        <button type="button" class="btn btn-secondary btn-sm" id="goBack" routerLink="/" routerLinkActive="active">Accept
+          more Offers</button>
+          &nbsp;
+        <button type="button" class="btn btn-primary btn-sm" id="Continue" routerLink="/buyer/checkout" routerLinkActive="active">Continue
+          to Checkout</button>
+        </div>
+    </div>
   </div>
 </div>
 
 <div class="clearfooter"></div>
+
