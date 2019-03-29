@@ -199,11 +199,11 @@ Bryan Vu contributed most of this buyer portal page.
 
     <div class="container">
         <table mat-table
-        [dataSource]="dataSourceRequests" multiTemplateDataRows
+        [dataSource]="dataSourceRequests" multiTemplateDataRows matSort
         class="mat-elevation-z8">
 
    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToGetRequestInfo">
-     <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+     <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-size: 16px">
       <span *ngIf="column === 'title'">Title</span>
       <span *ngIf="column === 'status'">Status</span>
       <span *ngIf="column === 'offerCount'">Offers</span>
