@@ -264,15 +264,7 @@ export class SellerComponent implements OnInit {
   }
 
   expandedOffer(id: any) {
-    const requestId = id;
-    // Make a call to retrieve request information with all offers to that request
-    this.requestService.getRequest(requestId).subscribe((data: any) => {
-      if (data.success) {
-        console.log(data);
-      } else {
-        console.log('could not fetch request data');
-      }
-    });
+
   }
 
   expandedArchived(listOfSellers: any) {
