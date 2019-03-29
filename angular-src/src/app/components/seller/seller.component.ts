@@ -491,8 +491,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   submit() {
     if (this.offerFormGroup.controls.shipping.value === '' || this.offerFormGroup.controls.value === null) {
       this.confirmShipping = 0;
-    }
-    else {
+    } else {
       this.confirmShipping = this.offerFormGroup.controls.shipping.value;
     }
       // var price = formatCurrency(this.priceFormControl.value, "en", "$");

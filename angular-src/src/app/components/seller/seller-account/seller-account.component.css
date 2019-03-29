@@ -91,3 +91,9 @@ html, body {
     stroke-dashoffset: -124px;
   }
 }
+
+.spin {
+  position: relative;
+  margin-top: 5px;
+  left: 30%;
+}

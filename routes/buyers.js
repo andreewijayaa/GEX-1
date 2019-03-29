@@ -846,7 +846,7 @@ router.post("/charge", (req, res) => {
                       subtotalPrice: purchaseInfo.subTotal,
                       stripeChargeID: Charge_id,
                       shippingAddress: purchaseInfo.shippingInfo,
-                      orderStatus: "Confirmed, Shipping Pending",
+                      orderStatus: "Purchased, Shipping Pending",
                       requestPurchasedID: purchaseInfo.requestPurchasedID
                     });
 
@@ -856,10 +856,10 @@ router.post("/charge", (req, res) => {
                       // console.log(newOrder);
                       // Updating the request offer status as payment completed.
                       Request.findById(req.body.request_id, (err, request) => {
-                        if (request.status == "Payment Completed") {
+                        if (request.status == "Purchased") {
 
                         } else {
-                          request.status = "Payment Completed";
+                          request.status = "Purchased";
                         }
                         request.save();
                       });
@@ -876,7 +876,7 @@ router.post("/charge", (req, res) => {
         });
         // Updating the offer status for each offer
         Offer.findById(offer._id, (err, offerToUpdate) => {
-          offerToUpdate.offerStatus = "Offer Accepted & Purchased";
+          offerToUpdate.offerStatus = "Purchased";
           offerToUpdate.save();
         });
       });

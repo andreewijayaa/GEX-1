@@ -31,6 +31,7 @@ export class BuyerAccountComponent implements OnInit {
   buyer_lastName: any;
   buyer_email: any;
   errorMessage: String;
+  spinner: Boolean;
 
 
   constructor(private buyerService: BuyerService,
@@ -39,6 +40,7 @@ export class BuyerAccountComponent implements OnInit {
 
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
+    this.spinner = false;
     this.getBuyerProfile();
     this.socket.on('updatedBuyerProfileInfo', () => {
       this.getBuyerProfile();
@@ -148,6 +150,7 @@ export class BuyerAccountComponent implements OnInit {
   // By: John
   // function for updating profile image
   processFile(imageInput: any){
+    this.spinner = true;
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
@@ -156,10 +159,12 @@ export class BuyerAccountComponent implements OnInit {
       this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
           this.notifier.notify("success", "Your Image has uploaded! Login again to update");
+          this.spinner = false;
         },
         (err) => {
           this.notifier.notify("error", "Your Image has failed to upload :( ");
-        })
+          this.spinner = false;
+        });
     });
 
     reader.readAsDataURL(file);
