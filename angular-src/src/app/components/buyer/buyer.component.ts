@@ -71,7 +71,7 @@ export class BuyerComponent implements OnInit {
   expandedOfferElement: OfferElement | null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
@@ -100,7 +100,7 @@ export class BuyerComponent implements OnInit {
     });
 
     this.dataSourceRequests.paginator = this.paginator;
-    // this.dataSourceRequests.sort = this.sort;
+    this.dataSourceRequests.sort = this.sort;
   }
 
   getBuyer() {
@@ -129,9 +129,9 @@ export class BuyerComponent implements OnInit {
   searchFilter(filterValue: string) {
     this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
 
-    // if (this.dataSourceRequests.paginator) {
-    //   this.dataSourceRequests.paginator.firstPage();
-    // }
+    if (this.dataSourceRequests.paginator) {
+       this.dataSourceRequests.paginator.firstPage();
+     }
   }
 
   expanded(id: any) {
