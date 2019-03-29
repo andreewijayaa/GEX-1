@@ -41,6 +41,7 @@ export class BuyerCheckoutComponent
 
   offerPrice: any;
   offerShipping: any;
+  totalFees: any;
   totalPrice: any;
 
   buyer: any;
@@ -49,7 +50,8 @@ export class BuyerCheckoutComponent
   paymentFormGroup: FormGroup;
   offersInCart: [String];
   emptyCart: Boolean;
-
+  requestID: any;
+  spinner: Boolean;
 
   billingSameAsShipping = false;
   stripeFees: Number;
@@ -135,14 +137,11 @@ export class BuyerCheckoutComponent
     this.buyerService.getBuyerProfile().subscribe((data: any) => {
       if (data.success) {
         this.buyer = data.buyer_found;
-        console.log(this.buyer);
       } else {
         console.log('Error: could not fetch buyer information');
         this.router.navigate(['/']);
       }
     });
-
-
 
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
@@ -151,6 +150,8 @@ export class BuyerCheckoutComponent
         this.offerPrice = data.offerPriceTotal; // Total price of those offers
         this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
         this.totalPrice = data.orderTotal; // Offers price + shipping price
+        this.requestID = data.offersInCart[0].request_ID;
+        console.log(this.offersInCart);
 
         // CONVERT ALL TO TWO SIG FIGS - For displaying purposes
         this.totalBeforeTaxDisplay = this.offerPrice + this.offerShipping;
@@ -261,12 +262,12 @@ export class BuyerCheckoutComponent
     stripeFee = (Math.round(stripeFee * 100) / 100);
 
     // Stripe Fee added up
-    const totalFees = stripeFee;
+    this.totalFees = stripeFee;
 
-    let totalamountwithFees = totalFees + this.totalPrice;
+    let totalamountwithFees = this.totalFees + this.totalPrice;
     totalamountwithFees = (Math.round(totalamountwithFees * 100) / 100);
     this.totalPrice = totalamountwithFees;
-    this.estimatedTaxDisplay = String('$' + totalFees);
+    this.estimatedTaxDisplay = String('$' + this.totalFees);
     this.totalPriceDisplay = '$' + totalamountwithFees;
 
       // } else {
@@ -276,6 +277,8 @@ export class BuyerCheckoutComponent
   }
 
   async onSubmit(form: NgForm) {
+    this.spinner = true;
+
     const billingDetails = {
       name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
       address_line1: this.billingFormGroup['value']['address1'],
@@ -315,17 +318,26 @@ export class BuyerCheckoutComponent
           amount: this.totalPrice,
           totalOffers: this.offersInCart,
           shippingInfo: shippingDetails,
-          orderID: orderNumber
-          // sellers: this.sellerList
+          orderID: orderNumber,
+          request_id: this.requestID,
+          offerPriceTotal: this.offerPrice,
+          shipPriceTotal: this.offerShipping,
+          subTotal: this.totalBeforeTaxDisplay,
+          feesPriceTotal: this.totalFees,
+          requestPurchasedID: this.requestID
         };
         console.log(obj);
 
         this.buyerService.checkout(obj).subscribe((data1: any) => {
-          if (data.success) {
-            // console.log('Charge Successful');
-            // console.log(data);
+          if (data1.success) {
+            this.spinner = false;
+            const orderID = data1.newOrder._id;
+            console.log(data1);
+            this.router.navigate(['/buyer/orderConfirm/' + orderID]);
           } else {
-            // console.log('Charge unsuccessful');
+            this.spinner = false;
+            console.log(data1);
+            this.notifier.notify('error', 'Something went wrong with processing your order. Please refresh your page and try again.');
           }
       });
     });

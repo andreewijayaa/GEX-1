@@ -10,8 +10,8 @@ const Seller = require('../models/seller');
 router.get('/:code', function (req, res, next) {
     
     var code = req.params.code;
-    Request.find({ code : code }, function(err, request) {
-    	res.json(request);
+    Request.find({ code : code }, function(err, request_found) {
+    	res.json.send({ success: true, request_found });
     });
   });
 

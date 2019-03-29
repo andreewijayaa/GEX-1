@@ -7,6 +7,11 @@
 
 <app-buyer-navbar></app-buyer-navbar>
 <body>
+
+    <div class="spin" *ngIf="spinner === true">
+        <mat-spinner class="example-margin" [diameter]="100"></mat-spinner>
+        <div style="height: 700px; clear: both;"></div>
+      </div>
 <link
   href="https://fonts.googleapis.com/icon?family=Material+Icons"
   rel="stylesheet"
