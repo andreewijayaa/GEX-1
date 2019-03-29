@@ -58,6 +58,8 @@ import { ForgetPasswordComponent } from './components/activation/forget-password
 import { BuyerUpdatePasswordComponent } from './components/buyer/buyer-update-password/buyer-update-password.component';
 import { SellerUpdatePasswordComponent } from './components/seller/seller-update-password/seller-update-password.component';
 import { OrderConfirmComponent } from './components/buyer/order-confirm/order-confirm.component';
+import { BuyerPurchasesComponent } from './components/buyer/buyer-purchases/buyer-purchases.component';
+import { SellerOrdersComponent } from './components/seller/seller-orders/seller-orders.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -72,12 +74,14 @@ const appRoutes: Routes = [
   {path: 'buyer/checkout', component: BuyerCheckoutComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/orderConfirm/:order', component: OrderConfirmComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/purchases', component: BuyerPurchasesComponent, canActivate: [BuyerAuthGuard]},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-services', component: SellerServicesComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/updatePass', component: SellerUpdatePasswordComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/submit-categories', component: SubmitCategoriesComponent, canActivate: [SellerAuthGuard]},
+  {path: 'seller/orders', component: SellerOrdersComponent, canActivate: [SellerAuthGuard]},
   {path: 'preactivation', component: PreactivationComponent },
   {path: 'postactivation/:token', component: PostactivationComponent },
   {path: 'resend', component: ResendComponent},
@@ -164,7 +168,9 @@ const customNotifierOptions: NotifierOptions = {
     StripeNeededDialogComponent,
     BuyerUpdatePasswordComponent,
     SellerUpdatePasswordComponent,
-    OrderConfirmComponent
+    OrderConfirmComponent,
+    BuyerPurchasesComponent,
+    SellerOrdersComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,

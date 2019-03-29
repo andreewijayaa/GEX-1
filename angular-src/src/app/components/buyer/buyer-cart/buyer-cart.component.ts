@@ -44,7 +44,6 @@ getCart() {
       this.offersPriceTotal = data.offerPriceTotal;
       this.offersShippingTotal = data.offerShippingTotal;
       this.orderTotal = data.orderTotal;
-      console.log(data);
     } else {
       this.notifier.notify('warning', 'Must accept offers to view cart.');
       this.router.navigate(['/buyer']);
@@ -59,9 +58,9 @@ getCart() {
     };
     this.buyerService.offerRejected(offerRemoved).subscribe((data: any) => {
       if (data.success) {
-        console.log("Offer Removed Successful.");
+        console.log('Offer Removed Successful.');
       } else {
-        //console.log("Offer Removed NOT Successful.");
+        // console.log("Offer Removed NOT Successful.");
       }
     });
 
