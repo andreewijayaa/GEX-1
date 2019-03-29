@@ -330,10 +330,14 @@ export class BuyerCheckoutComponent
 
         this.buyerService.checkout(obj).subscribe((data1: any) => {
           if (data1.success) {
-            this.spinner = false;
-            const orderID = data1.newOrder._id;
-            console.log(data1);
-            this.router.navigate(['/buyer/orderConfirm/' + orderID]);
+            this.buyerService.clearCart(this.buyer._id).subscribe((cartReturn: any) => {
+              if (cartReturn.success) {
+                this.spinner = false;
+                const orderID = data1.newOrder._id;
+                console.log(data1);
+                this.router.navigate(['/buyer/orderConfirm/' + orderID]);
+              }
+            });
           } else {
             this.spinner = false;
             console.log(data1);

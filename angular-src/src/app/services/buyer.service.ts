@@ -206,7 +206,7 @@ export class BuyerService {
     }
   }
 
-  // Generate Order Number service
+  // Generate Order Number service - ROni
   getOrderNumber() {
     this.loadToken();
     const httpOptions = {
@@ -249,7 +249,7 @@ export class BuyerService {
 
   // upload images to request
   addRequestImage(requestPic: File): Observable<Object> {
-    console.log("Request Picture has been called in services");
+    console.log('Request Picture has been called in services');
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -280,6 +280,26 @@ export class BuyerService {
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/removeFromCart', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  // Clear all the items in cart - ROni
+  clearCart(buyerID) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    const body = {
+      'buyerID': buyerID
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/clearCart', body, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/clearCart', body, httpOptions)
         .pipe(map(res => res));
     }
   }
