@@ -29,6 +29,7 @@ export class SellerAccountComponent implements OnInit {
   seller_firstName: any;
   seller_lastName: any;
   seller_email: any;
+  spinner: Boolean;
 
   // for image porcessing
   selectedFile: ImageSnippet;
@@ -42,6 +43,7 @@ export class SellerAccountComponent implements OnInit {
 
   // When the seller account page loads, the logged in seller's information will be fetched and displayed on the page.
   ngOnInit() {
+    this.spinner = false;
     this.getSellerProfile();
     this.socket.on('updatedSellerProfileInfo', ()  => {
       this.getSellerProfile();
@@ -159,6 +161,7 @@ export class SellerAccountComponent implements OnInit {
   // By: John
   // function for updating profile image
   processFile(imageInput: any) {
+    this.spinner = true;
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
@@ -167,9 +170,11 @@ export class SellerAccountComponent implements OnInit {
       this.sellerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
           this.notifier.notify('success', 'Your Image has uploaded! Login again to update');
+          this.spinner = false;
         },
         (err) => {
           this.notifier.notify('error', 'Your Image has failed to upload');
+          this.spinner = false;
         });
     });
 

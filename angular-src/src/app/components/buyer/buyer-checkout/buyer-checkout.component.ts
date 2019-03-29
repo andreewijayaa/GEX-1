@@ -151,7 +151,7 @@ export class BuyerCheckoutComponent
         this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
         this.totalPrice = data.orderTotal; // Offers price + shipping price
         this.requestID = data.offersInCart[0].request_ID;
-        console.log(this.offersInCart);
+        // console.log(this.offersInCart);
 
         // CONVERT ALL TO TWO SIG FIGS - For displaying purposes
         this.totalBeforeTaxDisplay = this.offerPrice + this.offerShipping;
@@ -308,7 +308,7 @@ export class BuyerCheckoutComponent
       // ...send the token to backend to process the charge
       this.buyerService.getOrderNumber().subscribe((data: any) => {
         const orderNumber = data;
-        console.log(orderNumber);
+        // console.log(orderNumber);
 
         const obj = {
           token: token,
@@ -326,7 +326,7 @@ export class BuyerCheckoutComponent
           feesPriceTotal: this.totalFees,
           requestPurchasedID: this.requestID
         };
-        console.log(obj);
+        // console.log(obj);
 
         this.buyerService.checkout(obj).subscribe((data1: any) => {
           if (data1.success) {
@@ -334,13 +334,13 @@ export class BuyerCheckoutComponent
               if (cartReturn.success) {
                 this.spinner = false;
                 const orderID = data1.newOrder._id;
-                console.log(data1);
+                // console.log(data1);
                 this.router.navigate(['/buyer/orderConfirm/' + orderID]);
               }
             });
           } else {
             this.spinner = false;
-            console.log(data1);
+            // console.log(data1);
             this.notifier.notify('error', 'Something went wrong with processing your order. Please refresh your page and try again.');
           }
       });
