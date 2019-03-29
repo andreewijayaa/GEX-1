@@ -59,6 +59,23 @@
           </mat-form-field>
       </mat-radio-group>
       <br>
+      <div class="form-group">
+          <label for="requestImageUpload1">Add Pictures to Offer:</label>
+          <input #imageInput
+                  type="file"
+                  accept="image/*"
+                  (change) = "processFile(imageInput)">
+      </div>
+      <div class="form-group">
+          <button type="button" class="btn-warning btn-sm" id="deleteBtn" (click)="deleteImagesFunction()">Delete Last Uploaded Image</button>
+          </div>
+      <div class="form-group">
+          <!--*ngIf="selectedFile" src="url('+ selectedFile.src +')"-->
+          <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[0]}} alt="" width="120" height="120">
+          <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[1]}} alt="" width="120" height="120">
+          <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[2]}} alt="" width="120" height="120">
+      </div>
+      <br>
       <mat-form-field style="width: 24%;">
         <span matPrefix>$&nbsp;</span>
         <input matInput id="price" placeholder="Amount" class="example-right-align" type="number" formControlName="price"
@@ -95,6 +112,11 @@
       <br>
       <mat-list-item><b style="margin-right:5px">Completion & Delivery:</b>
         {{confirmCompletion}}</mat-list-item>
+      <br>
+      <br>
+      <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[0]}} alt="" width="120" height="120">
+      <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[1]}} alt="" width="120" height="120">
+      <img class="RequestImageDisplay" *ngIf="selectedFile" src={{this.Image_Urls[2]}} alt="" width="120" height="120">
       <br>
       <br>
       <mat-list-item *ngIf="shipping == true"><strong style="margin-right: 5px">Shipping:</strong>

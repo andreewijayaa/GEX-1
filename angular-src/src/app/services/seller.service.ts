@@ -296,6 +296,26 @@ export class SellerService {
     }
   }
 
+  addOfferImage(offerPic: File): Observable<Object> {
+    console.log("Offer Picture has been called in services");
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.sellerToken
+      })
+    };
+    const formData = new FormData();
+    formData.append('image', offerPic);
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/offerpicture', formData, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/offerpicture', formData, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // Resend Confirmation Email
   resendSellerConfirmation(email) {
     this.loadToken();

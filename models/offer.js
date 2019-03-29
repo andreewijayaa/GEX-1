@@ -20,6 +20,10 @@ const offerSchema = mongoose.Schema({
     type:String,
     required:true
   },
+  offer_images: {
+    type : [String],
+    required: false
+  },
   price:{
     type:Number,
     required:true
