@@ -162,7 +162,7 @@ router.post('/request', (req, res, next) => {
       title: req.body.title,
       description: req.body.description,
       deadline: req.body.deadline,
-      status: "Awaiting offers"
+      status: "Awaiting Offers"
     });
 
     //code added by John to add images to requests
@@ -482,7 +482,7 @@ router.post("/offerAccepted", (req, res /*next*/) => {
       });
     else {
       offer.offerAccepted = accepted.offerAccepted;
-      offer.offerStatus = "Accepted, awaiting payment";
+      offer.offerStatus = "Accepted, Payment Pending";
       offer.save().then(() => {
         io.emit('updatedBuyerProfileInfo');
         Request.findById(accepted.requestId, (err, request) => {
@@ -519,6 +519,7 @@ router.post("/offerRejected", (req, res /*next*/) => {
       });
     else {
       offer.offerAccepted = removed.offerRemoved;
+      offer.offerStatus = 'Pending';
       offer.save().then(() => {
         var newRequestOffersList = [];
         Request.findById(removed.requestId, (err, request) => {
