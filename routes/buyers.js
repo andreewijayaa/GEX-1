@@ -391,7 +391,7 @@ router.get("/orderDetails/:id", (req, res,) => {
       
       Order.findById(req.params.id, (err, orderFound) => {
         if (err)
-          return res.status(500).send({ success: false, message: "could not find order." });
+          return res.send({ success: false, message: "could not find order." });
         res.status(200).send({ success: true, orderFound });
       });
     });
