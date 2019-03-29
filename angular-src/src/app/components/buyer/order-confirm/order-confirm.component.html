@@ -4,7 +4,7 @@
     <div class="text-center highlight"><img src="../../../../assets/RequirenLogo.png" />
       <div class="container text-center" style="margin-top: 31px;">
           <h2 class="text-center">thank you for your order.</h2>
-          <p class="text-center" style="margin-top: -28px;">Hello Omar, your order #1233489989 was successfully placed. Our seller(s) are working on getting your items prepared for you. We&#39;ll email you an update when your seller(s) has shipped your item(s).</p>
+          <p class="text-center" style="margin-top: -28px;">Hello {{buyer_first_name}}, your order #{{orderNumber}} was successfully placed. Our seller(s) are working on getting your items prepared for you. We&#39;ll email you an update when your seller(s) has shipped your item(s).</p>
       </div>
       <button class="btn btn-primary text-center" role="button" href="#">VIEW ORDERS</button>
     </div>
@@ -14,17 +14,17 @@
       <div class="row">
         <div class="col-md-5 mb-3">
           <h6 style="font-weight: bold">order details</h6>
-          order #:
+          order #: {{orderNumber}}
           <br>
-          member #:
+          order status: {{orderStatus}}
         </div>
         <div class="col-md-5 mb-3">
           <h6 style="font-weight: bold">shipping details</h6>
-          Omar Lozoya
+          {{shippingAddressDetails['name']}}
           <br>
-          12420 N 43rd Ln
-          <br>
-          Glendale, AZ 85304
+          {{shippingAddressDetails['address_line1']}}
+          <div *ngIf="shippingAddressDetails['address_line2'] !== '' || shippingAddressDetails['address_line2'] !== undefined">{{shippingAddressDetails['address_line2']}}</div>
+          {{shippingAddressDetails['address_city']}}, {{shippingAddressDetails['address_state']}} {{shippingAddressDetails['address_zip']}}
           </div>
       </div>
       <hr>
@@ -34,15 +34,23 @@
         <div class="row">
           <div class="col-md-4 mb-3">
             <h6 style="font-weight: bold">details</h6>
-            request type:
+            request type: {{requestTypeCodes}}
             <br>
-            title:
+            title: {{requestTitle}}
           </div>
           <div class="col-md-4 mb-3">
             <h6 style="font-weight: bold">description</h6>
+            <div [innerHTML]="requestDescription"></div>
           </div>
           <div class="col-md-4 mb-3">
               <h6 style="font-weight: bold">images</h6>
+              <div *ngIf="requestImages">
+                  <img class= "requestimage1" src={{requestImages[0]}} *ngIf="requestImages[0]" alt="" width="120" height="120">
+                  &nbsp;
+                  <img class= "requestimage2" src={{requestImages[1]}} *ngIf="requestImages[1]" alt="" width="120" height="120">
+                  &nbsp;
+                  <img class= "requestimage3" src={{requestImages[2]}} *ngIf="requestImages[2]" alt="" width="120" height="120">
+              </div>
             </div>
         </div>
         <hr>
@@ -74,23 +82,23 @@
           <div class="col-md-3">
             <p style="font-weight: bold">
                 offers:
-                <span class="price" style="font-weight: normal">$44.99</span>
+                <span class="price" style="font-weight: normal">${{offerTotal}}</span>
             </p>
             <p style="font-weight: bold">
                 shipping & handling:
-                <span class="price" style="font-weight: normal">$44.99</span>
+                <span class="price" style="font-weight: normal">${{shippingTotal}}</span>
             </p>
             <p style="font-weight: bold">
                 subtotal:
-                <span class="price" style="font-weight: normal">$44.99</span>
+                <span class="price" style="font-weight: normal">${{subtotal}}</span>
             </p>
             <p style="font-weight: bold">
-                estimated tax:
-                <span class="price" style="font-weight: normal">$44.99</span>
+                estimated fees:
+                <span class="price" style="font-weight: normal">${{feesTotal}}</span>
             </p>
             <p style="font-weight: bold; font-size: 20px">
                 total(USD):
-                <span class="price" style="font-weight: normal">$44.99</span>
+                <span class="price" style="font-weight: normal">${{orderTotal}}</span>
             </p>
           </div>
         </div>

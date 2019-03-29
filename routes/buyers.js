@@ -275,6 +275,53 @@ router.post("/deleterequest", function(req, res) {
   });
 });
 
+router.get("/orderDetails/:id", (req, res,) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to view order details." });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+
+    Buyer.findById(decoded.data._id, (err, buyer_viewing_order) => {
+      if (err) handleError(err);
+      
+      Order.findById(req.params.id, (err, orderFound) => {
+        if (err)
+          return res.status(500).send({ success: false, message: "could not find order." });
+        res.status(200).send({ success: true, orderFound });
+      });
+    });
+  });
+});
+
+router.get("/BuyerOrderDetails", (req, res,) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to view order details." });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+
+    Buyer.findById(decoded.data._id, (err, buyer_viewing_order) => {
+      if (err) handleError(err);
+      Order.getOrderbyBuyer(buyer_viewing_order, (err, order) => {
+
+      });
+    });
+  });
+});
+
 // Retrieve all applicable requests to the logged in buyer
 router.get("/request", (req, res, next) => {
   var token = req.headers["x-access-token"];
@@ -599,46 +646,46 @@ router.post("/removeFromCart", (req, res, next) => {
   });
 });
 
-router.post("/tax", (req, res) => {
-  let taxInfo = {
-    from_country: 'US',
-    from_zip: '85304',
-    from_state: 'AZ',
-    from_city: 'Glendale',
-    from_street: '12420 N 43rd Ln',
-    to_country: req.body.to_country,
-    to_zip: req.body.to_zip,
-    to_state: req.body.to_state,
-    shipping: req.body.shipping,
-    amount: req.body.amount
-  }
+// router.post("/tax", (req, res) => {
+//   let taxInfo = {
+//     from_country: 'US',
+//     from_zip: '85304',
+//     from_state: 'AZ',
+//     from_city: 'Glendale',
+//     from_street: '12420 N 43rd Ln',
+//     to_country: req.body.to_country,
+//     to_zip: req.body.to_zip,
+//     to_state: req.body.to_state,
+//     shipping: req.body.shipping,
+//     amount: req.body.amount
+//   }
 
-  client.taxForOrder({
-    from_country: taxInfo.from_country,
-    to_country: taxInfo.to_country,
-    to_zip: taxInfo.to_zip,
-    to_state: taxInfo.to_state,
-    amount: taxInfo.amount,
-    shipping: taxInfo.shipping,
-    nexus_addresses: [
-      {
-        country: 'US',
-        zip: taxInfo.from_zip,
-        state: taxInfo.from_state,
-        city: taxInfo.from_city,
-        street: taxInfo.from_street
-      }
-    ]
-  }).then(function(result) {
-    result.tax;
-    result.tax.amount_to_collect;
-    res.send({ success: true, result});
-  }).catch(function(err) {
-    err.detail;
-    err.status;
-    res.send({ success: false, err})
-  });
-})
+//   client.taxForOrder({
+//     from_country: taxInfo.from_country,
+//     to_country: taxInfo.to_country,
+//     to_zip: taxInfo.to_zip,
+//     to_state: taxInfo.to_state,
+//     amount: taxInfo.amount,
+//     shipping: taxInfo.shipping,
+//     nexus_addresses: [
+//       {
+//         country: 'US',
+//         zip: taxInfo.from_zip,
+//         state: taxInfo.from_state,
+//         city: taxInfo.from_city,
+//         street: taxInfo.from_street
+//       }
+//     ]
+//   }).then(function(result) {
+//     result.tax;
+//     result.tax.amount_to_collect;
+//     res.send({ success: true, result});
+//   }).catch(function(err) {
+//     err.detail;
+//     err.status;
+//     res.send({ success: false, err})
+//   });
+// })
 
 // By: Omar (Stripe Charge) & Roni (Transfer algorithm)
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
@@ -655,8 +702,12 @@ router.post("/charge", (req, res) => {
     totalOffers: req.body.totalOffers,
     shippingInfo: req.body.shippingInfo,
     orderID: req.body.orderID,
-    name: req.body.name
-
+    name: req.body.name,
+    offerPriceTotal: req.body.offerPriceTotal,
+    shipPriceTotal: req.body.shipPriceTotal,
+    subTotal: req.body.subTotal,
+    feesPriceTotal: req.body.feesPriceTotal,
+    requestPurchasedID: req.body.requestPurchasedID
   };
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
@@ -712,23 +763,44 @@ router.post("/charge", (req, res) => {
                       orderNumber: purchaseInfo.orderID,
                       offersPurchased: offerIDarray,
                       totalPrice: purchaseInfo.amount,
+                      totalFeesPrice: purchaseInfo.feesPriceTotal,
+                      totalOffersPrice: purchaseInfo.offerPriceTotal,
+                      totalShipPrice: purchaseInfo.shipPriceTotal,
+                      subtotalPrice: purchaseInfo.subTotal,
                       stripeChargeID: Charge_id,
                       shippingAddress: purchaseInfo.shippingInfo,
+                      orderStatus: "Confirmed, Shipping Pending",
+                      requestPurchasedID: purchaseInfo.requestPurchasedID
                     });
 
                     // Save the new order
                     newOrder.save(function(err, savingOrder) {
                       if (err) return handleError(err);
-                      console.log(newOrder);
+                      // console.log(newOrder);
+                      // Updating the request offer status as payment completed.
+                      Request.findById(req.body.request_id, (err, request) => {
+                        if (request.status == "Payment Completed") {
+
+                        } else {
+                          request.status = "Payment Completed";
+                        }
+                        request.save();
+                      });
                       return res.json({
                         success: true,
-                        message: "New order has been successfully placed."
+                        message: "New order has been successfully placed.",
+                        newOrder
                       })
                     });
                   }
                 }
               }
           });
+        });
+        // Updating the offer status for each offer
+        Offer.findById(offer._id, (err, offerToUpdate) => {
+          offerToUpdate.offerStatus = "Offer Accepted & Purchased";
+          offerToUpdate.save();
         });
       });
     }

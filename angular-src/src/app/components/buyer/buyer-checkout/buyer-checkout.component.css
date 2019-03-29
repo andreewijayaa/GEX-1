@@ -162,3 +162,10 @@ span.price {
   .StripeElement--webkit-autofill {
     background-color: #fefde5 !important;
   }
+
+  .spin {
+    position: relative;
+    margin-top: 300px;
+    left: 50%;
+    min-height: 100%;
+  }
