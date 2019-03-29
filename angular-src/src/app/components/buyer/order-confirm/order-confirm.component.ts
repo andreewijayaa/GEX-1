@@ -14,6 +14,7 @@ export class OrderConfirmComponent implements OnInit {
   private readonly notifier: NotifierService;
   orderDetais: any;
   orderId: any;
+  spinner: Boolean;
 
   // order and shipping details
   buyer_first_name: any;
@@ -24,6 +25,7 @@ export class OrderConfirmComponent implements OnInit {
   // submitted request info
   requestID: any;
   requestTypeCodes = [];
+  requestTypeNames = [];
   requestTitle = String;
   requestDescription = String;
   requestImages = [];
@@ -38,6 +40,64 @@ export class OrderConfirmComponent implements OnInit {
   feesTotal: Number;
   orderTotal: Number;
 
+  // Request Codes
+  codes = [
+    {
+      code: 78965422,
+      name: " Jewelry"
+    },
+    {
+      code: 78965423,
+      name: " Necklaces (Jewelry)"
+    },
+    {
+      code: 78965424,
+      name: " Rings (Jewelry)"
+    },
+    {
+      code: 78965425,
+      name: " Earrings (Jewelry)"
+    },
+    { code: 68977451,
+      name: " Dolls"
+    },
+    {
+      code: 67887941,
+      name: " Sculptures"
+    },
+    {
+      code: 62145331,
+      name: " Scarves"
+    },
+    {
+      code: 54887921,
+      name: " Blankets"
+    },
+    { code: 52871151,
+      name: " Socks"
+     },
+    {
+      code: 50360051,
+      name: " Pencils"
+    },
+    {
+      code: 49605401,
+      name: " Painting"
+    },
+    {
+      code: 49605402,
+      name: " Oil (Painting)"
+    },
+    {
+      code: 49605403,
+      name: " Watercolor (Painting)"
+    },
+    {
+      code: 49605404,
+      name: " Acrlyic (Painting)"
+    }
+  ];
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
@@ -45,11 +105,12 @@ export class OrderConfirmComponent implements OnInit {
     private buyerService: BuyerService) { this.notifier = notifierService; }
 
   ngOnInit() {
+    this.spinner = true;
     this.route.params.subscribe(params => {
       this.orderId = params.order;
     });
-    this.getBuyerProfile();
     this.getOrderConfirmDetails();
+    this.getBuyerProfile();
   }
 
   getBuyerProfile() {
@@ -57,7 +118,7 @@ export class OrderConfirmComponent implements OnInit {
       if (data.success) {
         this.buyer_first_name = data.buyer_found.first_name;
       } else {
-
+        console.log('Could not fetch buyer profile data');
       }
     });
   }
@@ -65,7 +126,6 @@ export class OrderConfirmComponent implements OnInit {
   getOrderConfirmDetails() {
     this.buyerService.getOrderDetails(this.orderId).subscribe((data: any) => {
       if (data.success) {
-        console.log(data);
         this.orderNumber = data.orderFound.orderNumber;
         this.orderStatus = data.orderFound.orderStatus;
         this.shippingAddressDetails = data.orderFound.shippingAddress;
@@ -76,9 +136,9 @@ export class OrderConfirmComponent implements OnInit {
         this.subtotal = data.orderFound.subtotalPrice;
         this.orderTotal = data.orderFound.totalPrice;
         this.getRequestDetails();
-        console.log(this.shippingAddressDetails);
-      } else {
-
+      } else if (data.success === false) {
+        this.spinner = false;
+        this.router.navigate(['/buyer']);
       }
     });
   }
@@ -91,11 +151,17 @@ export class OrderConfirmComponent implements OnInit {
         this.requestDescription = data.request.description;
         this.requestImages = data.request.request_images;
         this.purchasedOffers = data.offers;
-        console.log(data);
+        this.codes.forEach(code => {
+          this.requestTypeCodes.forEach(requestCode => {
+            if (code.code === requestCode) {
+              this.requestTypeNames.push(code.name);
+            }
+          });
+        });
+        this.spinner = false;
       } else {
-
+        console.log('Could not fetch request data');
       }
     });
   }
-
 }
