@@ -1,16 +1,39 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
+import { RequestService } from '../../services/request.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton } from '@angular/material';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource, MatTab } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { invalid } from '@angular/compiler/src/render3/view/util';
 import { NotifierService } from 'angular-notifier';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import { formatCurrency } from '@angular/common';
 import * as io from 'socket.io-client';
+
+export interface RequestElement {
+  title: String;
+  status: String;
+  deadline: String;
+  description: String;
+  request_images: [String];
+}
+
+export interface OfferElement {
+  title: String;
+  description: String;
+  price: String;
+  shippingPrice: String;
+  offerStatus: String;
+  offerAccepted: String;
+  created_at: Date;
+  request_ID: String;
+  expected_completion: String;
+  list_of_sellers_submitted_offers: [String];
+}
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -23,7 +46,14 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'app-seller',
   templateUrl: './seller.component.html',
-  styleUrls: ['./seller.component.css']
+  styleUrls: ['./seller.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class SellerComponent implements OnInit {
 
@@ -33,6 +63,7 @@ export class SellerComponent implements OnInit {
   code: String;
   state: String;
   seller: any;
+  sellerID: any;
   requestList: Object;
   offerList = [];
   activeRequests = [];
@@ -43,14 +74,28 @@ export class SellerComponent implements OnInit {
   progress1: any;
   progress2: any;
   progress3: any;
+  progress4: any;
   temp: any;
-  archivedRequests: Object;
+  archivedRequests = [];
   seller_firstName: any;
+  sellerMadeOffer: Boolean = false;
+
+  dataSourceRequests = new MatTableDataSource(this.activeRequests);
+  dataSourceOffers = new MatTableDataSource(this.offerList);
+  dataSourceArchived = new MatTableDataSource(this.archivedRequests);
+
+  displayRequestColumns = ['title', 'status', 'deadline'];
+  displayOfferColumns = ['title', 'offerStatus', 'created_at'];
+  displayArchivedColumns = ['title', 'status', 'deadline'];
+  expandedRequestElement: RequestElement | null;
+  expandedOfferElement: OfferElement | null;
+  expandedArchivedElement: RequestElement | null;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     notifierService: NotifierService,
+    private requestService: RequestService,
     private router: Router) {
     this.notifier = notifierService;
     this.socket = io('http://localhost:3000');
@@ -96,6 +141,7 @@ export class SellerComponent implements OnInit {
     this.progress1 = 0;
     this.progress2 = 0;
     this.progress3 = 0;
+    this.progress4 = 0;
   }
 
   getSellerProfile() {
@@ -104,20 +150,21 @@ export class SellerComponent implements OnInit {
       if (profile.success) {
         this.seller = profile.seller_found;
         this.seller_firstName = profile.seller_found.first_name;
+        this.sellerID = profile.seller_found._id;
         this.loader = false;
 
         this.temp = this.seller.user_account_setup;
         if (this.seller.user_account_setup[0]) {
           this.progress1 = 100;
           if (this.seller.user_account_setup[1]) {
-            this.progress2 = 50;
+            this.progress2 = 100;
             if (this.seller.user_account_setup[2]) {
-              this.progress2 = 100;
+              this.progress3 = 100;
               if (this.seller.user_account_setup[3]) {
-                this.progress3 = 100;
-              } else { this.progress3 = 50; }
-            } else { this.progress2 = 50; }
-          } else { this.progress2 = 25; }
+                this.progress4 = 100;
+              } else { this.progress4 = 50; }
+            } else { this.progress3 = 50; }
+          } else { this.progress2 = 50; }
         } else { this.progress1 = 50; }
 
         if (this.seller.user_account_setup[0]
@@ -130,6 +177,8 @@ export class SellerComponent implements OnInit {
           this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
             if (offers.success) {
               this.offerList = offers.offers;
+              this.dataSourceOffers = new MatTableDataSource(offers.offers);
+              // console.log(this.dataSourceOffers);
             } else {
               console.log('Could not fetch offers');
             }
@@ -143,6 +192,8 @@ export class SellerComponent implements OnInit {
           this.sellerService.getActiveRequests().subscribe((requests: any) => {
             if (requests.success) {
               this.activeRequests = requests.active_requests;
+              this.dataSourceRequests = new MatTableDataSource(requests.active_requests);
+              // console.log(this.dataSourceRequests);
             } else {
               console.log('could not fetch requests');
             }
@@ -156,6 +207,8 @@ export class SellerComponent implements OnInit {
           this.sellerService.getArchivedRequests().subscribe((archived: any) => {
             if (archived.success) {
               this.archivedRequests = archived.archived_request;
+              this.dataSourceArchived = new MatTableDataSource(archived.archived_request);
+              // console.log(this.dataSourceArchived);
             } else {
               console.log('Could not fetch archieved requests');
             }
@@ -184,6 +237,50 @@ export class SellerComponent implements OnInit {
     });
   }
 
+  searchRequestFilter(filterValue: string) {
+    this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchOfferFilter(filterValue: string) {
+    this.dataSourceOffers.filter = filterValue.trim().toLowerCase();
+  }
+
+  searchArchivedFilter(filterValue: string) {
+    this.dataSourceArchived.filter = filterValue.trim().toLowerCase();
+  }
+
+  expandedRequest(listOfSellers: any) {
+    this.sellerMadeOffer = false;
+    listOfSellers.forEach(element => {
+      if (element === this.sellerID) {
+        this.sellerMadeOffer = true;
+      }
+    });
+    if (this.sellerMadeOffer === true) {
+
+    } else {
+      this.sellerMadeOffer = false;
+    }
+  }
+
+  expandedOffer(id: any) {
+
+  }
+
+  expandedArchived(listOfSellers: any) {
+    this.sellerMadeOffer = false;
+    listOfSellers.forEach(element => {
+      if (element === this.sellerID) {
+        this.sellerMadeOffer = true;
+      }
+    });
+    if (this.sellerMadeOffer === true) {
+
+    } else {
+      this.sellerMadeOffer = false;
+    }
+  }
+
   submitOffer(title: any, id: any) {
     // Seller does not have a stripe account, therefor they can't submit an offer
     if (!this.seller.stripe || this.seller.stripe === null || this.seller.stripe === undefined) {
@@ -195,6 +292,7 @@ export class SellerComponent implements OnInit {
     let offerDescription: any;
     let offerPrice: any;
     let offerShipping: any;
+    let offerCompletion: any;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -213,6 +311,7 @@ export class SellerComponent implements OnInit {
           offerDescription = data['description'];
           offerPrice = data['price'];
           offerShipping = data['shipping'];
+          offerCompletion = data['completion'];
 
           const offer = {
             title: offerTitle,
@@ -220,7 +319,8 @@ export class SellerComponent implements OnInit {
             price: offerPrice,
             shipPrice: offerShipping,
             request_ID: id,
-            seller_ID: this.seller._id
+            seller_ID: this.seller._id,
+            expected_completion: offerCompletion
           };
 
           this.sellerService.postOffer(offer).subscribe((data: any) => {
@@ -240,8 +340,7 @@ export class SellerComponent implements OnInit {
               }, 4000);
             }
           });
-        }
-        else {
+        } else {
           //do nothing
         }
       }
@@ -276,7 +375,7 @@ export class SellerComponent implements OnInit {
       if (data.success === true) { // if the data succeed to be posted
         this.notifier.notify('success', 'This Request was archived!');
       } else { // if it fails
-        this.notifier.notify('error', data.msg);
+        this.notifier.notify('error', 'Something went wrong. Request undable to be archived.');
       }
     });
   }
@@ -292,7 +391,6 @@ export class SellerComponent implements OnInit {
     // setting description
     this.sellerService.deleteArchive(requestID).subscribe((data: any) => {
       if (data.success === true) { // if the data succeed to be posted
-        window.location.reload();
         this.notifier.notify('success', 'This Request was deleted from archive!');
       } else { // if it fails
         this.notifier.notify('error', data.msg);
@@ -337,8 +435,11 @@ export class SubmitOfferDialogComponent implements OnInit {
   confirmDescription: String;
   confirmPrice: any;
   confirmShipping: any;
+  confirmCompletion: String;
   shipping = false;
   offerFormGroup: FormGroup;
+// tslint:disable-next-line: max-line-length
+  completionPlaceholder = 'If your offer is purchased, when can you complete & have it delivered by?';
 
   constructor(
     private fb: FormBuilder,
@@ -353,6 +454,7 @@ export class SubmitOfferDialogComponent implements OnInit {
     this.offerFormGroup = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      completion: ['', Validators.required],
       shipping: [''],
       price: ['', Validators.required]
     });
@@ -368,6 +470,7 @@ export class SubmitOfferDialogComponent implements OnInit {
       // var price = formatCurrency(this.priceFormControl.value, "en", "$");
     this.confirmTitle = this.offerFormGroup.controls.title.value;
     this.confirmDescription = this.offerFormGroup.controls.description.value;
+    this.confirmCompletion = this.offerFormGroup.controls.completion.value;
     this.confirmPrice = this.offerFormGroup.controls.price.value;
     this.submitOffer = true;
   }
@@ -377,7 +480,8 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   confirmDialogSubmit() {
-    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, price: this.confirmPrice, shipping: this.confirmShipping});
+    // tslint:disable-next-line: max-line-length
+    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, completion: this.confirmCompletion, price: this.confirmPrice, shipping: this.confirmShipping});
   }
 
   confirmDialogCancel() {

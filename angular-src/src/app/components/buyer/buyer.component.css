@@ -1,6 +1,12 @@
 body, html {
+  margin: 0 100px 0 100px;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-user-select: node;
+  height: 100vh;
   height: 100%;
 }
+
 .app-loading {
   position: center;
   display: flex;
@@ -93,7 +99,7 @@ button{
 
 table {
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 tr.example-detail-row {

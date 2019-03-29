@@ -40,6 +40,10 @@ const offerSchema = mongoose.Schema({
     type: Date, 
     required: true, 
     default: Date.now
+  },
+  expected_completion:{
+    type:String,
+    required:true
   }
 });
 

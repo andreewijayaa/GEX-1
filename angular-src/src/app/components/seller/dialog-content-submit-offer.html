@@ -28,6 +28,19 @@
       </mat-form-field>
       <br>
       <br>
+      <mat-form-field style="width: 100%;">
+        <textarea matInput placeholder="{{completionPlaceholder}}" formControlName="completion"
+          [errorStateMatcher]="matcher" style="height: 150px" required></textarea>
+          <mat-hint>(ex: I can have it completed and delivered within 10 business days after purchase is completed.)</mat-hint>
+          <mat-error *ngIf="offerFormGroup.errors && !offerFormGroup.errors">
+            Please enter a completion & delivery descritption for this offer.
+          </mat-error>
+          <mat-error *ngIf="offerFormGroup.errors">
+            Completion info is <strong>required</strong>
+          </mat-error>
+      </mat-form-field>
+      <br>
+      <br>
       <mat-radio-group>
           <mat-radio-button id="noShipping" color="primary" value="1" (change)="shipping = false" checked>Free Shipping</mat-radio-button>
           <mat-radio-button color="primary" value="2" (change)="shipping = true">Shipping</mat-radio-button>
@@ -76,12 +89,12 @@
         {{confirmTitle}}</mat-list-item>
       <br>
       <br>
-      <br>
-      <br>
       <mat-list-item><b style="margin-right:5px">Description:</b>
         {{confirmDescription}}</mat-list-item>
       <br>
       <br>
+      <mat-list-item><b style="margin-right:5px">Completion & Delivery:</b>
+        {{confirmCompletion}}</mat-list-item>
       <br>
       <br>
       <mat-list-item *ngIf="shipping == true"><strong style="margin-right: 5px">Shipping:</strong>

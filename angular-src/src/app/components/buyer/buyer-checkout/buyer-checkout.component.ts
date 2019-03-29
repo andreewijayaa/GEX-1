@@ -38,83 +38,82 @@ export class BuyerCheckoutComponent
   error: string;
 
   private readonly notifier: NotifierService;
-  selectedOfferId: any;
-  offerList: Object;
-  request_Id: any;
+
   offerPrice: any;
   offerShipping: any;
+  totalFees: any;
   totalPrice: any;
-  isDataAvailable: Boolean = false;
+
   buyer: any;
   billingFormGroup: FormGroup;
   shippingFormGroup: FormGroup;
   paymentFormGroup: FormGroup;
   offersInCart: [String];
   emptyCart: Boolean;
-  orderFees: Number;
-  editable: Boolean = false;
-  sellerList = [];
-  billingSameAsShipping = false;
+  requestID: any;
+  spinner: Boolean;
 
-  //FOR DISPLAY
+  billingSameAsShipping = false;
+  stripeFees: Number;
+
+  // FOR DISPLAY
   offerPriceDisplay: any;
   offerShippingDisplay: any;
-  // orderFeesDisplay: any;
   totalPriceDisplay: any;
   totalBeforeTaxDisplay: any;
   estimatedTaxDisplay = '----';
 
   states = [
-    { label: "AK" },
-    { label: "AL" },
-    { label: "AZ" },
-    { label: "AR" },
-    { label: "CA" },
-    { label: "CO" },
-    { label: "CT" },
-    { label: "DE" },
-    { label: "FL" },
-    { label: "GA" },
-    { label: "HI" },
-    { label: "ID" },
-    { label: "IL" },
-    { label: "IN" },
-    { label: "IA" },
-    { label: "KS" },
-    { label: "KY" },
-    { label: "LA" },
-    { label: "ME" },
-    { label: "MD" },
-    { label: "MA" },
-    { label: "MI" },
-    { label: "MN" },
-    { label: "MS" },
-    { label: "MO" },
-    { label: "MT" },
-    { label: "NE" },
-    { label: "NV" },
-    { label: "NH" },
-    { label: "NJ" },
-    { label: "NM" },
-    { label: "NY" },
-    { label: "NC" },
-    { label: "ND" },
-    { label: "OH" },
-    { label: "OK" },
-    { label: "OR" },
-    { label: "PA" },
-    { label: "RI" },
-    { label: "SC" },
-    { label: "SD" },
-    { label: "TN" },
-    { label: "TX" },
-    { label: "UT" },
-    { label: "VT" },
-    { label: "VA" },
-    { label: "WA" },
-    { label: "WV" },
-    { label: "WI" },
-    { label: "WY" }
+    { label: 'AK' },
+    { label: 'AL' },
+    { label: 'AZ' },
+    { label: 'AR' },
+    { label: 'CA' },
+    { label: 'CO' },
+    { label: 'CT' },
+    { label: 'DE' },
+    { label: 'FL' },
+    { label: 'GA' },
+    { label: 'HI' },
+    { label: 'ID' },
+    { label: 'IL' },
+    { label: 'IN' },
+    { label: 'IA' },
+    { label: 'KS' },
+    { label: 'KY' },
+    { label: 'LA' },
+    { label: 'ME' },
+    { label: 'MD' },
+    { label: 'MA' },
+    { label: 'MI' },
+    { label: 'MN' },
+    { label: 'MS' },
+    { label: 'MO' },
+    { label: 'MT' },
+    { label: 'NE' },
+    { label: 'NV' },
+    { label: 'NH' },
+    { label: 'NJ' },
+    { label: 'NM' },
+    { label: 'NY' },
+    { label: 'NC' },
+    { label: 'ND' },
+    { label: 'OH' },
+    { label: 'OK' },
+    { label: 'OR' },
+    { label: 'PA' },
+    { label: 'RI' },
+    { label: 'SC' },
+    { label: 'SD' },
+    { label: 'TN' },
+    { label: 'TX' },
+    { label: 'UT' },
+    { label: 'VT' },
+    { label: 'VA' },
+    { label: 'WA' },
+    { label: 'WV' },
+    { label: 'WI' },
+    { label: 'WY' }
   ];
 
   constructor(
@@ -140,33 +139,28 @@ export class BuyerCheckoutComponent
         this.buyer = data.buyer_found;
       } else {
         console.log('Error: could not fetch buyer information');
+        this.router.navigate(['/']);
       }
     });
 
     this.buyerService.retrieveBuyerCart().subscribe((data: any) => {
       if (data.success) {
-        // console.log(data);
-        this.emptyCart = false;
-        this.offersInCart = data.offersInCart;
-        this.offerPrice = data.offerPriceTotal;
-        this.offerShipping = data.offerShippingTotal;
-        // this.orderFees = data.orderFees;
-        this.totalPrice = data.orderTotal;
-        // console.log(this.offersInCart);
-        for (let i = 0; i < this.offersInCart['length']; i++) {
-          this.sellerList.push(this.offersInCart[i]['seller_ID']);
-        }
-       // console.log(this.sellerList);
+        this.emptyCart = false; // Will be used as a pre condition
+        this.offersInCart = data.offersInCart; // Object of all the objects of offers in cart
+        this.offerPrice = data.offerPriceTotal; // Total price of those offers
+        this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
+        this.totalPrice = data.orderTotal; // Offers price + shipping price
+        this.requestID = data.offersInCart[0].request_ID;
+        console.log(this.offersInCart);
 
-        // CONVERT ALL TO TWO SIG FIGS
+        // CONVERT ALL TO TWO SIG FIGS - For displaying purposes
         this.totalBeforeTaxDisplay = this.offerPrice + this.offerShipping;
         this.totalBeforeTaxDisplay = this.totalBeforeTaxDisplay.toFixed(2);
         this.offerPriceDisplay = this.offerPrice.toFixed(2);
         this.offerShippingDisplay = this.offerShipping.toFixed(2);
-        // this.orderFeesDisplay = this.orderFees.toFixed(2);
-        this.totalPriceDisplay = this.totalPrice.toFixed(2);
+        this.totalPriceDisplay = '----';
       } else {
-        this.notifier.notify('warning', 'Must accept offers to checkout.');
+        this.notifier.notify('warning', 'Must have offers in cart to checkout.');
         this.router.navigate(['/buyer']);
       }
     });
@@ -221,12 +215,10 @@ export class BuyerCheckoutComponent
         zip: this.shippingFormGroup['value']['zip'],
         sameAsShipping: true
       });
-    }
-    else if (this.billingSameAsShipping === true) {
+    } else if (this.billingSameAsShipping === true) {
       this.billingSameAsShipping = false;
       this.resetBillingForm();
-    }
-    else { /* do nothing */ }
+    } else { /* do nothing */ }
   }
 
   ngAfterViewInit() {
@@ -250,26 +242,43 @@ export class BuyerCheckoutComponent
   }
 
   calculateTax() {
-    const infoObj = {
-      to_country: 'US',
-      to_zip: this.shippingFormGroup['value']['zip'],
-      to_state: this.shippingFormGroup['value']['state'],
-      shipping: this.offerShipping,
-      amount: this.offerPrice
-    };
-    this.buyerService.getTax(infoObj).subscribe((data: any) => {
-      if (data.success) {
-        console.log(data);
-        console.log(data.result.tax.amount_to_collect);
-        this.estimatedTaxDisplay = String('$' + data.result.tax.amount_to_collect);
-        this.totalPriceDisplay = this.totalPrice + data.result.tax.amount_to_collect;
-      } else {
-        console.log(data);
-      }
-    });
+    // Tax commented for MVP reasons
+
+    // const infoObj = {
+    //   to_country: 'US',
+    //   to_zip: this.shippingFormGroup['value']['zip'],
+    //   to_state: this.shippingFormGroup['value']['state'],
+    //   shipping: this.offerShipping,
+    //   amount: this.offerPrice
+    // };
+    // this.buyerService.getTax(infoObj).subscribe((data: any) => {
+    //   if (data.success) {
+
+    // Used to calculate stripe fee
+    const totalPriceWithTax = this.totalPrice;
+
+    // STRIPE: in the US (assuming standard US pricing of 2.9% + 30¢ per successful charge)
+    let stripeFee = ((totalPriceWithTax * 0.029) + 0.30);
+    stripeFee = (Math.round(stripeFee * 100) / 100);
+
+    // Stripe Fee added up
+    this.totalFees = stripeFee;
+
+    let totalamountwithFees = this.totalFees + this.totalPrice;
+    totalamountwithFees = (Math.round(totalamountwithFees * 100) / 100);
+    this.totalPrice = totalamountwithFees;
+    this.estimatedTaxDisplay = String('$' + this.totalFees);
+    this.totalPriceDisplay = '$' + totalamountwithFees;
+
+      // } else {
+      //   console.log(data);
+      // }
+    // });
   }
 
   async onSubmit(form: NgForm) {
+    this.spinner = true;
+
     const billingDetails = {
       name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
       address_line1: this.billingFormGroup['value']['address1'],
@@ -306,19 +315,29 @@ export class BuyerCheckoutComponent
           name: this.billingFormGroup['value']['firstName'] + ' ' + this.billingFormGroup['value']['lastName'],
           buyerID: this.buyer._id,
           email: this.buyer.email,
-          amount: this.totalPriceDisplay * 100,
+          amount: this.totalPrice,
           totalOffers: this.offersInCart,
           shippingInfo: shippingDetails,
-          orderID: orderNumber
-          // sellers: this.sellerList
+          orderID: orderNumber,
+          request_id: this.requestID,
+          offerPriceTotal: this.offerPrice,
+          shipPriceTotal: this.offerShipping,
+          subTotal: this.totalBeforeTaxDisplay,
+          feesPriceTotal: this.totalFees,
+          requestPurchasedID: this.requestID
         };
+        console.log(obj);
 
         this.buyerService.checkout(obj).subscribe((data1: any) => {
-          if (data.success) {
-            // console.log('Charge Successful');
-            // console.log(data);
+          if (data1.success) {
+            this.spinner = false;
+            const orderID = data1.newOrder._id;
+            console.log(data1);
+            this.router.navigate(['/buyer/orderConfirm/' + orderID]);
           } else {
-            // console.log('Charge unsuccessful');
+            this.spinner = false;
+            console.log(data1);
+            this.notifier.notify('error', 'Something went wrong with processing your order. Please refresh your page and try again.');
           }
       });
     });

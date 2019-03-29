@@ -19,7 +19,8 @@ export class BuyerCartComponent implements OnInit {
   orderFees: Number;
   offersPriceTotal: Number;
   offersShippingTotal: Number;
-  removeItemNavbar = 0;
+  sellerIds = [];
+
   private readonly notifier: NotifierService;
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -49,16 +50,17 @@ getCart() {
     }
   });
 }
-  removeOfferFromCart(offerid) {
+  removeOfferFromCart(offerid, requestid) {
     const offerRemoved = {
       offer_ID: offerid,
-      offer_removed: false
+      offer_removed: false,
+      request_ID: requestid
     };
     this.buyerService.offerRejected(offerRemoved).subscribe((data: any) => {
       if (data.success) {
-        //console.log("Offer Removed Successful.");
+        console.log('Offer Removed Successful.');
       } else {
-        //console.log("Offer Removed NOT Successful.");
+        // console.log("Offer Removed NOT Successful.");
       }
     });
 

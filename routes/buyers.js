@@ -162,7 +162,7 @@ router.post('/request', (req, res, next) => {
       title: req.body.title,
       description: req.body.description,
       deadline: req.body.deadline,
-      status: "awaiting offers"
+      status: "Awaiting Offers"
     });
 
     //code added by John to add images to requests
@@ -271,6 +271,53 @@ router.post("/deleterequest", function(req, res) {
           return res.json(wewlad);
         });
       }
+    });
+  });
+});
+
+router.get("/orderDetails/:id", (req, res,) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to view order details." });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+
+    Buyer.findById(decoded.data._id, (err, buyer_viewing_order) => {
+      if (err) handleError(err);
+      
+      Order.findById(req.params.id, (err, orderFound) => {
+        if (err)
+          return res.status(500).send({ success: false, message: "could not find order." });
+        res.status(200).send({ success: true, orderFound });
+      });
+    });
+  });
+});
+
+router.get("/BuyerOrderDetails", (req, res,) => {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "Must login to view order details." });
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+
+    Buyer.findById(decoded.data._id, (err, buyer_viewing_order) => {
+      if (err) handleError(err);
+      Order.getOrderbyBuyer(buyer_viewing_order, (err, order) => {
+
+      });
     });
   });
 });
@@ -412,17 +459,17 @@ router.get("/retrieveCart", (req, res, next) => {
       .send({ success: false, message: "Must Login to view Cart!." });
   var orderTotal = 0,
     offerPriceTotal = 0,
-    offerShippingTotal = 0,
-    orderFees = 0;
+    offerShippingTotal = 0;
   // Must be a buyer logged in to be able to enter an item to cart
   jwt.verify(token, config.secret, function(err, decoded) {
     if (err)
       return res
         .status(500)
         .send({ success: false, message: "Failed to authenticate user." });
-
+    // Find the buyer that is trying to retrieve Cart
     Buyer.findById(decoded.data._id, (err, buyerViewingCart) => {
       if (err) return handleError(err);
+      //Check to make sure buyer has offers in cart
       if (
         buyerViewingCart.offerCart == undefined ||
         buyerViewingCart.offerCart.length <= 0
@@ -430,7 +477,7 @@ router.get("/retrieveCart", (req, res, next) => {
         return res
           .status(200)
           .send({ success: false, message: "Cart is Empty." });
-
+      // Fetch the offers by getting the offer id from buyers cart
       Offer.find(
         { _id: { $in: buyerViewingCart.offerCart } },
         (err, offersInCart) => {
@@ -440,13 +487,13 @@ router.get("/retrieveCart", (req, res, next) => {
               .send({ success: false, message: "Offer not found." });
           var offers = offersInCart;
 
-          // Add entity name to the returned object.
+          // Add the total price of offers / and the shipping for those offers 
           offersInCart.forEach(function(currentOffer) {
             offerPriceTotal = offerPriceTotal + currentOffer.price;
             offerShippingTotal = offerShippingTotal + currentOffer.shippingPrice;
-            //Seller.findById(currentOffer.seller_ID, (err, SellersOffer) => {
-            //});
           });
+
+          
           offerPriceTotal = Math.round(offerPriceTotal * 100) / 100;
           offerShippingTotal = Math.round(offerShippingTotal * 100) / 100;
           orderTotal = offerPriceTotal + offerShippingTotal;
@@ -467,9 +514,11 @@ router.get("/retrieveCart", (req, res, next) => {
 
 // Offer Accepted
 router.post("/offerAccepted", (req, res /*next*/) => {
+  const io = req.app.get('io');
   let accepted = {
     id: req.body.offer_ID,
-    offerAccepted: req.body.offer_accepted
+    offerAccepted: req.body.offer_accepted,
+    requestId: req.body.request_id
   };
 
   Offer.findById(accepted.id, (err, offer) => {
@@ -480,8 +529,23 @@ router.post("/offerAccepted", (req, res /*next*/) => {
       });
     else {
       offer.offerAccepted = accepted.offerAccepted;
-      offer.save();
-      res.json({ success: true });
+      offer.offerStatus = "Accepted, Payment Pending";
+      offer.save().then(() => {
+        io.emit('updatedBuyerProfileInfo');
+        Request.findById(accepted.requestId, (err, request) => {
+          if (!request) {
+            return res.status(405).send({
+              success: false,
+              message: "offer accepted but could not update request status"
+            });
+          } else {
+            request.status = 'Offer(s) accepted';
+            request.accepted_offers_byID.push(accepted.id);
+            request.save();
+            res.json({ success: true });
+          }
+        });
+      });
     }
   });
 });
@@ -490,7 +554,8 @@ router.post("/offerAccepted", (req, res /*next*/) => {
 router.post("/offerRejected", (req, res /*next*/) => {
   let removed = {
     id: req.body.offer_ID,
-    offerRemoved: req.body.offer_removed
+    offerRemoved: req.body.offer_removed,
+    requestId: req.body.request_ID
   };
 
   Offer.findById(removed.id, (err, offer) => {
@@ -501,8 +566,27 @@ router.post("/offerRejected", (req, res /*next*/) => {
       });
     else {
       offer.offerAccepted = removed.offerRemoved;
-      offer.save();
-      res.json({ success: true });
+      offer.offerStatus = 'Pending';
+      offer.save().then(() => {
+        var newRequestOffersList = [];
+        Request.findById(removed.requestId, (err, request) => {
+          request.accepted_offers_byID.forEach(offerID => {
+            if (offerID == removed.id) {
+
+            } else {
+              newRequestOffersList.push(offerID);
+            }
+          });
+          request.accepted_offers_byID = newRequestOffersList;
+          if (request.accepted_offers_byID.length == 0 || request.accepted_offers_byID === undefined) {
+            request.status = 'Pending offers';
+          } else {
+            request.status = 'Offer(s) accepted';
+          }
+          request.save();
+          res.json({ success: true });
+        });
+      });
     }
   });
 });
@@ -548,6 +632,7 @@ router.post("/removeFromCart", (req, res, next) => {
       if (buyerViewingCart.offerCart.indexOf(offer) === -1) {
         buyerViewingCart.save().then(() => {
           io.emit('updatedBuyerCartInfo');
+          Request.findById()
           return res
           .status(200)
           .send({ success: true, msg: "Offer removed from cart." });
@@ -561,50 +646,54 @@ router.post("/removeFromCart", (req, res, next) => {
   });
 });
 
-router.post("/tax", (req, res) => {
-  let taxInfo = {
-    from_country: 'US',
-    from_zip: '85304',
-    from_state: 'AZ',
-    from_city: 'Glendale',
-    from_street: '12420 N 43rd Ln',
-    to_country: req.body.to_country,
-    to_zip: req.body.to_zip,
-    to_state: req.body.to_state,
-    shipping: req.body.shipping,
-    amount: req.body.amount
-  }
+// router.post("/tax", (req, res) => {
+//   let taxInfo = {
+//     from_country: 'US',
+//     from_zip: '85304',
+//     from_state: 'AZ',
+//     from_city: 'Glendale',
+//     from_street: '12420 N 43rd Ln',
+//     to_country: req.body.to_country,
+//     to_zip: req.body.to_zip,
+//     to_state: req.body.to_state,
+//     shipping: req.body.shipping,
+//     amount: req.body.amount
+//   }
 
-  client.taxForOrder({
-    from_country: taxInfo.from_country,
-    to_country: taxInfo.to_country,
-    to_zip: taxInfo.to_zip,
-    to_state: taxInfo.to_state,
-    amount: taxInfo.amount,
-    shipping: taxInfo.shipping,
-    nexus_addresses: [
-      {
-        country: 'US',
-        zip: taxInfo.from_zip,
-        state: taxInfo.from_state,
-        city: taxInfo.from_city,
-        street: taxInfo.from_street
-      }
-    ]
-  }).then(function(result) {
-    result.tax;
-    result.tax.amount_to_collect;
-    res.send({ success: true, result});
-  }).catch(function(err) {
-    err.detail;
-    err.status;
-    res.send({ success: false, err})
-  });
-})
+//   client.taxForOrder({
+//     from_country: taxInfo.from_country,
+//     to_country: taxInfo.to_country,
+//     to_zip: taxInfo.to_zip,
+//     to_state: taxInfo.to_state,
+//     amount: taxInfo.amount,
+//     shipping: taxInfo.shipping,
+//     nexus_addresses: [
+//       {
+//         country: 'US',
+//         zip: taxInfo.from_zip,
+//         state: taxInfo.from_state,
+//         city: taxInfo.from_city,
+//         street: taxInfo.from_street
+//       }
+//     ]
+//   }).then(function(result) {
+//     result.tax;
+//     result.tax.amount_to_collect;
+//     res.send({ success: true, result});
+//   }).catch(function(err) {
+//     err.detail;
+//     err.status;
+//     res.send({ success: false, err})
+//   });
+// })
 
-// By: Omar
+// By: Omar (Stripe Charge) & Roni (Transfer algorithm)
 // Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
 router.post("/charge", (req, res) => {
+
+  var offerIDarray = [];
+  var offerCounter = 0;
+
   let purchaseInfo = {
     buyerID: req.body.buyerID,
     stripeEmail: req.body.email,
@@ -614,10 +703,109 @@ router.post("/charge", (req, res) => {
     shippingInfo: req.body.shippingInfo,
     orderID: req.body.orderID,
     name: req.body.name,
-    sellers: req.body.sellers
+    offerPriceTotal: req.body.offerPriceTotal,
+    shipPriceTotal: req.body.shipPriceTotal,
+    subTotal: req.body.subTotal,
+    feesPriceTotal: req.body.feesPriceTotal,
+    requestPurchasedID: req.body.requestPurchasedID
   };
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
+    //******************************************************************* */
+    // Create Transactions
+    function processTransaction(Charge_id){
+
+        // Iterate through all the offers passed in with the charge
+        purchaseInfo.totalOffers.forEach(offer => {
+
+          // Calculate the total amount + Stripe fee + Requiren fee
+          const totalAmount = offer.price + offer.shippingPrice;
+          console.log('totalAmount = ' + totalAmount);
+          //Requiren Fee 
+          var requirenFee = (totalAmount*0.030); 
+          requirenFee = (Math.round(requirenFee * 100) / 100);
+          requirenFee = (requirenFee*100);
+          console.log('requirenFee = ' + requirenFee);
+          //Getting the final seller payment amount
+          var sellerProfit = (totalAmount*100);
+          sellerProfit = (sellerProfit-requirenFee);
+          console.log('sellerProfit = ' + sellerProfit);
+          // Fetch Seller Stripe ID 
+          Seller.findById(offer.seller_ID, (err, seller) => {
+          if (seller.stripe.stripe_user_id == null || seller.stripe.stripe_user_id == undefined) return res.json({ success: false, msg: "Unable To complete Transaction." });
+          
+          // Create a Transfer to the connected account (later):
+          stripe.transfers.create({
+            amount: sellerProfit,
+            currency: "usd",
+            destination: seller.stripe.stripe_user_id,
+            source_transaction: Charge_id, // Used to make sure that the the amounts being trasitioned will not exceed the initial charge amount
+          }, function(err, result) { 
+            if (err) return console.log(err)
+              if(result != null) {
+                
+                if(result.id != null) {
+
+                  var offerPurchased = {
+                    id: result.id,
+                    offerID: offer.id,
+                    offerFulfillmentStatus: 'Ordered',
+                    GroudID: result.transfer_group,
+                    sellerProfit: (result.amount/100).toFixed(2)
+                  };
+                  offerIDarray.push(offerPurchased);
+                  offerCounter++;
+
+                  if(offerCounter == purchaseInfo.totalOffers.length) {
+                    // After paying all the sellers, now we create the order and save it in the DB
+                    let newOrder = new Order({
+                      buyerID: purchaseInfo.buyerID,
+                      orderNumber: purchaseInfo.orderID,
+                      offersPurchased: offerIDarray,
+                      totalPrice: purchaseInfo.amount,
+                      totalFeesPrice: purchaseInfo.feesPriceTotal,
+                      totalOffersPrice: purchaseInfo.offerPriceTotal,
+                      totalShipPrice: purchaseInfo.shipPriceTotal,
+                      subtotalPrice: purchaseInfo.subTotal,
+                      stripeChargeID: Charge_id,
+                      shippingAddress: purchaseInfo.shippingInfo,
+                      orderStatus: "Confirmed, Shipping Pending",
+                      requestPurchasedID: purchaseInfo.requestPurchasedID
+                    });
+
+                    // Save the new order
+                    newOrder.save(function(err, savingOrder) {
+                      if (err) return handleError(err);
+                      // console.log(newOrder);
+                      // Updating the request offer status as payment completed.
+                      Request.findById(req.body.request_id, (err, request) => {
+                        if (request.status == "Payment Completed") {
+
+                        } else {
+                          request.status = "Payment Completed";
+                        }
+                        request.save();
+                      });
+                      return res.json({
+                        success: true,
+                        message: "New order has been successfully placed.",
+                        newOrder
+                      })
+                    });
+                  }
+                }
+              }
+          });
+        });
+        // Updating the offer status for each offer
+        Offer.findById(offer._id, (err, offerToUpdate) => {
+          offerToUpdate.offerStatus = "Offer Accepted & Purchased";
+          offerToUpdate.save();
+        });
+      });
+    }
+    //******************************************************************* */
+
     if (!info)
       return res.status(405).send({
         success: false,
@@ -636,17 +824,21 @@ router.post("/charge", (req, res) => {
           info.save();
           stripe.charges
             .create({
-              amount: purchaseInfo.amount,
+              amount: (purchaseInfo.amount*100),
               currency: "usd",
               description: "Charge for " + purchaseInfo.name + ".",
               customer: customer.id,
               receipt_email: purchaseInfo.stripeEmail,
-              metadata: {
-                order_id: purchaseInfo.orderID
-              },
-              // transfer_group: purchaseInfo.orderID
-            })
-            .then(charge => res.send({ success: true, charge }));
+              source_transaction: purchaseInfo.orderID
+            }, function(err, result) { 
+              if (err) return console.log(err);
+              if(result != null) {
+                if(result.paid) {
+                  processTransaction(result.id);
+                }
+              }
+            });
+            //.then(charge => res.send({ success: true, charge }));
         });
     } else if (info.stripe_customer === true) {
       console.log("Is already a stripe customer");
@@ -654,32 +846,27 @@ router.post("/charge", (req, res) => {
         .update(info.stripe_customer_id, {
           source: purchaseInfo.stripeToken
         })
-        .then(customer =>
+        .then(customer => {
           stripe.charges.create({
-            amount: purchaseInfo.amount,
+            amount: (purchaseInfo.amount*100),
             currency: "usd",
             description: "Charge for " + purchaseInfo.name + ".",
             receipt_email: purchaseInfo.stripeEmail,
             customer: customer.id
-          })
-        )
-        .then(charge => res.send({ success: true, charge }));
+          }, function(err, result) { 
+            if (err) return console.log(err);
+            if(result != null) {
+              if(result.paid) {
+                processTransaction(result.id);
+              }
+            }
+          });
+        });
+        //.then(charge => res.send({ success: true, charge }));
     } else {
       res.json({ success: false, msg: "Could not charge customer" });
     }
   });
-
-  // for (var pos = 0; pos < purchaseInfo.totalOffers.length; pos++) {
-  //   //console.log(purchaseInfo.totalOffers[pos].seller_ID);
-  //   stripe.transfers
-  //     .create({
-  //       amount: purchaseInfo.totalOffers[pos].price * 100,
-  //       currency: "usd",
-  //       destination: "{CONNECTED_STRIPE_ACCOUNT_ID}",
-  //       transfer_group: purchaseInfo.orderID
-  //     })
-  //     .then(transfer => res.send({ success: true, transfer }));
-  // }
 });
 
 //Email Verification - RONI
