@@ -73,5 +73,10 @@ span.price {
   color: grey;
 }
 
-
+.spin {
+  position: relative;
+  margin-top: 300px;
+  left: 50%;
+  min-height: 100%;
+}
 
