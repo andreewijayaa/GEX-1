@@ -241,36 +241,38 @@ export class BuyerCheckoutComponent
   }
 
   calculateTax() {
-    const infoObj = {
-      to_country: 'US',
-      to_zip: this.shippingFormGroup['value']['zip'],
-      to_state: this.shippingFormGroup['value']['state'],
-      shipping: this.offerShipping,
-      amount: this.offerPrice
-    };
-    this.buyerService.getTax(infoObj).subscribe((data: any) => {
-      if (data.success) {
+    // Tax commented for MVP reasons
 
-        // Used to calculate stripe fee
-        var totalPriceWithTax = this.totalPrice + data.result.tax.amount_to_collect
+    // const infoObj = {
+    //   to_country: 'US',
+    //   to_zip: this.shippingFormGroup['value']['zip'],
+    //   to_state: this.shippingFormGroup['value']['state'],
+    //   shipping: this.offerShipping,
+    //   amount: this.offerPrice
+    // };
+    // this.buyerService.getTax(infoObj).subscribe((data: any) => {
+    //   if (data.success) {
 
-        //STRIPE: in the US (assuming standard US pricing of 2.9% + 30¢ per successful charge)
-        var stripeFee = ((totalPriceWithTax*0.029) + 0.30);
-        stripeFee = (Math.round(stripeFee * 100) / 100);
+    // Used to calculate stripe fee
+    const totalPriceWithTax = this.totalPrice;
 
-        // Tax and Stripe Fee added up
-        var totalFees = data.result.tax.amount_to_collect + stripeFee;
+    // STRIPE: in the US (assuming standard US pricing of 2.9% + 30¢ per successful charge)
+    let stripeFee = ((totalPriceWithTax * 0.029) + 0.30);
+    stripeFee = (Math.round(stripeFee * 100) / 100);
 
-        var totalamountwithFees = totalFees + this.totalPrice;
-        totalamountwithFees = (Math.round(totalamountwithFees * 100) / 100);
-        this.totalPrice = totalamountwithFees;
-        this.estimatedTaxDisplay = String('$' + totalFees);
-        this.totalPriceDisplay = '$' + totalamountwithFees;
+    // Stripe Fee added up
+    const totalFees = stripeFee;
 
-      } else {
-        console.log(data);
-      }
-    });
+    let totalamountwithFees = totalFees + this.totalPrice;
+    totalamountwithFees = (Math.round(totalamountwithFees * 100) / 100);
+    this.totalPrice = totalamountwithFees;
+    this.estimatedTaxDisplay = String('$' + totalFees);
+    this.totalPriceDisplay = '$' + totalamountwithFees;
+
+      // } else {
+      //   console.log(data);
+      // }
+    // });
   }
 
   async onSubmit(form: NgForm) {
