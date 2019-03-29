@@ -313,6 +313,15 @@
                               </div>
                               &nbsp;
                               <div>
+                                  <h6>Offer Images:</h6>
+                                  <label *ngIf = "!element.offer_images[0]">No Images Submitted </label>
+                                  <img class="OfferImageDisplay" *ngIf = "element.offer_images[0]" src={{element.offer_images[0]}} alt="" width="120" height="120">
+                                  <img class="OfferImageDisplay" *ngIf = "element.offer_images[1]" src={{element.offer_images[1]}} alt="" width="120" height="120">
+                                  <img class="OfferImageDisplay" *ngIf = "element.offer_images[2]" src={{element.offer_images[2]}} alt="" width="120" height="120">
+                                  &nbsp;
+                              </div>
+                              &nbsp;
+                              <div>
                                   <h6>Completion & Delivery Promise:</h6>
                                   <div [innerHTML]="element.expected_completion"></div>
                                   &nbsp;

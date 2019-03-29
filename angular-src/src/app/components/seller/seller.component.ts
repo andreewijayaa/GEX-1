@@ -14,6 +14,10 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { formatCurrency } from '@angular/common';
 import * as io from 'socket.io-client';
 
+class ImageSnippet {
+  constructor(public src: string, public file: File) {}
+}
+
 export interface RequestElement {
   title: String;
   status: String;
@@ -33,6 +37,7 @@ export interface OfferElement {
   request_ID: String;
   expected_completion: String;
   list_of_sellers_submitted_offers: [String];
+  offer_images: [String];
 }
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -293,6 +298,7 @@ export class SellerComponent implements OnInit {
     let offerPrice: any;
     let offerShipping: any;
     let offerCompletion: any;
+    let offerImages: any;
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -312,16 +318,33 @@ export class SellerComponent implements OnInit {
           offerPrice = data['price'];
           offerShipping = data['shipping'];
           offerCompletion = data['completion'];
-
-          const offer = {
-            title: offerTitle,
-            description: offerDescription,
-            price: offerPrice,
-            shipPrice: offerShipping,
-            request_ID: id,
-            seller_ID: this.seller._id,
-            expected_completion: offerCompletion
-          };
+          offerImages = data['offerImages'];
+          var offer;
+          console.log(offerImages)
+          debugger;
+          if (offerImages[0] != ''){
+            offer = {
+              title: offerTitle,
+              description: offerDescription,
+              price: offerPrice,
+              shipPrice: offerShipping,
+              request_ID: id,
+              seller_ID: this.seller._id,
+              expected_completion: offerCompletion,
+              offer_pic: offerImages
+            };
+          }
+          else{
+            offer = {
+              title: offerTitle,
+              description: offerDescription,
+              price: offerPrice,
+              shipPrice: offerShipping,
+              request_ID: id,
+              seller_ID: this.seller._id,
+              expected_completion: offerCompletion
+            };
+          }
 
           this.sellerService.postOffer(offer).subscribe((data: any) => {
             if (data.success) { // if the data succeed to be posted
@@ -438,10 +461,15 @@ export class SubmitOfferDialogComponent implements OnInit {
   confirmCompletion: String;
   shipping = false;
   offerFormGroup: FormGroup;
+  selectedFile: ImageSnippet;
+  Image_Urls: [String] = [""];
+  confirmImages: [String];
+  
 // tslint:disable-next-line: max-line-length
   completionPlaceholder = 'If your offer is purchased, when can you complete & have it delivered by?';
 
   constructor(
+    private sellerService: SellerService,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<SubmitOfferDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data) {
@@ -467,11 +495,55 @@ export class SubmitOfferDialogComponent implements OnInit {
       this.confirmShipping = this.offerFormGroup.controls.shipping.value;
     }
       // var price = formatCurrency(this.priceFormControl.value, "en", "$");
+    this.confirmImages = this.Image_Urls;
     this.confirmTitle = this.offerFormGroup.controls.title.value;
     this.confirmDescription = this.offerFormGroup.controls.description.value;
     this.confirmCompletion = this.offerFormGroup.controls.completion.value;
     this.confirmPrice = this.offerFormGroup.controls.price.value;
     this.submitOffer = true;
+  }
+
+  processFile(imageInput: any) {
+    //debugger;
+    //console.log("Process file called in make request component");
+    console.log(this.Image_Urls.length);
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener("load", (event: any) => {
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+      //debugger;
+      this.sellerService.addOfferImage(this.selectedFile.file).subscribe(
+        (res) => {
+          //console.log("Image url " + res["imageUrl"]);
+          if (this.Image_Urls[0] == ""){
+            this.Image_Urls[0] = res["imageUrl"];
+          }
+          else {
+            this.Image_Urls.push(res["imageUrl"]);
+          }
+          //this.Image_Urls.length()
+          //console.log("There is no way this works inside the function " + this.Image_Urls)
+          //this.Image_Urls.push(res["imageUrl"]);
+          //console.log("The Image url is " + this.Image_Urls[0] );
+        },
+        (err) => {
+          console.log("an error message");
+        })
+    });
+    reader.readAsDataURL(file);
+  }
+
+  deleteImagesFunction(){
+    if (this.Image_Urls[0] == ""){
+    }
+    else if (this.Image_Urls.length == 1){
+      //debugger;
+      this.Image_Urls[0] = "";
+    }
+    else{
+      this.Image_Urls.pop();
+    }
   }
 
   cancel() {
@@ -480,7 +552,7 @@ export class SubmitOfferDialogComponent implements OnInit {
 
   confirmDialogSubmit() {
     // tslint:disable-next-line: max-line-length
-    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, completion: this.confirmCompletion, price: this.confirmPrice, shipping: this.confirmShipping});
+    this.dialogRef.close({ title: this.confirmTitle, description: this.confirmDescription, completion: this.confirmCompletion, price: this.confirmPrice, shipping: this.confirmShipping, offerImages: this.confirmImages});
   }
 
   confirmDialogCancel() {

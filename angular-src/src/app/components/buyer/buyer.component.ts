@@ -31,6 +31,7 @@ export interface OfferElement {
   _id: String;
   offerAccepted: Boolean;
   expected_completion: String;
+  offer_images: [String];
 }
 
 @Component({

@@ -10,9 +10,11 @@ const Request = require("../models/request");
 const Offer = require("../models/offer");
 const sendEmail = require("../models/sendEmail");
 const upload = require("../services/multer");
+const upload2 = require("../services/multer2");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const singleUpload = upload.single("image");
+const singleUpload2 = upload2.single("image");
 
 // Seller register route that will take in all required information that is required from seller upon registration
 // By Roni
@@ -409,6 +411,12 @@ router.post("/makeOffer", (req, res, next) => {
       shippingPrice: req.body.shipPrice,
       expected_completion: req.body.expected_completion
     });
+    //for adding images to offers by John
+    if (req.body.offer_pic != null){
+      newOffer.offer_images = req.body.offer_pic;
+      console.log("in that if statement");
+    }
+
     // Check if request is expired
     Request.findById(req.body.request_ID, (err, requestBeingOffered) => {
       if (err)
@@ -628,6 +636,26 @@ router.post("/addDescription", (req, res) => {
           message: "Attempted to add desciption"
         });
       });
+    });
+  });
+});
+
+//add picutres to offers
+router.post("/offerpicture", function(req, res) {
+  var token = req.headers["x-access-token"];
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  jwt.verify(token, config.secret, function(err, decoded) {
+    singleUpload2(req, res, function(err, some) {
+      if (err) {
+        return res.status(422).send({
+          errors: [{ title: "Image Upload Error", detail: err.message }]
+        });
+      }
+      //console.log(req.file.location);
+      return res.json({ imageUrl: req.file.location });
     });
   });
 });
