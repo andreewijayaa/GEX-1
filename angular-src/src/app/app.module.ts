@@ -55,6 +55,9 @@ import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { ResendComponent } from './components/activation/resend/resend.component';
 import { ForgetPasswordComponent } from './components/activation/forget-password/forget-password.component';
+import { SellpageComponent } from './components/home/sellpage/sellpage.component';
+import { BuypageComponent } from './components/home/buypage/buypage.component';
+import { HowitworkspageComponent } from './components/home/howitworkspage/howitworkspage.component';
 import { BuyerUpdatePasswordComponent } from './components/buyer/buyer-update-password/buyer-update-password.component';
 import { SellerUpdatePasswordComponent } from './components/seller/seller-update-password/seller-update-password.component';
 import { OrderConfirmComponent } from './components/buyer/order-confirm/order-confirm.component';
@@ -63,6 +66,9 @@ import { SellerOrdersComponent } from './components/seller/seller-orders/seller-
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
+  {path: 'sell', component: SellpageComponent},
+  {path: 'buy', component: BuypageComponent},
+  {path: 'how', component: HowitworkspageComponent},
   {path: 'buyer-register', component: BuyerRegisterComponent},
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
@@ -166,6 +172,9 @@ const customNotifierOptions: NotifierOptions = {
     ResendComponent,
     ForgetPasswordComponent,
     StripeNeededDialogComponent,
+    SellpageComponent,
+    BuypageComponent,
+    HowitworkspageComponent,
     BuyerUpdatePasswordComponent,
     SellerUpdatePasswordComponent,
     OrderConfirmComponent,
