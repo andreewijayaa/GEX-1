@@ -109,9 +109,9 @@
                 &nbsp;
               <!-- Start of New Request Table Content -->
               <div class="container">
-                  <table mat-table [dataSource]="dataSourceRequests" multiTemplateDataRows class="mat-elevation-z8">
+                  <table mat-table [dataSource]="dataSourceRequests" multiTemplateDataRows matSort class="mat-elevation-z8">
                     <ng-container matColumnDef="{{column}}" *ngFor="let column of displayRequestColumns">
-                      <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-size: 16px">
                         <span *ngIf="column === 'title'">Title</span>
                         <span *ngIf="column === 'status'">Status</span>
                         <span *ngIf="column === 'deadline'">Deadline</span>
@@ -175,6 +175,8 @@
                       &nbsp;
                     </div>
                   </div>
+                  <mat-paginator [length]="dataSourceRequests.filteredData.length" [pageSize]="25">
+                 </mat-paginator>
                 </div>
               </div>
               <!--- End of New Table Content-->

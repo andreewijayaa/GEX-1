@@ -1,10 +1,10 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, ViewChild } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
 import { RequestService } from '../../services/request.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource, MatTab } from '@angular/material';
+import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource, MatTab, MatSort, MatPaginator } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { NullAstVisitor, identifierName } from '@angular/compiler';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -95,6 +95,9 @@ export class SellerComponent implements OnInit {
   expandedRequestElement: RequestElement | null;
   expandedOfferElement: OfferElement | null;
   expandedArchivedElement: RequestElement | null;
+
+  @ViewChild(MatPaginator) requestPaginator: MatPaginator;
+  @ViewChild(MatSort) requestSort: MatSort;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -198,6 +201,8 @@ export class SellerComponent implements OnInit {
             if (requests.success) {
               this.activeRequests = requests.active_requests;
               this.dataSourceRequests = new MatTableDataSource(requests.active_requests);
+              this.dataSourceRequests.paginator = this.requestPaginator;
+              this.dataSourceRequests.sort = this.requestSort;
               // console.log(this.dataSourceRequests);
             } else {
               console.log('could not fetch requests');
@@ -244,6 +249,9 @@ export class SellerComponent implements OnInit {
 
   searchRequestFilter(filterValue: string) {
     this.dataSourceRequests.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceRequests.paginator) {
+       this.dataSourceRequests.paginator.firstPage();
+     }
   }
 
   searchOfferFilter(filterValue: string) {
@@ -464,7 +472,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   selectedFile: ImageSnippet;
   Image_Urls: [String] = [""];
   confirmImages: [String];
-  
+
 // tslint:disable-next-line: max-line-length
   completionPlaceholder = 'If your offer is purchased, when can you complete & have it delivered by?';
 
