@@ -13,7 +13,7 @@ export class RegisterService {
 
   // Buyer Register Service
   RegisterBuyer(buyer) {
-    console.log('Inside Buyer Register');
+    console.log('Buyer is being registered');
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ export class RegisterService {
       return this.http.post('http://localhost:3000/buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
     } else {
-      console.log('Inside Buyer Register');
+      console.log('Buyer is being registered');
       return this.http.post('buyers/register', buyer, httpOptions)
       .pipe(map(res => res));
     }
@@ -31,6 +31,7 @@ export class RegisterService {
 
   // Seller Register Service
   RegisterSeller(seller) {
+    console.log('Seller is being registered');
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -40,7 +41,8 @@ export class RegisterService {
       return this.http.post('http://localhost:3000/sellers/register', seller, httpOptions)
       .pipe(map(res => res));
     } else {
-     return this.http.post('sellers/register', seller, httpOptions)
+      console.log('Seller is being registered');
+      return this.http.post('sellers/register', seller, httpOptions)
       .pipe(map(res => res));
     }
   }

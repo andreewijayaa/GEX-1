@@ -7,18 +7,18 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-right: 50px">
     <ul class="navbar-nav ml-auto">
       <a class="nav-item">
-          <img class="img-circle" src= {{buyer.data.profile_image}} *ngIf="buyer.data.profile_image" alt="" width="40" height="40">
-          <img class="img-circle" src= {{buyer.data.profile_image}} *ngIf="!(buyer.data.profile_image)" alt="" width="40" height="40">
+          <img class="img-circle" src= {{profile_image}} *ngIf="profile_image" alt="" width="40" height="40">
+          <img class="img-circle" src= {{profile_image}} *ngIf="!(profile_image)" alt="" width="40" height="40">
       </a>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" routerLink="/buyer" routerLinkActive="active" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false" style="font-size: 20px; font-family: Open Sans">
-          {{buyer_first_name}} {{buyer_last_name}}<span class="sr-only">(current)</span>
+          {{buyer_firstName}} {{buyer_lastName}}<span class="sr-only">(current)</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-family: Open Sans">
           <a class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">Submit New Request</a>
           <a class="dropdown-item" routerLink="/buyer" routerLinkActive="active-link">Go to My Portal</a>
-          <a class="dropdown-item" routerLink="/buyer" routerLinkActive="active-link">Orders</a>
+          <a class="dropdown-item" routerLink="/buyer/purchases" routerLinkActive="active-link">Purchases</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" routerLink="/buyer/buyer-account" routerLinkActive="active-link">My Account</a>
           <a class="dropdown-item" (click)="onLogoutClick()" routerLink="/buyer-login" routerLinkActive="active-link" style="color:red">Logout</a>
@@ -27,14 +27,14 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown">
-          <img class="img-cart" src="../../../../assets/cartLogo.png" alt="" width="35" height="35"><span *ngIf="(totalItemsCart + itemAdded_RemovedCart) > 0" class="cartBadge" matBadge="{{totalItemsCart + itemAdded_RemovedCart}}" matBadgeColor="warn" matBadgeSize="medium"></span>
+          <img class="img-cart" src="../../../../assets/cartLogo.png" alt="" width="35" height="35"><span *ngIf="buyer_cart.length > 0" class="cartBadge" matBadge="{{buyer_cart.length}}" matBadgeColor="warn" matBadgeSize="medium"></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-family: Open Sans">
-              <a *ngIf="(totalItemsCart + itemAdded_RemovedCart) == 0"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">Cart empty.</a>
-              <a *ngIf="(totalItemsCart + itemAdded_RemovedCart) == 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{totalItemsCart + itemAdded_RemovedCart}} offer in your cart.</a>
-              <a *ngIf="(totalItemsCart + itemAdded_RemovedCart) > 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{totalItemsCart + itemAdded_RemovedCart}} offers in your cart.</a>
+              <a *ngIf="buyer_cart.length == 0"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">Cart empty.</a>
+              <a *ngIf="buyer_cart.length == 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have 1 offer in your cart.</a>
+              <a *ngIf="buyer_cart.length > 1"class="dropdown-item" routerLink="/buyer/make-request" routerLinkActive="active-link">You have {{buyer_cart.length}} offers in your cart.</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" routerLink="/buyer/cart" routerLinkActive="active-link"><button type="button" routerLink="/buyer" class="btn" style="background-color: #4cd137;">Go to Cart</button>
+              <a class="dropdown-item"><button type="button" routerLink="/buyer/cart" routerLinkActive="active-link" class="btn" style="background-color: #4cd137;">Go to Cart</button>
               </a>
             </div>
       </li>

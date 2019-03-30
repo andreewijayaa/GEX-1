@@ -18,11 +18,21 @@ const RequestSchema = mongoose.Schema({
     type:String,
     required: true
   },
+  status: {
+    type: String,
+    required: true
+  },
   deadline:{
     type:Date
   },
   request_offers_byID:{
     type:[String]
+  },
+  accepted_offers_byID: {
+    type:[String]
+  },
+  list_of_sellers_submitted_offers: {
+    type: [String]
   },
   offerCount: {
     type:Number,
@@ -39,7 +49,7 @@ const RequestSchema = mongoose.Schema({
 const Request = module.exports = mongoose.model('Request', RequestSchema);
 
 module.exports.createRequest = function(newRequest, callback){
-  newRquest.save(callback);
+  newRequest.save(callback);
 }
 
 module.exports.getRequestbyId = function(id, callback){

@@ -18,12 +18,13 @@ export class BuyerService {
   offer: any;
   offerCartItem: any;
   offerID: any;
+  taxInfo: any;
 
   constructor(private http: HttpClient,
     private router: Router) { }
 
   // Get Buyer Profile Service - Bryan Vu
-  getBuyerProfile(): Observable<any> {
+  getBuyerProfile() {
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
@@ -62,9 +63,9 @@ export class BuyerService {
   }
 
 
-  //service to delete request
+  // service to delete request
   deleteBuyerRequest(request) {
-    //console.log("Delete Request Called");
+    // console.log("Delete Request Called");
     this.loadToken();
     if (this.buyerToken != null) {
       const httpOptions = {
@@ -104,6 +105,23 @@ export class BuyerService {
     }
   }
 
+  getOrderDetails(orderId) {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/buyers/orderDetails/' + orderId, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/orderDetails/' + orderId, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
   // By: Omar
   // Update current buyers profile
   updateBuyerProfile(buyer) {
@@ -122,6 +140,7 @@ export class BuyerService {
   }
 
   addOfferToBuyerCart(offerCartItem) {
+    this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -139,6 +158,7 @@ export class BuyerService {
   // By Roni
   // Retreive buyer shopping cart
   retrieveBuyerCart() {
+    this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -154,6 +174,21 @@ export class BuyerService {
     }
   }
 
+  getTax(taxInfo) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/tax', taxInfo, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/tax', taxInfo, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
   // By: Omar
   // Sends the checkout information to server checkout route in app.js
   checkout(offer) {
@@ -162,12 +197,29 @@ export class BuyerService {
         'Content-Type': 'application/json'
       })
     };
-    console.log(offer);
     if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/charge', offer, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/charge', offer, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  // Generate Order Number service - ROni
+  getOrderNumber() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/buyers/generateOrderNumber', httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/generateOrderNumber', httpOptions)
         .pipe(map(res => res));
     }
   }
@@ -190,14 +242,14 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('buyers/profilepicture', profilePic)
+      return this.http.post('buyers/profilepicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
 
   // upload images to request
   addRequestImage(requestPic: File): Observable<Object> {
-    console.log("Request Picture has been called in services");
+    console.log('Request Picture has been called in services');
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -211,7 +263,7 @@ export class BuyerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('buyers/requestpicture', requestPic)
+      return this.http.post('buyers/requestpicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
@@ -223,12 +275,31 @@ export class BuyerService {
         'x-access-token': this.buyerToken
       })
     };
-    console.log(offerID);
     if (process.env.NODE_ENV === 'development') {
       return this.http.post('http://localhost:3000/buyers/removeFromCart', offerID, httpOptions)
         .pipe(map(res => res));
     } else {
       return this.http.post('buyers/removeFromCart', offerID, httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
+  // Clear all the items in cart - ROni
+  clearCart(buyerID) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    const body = {
+      'buyerID': buyerID
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/clearCart', body, httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.post('buyers/clearCart', body, httpOptions)
         .pipe(map(res => res));
     }
   }
@@ -285,6 +356,32 @@ export class BuyerService {
       .pipe(map(res => res));
     }
   }
+
+  // Update Password function
+  updatePassword(oldPass, newPass, newPassConfirm) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    const body = {
+      'oldPassword': oldPass,
+      'newPassword': newPass,
+      'newPasswordConfirm': newPassConfirm
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/buyers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('buyers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
   // Load local token
   loadToken() {
     const token = localStorage.getItem('id_token');

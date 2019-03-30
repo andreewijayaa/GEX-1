@@ -13,7 +13,7 @@ body{
 
 
 form {
-    border: 3px solid #fcfdfc;
+    border: 4px outset rgba(245, 245, 245, 0.582);
     position: relative;
     top:30%;
     left: 50%;

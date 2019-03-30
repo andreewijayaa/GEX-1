@@ -8,6 +8,10 @@
     clear: both;
 }
 
+body {
+  width: 100%;
+}
+
 ul {
     display: flex;
     align-items: stretch; /* Default */
@@ -50,12 +54,12 @@ span.price {
     left: 43%;
     top: 50%;
   }
-  
+
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  
+
   .total {
     overflow-y: scroll;
   }
@@ -66,7 +70,7 @@ span.price {
     padding-right: 15px;
     padding-left: 15px;
   }
-  
+
   .app-loading .spinner {
     height: 200px;
     width: 200px;
@@ -79,7 +83,7 @@ span.price {
     right: 0;
     margin: auto;
   }
-  
+
   .app-loading .spinner .path {
     stroke-dasharray: 1, 200;
     stroke-dashoffset: 0;
@@ -87,13 +91,13 @@ span.price {
     stroke-linecap: round;
     stroke: blue;
   }
-  
+
   @keyframes rotate {
     100% {
       transform: rotate(360deg);
     }
   }
-  
+
   @keyframes dash {
     0% {
       stroke-dasharray: 1, 200;
@@ -117,12 +121,12 @@ span.price {
     border-radius: 8px;
     padding: 1rem 2rem;
     background: white;
-  
-    
+
+
     color: #525252;
     font-size: 1.1rem;
   }
-  
+
   form.checkout button {
     padding: 0.5rem 1rem;
     color: white;
@@ -131,7 +135,7 @@ span.price {
     border-radius: 4px;
     margin-top: 1rem;
   }
-  
+
   form.checkout button:active {
     background: #1761a0;
   }
@@ -146,15 +150,22 @@ span.price {
     -webkit-transition: box-shadow 150ms ease;
     transition: box-shadow 150ms ease;
   }
-  
+
   .StripeElement--focus {
     box-shadow: 0 1px 3px 0 #cfd7df;
   }
-  
+
   .StripeElement--invalid {
     border-color: #fa755a;
   }
-  
+
   .StripeElement--webkit-autofill {
     background-color: #fefde5 !important;
+  }
+
+  .spin {
+    position: relative;
+    margin-top: 300px;
+    left: 50%;
+    min-height: 100%;
   }

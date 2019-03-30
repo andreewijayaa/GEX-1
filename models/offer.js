@@ -20,6 +20,10 @@ const offerSchema = mongoose.Schema({
     type:String,
     required:true
   },
+  offer_images: {
+    type : [String],
+    required: false
+  },
   price:{
     type:Number,
     required:true
@@ -40,6 +44,10 @@ const offerSchema = mongoose.Schema({
     type: Date, 
     required: true, 
     default: Date.now
+  },
+  expected_completion:{
+    type:String,
+    required:true
   }
 });
 

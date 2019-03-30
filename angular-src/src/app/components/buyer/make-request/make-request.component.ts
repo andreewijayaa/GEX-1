@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { NotifierService } from "angular-notifier";
 import { BuyerService } from "../../../services/buyer.service";
 import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png";
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png?token=AjGwr9AEAkdP2Vs8YyLNcgAMU2Q-WOocks5coW24wA%3D%3D";
 class ImageSnippet {
   constructor(public src: string, public file: File) {}
 }
@@ -101,7 +101,7 @@ export class MakeRequestComponent implements OnInit {
   title: String;
   submitLabels: String[];
   codeArray: Number[];
-  description: String = "Enter description of desired product";
+  description: String = "";
   deadline: Date;
   buttonText: String = 'Submit Your Request to Sellers on Requiren';
   Image_Urls: [String] = [""];
@@ -242,6 +242,7 @@ export class MakeRequestComponent implements OnInit {
 
     reader.addEventListener("load", (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
+      //debugger;
       this.buyerService.addRequestImage(this.selectedFile.file).subscribe(
         (res) => {
           //console.log("Image url " + res["imageUrl"]);
@@ -268,13 +269,14 @@ export class MakeRequestComponent implements OnInit {
     if (this.Image_Urls[0] == ""){
       return this.notifier.notify("error", "There are no images to delete");
     }
-    else if (this.Image_Urls[0].length == 1){
+    else if (this.Image_Urls.length == 1){
+      //debugger;
       this.Image_Urls[0] = "";
-      this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
+      this.notifier.notify("success", "You now have " + 0 + " of 3 images left");
     }
     else{
       this.Image_Urls.pop();
+      this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
     }
-    this.notifier.notify("success", "You now have " + this.Image_Urls.length + " of 3 images left");
   }
 }

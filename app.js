@@ -29,6 +29,9 @@ const ejs = require('ejs')._express;
 const multer = require("multer");
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
+const http = require('http');
+const socketIO = require('socket.io');
+
 
 mongoose.set('useCreateIndex', true);
 
@@ -37,7 +40,6 @@ mongoose.Promise = require('bluebird');
 mongoose.connect(config.database, { useNewUrlParser: true, promiseLibrary: require('bluebird') })
   .then(() => console.log(`Connected to database ${config.database}`))
   .catch((err) => console.log(`Database error: ${err}`));
-
 
 const app = express();
 
@@ -104,32 +106,7 @@ app.use('/sellers', sellers);
 //requests route
 app.use('/requests', requests);
 
-/*
-// By: Omar
-// Checkout route that communicates with Stripe. Creats a customer and charges them when they complete checkout for their accepted offer.
-app.post('/checkout', (req, res, next) => {
-  let offer = {
-    stripeEmail: req.body.email,
-    stripeToken: req.body.token,
-    amount: req.body.amount,
-    description: req.body.description
-  }
-
-  stripe.customers.create({
-    email: offer.stripeEmail,
-    source: offer.stripeToken
-  })
-  .then(customer => stripe.charges.create({
-    amount: offer.amount,
-    currency: 'usd',
-    //title: req.body.product,
-    description: offer.description,
-    customer: customer.id,
-    //source: offer.stripeToken
-  }))
-});*/
-
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV === 'production') {
   // For all GET requests, send back index.html
   // so that PathLocationStrategy can be used
   app.get('/*', function(req, res) {
@@ -140,7 +117,16 @@ app.all('*', function(req, res) {
   res.redirect(process.env.BASE_URL);
   
 });
+
+const server = http.createServer(app);
+const io = socketIO(server);
+app.set('io', io);
+
+io.on('connection', (socket) => {
+  //console.log('Connected to Socket');
+});
+
 // Start Server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log('Server started on port '+port);
 });

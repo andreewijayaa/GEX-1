@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BuyerService } from '../../../services/buyer.service';
 import { ActivatedRoute } from '@angular/router';
+import { NotifierService } from "angular-notifier";
 import { SellerAccountComponent } from '../../seller/seller-account/seller-account.component';
+import * as io from 'socket.io-client';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {}
@@ -13,41 +15,62 @@ class ImageSnippet {
   styleUrls: ['./buyer-account.component.css']
 })
 export class BuyerAccountComponent implements OnInit {
-
+  private readonly notifier: NotifierService;
   //for image porcessing
   selectedFile: ImageSnippet;
 
   // Delcared buyer variable.
+  socket;
   buyer: any;
   buyerLogout: Boolean;
   buyer_id: String;
-  buyer_updatedFirstName = localStorage.getItem('buyerFirstName');
-  buyer_updatedLastName = localStorage.getItem('buyerLastName');
-  buyer_updatedPassword: String;
+  buyer_updatedFirstName: any;
+  buyer_updatedLastName: any;
+  buyer_profile_image: any;
+  buyer_firstName: any;
+  buyer_lastName: any;
+  buyer_email: any;
   errorMessage: String;
-  updateBuyerFirstName = localStorage.getItem('buyerFirstName');
-  updateBuyerLastName = localStorage.getItem('buyerLastName');
+  spinner: Boolean;
+
 
   constructor(private buyerService: BuyerService,
-    private route: ActivatedRoute) { }
+    private notifierService: NotifierService,
+    private route: ActivatedRoute) {this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
 
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {
-    this.buyer = this.route.snapshot.data['buyer'];
-    this.buyer_id = this.buyer.data._id;
+    this.spinner = false;
+    this.getBuyerProfile();
+    this.socket.on('updatedBuyerProfileInfo', () => {
+      this.getBuyerProfile();
+    });
     this.buyerLogout = true;
   }
 
-  // Function enables users to use the textfields in order to edit their information. 
+  getBuyerProfile() {
+    this.buyerService.getBuyerProfile().subscribe((data:any) => {
+      if (data.success) {
+        this.buyer = data.buyer_found;
+        this.buyer_id = this.buyer._id;
+        this.buyer_profile_image = this.buyer.profile_image;
+        this.buyer_firstName = this.buyer.first_name;
+        this.buyer_lastName = this.buyer.last_name;
+        this.buyer_email = this.buyer.email;
+      } else {
+        console.log('Could not fetch buyer profile info');
+      }
+    });
+  }
+
+  // Function enables users to use the textfields in order to edit their information.
   // This only works with the front end so far. This has not been tied in with the backend.
   editFunction(): void {
     (<HTMLInputElement>document.getElementById('fName')).disabled = false;
     (<HTMLInputElement>document.getElementById('lName')).disabled = false;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = false;
-    (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
-    (<HTMLInputElement>document.getElementById('verify')).hidden = false;
-    (<HTMLInputElement>document.getElementById('newPass')).hidden = false;
+    (<HTMLInputElement>document.getElementById('saveBtn')).hidden = false;
+    (<HTMLInputElement>document.getElementById('editBtn')).hidden = true;
     (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = false;
   }
 
@@ -59,21 +82,12 @@ export class BuyerAccountComponent implements OnInit {
     var success = this.updateBuyerData();
 
     if (success) {
-      (<HTMLInputElement>document.getElementById('pwd')).value = (<HTMLInputElement>document.getElementById('newPwd')).value;
       (<HTMLInputElement>document.getElementById('fName')).disabled = true;
       (<HTMLInputElement>document.getElementById('lName')).disabled = true;
       (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-      (<HTMLInputElement>document.getElementById('pwd')).disabled = true;
       (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
       (<HTMLInputElement>document.getElementById('editBtn')).disabled = true;
-      (<HTMLInputElement>document.getElementById('verify')).hidden = true;
-      (<HTMLInputElement>document.getElementById('newPass')).hidden = true;
-      (<HTMLInputElement>document.getElementById('newPwd')).value = '';
-      (<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
-      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
-    }
-    else {
+    } else {
       // Could not update profile
     }
   }
@@ -83,57 +97,34 @@ export class BuyerAccountComponent implements OnInit {
   updateBuyerData(): Boolean {
     const newFName = (<HTMLInputElement>document.getElementById('fName')).value;
     const newLName = (<HTMLInputElement>document.getElementById('lName')).value;
-    const newPass = (<HTMLInputElement>document.getElementById('newPwd')).value;
-    const confirm = (<HTMLInputElement>document.getElementById('verifyPwd')).value;
 
-    if (newFName === "" || newLName === "" || newPass === "" || confirm === "") {
+    if (newFName === "" || newLName === "") { // || newPass === "" || confirm === "") {
       this.errorMessage = "One of the following fields is empty! Please fill in all highlighted empty fields.";
       (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
       (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
       (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Red';
       (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Red';
-      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
-    }
-    else if (newPass !== confirm) {
-      this.errorMessage = "Passwords do not match!";
-      (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
-      (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
-      (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
-      (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
-      (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Red';
-      (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Red';
-    }
-    else {
+    } else {
       this.buyer_updatedFirstName = (<HTMLInputElement>document.getElementById('fName')).value;
       this.buyer_updatedLastName = (<HTMLInputElement>document.getElementById('lName')).value;
-      this.buyer_updatedPassword = confirm;
+
+      console.log(this.buyer_updatedFirstName);
       const update = {
         "updater_id": this.buyer_id,
         "fName": this.buyer_updatedFirstName,
         "lName": this.buyer_updatedLastName,
-        "pass": this.buyer_updatedPassword
       }
 
       this.buyerService.updateBuyerProfile(update).subscribe((data: any) => {
         if (data.success) {
-          //console.log('Buyer Account Update Successful.');
-          localStorage.setItem('buyerFirstName', this.buyer_updatedFirstName);
-          localStorage.setItem('buyerLastName', this.buyer_updatedLastName);
-          this.updateBuyerFirstName = localStorage.getItem('buyerFirstName');
-          this.updateBuyerLastName = localStorage.getItem('buyerLastName');
-
           this.errorMessage = "Account updated successfully!";
           (<HTMLInputElement>document.getElementById('errorMessage')).hidden = false;
           (<HTMLInputElement>document.getElementById('cancelBtn')).hidden = true;
           (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Green";
           (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'Green';
           (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'Green';
-          (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'Green';
-          (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'Green';
           return true;
-        }
-        else {
+        } else {
           this.errorMessage = "Something went wrong. Your information could not be updated. Please refresh the page and try again.";
           (<HTMLInputElement>document.getElementById('errorMessage')).style.color = "Red";
         }
@@ -150,15 +141,8 @@ export class BuyerAccountComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('fName')).disabled = true;
     (<HTMLInputElement>document.getElementById('lName')).disabled = true;
     (<HTMLInputElement>document.getElementById('eAddress')).disabled = true;
-    (<HTMLInputElement>document.getElementById('pwd')).disabled = true;
-    (<HTMLInputElement>document.getElementById('saveBtn')).disabled = true;
-    (<HTMLInputElement>document.getElementById('editBtn')).disabled = false;
-    (<HTMLInputElement>document.getElementById('verify')).hidden = true;
-    (<HTMLInputElement>document.getElementById('newPass')).hidden = true;
-    (<HTMLInputElement>document.getElementById('newPwd')).value = '';
-    (<HTMLInputElement>document.getElementById('verifyPwd')).value = '';
-    (<HTMLInputElement>document.getElementById('verifyPwd')).style.backgroundColor = 'White';
-    (<HTMLInputElement>document.getElementById('newPwd')).style.backgroundColor = 'White';
+    (<HTMLInputElement>document.getElementById('saveBtn')).hidden = true;
+    (<HTMLInputElement>document.getElementById('editBtn')).hidden = false;
     (<HTMLInputElement>document.getElementById('fName')).style.backgroundColor = 'White';
     (<HTMLInputElement>document.getElementById('lName')).style.backgroundColor = 'White';
   }
@@ -166,6 +150,7 @@ export class BuyerAccountComponent implements OnInit {
   // By: John
   // function for updating profile image
   processFile(imageInput: any){
+    this.spinner = true;
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
@@ -173,11 +158,13 @@ export class BuyerAccountComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
-          
+          this.notifier.notify("success", "Your Image has uploaded! Login again to update");
+          this.spinner = false;
         },
         (err) => {
-
-        })
+          this.notifier.notify("error", "Your Image has failed to upload :( ");
+          this.spinner = false;
+        });
     });
 
     reader.readAsDataURL(file);

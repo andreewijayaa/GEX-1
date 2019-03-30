@@ -22,7 +22,7 @@ export class SellerService {
   }
 
   // Service to fetch seller profile from database (front-end to back-end connection)
-  getSellerProfile(): Observable<any> {
+  getSellerProfile() {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -36,6 +36,21 @@ export class SellerService {
       return this.http.get('http://localhost:3000/sellers/profile', httpOptions).pipe(map(res => res));
     } else {
       return this.http.get('sellers/profile', httpOptions).pipe(map(res => res));
+    }
+  }
+
+  getSellerById(sellerId) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/sellers/sellerById/' + sellerId, httpOptions)
+      .pipe(map(res => res));
+    } else {
+      return this.http.get('seller/sellerById/' + sellerId, httpOptions)
+      .pipe(map(res => res));
     }
   }
 
@@ -237,7 +252,9 @@ export class SellerService {
     }
   }
 
-  setBillingAddress(billingAddress) {
+
+
+  addSellerAddress(address) {
     this.loadToken();
     // Tokens needed to fetch data from database
     const httpOptions = {
@@ -247,23 +264,22 @@ export class SellerService {
       })
     };
     if (process.env.NODE_ENV === 'development') {
-      return this.http.post('http://localhost:3000/sellers/addBillingAddress', billingAddress, httpOptions)
+      return this.http.post('http://localhost:3000/sellers/addAddress', address, httpOptions)
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/addBillingAddress', billingAddress)
+      return this.http.post('sellers/addAddress', address)
       .pipe(map(res => res));
     }
   }
 
-  //allow user to upload profile picture
-  //By John
+  // allow user to upload profile picture
+  // By John
   setProfilePicture(profilePic: File): Observable<Object>{
-    //console.log("profile picutre action taken");
+    // console.log("profile picutre action taken");
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({
-        'Content-Type': 'application/json',
         'x-access-token': this.sellerToken
       })
     };
@@ -275,7 +291,27 @@ export class SellerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/profilepicture', profilePic)
+      return this.http.post('sellers/profilepicture', formData, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  addOfferImage(offerPic: File): Observable<Object> {
+    console.log("Offer Picture has been called in services");
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'x-access-token': this.sellerToken
+      })
+    };
+    const formData = new FormData();
+    formData.append('image', offerPic);
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/offerpicture', formData, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/offerpicture', formData, httpOptions)
       .pipe(map(res => res));
     }
   }
@@ -324,5 +360,89 @@ export class SellerService {
   sellerLogout() {
     this.sellerToken = null;
     this.seller = null;
+  }
+
+  // Service to archive a request
+  addArchive(requestID) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/addArchive', requestID, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/addArchive', requestID, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  // Service to get archived requests from buyers associated with seller's code
+  getArchivedRequests() {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/sellers/getArchivedRequests', httpOptions).pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+    return this.http.get('sellers/getArchivedRequests', httpOptions).pipe(map(res => res));
+    }
+  }
+
+  // Update Password function
+  updatePassword(oldPass, newPass, newPassConfirm) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    const body = {
+      'oldPassword': oldPass,
+      'newPassword': newPass,
+      'newPasswordConfirm': newPassConfirm
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/updatePassword', body, httpOptions)
+      .pipe(map(res => res));
+    }
+  }
+
+  // Service to delete an archived request
+  deleteArchive(requestID) {
+    this.loadToken();
+    // Tokens needed to fetch data from database
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/deleteArchive', requestID, httpOptions)
+      .pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+      return this.http.post('sellers/deleteArchive', requestID, httpOptions)
+      .pipe(map(res => res));
+    }
   }
 }
