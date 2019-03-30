@@ -95,13 +95,15 @@ export class BuyerComponent implements OnInit {
       if (requests.success) {
         this.requestList = requests['requests'];
         this.dataSourceRequests = new MatTableDataSource(requests['requests']);
+        this.dataSourceRequests.paginator = this.paginator;
+        this.dataSourceRequests.sort = this.sort;
       } else {
         console.log('could not fetch buyer requests');
       }
     });
 
-    this.dataSourceRequests.paginator = this.paginator;
-    this.dataSourceRequests.sort = this.sort;
+
+
   }
 
   getBuyer() {
