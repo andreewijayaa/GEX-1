@@ -49,9 +49,15 @@ import { MomentModule } from 'ngx-moment';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { ResendComponent } from './components/activation/resend/resend.component';
 import { ForgetPasswordComponent } from './components/activation/forget-password/forget-password.component';
+import { SellpageComponent } from './components/home/sellpage/sellpage.component';
+import { BuypageComponent } from './components/home/buypage/buypage.component';
+import { HowitworkspageComponent } from './components/home/howitworkspage/howitworkspage.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
+  {path: 'sell', component: SellpageComponent},
+  {path: 'buy', component: BuypageComponent},
+  {path: 'how', component: HowitworkspageComponent},
   {path: 'buyer-register', component: BuyerRegisterComponent},
   {path: 'seller-register', component: SellerRegisterComponent},
   {path: 'login', component: LoginComponent},
@@ -151,7 +157,10 @@ const customNotifierOptions: NotifierOptions = {
     BuyerCartComponent,
     ResendComponent,
     ForgetPasswordComponent,
-    StripeNeededDialogComponent
+    StripeNeededDialogComponent,
+    SellpageComponent,
+    BuypageComponent,
+    HowitworkspageComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,
