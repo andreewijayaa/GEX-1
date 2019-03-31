@@ -163,7 +163,7 @@ module.exports.orderConfirmation = function(buyer, order){
     templateId: 'd-9405881baaa14001be1d2c7a14f5f933',
     dynamic_template_data: {
       name: buyer.first_name,
-      orderLink: process.env.BABEL_ENV + '/buyer/orderConfirm/' + order._id
+      orderLink: process.env.BASE_URL + '/buyer/orderConfirm/' + order._id
     },
   };
   sgMail.send(msg).then(() => {
@@ -182,7 +182,7 @@ module.exports.notifyBuyerNewOffer = function(buyer, request){
     templateId: 'd-1b2d39c6bed8445b99a84598cd701e03',
     dynamic_template_data: {
       name: buyer.first_name,
-      offerLink: process.env.BABEL_ENV + '/buyer',
+      offerLink: process.env.BASE_URL + '/buyer',
       requestTitle: request.title
     },
   };
