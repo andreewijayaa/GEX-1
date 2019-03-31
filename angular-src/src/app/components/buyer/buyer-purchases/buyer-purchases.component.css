@@ -1,0 +1,10 @@
+.clearfooter {
+  height: 600px;
+  clear: both;
+}
+
+.clearheader {
+  height: 100px;
+  clear: both;
+}
+
