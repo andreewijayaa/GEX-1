@@ -459,6 +459,7 @@ router.post("/makeOffer", (req, res, next) => {
             if (err) {
               return next(err);
             }
+           
             //console.log('New Offer made tied to Seller %s', decoded.data._id);
             Request.findById(newOffer.request_ID, (err, request_with_offer) => {
               if (err) return handleError(err);
@@ -469,6 +470,10 @@ router.post("/makeOffer", (req, res, next) => {
               request_with_offer.list_of_sellers_submitted_offers.push(newOffer.seller_ID);
               request_with_offer.save().then(() => {
                 io.emit('updatedSellerProfileInfo');
+                Buyer.findById(request_with_offer.buyer_ID, (err, buyer_with_request) => {
+                  if (err) return handleError(err);
+                  sendEmail.notifyBuyerNewOffer(buyer_with_request, request_with_offer);
+                });
                 return res.status(200).send({ success: true, message: 'The offer was submitted successfully!' });
               });
             });
