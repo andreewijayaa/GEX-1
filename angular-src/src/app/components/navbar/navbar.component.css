@@ -1,11 +1,10 @@
 
 .navbar {
-  margin: auto;
-  height: auto;
+  margin-top: -16px;
   position: absulote;
   border: 1px;
-  overflow: visible;
-  z-index: 9999;
+  overflow: hidden;
+
 
 }
 
