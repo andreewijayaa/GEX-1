@@ -2,7 +2,6 @@
 //Using SendGrid as our email service
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-console.log('Base URL = ' +  process.env.BASE_URL);
 //Function that will take in a seller, and email them their token
 //Used Upon user registration to confirm email
 module.exports.sellerSendVerificationEmail = function(user, callback){
@@ -50,7 +49,7 @@ module.exports.NotifySellerNewRequest= function(seller, request, callback) {
     templateId: 'd-33099325b30c4edc940590551c708f87',
     dynamic_template_data: {
       name: seller.first_name,
-      requestTitle: request.Title
+      viewRequest: process.env.BASE_URL + '/seller'
     },
   };
   //console.log('Sent Notification to seller ' + seller.email + ' With Request ' + request._id);
@@ -150,6 +149,43 @@ module.exports.passwordChanged = function(user, callback){
     templateId: 'd-92cfc5c3ec0f44c5b664d9777639bc16',
     dynamic_template_data: {
       name: user.first_name,
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
+}
+
+//Function that will take in an offer, and email their seller purchase notification
+module.exports.offerPurchased = function(offer, seller){
+  const msg = {
+    to: user.email,
+    from: 'do_not_reply@requiren.com',
+    fromname: 'Requiren',
+    templateId: 'd-9405881baaa14001be1d2c7a14f5f933',
+    dynamic_template_data: {
+      name: seller.first_name,
+      offerTitle: offer.title,
+      offerDetails: process.env.BASE_URL + '/seller'
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
+}
+
+//Function that will take in an offer, and email their seller purchase notification
+module.exports.orderConfirmation = function(buyer, order){
+  const msg = {
+    to: user.email,
+    from: 'do_not_reply@requiren.com',
+    fromname: 'Requiren',
+    templateId: 'd-9405881baaa14001be1d2c7a14f5f933',
+    dynamic_template_data: {
+      name: buyer.first_name,
+      orderLink: process.env.BABEL_ENV + '/buyer/orderConfirm/' + order._id
     },
   };
   sgMail.send(msg).then(() => {
