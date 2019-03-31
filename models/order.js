@@ -44,8 +44,8 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required : true,
     },
-    requestPurchasedID: {
-        type: String,
+    requestsPurchasedID: {
+        type: [String],
         required : true
     },
     stripeChargeID: {
