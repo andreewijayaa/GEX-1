@@ -54,7 +54,7 @@ export class BuyerCheckoutComponent
   spinner: Boolean;
 
   billingSameAsShipping = false;
-  stripeFees: Number;
+  stripeFees: Number = 0;
 
   // FOR DISPLAY
   offerPriceDisplay: any;

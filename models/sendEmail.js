@@ -160,7 +160,7 @@ module.exports.passwordChanged = function(user, callback){
 //Function that will take in an offer, and email their seller purchase notification
 module.exports.offerPurchased = function(offer, seller){
   const msg = {
-    to: user.email,
+    to: seller.email,
     from: 'do_not_reply@requiren.com',
     fromname: 'Requiren',
     templateId: 'd-9405881baaa14001be1d2c7a14f5f933',
@@ -179,7 +179,7 @@ module.exports.offerPurchased = function(offer, seller){
 //Function that will take in an offer, and email their seller purchase notification
 module.exports.orderConfirmation = function(buyer, order){
   const msg = {
-    to: user.email,
+    to: buyer.email,
     from: 'do_not_reply@requiren.com',
     fromname: 'Requiren',
     templateId: 'd-9405881baaa14001be1d2c7a14f5f933',

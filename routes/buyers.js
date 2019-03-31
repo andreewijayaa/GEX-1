@@ -835,7 +835,7 @@ router.post("/charge", (req, res) => {
     feesPriceTotal: req.body.feesPriceTotal,
     requestsPurchasedID: req.body.requestsPurchasedID
   };
-
+  console.log(purchaseInfo.amount*100);
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
     //******************************************************************* */
     // Create Transactions
@@ -953,7 +953,7 @@ router.post("/charge", (req, res) => {
           info.save();
           stripe.charges
             .create({
-              amount: (purchaseInfo.amount*100),
+              amount: Math.floor(purchaseInfo.amount*100),
               currency: "usd",
               description: "Charge for " + purchaseInfo.name + ".",
               customer: customer.id,
@@ -977,7 +977,7 @@ router.post("/charge", (req, res) => {
         })
         .then(customer => {
           stripe.charges.create({
-            amount: (purchaseInfo.amount*100),
+            amount: Math.floor(purchaseInfo.amount*100),
             currency: "usd",
             description: "Charge for " + purchaseInfo.name + ".",
             receipt_email: purchaseInfo.stripeEmail,
