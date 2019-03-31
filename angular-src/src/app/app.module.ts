@@ -101,7 +101,7 @@ const appRoutes: Routes = [
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
-      position: 'left',
+      position: 'middle',
       distance: 12
     },
     vertical: {
@@ -112,11 +112,11 @@ const customNotifierOptions: NotifierOptions = {
   },
   theme: 'material',
   behaviour: {
-    autoHide: 3000,
+    autoHide: 4000,
     onClick: false,
     onMouseover: 'pauseAutoHide',
     showDismissButton: true,
-    stacking: 4
+    stacking: 1
   },
   animations: {
     enabled: true,
@@ -127,7 +127,7 @@ const customNotifierOptions: NotifierOptions = {
     },
     hide: {
       preset: 'fade',
-      speed: 300,
+      speed: 150,
       easing: 'ease',
       offset: 50
     },
