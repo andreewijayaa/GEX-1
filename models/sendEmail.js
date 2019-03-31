@@ -97,28 +97,6 @@ module.exports.buyerEmailVerified = function(user, callback){
   });
 }
 
-//Function that will take in a buyer, and request then email applicable buyer with a link to the request
-//Used Upon buyer submitting a new request
-module.exports.NotifyBuyerNewOffer= function(buyer, request, callback){
-  const msg = {
-    to: buyer.email,
-    from: 'do_not_reply@requiren.com',
-    fromname: 'Requiren',
-    templateId: 'd-33099325b30c4edc940590551c708f87',
-    dynamic_template_data: {
-      name: buyer.first_name,
-      requestTitle: request.Title,
-      requestID : process.env.BASE_URL + '/request/' + requestID,
-    },
-  };
-  //console.log('Sent Notification to buyer ' + buyer.email + ' With Request ' + request._id);
-  
-  sgMail.send(msg).then(() => {
-  }).catch((error) => {
-    console.log('error', error);
-  });
-}
-
 //Function that will take in a USER, and email them their PASSWORD reset token
 module.exports.resetEmail = function(user, callback){
   var type;
@@ -176,7 +154,7 @@ module.exports.offerPurchased = function(offer, seller){
   });
 }
 
-//Function that will take in an offer, and email their seller purchase notification
+//Function that will take in an order, and email buyer link to order confrimation
 module.exports.orderConfirmation = function(buyer, order){
   const msg = {
     to: buyer.email,
@@ -186,6 +164,26 @@ module.exports.orderConfirmation = function(buyer, order){
     dynamic_template_data: {
       name: buyer.first_name,
       orderLink: process.env.BABEL_ENV + '/buyer/orderConfirm/' + order._id
+    },
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
+}
+
+//Function that will take in a buyer, and request then email applicable buyer with a link to the request
+//Used Upon buyer submitting a new request
+module.exports.notifyBuyerNewOffer = function(buyer, request){
+  const msg = {
+    to: buyer.email,
+    from: 'do_not_reply@requiren.com',
+    fromname: 'Requiren',
+    templateId: 'd-1b2d39c6bed8445b99a84598cd701e03',
+    dynamic_template_data: {
+      name: buyer.first_name,
+      offerLink: process.env.BABEL_ENV + '/buyer',
+      requestTitle: request.title
     },
   };
   sgMail.send(msg).then(() => {

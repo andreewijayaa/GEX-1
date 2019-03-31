@@ -862,7 +862,7 @@ router.post("/charge", (req, res) => {
           
           // Create a Transfer to the connected account (later):
           stripe.transfers.create({
-            amount: sellerProfit,
+            amount: Math.floor(sellerProfit),
             currency: "usd",
             destination: seller.stripe.stripe_user_id,
             source_transaction: Charge_id, // Used to make sure that the the amounts being trasitioned will not exceed the initial charge amount
