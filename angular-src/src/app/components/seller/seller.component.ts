@@ -97,7 +97,11 @@ export class SellerComponent implements OnInit {
   expandedArchivedElement: RequestElement | null;
 
   @ViewChild(MatPaginator) requestPaginator: MatPaginator;
+  @ViewChild(MatPaginator) offerPaginator: MatPaginator;
+  @ViewChild(MatPaginator) archivePaginator: MatPaginator;
   @ViewChild(MatSort) requestSort: MatSort;
+  @ViewChild(MatSort) offerSort: MatSort;
+  @ViewChild(MatSort) archiveSort: MatSort;
 
   constructor(private sellerService: SellerService,
     private route: ActivatedRoute,
@@ -186,6 +190,8 @@ export class SellerComponent implements OnInit {
             if (offers.success) {
               this.offerList = offers.offers;
               this.dataSourceOffers = new MatTableDataSource(offers.offers);
+              this.dataSourceOffers.paginator = this.offerPaginator;
+              this.dataSourceOffers.sort = this.offerSort;
               // console.log(this.dataSourceOffers);
             } else {
               console.log('Could not fetch offers');
@@ -218,6 +224,8 @@ export class SellerComponent implements OnInit {
             if (archived.success) {
               this.archivedRequests = archived.archived_request;
               this.dataSourceArchived = new MatTableDataSource(archived.archived_request);
+              this.dataSourceArchived.paginator = this.archivePaginator;
+              this.dataSourceArchived.sort = this.archiveSort;
               // console.log(this.dataSourceArchived);
             } else {
               console.log('Could not fetch archieved requests');
@@ -256,10 +264,16 @@ export class SellerComponent implements OnInit {
 
   searchOfferFilter(filterValue: string) {
     this.dataSourceOffers.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceOffers.paginator) {
+       this.dataSourceOffers.paginator.firstPage();
+     }
   }
 
   searchArchivedFilter(filterValue: string) {
     this.dataSourceArchived.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceArchived.paginator) {
+       this.dataSourceArchived.paginator.firstPage();
+     }
   }
 
   expandedRequest(listOfSellers: any) {

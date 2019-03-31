@@ -278,9 +278,9 @@
                 &nbsp;
                 <!-- Start of New Offer Table Content -->
                 <div class="container">
-                    <table mat-table [dataSource]="dataSourceOffers" multiTemplateDataRows class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSourceOffers" multiTemplateDataRows matSort class="mat-elevation-z8">
                       <ng-container matColumnDef="{{column}}" *ngFor="let column of displayOfferColumns">
-                        <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-size: 16px">
                           <span *ngIf="column === 'title'">Title</span>
                           <span *ngIf="column === 'offerStatus'">Status</span>
                           <span *ngIf="column === 'created_at'">Submission Date</span>
@@ -347,6 +347,8 @@
                         &nbsp;
                       </div>
                     </div>
+                    <mat-paginator [length]="dataSourceOffers.filteredData.length" [pageSize]="25">
+                   </mat-paginator>
                   </div>
                 </div>
                 <!--- End of New Table Content-->
@@ -437,9 +439,9 @@
                 &nbsp;
                 <!--Start of New Archived Table-->
                 <div class="container">
-                    <table mat-table [dataSource]="dataSourceArchived" multiTemplateDataRows class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSourceArchived" multiTemplateDataRows matSort class="mat-elevation-z8">
                       <ng-container matColumnDef="{{column}}" *ngFor="let column of displayArchivedColumns">
-                        <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-size: 16px">
                           <span *ngIf="column === 'title'">Title</span>
                           <span *ngIf="column === 'status'">Status</span>
                           <span *ngIf="column === 'deadline'">Deadline</span>
@@ -503,6 +505,8 @@
                         &nbsp;
                       </div>
                     </div>
+                    <mat-paginator [length]="dataSourceArchived.filteredData.length" [pageSize]="25">
+                   </mat-paginator>
                   </div>
                 </div>
                 <!--- End of New Table Content-->
