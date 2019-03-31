@@ -5,6 +5,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const config = require("../config/database");
 const Seller = require("../models/seller");
+const Buyer = require("../models/buyer");
 const Address = require("../models/address");
 const Request = require("../models/request");
 const Offer = require("../models/offer");
