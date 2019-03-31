@@ -33,59 +33,74 @@
       </div>
       <hr>
     </div>
-    <div *ngFor="let element of requestIDList"></div>
-    <div class="container" style="text-align: left">
-        <h4 style="font-weight: bold;"><u>submitted request info:</u></h4>
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <h6 style="font-weight: bold">details</h6>
-            <u>request type:</u> <br> <label *ngFor="let code of requestTypeNames" id="otis" style="font-size: 14px">{{code}},</label>
-            <br>
-            <u>title:</u> <br> <label style="font-size: 14px">{{requestTitle}}</label>
-          </div>
-          <div class="col-md-4 mb-3">
-            <h6 style="font-weight: bold">description</h6>
-            <div [innerHTML]="requestDescription"></div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <h6 style="font-weight: bold">images</h6>
-              <div *ngIf="requestImages">
-                  <img class= "requestimage1" src={{requestImages[0]}} *ngIf="requestImages[0]" alt="" width="120" height="120">
-                  &nbsp;
-                  <img class= "requestimage2" src={{requestImages[1]}} *ngIf="requestImages[1]" alt="" width="120" height="120">
-                  &nbsp;
-                  <img class= "requestimage3" src={{requestImages[2]}} *ngIf="requestImages[2]" alt="" width="120" height="120">
+    <div *ngFor="let element of dataPerRequestID">
+        <div class="container" style="text-align: left">
+            <h4 style="font-weight: bold;"><u>{{element.request.title}} request info:</u></h4>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <h6 style="font-weight: bold">details</h6>
+                <u>title:</u> <br> <label style="font-size: 14px">{{element.request.title}}</label>
+                <br>
+                <u>creation date:</u> <br> <label style="font-size: 14px">{{element.request.created_at | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</label>
+                <br>
+                <u>deadline date:</u> <br> <label style="font-size: 14px">{{element.request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</label>
               </div>
+              <div class="col-md-4 mb-3">
+                <h6 style="font-weight: bold">description</h6>
+                <div [innerHTML]="element.request.description"></div>
+              </div>
+              <div class="col-md-4 mb-3">
+                  <h6 style="font-weight: bold">images</h6>
+                  <div *ngIf="element.request.request_images">
+                      <img class= "requestimage1" src={{element.request.request_images[0]}} *ngIf="element.request.request_images[0]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage2" src={{element.request.request_images[1]}} *ngIf="element.request.request_images[1]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage3" src={{element.request.request_images[2]}} *ngIf="element.request.request_images[2]" alt="" width="120" height="120">
+                  </div>
+                </div>
             </div>
+            <hr>
+          </div>
+        <div class="container" style="text-align: left">
+            <h4 style="font-weight: bold;"><u>accepted offers for "{{element.request.title}}":</u></h4>
+            <div class="row" *ngFor="let offer of element.offers">
+              <div class="col-md-3">
+                <h6 style="font-weight: bold; color: blue">{{offer.title}}</h6>
+              </div>
+              <div class="col-md-3">
+                <h6 style="font-weight: bold">description</h6>
+                <div [innerHTML]="offer.description"></div>
+              </div>
+              <div class="col-md-3">
+                  <h6 style="font-weight: bold">images</h6>
+                  <div *ngIf="offer.offer_images">
+                      <img class= "requestimage1" src="{{offer.offer_images[0]}}" *ngIf="offer.offer_images[0]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage2" src="{{offer.offer_images[1]}}" *ngIf="offer.offer_images[1]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage3" src="{{offer.offer_images[2]}}" *ngIf="offer.offer_images[2]" alt="" width="120" height="120">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <h6 style="font-weight: bold">totals</h6>
+                  shipping price: <span class="price">${{offer.shippingPrice}}</span>
+                  <br>
+                  price: <span class="price">${{offer.price}}</span>
+                  <br>
+                  total: <span class="price">${{offer.shippingPrice + offer.price}}</span>
+                  <hr>
+              </div>
+              &nbsp;
+            </div>
+            <hr>
         </div>
-        <hr>
-      </div>
-    <div class="container" style="text-align: left">
-        <h4 style="font-weight: bold;"><u>accepted offers:</u></h4>
-        <div class="row" *ngFor="let offer of purchasedOffers">
-          <div class="col-md-4 mb-3">
-            <h6 style="font-weight: bold; color: blue">{{offer.title}}</h6>
-          </div>
-          <div class="col-md-4 mb-3">
-            <h6 style="font-weight: bold">description</h6>
-            <div [innerHTML]="offer.description"></div>
-          </div>
-          <div class="col-md-3">
-              <h6 style="font-weight: bold">totals</h6>
-              shipping price: <span class="price">${{offer.shippingPrice}}</span>
-              <br>
-              price: <span class="price">${{offer.price}}</span>
-              <br>
-              total: <span class="price">${{offer.shippingPrice + offer.price}}</span>
-              <hr>
-          </div>
-        </div>
-        <hr>
     </div>
     <div class="container" style="text-align: left">
         <div class="row">
-          <div class="col-md-4 mb-3"></div>
-          <div class="col-md-4 mb-3"></div>
+          <div class="col-md-3"></div>
+          <div class="col-md-3"></div>
+          <div class="col-md-3"></div>
           <div class="col-md-3">
             <p style="font-weight: bold">
                 offers:
