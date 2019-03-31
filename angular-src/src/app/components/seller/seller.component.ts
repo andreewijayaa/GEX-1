@@ -72,7 +72,7 @@ export class SellerComponent implements OnInit {
   requestList: Object;
   offerList = [];
   activeRequests = [];
-  loader: boolean;
+  spinner: boolean;
   dialogLoader: boolean;
   accountSetup: Number;
   accountSetupBool: Boolean = false;
@@ -115,6 +115,7 @@ export class SellerComponent implements OnInit {
 
   // On initialization process of the webpage
   ngOnInit() {
+    this.spinner = true;
     // get params if stripe is sending a redirect
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
@@ -143,8 +144,6 @@ export class SellerComponent implements OnInit {
       });
     }
 
-    this.loader = true;
-
     this.getSellerProfile();
     this.socket.on('updatedSellerProfileInfo', ()  => {
       this.getSellerProfile();
@@ -163,7 +162,6 @@ export class SellerComponent implements OnInit {
         this.seller = profile.seller_found;
         this.seller_firstName = profile.seller_found.first_name;
         this.sellerID = profile.seller_found._id;
-        this.loader = false;
 
         this.temp = this.seller.user_account_setup;
         if (this.seller.user_account_setup[0]) {
@@ -185,6 +183,24 @@ export class SellerComponent implements OnInit {
           && this.seller.user_account_setup[3]) {
           this.accountSetupBool = true;
 
+          // Fetching seller active requests from the service to be used in the webpage
+          this.sellerService.getActiveRequests().subscribe((requests: any) => {
+            if (requests.success) {
+              this.activeRequests = requests.active_requests;
+              this.dataSourceRequests = new MatTableDataSource(requests.active_requests);
+              this.dataSourceRequests.paginator = this.requestPaginator;
+              this.dataSourceRequests.sort = this.requestSort;
+              // console.log(this.dataSourceRequests);
+              this.spinner = false;
+            } else {
+              console.log('could not fetch requests');
+            }
+          },
+          err => {
+            console.log(err);
+            return false;
+          });
+
           // Fetching seller offer history from the s ervice to be used in the webpage
           this.sellerService.getSellerOffersHistory().subscribe((offers: any) => {
             if (offers.success) {
@@ -195,23 +211,6 @@ export class SellerComponent implements OnInit {
               // console.log(this.dataSourceOffers);
             } else {
               console.log('Could not fetch offers');
-            }
-          },
-          err => {
-            console.log(err);
-            return false;
-          });
-
-          // Fetching seller active requests from the service to be used in the webpage
-          this.sellerService.getActiveRequests().subscribe((requests: any) => {
-            if (requests.success) {
-              this.activeRequests = requests.active_requests;
-              this.dataSourceRequests = new MatTableDataSource(requests.active_requests);
-              this.dataSourceRequests.paginator = this.requestPaginator;
-              this.dataSourceRequests.sort = this.requestSort;
-              // console.log(this.dataSourceRequests);
-            } else {
-              console.log('could not fetch requests');
             }
           },
           err => {
