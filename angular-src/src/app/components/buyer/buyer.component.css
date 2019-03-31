@@ -145,3 +145,9 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-description-attribution {
   opacity: 0.5;
 }
+
+.spin {
+  margin-top: 10%;
+  margin-left: 45%;
+  min-height: 100%;
+}
