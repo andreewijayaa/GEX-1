@@ -63,6 +63,7 @@ export class BuyerComponent implements OnInit {
   seller_firstName: String;
   seller_lastName: String;
   offerAccepted: Boolean;
+  spinner: Boolean;
 
   dataSourceRequests = new MatTableDataSource(this.requestList);
   dataSourceOffers = [];
@@ -86,6 +87,7 @@ export class BuyerComponent implements OnInit {
   // showing buyer info when buyer portal page loads - Bryan Vu
 
   ngOnInit() {
+    this.spinner = true;
     this.getBuyer();
     this.socket.on('updatedBuyerProfileInfo', () => {
       this.getBuyer();
@@ -97,13 +99,11 @@ export class BuyerComponent implements OnInit {
         this.dataSourceRequests = new MatTableDataSource(requests['requests']);
         this.dataSourceRequests.paginator = this.paginator;
         this.dataSourceRequests.sort = this.sort;
+        this.spinner = false;
       } else {
         console.log('could not fetch buyer requests');
       }
     });
-
-
-
   }
 
   getBuyer() {

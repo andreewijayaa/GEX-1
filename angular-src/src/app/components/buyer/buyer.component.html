@@ -32,172 +32,16 @@ Bryan Vu contributed most of this buyer portal page.
     </div>
   </div>
   &nbsp;
-  <!-----<li class="card container">
-    &nbsp;
-    <table class="table table-striped table-sm" style="background-color: #282d32; color: white">
-      <thead>
-        <tr style="text-align:center">
-          <th>Name</th>
-          <th style="width: 300px;">Status</th>
-          <th style="width: 300px;">Offers</th>
-          <th style="width: 300px;">Time Left</th>
-        </tr>
-      </thead>
-    </table>
-
-    <mat-accordion>
-      <p align="center" *ngIf="requestList.length == 0">
-        You have not made any product requests yet.
-      </p>
-      <mat-expansion-panel id="requestExpansionId" *ngFor="let request of requestList | filter:filter | paginate: {itemsPerPage: 25, currentPage: p}"
-        (opened)="expanded(request._id)">
-        <mat-expansion-panel-header style="text-align:center">
-          <mat-panel-title style="width: 180px" id="requestTitle">
-            {{request.title}}
-          </mat-panel-title>
-          <mat-panel-title style="width:200px">
-            Pending
-          </mat-panel-title>
-          <mat-panel-title style="width: 75px">
-            {{request.offerCount}}
-          </mat-panel-title>
-          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true | number:'1.0-0') >= 3" style="width: 90px; color: green">
-            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
-          </mat-panel-title>
-          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) < 3 && (request.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">
-            {{request.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
-          </mat-panel-title>
-          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) < 1 && (request.deadline | amDifference: today :'days' : true) > 0" style="width: 90px; color: orange">
-            Less than 1 day<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
-          </mat-panel-title>
-          <mat-panel-title *ngIf="(request.deadline | amDifference: today :'days' : true) <= 0" style="width: 90px; color: red">
-            EXPIRED<br>{{request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}
-          </mat-panel-title>
-          <mat-panel-title id="selectedRequestId" hidden>
-            {{request._id}}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="container" style="border:3px solid black; background-color: #dcdde1">
-          &nbsp;
-          <mat-panel-title>
-            Request Description:
-          </mat-panel-title>
-          <mat-panel-title>
-            <div [innerHTML]="request.description"></div>
-          </mat-panel-title>
-          <mat-panel-title>
-            Request Picture:
-          </mat-panel-title>
-          <mat-panel-title>
-            <img class= "requestimage1" src={{request.request_images[0]}} *ngIf="request.request_images[0]" alt="" width="120" height="120">
-            <img class= "requestimage2" src={{request.request_images[1]}} *ngIf="request.request_images[1]" alt="" width="120" height="120">
-            <img class= "requestimage3" src={{request.request_images[2]}} *ngIf="request.request_images[2]" alt="" width="120" height="120">
-          </mat-panel-title>
-          <button type="button" class="pull-right btn-danger btn-sm float-sm-right" id="editBtn" (click)="deleteRequestFunction(request._id)">Delete Request</button>
-          <br>
-          <mat-panel-title>
-            Offers:
-          </mat-panel-title>
-          <br>
-          <table class="table table-striped table-sm" style="background-color: #487eb0; color: white">
-            <thead>
-              <tr style="text-align:center;">
-                <th>Title</th>
-                <th>Submission Date</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-          </table>
-
-          <mat-expansion-panel *ngFor="let offer of offerList" style="background-color: #f5f6fa">
-            <mat-expansion-panel-header>
-              <mat-panel-title id="offerTitle" style="margin-left: 3%">
-                {{offer.title}}
-              </mat-panel-title>
-              <mat-panel-title id="offerSubDate" style="margin-left: 25%">
-                offer-sub-date
-              </mat-panel-title>
-              <mat-panel-title id="offerPrice" style="margin-left: 30%">
-                ${{offer.price}}
-              </mat-panel-title>
-              <mat-panel-title id="offerId" hidden>
-                {{offer._id}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <div class="container" style="border:3px solid #7f8fa6">
-              &nbsp;
-              <mat-panel-title>
-                Offer Details:
-              </mat-panel-title>
-              <mat-panel-title id="offerDescription">
-                {{offer.description}}
-              </mat-panel-title>
-              <!--
-              <mat-panel-title *ngIf="offerCart.indexOf(offer._id) === -1" style="margin-left: 85%">
-                <button mat-button (click)="acceptOffer($event.target, offer._id)" id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>#8c7ae6
-              </mat-panel-title>
-              <mat-panel-title *ngIf="offerCart.indexOf(offer._id) !== -1" style="margin-left: 85%">
-                <button [disabled]="true" mat-button style="background-color: #006400; color: white;">Offer In Cart</button>
-              </mat-panel-title>-
-              <mat-panel-title style="margin-left: 85%">
-                <button *ngIf="offer.offerAccepted === true" mat-button (click)="acceptOffer($event.target, offer._id)"
-                  id="acceptOfferButton" style="background-color: #4cd137; color: white;" disabled>Offer Accepted</button>
-                <button *ngIf="offer.offerAccepted === false" mat-button (click)="acceptOffer($event.target, offer._id)"
-                  id="acceptOfferButton" style="background-color: #8c7ae6; color: white;">Accept Offer</button>
-              </mat-panel-title>
-              &nbsp;
-            </div>
-          </mat-expansion-panel>
-          &nbsp;
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-
-    &nbsp;
-
-    <pagination-controls (pageChange)="p = $event" previousLabel="Previous" nextLabel="Next" directionLinks="true"
-      autoHide="true">
-    </pagination-controls>
-  </li>--
-  </div>
-    <div class="container">
-      <table mat-table
-        [dataSource]="dataSourceRequests"
-        class="mat-elevation-z8">
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Title</th>
-          <td mat-cell *matCellDef="let element">{{element.title}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Status</th>
-            <td mat-cell *matCellDef="let element">{{element.status}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="offerCount">
-            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Offers</th>
-            <td mat-cell *matCellDef="let element">{{element.offerCount}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="deadline">
-            <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">Time Remaining</th>
-            <td mat-cell *matCellDef="let element">
-              <span *ngIf="(element.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 90px; color: green">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
-              <span *ngIf="(element.deadline | amDifference: today :'days' : true) <= 3 && (element.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
-              <span *ngIf="(element.deadline | amDifference: today :'days' : true) < 1 && (element.deadline | amDifference: today :'days' : true) > 0" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
-              <span *ngIf="(element.deadline | amDifference: today :'days' : true) <= 0" style="width: 90px; color: red">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
-            </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-      </table>
-  </div>-->
 </div>
 
-    <div class="container">
+<div class="center container" *ngIf="spinner === true">
+    <div class="spin">
+        <mat-spinner class="example-margin" [diameter]="130"></mat-spinner>
+    </div>
+</div>
+
+
+    <div class="container" *ngIf="spinner === false">
         <table mat-table
         [dataSource]="dataSourceRequests" multiTemplateDataRows matSort
         class="mat-elevation-z8">
@@ -211,8 +55,8 @@ Bryan Vu contributed most of this buyer portal page.
     </th>
      <td mat-cell *matCellDef="let element">
         <span *ngIf="column === 'deadline'; else other;">
-            <span *ngIf="(element.deadline | amDifference: today :'days' : true | number:'1.0-0') >= 3" style="width: 90px; color: green" style="width: 90px; color: green">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
-            <span *ngIf="3 > (element.deadline | amDifference: today :'days' : true) && (element.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+            <span *ngIf="(element.deadline | amDifference: today :'days' : true | number:'1.0-0') > 3" style="width: 90px; color: green" style="width: 90px; color: green">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
+            <span *ngIf="3 >= (element.deadline | amDifference: today :'days' : true) && (element.deadline | amDifference: today :'days' : true) >= 1" style="width: 90px; color: orange">{{element.deadline | amDifference: today :'days' : true | number:'1.0-0'}} day(s)<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
             <span *ngIf="(element.deadline | amDifference: today :'days' : true) < 1 && (element.deadline | amDifference: today :'days' : true) > 0" style="width: 90px; color: orange">Less than 1 day<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
             <span *ngIf="(element.deadline | amDifference: today :'days' : true) <= 0" style="width: 90px; color: red">EXPIRED<br>{{element.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span>
           </span>
