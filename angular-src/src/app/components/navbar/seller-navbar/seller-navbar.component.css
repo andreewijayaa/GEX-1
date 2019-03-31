@@ -27,14 +27,23 @@
   }
 */
 
+ul {
+  list-style: none;
+  display: inline-flex;
+}
+.navbar-nav > li{
+  padding-left:10px;
+  padding-right:10px;
+}
 
   .img-circle {
     border-radius: 50%;
     -ms-transform: translate(0);
     -webkit-transform: translateZ(10);
     transform: translateZ(0);
+
   }
 
   .dropdown:hover>.dropdown-menu {
-    display: block;
+    display: inline;
   }
