@@ -126,9 +126,8 @@ body, html {
 }
 
 .spin {
-  position: relative;
-  margin-top: 300px;
-  left: 50%;
+  margin-top: 10%;
+  margin-left: 45%;
   min-height: 100%;
 }
 
