@@ -23,12 +23,13 @@ export class OrderConfirmComponent implements OnInit {
   shippingAddressDetails = [];
 
   // submitted request info
-  requestID: any;
+  requestIDList = [];
   requestTypeCodes = [];
   requestTypeNames = [];
   requestTitle = String;
   requestDescription = String;
   requestImages = [];
+  dataPerRequestID = [];
 
   // accepted offers
   purchasedOffers = [];
@@ -129,7 +130,7 @@ export class OrderConfirmComponent implements OnInit {
         this.orderNumber = data.orderFound.orderNumber;
         this.orderStatus = data.orderFound.orderStatus;
         this.shippingAddressDetails = data.orderFound.shippingAddress;
-        this.requestID = data.orderFound.requestPurchasedID;
+        this.requestIDList = data.orderFound.requestPurchasedID;
         this.offerTotal = data.orderFound.totalOffersPrice;
         this.shippingTotal = data.orderFound.totalShipPrice;
         this.feesTotal = data.orderFound.totalFeesPrice;
@@ -144,24 +145,32 @@ export class OrderConfirmComponent implements OnInit {
   }
 
   getRequestDetails() {
-    this.requestService.getRequest(this.requestID).subscribe((data: any) => {
-      if (data.success) {
-        this.requestTypeCodes = data.request.code;
-        this.requestTitle = data.request.title;
-        this.requestDescription = data.request.description;
-        this.requestImages = data.request.request_images;
-        this.purchasedOffers = data.offers;
-        this.codes.forEach(code => {
-          this.requestTypeCodes.forEach(requestCode => {
-            if (code.code === requestCode) {
-              this.requestTypeNames.push(code.name);
-            }
+    this.requestIDList.forEach(requestID => {
+      this.requestService.getRequest(requestID).subscribe((data: any) => {
+        if (data.success) {
+          this.dataPerRequestID.push(data.request);
+          // this.requestTypeCodes = data.request.code;
+          // this.requestTitle = data.request.title;
+          // this.requestDescription = data.request.description;
+          // this.requestImages = data.request.request_images;
+          // this.purchasedOffers = data.offers;
+          this.codes.forEach(code => {
+            this.requestTypeCodes.forEach(requestCode => {
+              if (code.code === requestCode) {
+                this.requestTypeNames.push(code.name);
+              }
+            });
           });
-        });
-        this.spinner = false;
-      } else {
-        console.log('Could not fetch request data');
-      }
+          this.spinner = false;
+        } else {
+          console.log('Could not fetch request data');
+        }
+      });
+    });
+
+
+    this.dataPerRequestID.forEach(element => {
+
     });
   }
 }

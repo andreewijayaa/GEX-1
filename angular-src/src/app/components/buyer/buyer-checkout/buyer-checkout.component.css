@@ -165,7 +165,7 @@ span.price {
 
   .spin {
     position: relative;
-    margin-top: 300px;
-    left: 50%;
+    margin-top: -50px;
+    left: 75%;
     min-height: 100%;
   }

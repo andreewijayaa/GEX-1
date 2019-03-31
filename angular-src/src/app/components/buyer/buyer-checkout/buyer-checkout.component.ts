@@ -133,7 +133,7 @@ export class BuyerCheckoutComponent
   }
 
   ngOnInit() {
-
+    this.spinner = false;
     this.buyerService.getBuyerProfile().subscribe((data: any) => {
       if (data.success) {
         this.buyer = data.buyer_found;
@@ -155,6 +155,7 @@ export class BuyerCheckoutComponent
           if (this.requestsID.indexOf(element.request_ID) === -1) {
             this.requestsID.push(element.request_ID);
           }
+          console.log(this.requestsID);
         });
 
         // console.log(this.offersInCart);
@@ -229,8 +230,11 @@ export class BuyerCheckoutComponent
 
   ngAfterViewInit() {
     this.card = elements.create('card');
-    this.card.mount(this.cardInfo.nativeElement);
-    this.card.addEventListener('change', this.cardHandler);
+    setTimeout(() => {
+      this.card.mount(this.cardInfo.nativeElement);
+      this.card.addEventListener('change', this.cardHandler);
+    }, 1000);
+
   }
 
   ngOnDestroy() {
