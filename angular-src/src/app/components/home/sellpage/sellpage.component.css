@@ -11,7 +11,7 @@ body , html {
 
 
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 890px) {
   body, html{
     margin: 0 2px !important;
   }
@@ -23,6 +23,15 @@ body , html {
   }
   li {
     font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 1355px){
+  .mark-1 {
+    margin-bottom: 150px;
+  }
+  h1, h2, h2 {
+    font-size: 1.5rem;
   }
 }
 .container {
