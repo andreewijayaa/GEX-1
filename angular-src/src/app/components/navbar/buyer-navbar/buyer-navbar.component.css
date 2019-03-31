@@ -1,31 +1,4 @@
-/*
-.navbar-brand{
-  max-height: 30px;
-  max-width: 30%;
-  overflow: visible;
-  padding: 0;
 
-}
-
-.logForm {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-.nav-item2 {
-  float: left;
-  list-style-type: none;
-  font-size: 14px;
-  padding-top: 0;
-  nav-down: auto
-}
-
-.nav-item2 a:hover {
-  background-color: lightgray;
-}
-*/
 
 .navbar-nav > li{
   padding-left:10px;
@@ -53,3 +26,8 @@
 .nav-item:hover>.img-cart {
   opacity: 0.5;
 }
+
+
+
+
+

@@ -11,17 +11,7 @@ body , html {
 
 
 }
-.container {
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  height: 200px;
-  background-color: lightblue;
 
-}
 
 li {
   list-style: none;
@@ -57,7 +47,6 @@ li {
 .mark-3 {
 
   margin-top: 50px;
-  height: 150px;
   padding: 80px 10px;
   text-align: center;
   color: rgb(83, 92, 95);
@@ -221,5 +210,13 @@ transition: all 0.3s ease 0s;
 @media screen and (max-width: 700px) {
   .card{
     flex: 100%;
+  }
+}
+@media screen and (max-width: 768px) {
+  body, html{
+    margin: 0 2px !important;
+  }
+  h2, h3 , li{
+    font-size: 1.2rem;
   }
 }
