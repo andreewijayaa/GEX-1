@@ -881,13 +881,8 @@ router.post("/charge", (req, res) => {
                   };
                   offerIDarray.push(offerPurchased);
                   offerCounter++;
-<<<<<<< HEAD
-
-                  if (offerCounter == purchaseInfo.totalOffers.length) {
-=======
                   sendEmail.offerPurchased(offer,seller);
                   if(offerCounter == purchaseInfo.totalOffers.length) {
->>>>>>> upstream/master
                     // After paying all the sellers, now we create the order and save it in the DB
                     let newOrder = new Order({
                       buyerID: purchaseInfo.buyerID,
