@@ -300,6 +300,23 @@ router.post("/requestpicture", function(req, res) {
 //function to delete requests
 // By John
 router.post("/deleterequest", function(req, res) {
+
+  //Remove request from buyers and sellers arrays
+  function removeRequestIDFromArray(requestID, arrayPassed) {
+    if(arrayPassed != undefined || arrayPassed != null ) {
+      var index = arrayPassed.indexOf(requestID);
+      if (index !== -1) {
+        if (index > -1) {
+          arrayPassed.splice(index, 1);
+        }
+
+      if (arrayPassed.indexOf(requestID) === -1) {
+          return arrayPassed;
+        }
+      }
+    }
+  }
+
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -329,6 +346,39 @@ router.post("/deleterequest", function(req, res) {
           if (err) {
             res.send("Error deleting request")
           }
+          //Remove request from seller open_request array
+          Seller.find({ 'open_requests': { $in: req.body.request_id} }, (err, sellerHasRequestID) => {
+            sellerHasRequestID.forEach(openIdFound => {
+              openIdFound.open_requests = removeRequestIDFromArray(req.body.request_id, openIdFound.open_requests);
+              openIdFound.save(err => {
+                if (err) {
+                  console.log(err);
+                } 
+              });
+            });
+          });
+          //Remove request from seller archived_request array
+          Seller.find({ 'archived_request': { $in: req.body.request_id} }, (err, sellerHasRequestID2) => {
+            sellerHasRequestID2.forEach(archievedIdFound => {
+                archievedIdFound.archived_request = removeRequestIDFromArray(req.body.request_id, archievedIdFound.archived_request);
+                archievedIdFound.save(err => {
+                  if (err) {
+                    console.log(err);
+                  } 
+              });
+            });
+          });
+          //Remove request from seller buyer_requests_byID array
+          Buyer.find({ 'buyer_requests_byID': { $in: req.body.request_id} }, (err, buyerHasRequestID) => {
+            buyerHasRequestID.forEach(buyerRequestIdFound => {
+                buyerRequestIdFound.buyer_requests_byID = removeRequestIDFromArray(req.body.request_id, buyerRequestIdFound.buyer_requests_byID);
+                buyerRequestIdFound.save(err => {
+                  if (err) {
+                    console.log(err);
+                  } 
+              });
+            });
+          });
           return res.json(wewlad);
         });
       }
