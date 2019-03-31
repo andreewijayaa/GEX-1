@@ -309,7 +309,6 @@ router.post("/deleterequest", function(req, res) {
         if (index > -1) {
           arrayPassed.splice(index, 1);
         }
-
       if (arrayPassed.indexOf(requestID) === -1) {
           return arrayPassed;
         }
@@ -834,7 +833,7 @@ router.post("/charge", (req, res) => {
     shipPriceTotal: req.body.shipPriceTotal,
     subTotal: req.body.subTotal,
     feesPriceTotal: req.body.feesPriceTotal,
-    requestPurchasedID: req.body.requestPurchasedID
+    requestsPurchasedID: req.body.requestsPurchasedID
   };
 
   Buyer.findById(purchaseInfo.buyerID, (err, info) => {
@@ -897,7 +896,7 @@ router.post("/charge", (req, res) => {
                       stripeChargeID: Charge_id,
                       shippingAddress: purchaseInfo.shippingInfo,
                       orderStatus: "Purchased, Shipping Pending",
-                      requestPurchasedID: purchaseInfo.requestPurchasedID
+                      requestsPurchasedID: purchaseInfo.requestsPurchasedID
                     });
 
                     // Save the new order
@@ -905,13 +904,15 @@ router.post("/charge", (req, res) => {
                       if (err) return handleError(err);
                       // console.log(newOrder);
                       // Updating the request offer status as payment completed.
-                      Request.findById(req.body.request_id, (err, request) => {
-                        if (request.status == "Purchased") {
-
-                        } else {
-                          request.status = "Purchased";
-                        }
-                        request.save();
+                      newOrder.requestsPurchasedID.forEach(requestID => {
+                        Request.findById(requestID, (err, request) => {
+                          if (request.status == "Purchased") {
+  
+                          } else {
+                            request.status = "Purchased";
+                          }
+                          request.save();
+                        });
                       });
                       return res.json({
                         success: true,

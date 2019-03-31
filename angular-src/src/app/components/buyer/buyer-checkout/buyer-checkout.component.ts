@@ -50,7 +50,7 @@ export class BuyerCheckoutComponent
   paymentFormGroup: FormGroup;
   offersInCart: [String];
   emptyCart: Boolean;
-  requestID: any;
+  requestsID: any = [];
   spinner: Boolean;
 
   billingSameAsShipping = false;
@@ -150,7 +150,13 @@ export class BuyerCheckoutComponent
         this.offerPrice = data.offerPriceTotal; // Total price of those offers
         this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
         this.totalPrice = data.orderTotal; // Offers price + shipping price
-        this.requestID = data.offersInCart[0].request_ID;
+        console.log(data.offersInCart);
+        data.offersInCart.forEach(element => {
+          if (this.requestsID.indexOf(element.request_ID) === -1) {
+            this.requestsID.push(element.request_ID);
+          }
+        });
+
         // console.log(this.offersInCart);
 
         // CONVERT ALL TO TWO SIG FIGS - For displaying purposes
@@ -319,12 +325,11 @@ export class BuyerCheckoutComponent
           totalOffers: this.offersInCart,
           shippingInfo: shippingDetails,
           orderID: orderNumber,
-          request_id: this.requestID,
           offerPriceTotal: this.offerPrice,
           shipPriceTotal: this.offerShipping,
           subTotal: this.totalBeforeTaxDisplay,
           feesPriceTotal: this.totalFees,
-          requestPurchasedID: this.requestID
+          requestsPurchasedID: this.requestsID
         };
         // console.log(obj);
 
