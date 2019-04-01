@@ -870,13 +870,18 @@ router.post("/charge", (req, res) => {
               if(result != null) {
                 
                 if(result.id != null) {
-
-                  var offerPurchased = {
+                  
+                  let offerPurchased = {
                     id: result.id,
                     offerID: offer.id,
                     offerFulfillmentStatus: 'Ordered',
+                    trackingInfo: {
+                      shippingCompany: '',
+                      trackingNumber: ''
+                    },
                     GroudID: result.transfer_group,
-                    sellerProfit: (result.amount/100).toFixed(2)
+                    sellerProfit: (result.amount/100).toFixed(2),
+                    sellerID: offer.seller_ID
                   };
                   offerIDarray.push(offerPurchased);
                   offerCounter++;

@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/database");
 const Seller = require("../models/seller");
 const Buyer = require("../models/buyer");
+const Order = require("../models/order");
 const Address = require("../models/address");
 const Request = require("../models/request");
 const Offer = require("../models/offer");
@@ -1128,7 +1129,6 @@ router.get("/getStripeRoute", (req, res) => {
     return res.status(200).send({ success: true, urlToOpen });
   });
 });
-module.exports = router;
 
 //let seller to archive requests
 //code by Andre
@@ -1180,6 +1180,7 @@ router.post("/addArchive", (req, res) => {
     });
   });
 });
+
 
 //route to get archived requests made by Andre
 //uses mongoose to find archived requets
@@ -1259,3 +1260,80 @@ router.post("/deleteArchive", (req, res) => {
     });
   });
 });
+
+/************************************ PURCHASED OFFERS - RONI *********************************** */
+
+router.get("/getPurchasedOffers", (req, res) => {
+  const io = req.app.get('io');
+  var token = req.headers["x-access-token"];
+
+  var arrayOffer = [];
+  //if they don't have a token
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+    //console.log('deleting this request from archive: ' + req.body.request_ID);
+
+
+
+     Order.find({'offersPurchased.sellerID': decoded.data._id }, (err2, sellerPurchasedOffersOrder) => {
+      if(err2) return handleError(err2);
+      if(sellerPurchasedOffersOrder == null || sellerPurchasedOffersOrder == undefined) return res.status(500).send({ success: false, message: "Error fetching order." });
+      var promise1 = sellerPurchasedOffersOrder.forEach(singleOrder => {
+        if(singleOrder.offersPurchased == null || singleOrder.offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
+        
+        singleOrder.offersPurchased.forEach(singleOffer => {
+          if(singleOffer.sellerID == decoded.data._id)
+          {
+            Offer.findById(singleOffer.offerID, (errSeller, offerFromOrder)=>{
+              if(errSeller) return res.status(500).send({ success: false, message: "Error fetching order." });
+              Request.findById(offerFromOrder.request_ID, (errrequest, requestFromOrder)=>{
+                if(errrequest) return res.status(500).send({ success: false, message: "Error fetching order." });
+                let purchasedOfferWithOrder = {
+                  offer: offerFromOrder,
+                  order: singleOrder,
+                  request: requestFromOrder,
+                }
+                arrayOffer.push(purchasedOfferWithOrder);
+                console.log(arrayOffer); // <-- it has what we need
+            });
+            });
+          }
+        });
+      });
+    });
+    console.log(arrayOffer); // <-- it shows emtpy
+  });
+});
+
+router.post("/updatePurchasedOffers", (req, res) => {
+  const io = req.app.get('io');
+  var token = req.headers["x-access-token"];
+
+  
+  //if they don't have a token
+  if (!token)
+    return res
+      .status(401)
+      .send({ success: false, message: "No token provided." });
+  //otherwise verify the token and return user data in a response
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Failed to authenticate token." });
+  
+  
+  
+
+      });   
+});
+
+module.exports = router;
