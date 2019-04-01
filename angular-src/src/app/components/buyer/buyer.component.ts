@@ -55,7 +55,7 @@ export class BuyerComponent implements OnInit {
   loaded: Promise<boolean>;
   loading: Boolean;
   panelOpenState = false;
-  offerList: Object;
+  offerList: [];
   offerTitleAddToCart: String;
   offerCart: [String] = [''];
   buyer_firstName: any;
@@ -66,7 +66,7 @@ export class BuyerComponent implements OnInit {
   spinner: Boolean;
 
   dataSourceRequests = new MatTableDataSource(this.requestList);
-  dataSourceOffers = [];
+  dataSourceOffers = new MatTableDataSource(this.offerList);
   columnsToGetRequestInfo = ['title', 'status', 'offerCount', 'deadline'];
   columnsToGetOfferInfo = ['title', 'created_at', 'shippingPrice', 'price'];
   expandedRequestElement: RequestElement | null;
@@ -74,6 +74,7 @@ export class BuyerComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort) offerSort: MatSort;
 
   constructor(private registerService: RegisterService,
     private buyerService: BuyerService,
@@ -145,6 +146,7 @@ export class BuyerComponent implements OnInit {
       if (data.success) {
         this.offerList = data.offers;
         this.dataSourceOffers = data.offers;
+        this.dataSourceOffers.sort = this.offerSort;
         this.offerCart = this.buyerProfile['offerCart'];
       } else {
         console.log('could not fetch request data');
@@ -163,6 +165,10 @@ export class BuyerComponent implements OnInit {
         console.log('Could not get seller info');
       }
     });
+  }
+
+  offerSearchFilter(filterValue: string) {
+    this.dataSourceOffers.filter = filterValue.trim().toLowerCase();
   }
 
   deleteRequestFunction(request_id_todelete) {
