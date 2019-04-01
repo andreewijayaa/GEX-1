@@ -1,0 +1,118 @@
+<app-buyer-navbar></app-buyer-navbar>
+<div class="clearheader"></div>
+<div class="spin" *ngIf="spinner === true">
+    <mat-spinner class="example-margin" [diameter]="100"></mat-spinner>
+    <div style="height: 700px; clear: both;"></div>
+  </div>
+<body>
+  &nbsp;
+    <h4> Order #: {{orderNumber}}</h4>
+    &nbsp;
+    <div class="container" style="text-align: left; border: 2px solid; background-color: whitesmoke ">
+      &nbsp;
+      <div class="row">
+        <div class="col-md-4">
+          <h6 style="font-weight: bold">order details</h6>
+          <u>order #:</u> <br> <label style="font-size: 14px">{{orderNumber}}</label>
+          <br>
+          <u>order status:</u> <br> <label style="font-size: 14px; color: blue">{{orderStatus}}</label>
+        </div>
+      <div class="col-md-4">
+          <h6 style="font-weight: bold">shipping details</h6>
+          {{shippingAddressDetails['name']}}
+          <br>
+          {{shippingAddressDetails['address_line1']}}
+          <div *ngIf="shippingAddressDetails['address_line2'] !== '' || shippingAddressDetails['address_line2'] !== undefined">{{shippingAddressDetails['address_line2']}}</div>
+          {{shippingAddressDetails['address_city']}}, {{shippingAddressDetails['address_state']}} {{shippingAddressDetails['address_zip']}}
+          </div>
+      <div class="col-md-4">
+          <h6 style="font-weight: bold">order total</h6>
+              <p style="font-weight:normal">
+                  offers:
+                  <span class="price" style="font-weight: normal">${{offerTotal}}</span>
+              </p>
+              <p style="font-weight: normal">
+                  shipping & handling:
+                  <span class="price" style="font-weight: normal">${{shippingTotal}}</span>
+              </p>
+              <p style="font-weight: normal">
+                  subtotal:
+                  <span class="price" style="font-weight: normal">${{subtotal}}</span>
+              </p>
+              <p style="font-weight: normal">
+                  estimated fees:
+                  <span class="price" style="font-weight: normal">${{feesTotal}}</span>
+              </p>
+              <hr>
+              <p style="font-weight: bold; font-size: 20px">
+                  total(USD):
+                  <span class="price" style="font-weight: normal">${{orderTotal}}</span>
+              </p>
+            </div>
+      </div>
+    </div>
+    &nbsp;
+    <div *ngFor="let element of dataPerRequestID">
+        <div class="container" style="text-align: left">
+            <h4 style="font-weight: bold;"><u>{{element.request.title}} request info:</u></h4>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <h6 style="font-weight: bold">details</h6>
+                <u>title:</u> <br> <label style="font-size: 14px">{{element.request.title}}</label>
+                <br>
+                <u>creation date:</u> <br> <label style="font-size: 14px">{{element.request.created_at | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</label>
+                <br>
+                <u>deadline date:</u> <br> <label style="font-size: 14px">{{element.request.deadline | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</label>
+              </div>
+              <div class="col-md-4 mb-3">
+                <h6 style="font-weight: bold">description</h6>
+                <div [innerHTML]="element.request.description"></div>
+              </div>
+              <div class="col-md-4 mb-3">
+                  <h6 style="font-weight: bold">images</h6>
+                  <div *ngIf="element.request.request_images">
+                      <img class= "requestimage1" src={{element.request.request_images[0]}} *ngIf="element.request.request_images[0]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage2" src={{element.request.request_images[1]}} *ngIf="element.request.request_images[1]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage3" src={{element.request.request_images[2]}} *ngIf="element.request.request_images[2]" alt="" width="120" height="120">
+                  </div>
+                </div>
+            </div>
+            <hr>
+          </div>
+        <div class="container" style="text-align: left">
+            <h4 style="font-weight: bold;"><u>accepted offers for "{{element.request.title}}":</u></h4>
+            <div class="row" *ngFor="let offer of element.offers">
+              <div class="col-md-3">
+                <h6 style="font-weight: bold; color: blue">{{offer.title}}</h6>
+              </div>
+              <div class="col-md-3">
+                <h6 style="font-weight: bold">description</h6>
+                <div [innerHTML]="offer.description"></div>
+              </div>
+              <div class="col-md-3">
+                  <h6 style="font-weight: bold">images</h6>
+                  <div *ngIf="offer.offer_images">
+                      <img class= "requestimage1" src="{{offer.offer_images[0]}}" *ngIf="offer.offer_images[0]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage2" src="{{offer.offer_images[1]}}" *ngIf="offer.offer_images[1]" alt="" width="120" height="120">
+                      &nbsp;
+                      <img class= "requestimage3" src="{{offer.offer_images[2]}}" *ngIf="offer.offer_images[2]" alt="" width="120" height="120">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <h6 style="font-weight: bold">totals</h6>
+                  shipping price: <span class="price">${{offer.shippingPrice}}</span>
+                  <br>
+                  price: <span class="price">${{offer.price}}</span>
+                  <hr>
+                  total: <span class="price">${{offer.shippingPrice + offer.price}}</span>
+              </div>
+              &nbsp;
+            </div>
+            <hr>
+        </div>
+    </div>
+</body>
+<div class="clearfooter"></div>
