@@ -2,7 +2,7 @@
 
 body , html {
   font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  margin: 0 100px 0 100px;
+  margin: 0 !important;
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: none;
   -webkit-user-select: node;
@@ -30,7 +30,7 @@ body , html {
   .mark-1 {
     margin-bottom: 150px;
   }
-  h1, h2, h2 {
+  h1, h2, h3 {
     font-size: 1.5rem;
   }
 }
@@ -138,14 +138,13 @@ h1,h2, h3, h4, h5, h6 {
 
 }
 .card-head {
-  background-color: rgb(112, 138, 255);
+  background-color: #5271ff;
   height: 100px;
   display: flex;
   justify-content: center;
-  padding-top: 50px;
+  align-items: center;
   text-align: center;
   flex-wrap: wrap;
-  padding-top: 60px;
   color: white;
   font-size: 2rem;
   font-family: "Palatino Linotype", "Book Antiqua", serif;
@@ -182,7 +181,7 @@ h1,h2, h3, h4, h5, h6 {
 
 .btn {
   border: none;
-background: #ce6605;
+background: #ac34cf;
 color: #ffffff !important;
 font-weight: 100;
 padding: 20px;
