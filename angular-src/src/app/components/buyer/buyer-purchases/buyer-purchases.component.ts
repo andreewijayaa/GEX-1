@@ -15,6 +15,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 export class BuyerPurchasesComponent implements OnInit {
   private readonly notifier: NotifierService;
   ordersList = [];
+  spinner: Boolean;
 
   constructor(private buyerService: BuyerService,
     private requestService: RequestService,
@@ -25,27 +26,32 @@ export class BuyerPurchasesComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.spinner = true;
     this.getOrders();
   }
 
   getOrders() {
     this.buyerService.getBuyerPurchases().subscribe((data: any) => {
       if (data.success) {
-        console.log(data.purchases);
+        if (data.purchases.length === 0 || data.purchases === undefined || data.purchases[0] === '') {
+          this.spinner = false;
+          this.router.navigate(['/buyer']);
+          this.notifier.notify('', 'No purchases have been made yet.');
+        }
         data.purchases.forEach(purchase => {
           this.buyerService.getOrderDetails(purchase).subscribe((data: any) => {
             if (data.success) {
               this.ordersList.push(data.orderFound);
+              this.spinner = false;
             } else {
               console.log('Could not get order details');
             }
           });
         });
-      } else {
+      } else if (!data.success) {
         console.log('error');
       }
     });
-    console.log(this.ordersList);
   }
 
 }
