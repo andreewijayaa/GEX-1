@@ -447,7 +447,7 @@ router.get("/orderDetails/:id", (req, res,) => {
   });
 });
 
-router.get("/BuyerOrderDetails", (req, res,) => {
+router.get("/buyerOrderDetails", (req, res) => {
   var token = req.headers["x-access-token"];
   if (!token)
     return res
@@ -460,11 +460,10 @@ router.get("/BuyerOrderDetails", (req, res,) => {
         .status(500)
         .send({ success: false, message: "Failed to authenticate token." });
 
-    Buyer.findById(decoded.data._id, (err, buyer_viewing_order) => {
+    Buyer.findById(decoded.data._id, (err, buyer_viewing_purchases) => {
       if (err) handleError(err);
-      Order.getOrderbyBuyer(buyer_viewing_order, (err, order) => {
-
-      });
+      const purchases = buyer_viewing_purchases.purchased_orders;
+      return res.send({ success: true, purchases});
     });
   });
 });
@@ -914,7 +913,11 @@ router.post("/charge", (req, res) => {
                           request.save();
                         });
                       });
+                      console.log(newOrder._id);
+                      debugger;
+                      info.purchased_orders.push(newOrder._id);
                       sendEmail.orderConfirmation(info,newOrder);
+                      info.save();
                       return res.json({
                         success: true,
                         message: "New order has been successfully placed.",

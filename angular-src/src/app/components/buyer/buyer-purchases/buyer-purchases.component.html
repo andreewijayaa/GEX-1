@@ -2,15 +2,27 @@
 <div class="clearheader"></div>
 
 <div class="container">
+  <h3>Purchases</h3>
+  <hr>
   <div class="row">
-    <div class="col-md-8">
-
+    <div class="col-md-9" *ngFor="let order of ordersList">
+      <div class="row">
+        &nbsp;
+        <div class="col-md-12 col-lg-4">
+            <!-----<img class= "img-fluid" src="../../../../assets/codeImage.jpg" alt="">-->
+        </div>
+        <div class="col" style="border: 2px solid lightgray; margin-left: -15px; background-color:whitesmoke">
+            <h6 style="margin-top: 5px"><a routerLink="/buyer/purchases/{{order._id}}" routerLinkActive="router-link-active">{{order.orderNumber}}</a></h6><h6 style="float: right">Shipping address:</h6>
+            <h6>Request Purchased Total: <span style="font-size: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif;">{{order.requestsPurchasedID.length}}</span></h6><div style="font-size: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif; float: right;">{{order.shippingAddress.address_line1}} {{order.shippingAddress.address_line2}}</div>
+            <h6>Order status:<span style="font-size: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif"> {{order.orderStatus}}</span></h6><div style="font-size: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif; float: right;">{{order.shippingAddress.address_city}}, {{order.shippingAddress.address_state}} {{order.shippingAddress.address_zip}}</div>
+            <h6>Purchase Date: <span style="font-size: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif">{{order.created_at | amLocale:'en' | amDateFormat: 'MM-DD-YYYY hh:mm a'}}</span></h6>
+            <h6>Total: <span style="font-size: 15px; font-family: Verdana, Geneva, Tahoma, sans-serif">${{order.totalPrice}}</span></h6>
+          &nbsp;
+        </div>
+      </div>
+      &nbsp;
     </div>
     <div class="col-md-4">
-      <div class="container" style="border-width: 5px; border-color: black">
-        here
-      </div>
-      here
     </div>
   </div>
 </div>
