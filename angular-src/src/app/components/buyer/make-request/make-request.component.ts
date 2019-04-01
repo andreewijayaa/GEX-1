@@ -105,6 +105,7 @@ export class MakeRequestComponent implements OnInit {
   deadline: Date;
   buttonText: String = 'Submit Your Request to Sellers on Requiren';
   Image_Urls: [String] = [""];
+  spinner: Boolean;
 
   public onChange(event): void {
     // Simple deadline selection - Bryan Vu
@@ -131,6 +132,7 @@ export class MakeRequestComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.spinner = false;
     this.submitLabels = [];
     this.codeArray = [];
   }
@@ -234,6 +236,7 @@ export class MakeRequestComponent implements OnInit {
   // By: John
   // function for updating profile image
   processFile(imageInput: any) {
+    this.spinner = true;
     //debugger;
     //console.log("Process file called in make request component");
     console.log(this.Image_Urls.length);
@@ -252,11 +255,8 @@ export class MakeRequestComponent implements OnInit {
           else {
             this.Image_Urls.push(res["imageUrl"]);
           }
-          //this.Image_Urls.length()
           this.notifier.notify("success", "You added " + this.Image_Urls.length + " of 3 images");
-          //console.log("There is no way this works inside the function " + this.Image_Urls)
-          //this.Image_Urls.push(res["imageUrl"]);
-          //console.log("The Image url is " + this.Image_Urls[0] );
+          this.spinner = false;
         },
         (err) => {
           console.log("an error message");
