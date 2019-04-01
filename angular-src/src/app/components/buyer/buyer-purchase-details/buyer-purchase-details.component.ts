@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { BuyerService } from '../../../services/buyer.service';
-import { RequestService } from '../../../services/request.service';
-import { NotifierService } from 'angular-notifier';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Component, OnInit } from "@angular/core";
+import { BuyerService } from "../../../services/buyer.service";
+import { RequestService } from "../../../services/request.service";
+import { NotifierService } from "angular-notifier";
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: 'app-order-confirm',
-  templateUrl: './order-confirm.component.html',
-  styleUrls: ['./order-confirm.component.css']
+  selector: "app-buyer-purchase-details",
+  templateUrl: "./buyer-purchase-details.component.html",
+  styleUrls: ["./buyer-purchase-details.component.css"]
 })
-export class OrderConfirmComponent implements OnInit {
+export class BuyerPurchaseDetailsComponent implements OnInit {
   private readonly notifier: NotifierService;
   orderDetais: any;
   orderId: any;
@@ -32,17 +31,23 @@ export class OrderConfirmComponent implements OnInit {
   subtotal: Number;
   feesTotal: Number;
   orderTotal: Number;
+  orderShipCompany: any;
+  orderTrackNumber: any;
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private requestService: RequestService,
-    private buyerService: BuyerService) { this.notifier = notifierService; }
+    private buyerService: BuyerService
+  ) {
+    this.notifier = notifierService;
+  }
 
   ngOnInit() {
     this.spinner = true;
     this.route.params.subscribe(params => {
-      this.orderId = params.order;
+      this.orderId = params.orderId;
     });
     this.getOrderConfirmDetails();
     this.getBuyerProfile();
@@ -61,6 +66,7 @@ export class OrderConfirmComponent implements OnInit {
   getOrderConfirmDetails() {
     this.buyerService.getOrderDetails(this.orderId).subscribe((data: any) => {
       if (data.success) {
+        console.log(data);
         this.orderNumber = data.orderFound.orderNumber;
         this.orderStatus = data.orderFound.orderStatus;
         this.shippingAddressDetails = data.orderFound.shippingAddress;
@@ -70,10 +76,19 @@ export class OrderConfirmComponent implements OnInit {
         this.feesTotal = data.orderFound.totalFeesPrice;
         this.subtotal = data.orderFound.subtotalPrice;
         this.orderTotal = data.orderFound.totalPrice;
+        this.orderShipCompany = data.orderFound.orderShippingCompany;
+        this.orderTrackNumber = data.orderFound.orderTrackingNumber;
+        if (this.orderShipCompany === '' || this.orderShipCompany === undefined) {
+          this.orderShipCompany = 'Not provided yet.';
+        }
+        if (this.orderTrackNumber === '' || this.orderTrackNumber === undefined) {
+          this.orderTrackNumber = 'Not provided yet.';
+        }
         this.getRequestDetails();
       } else if (data.success === false) {
         this.spinner = false;
-        this.router.navigate(['/buyer']);
+        console.log('here');
+        //this.router.navigate(['/buyer']);
       }
     });
   }

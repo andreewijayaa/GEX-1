@@ -5,24 +5,19 @@
     <div style="height: 700px; clear: both;"></div>
   </div>
 <body>
-    <div class="text-center highlight"><img src="../../../../assets/RequirenLogo.png" />
-      <div class="container text-center" style="margin-top: 31px;">
-          <h2 class="text-center">thank you for your order.</h2>
-          <p class="text-center" style="margin-top: -28px;">Hello {{buyer_first_name}}, your order #{{orderNumber}} was successfully placed. Our seller(s) are working on getting your items prepared for you. We&#39;ll email you an update when your seller(s) has shipped your item(s).</p>
-      </div>
-      <button class="btn btn-primary text-center" role="button" routerLink="/buyer/purchases" routerLinkActive="active">VIEW PURCHASES</button>
-    </div>
+  &nbsp;
+    <h4> Order #: {{orderNumber}}</h4>
     &nbsp;
-    <div class="container" style="text-align: left">
-      <h4 style="font-weight: bold;"><u>order & shipping details:</u></h4>
+    <div class="container" style="text-align: left; border: 2px solid; background-color: whitesmoke ">
+      &nbsp;
       <div class="row">
-        <div class="col-md-5 mb-3">
+        <div class="col-md-4">
           <h6 style="font-weight: bold">order details</h6>
           <u>order #:</u> <br> <label style="font-size: 14px">{{orderNumber}}</label>
           <br>
-          <u>order status:</u> <br> <label style="font-size: 14px">{{orderStatus}}</label>
+          <u>order status:</u> <br> <label style="font-size: 14px; color: blue">{{orderStatus}}</label>
         </div>
-        <div class="col-md-5 mb-3">
+      <div class="col-md-4">
           <h6 style="font-weight: bold">shipping details</h6>
           {{shippingAddressDetails['name']}}
           <br>
@@ -30,9 +25,33 @@
           <div *ngIf="shippingAddressDetails['address_line2'] !== '' || shippingAddressDetails['address_line2'] !== undefined">{{shippingAddressDetails['address_line2']}}</div>
           {{shippingAddressDetails['address_city']}}, {{shippingAddressDetails['address_state']}} {{shippingAddressDetails['address_zip']}}
           </div>
+      <div class="col-md-4">
+          <h6 style="font-weight: bold">order total</h6>
+              <p style="font-weight:normal">
+                  offers:
+                  <span class="price" style="font-weight: normal">${{offerTotal}}</span>
+              </p>
+              <p style="font-weight: normal">
+                  shipping & handling:
+                  <span class="price" style="font-weight: normal">${{shippingTotal}}</span>
+              </p>
+              <p style="font-weight: normal">
+                  subtotal:
+                  <span class="price" style="font-weight: normal">${{subtotal}}</span>
+              </p>
+              <p style="font-weight: normal">
+                  estimated fees:
+                  <span class="price" style="font-weight: normal">${{feesTotal}}</span>
+              </p>
+              <hr>
+              <p style="font-weight: bold; font-size: 20px">
+                  total(USD):
+                  <span class="price" style="font-weight: normal">${{orderTotal}}</span>
+              </p>
+            </div>
       </div>
-      <hr>
     </div>
+    &nbsp;
     <div *ngFor="let element of dataPerRequestID">
         <div class="container" style="text-align: left">
             <h4 style="font-weight: bold;"><u>{{element.request.title}} request info:</u></h4>
@@ -87,42 +106,12 @@
                   shipping price: <span class="price">${{offer.shippingPrice}}</span>
                   <br>
                   price: <span class="price">${{offer.price}}</span>
-                  <br>
-                  total: <span class="price">${{offer.shippingPrice + offer.price}}</span>
                   <hr>
+                  total: <span class="price">${{offer.shippingPrice + offer.price}}</span>
               </div>
               &nbsp;
             </div>
             <hr>
-        </div>
-    </div>
-    <div class="container" style="text-align: left">
-        <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-3"></div>
-          <div class="col-md-3"></div>
-          <div class="col-md-3">
-            <p style="font-weight: bold">
-                offers:
-                <span class="price" style="font-weight: normal">${{offerTotal}}</span>
-            </p>
-            <p style="font-weight: bold">
-                shipping & handling:
-                <span class="price" style="font-weight: normal">${{shippingTotal}}</span>
-            </p>
-            <p style="font-weight: bold">
-                subtotal:
-                <span class="price" style="font-weight: normal">${{subtotal}}</span>
-            </p>
-            <p style="font-weight: bold">
-                estimated fees:
-                <span class="price" style="font-weight: normal">${{feesTotal}}</span>
-            </p>
-            <p style="font-weight: bold; font-size: 20px">
-                total(USD):
-                <span class="price" style="font-weight: normal">${{orderTotal}}</span>
-            </p>
-          </div>
         </div>
     </div>
 </body>

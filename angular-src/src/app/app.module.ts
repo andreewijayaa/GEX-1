@@ -63,6 +63,7 @@ import { SellerUpdatePasswordComponent } from './components/seller/seller-update
 import { OrderConfirmComponent } from './components/buyer/order-confirm/order-confirm.component';
 import { BuyerPurchasesComponent } from './components/buyer/buyer-purchases/buyer-purchases.component';
 import { SellerOrdersComponent } from './components/seller/seller-orders/seller-orders.component';
+import { BuyerPurchaseDetailsComponent } from './components/buyer/buyer-purchase-details/buyer-purchase-details.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -81,6 +82,7 @@ const appRoutes: Routes = [
   {path: 'buyer/make-request', component: MakeRequestComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/orderConfirm/:order', component: OrderConfirmComponent, canActivate: [BuyerAuthGuard]},
   {path: 'buyer/purchases', component: BuyerPurchasesComponent, canActivate: [BuyerAuthGuard]},
+  {path: 'buyer/purchases/:orderId', component: BuyerPurchaseDetailsComponent, canActivate: [BuyerAuthGuard]},
   {path: 'seller', component: SellerComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/seller-account', component: SellerAccountComponent, canActivate: [SellerAuthGuard]},
   {path: 'seller/submit-offer/:id', component: SubmitOfferComponent, canActivate: [SellerAuthGuard]},
@@ -179,7 +181,8 @@ const customNotifierOptions: NotifierOptions = {
     SellerUpdatePasswordComponent,
     OrderConfirmComponent,
     BuyerPurchasesComponent,
-    SellerOrdersComponent
+    SellerOrdersComponent,
+    BuyerPurchaseDetailsComponent
   ],
   entryComponents: [
     SubmitOfferDialogComponent,

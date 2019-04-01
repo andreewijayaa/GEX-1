@@ -122,6 +122,23 @@ export class BuyerService {
     }
   }
 
+  getBuyerPurchases() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-access-token': this.buyerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/buyers/buyerOrderDetails', httpOptions)
+        .pipe(map(res => res));
+    } else {
+      return this.http.get('buyers/buyerOrderDetails', httpOptions)
+        .pipe(map(res => res));
+    }
+  }
+
   // By: Omar
   // Update current buyers profile
   updateBuyerProfile(buyer) {

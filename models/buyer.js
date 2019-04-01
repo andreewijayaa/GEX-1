@@ -60,6 +60,9 @@ const BuyerSchema = mongoose.Schema({
     stripe_customer_id: {
         type: String,
         required: false
+    },
+    purchased_orders: {
+        type: [String]
     }
 });
 

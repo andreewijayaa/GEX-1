@@ -4,32 +4,8 @@ import { RequestService } from '../../../services/request.service';
 import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource, MatTab, MatSort, MatPaginator } from '@angular/material';
 import { NotifierService } from 'angular-notifier';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 
-export interface RequestElement {
-  title: String;
-  status: String;
-  deadline: String;
-  description: String;
-  request_images: [String];
-}
-
-export interface OfferElement {
-  title: String;
-  description: String;
-  price: String;
-  shippingPrice: String;
-  offerStatus: String;
-  offerAccepted: String;
-  created_at: Date;
-  request_ID: String;
-  expected_completion: String;
-  list_of_sellers_submitted_offers: [String];
-  offer_images: [String];
-}
-
-export interface OrderElement {
-
-}
 
 @Component({
   selector: 'app-buyer-purchases',
@@ -37,10 +13,39 @@ export interface OrderElement {
   styleUrls: ['./buyer-purchases.component.css']
 })
 export class BuyerPurchasesComponent implements OnInit {
+  private readonly notifier: NotifierService;
+  ordersList = [];
 
-  constructor() { }
+  constructor(private buyerService: BuyerService,
+    private requestService: RequestService,
+    notiferService: NotifierService,
+    private route: ActivatedRoute,
+    private router: Router) {
+      this.notifier = notiferService;
+    }
 
   ngOnInit() {
+    this.getOrders();
+  }
+
+  getOrders() {
+    this.buyerService.getBuyerPurchases().subscribe((data: any) => {
+      if (data.success) {
+        console.log(data.purchases);
+        data.purchases.forEach(purchase => {
+          this.buyerService.getOrderDetails(purchase).subscribe((data: any) => {
+            if (data.success) {
+              this.ordersList.push(data.orderFound);
+            } else {
+              console.log('Could not get order details');
+            }
+          });
+        });
+      } else {
+        console.log('error');
+      }
+    });
+    console.log(this.ordersList);
   }
 
 }
