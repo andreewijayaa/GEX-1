@@ -66,7 +66,6 @@ export class BuyerPurchaseDetailsComponent implements OnInit {
   getOrderConfirmDetails() {
     this.buyerService.getOrderDetails(this.orderId).subscribe((data: any) => {
       if (data.success) {
-        console.log(data);
         this.orderNumber = data.orderFound.orderNumber;
         this.orderStatus = data.orderFound.orderStatus;
         this.shippingAddressDetails = data.orderFound.shippingAddress;
@@ -88,7 +87,8 @@ export class BuyerPurchaseDetailsComponent implements OnInit {
       } else if (data.success === false) {
         this.spinner = false;
         console.log('here');
-        //this.router.navigate(['/buyer']);
+        this.router.navigate(['/buyer']);
+        this.notifier.notify('', 'Could not find order');
       }
     });
   }

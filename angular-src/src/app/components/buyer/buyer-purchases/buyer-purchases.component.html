@@ -1,7 +1,13 @@
 <app-buyer-navbar></app-buyer-navbar>
 <div class="clearheader"></div>
 
-<div class="container">
+<div class="center container" *ngIf="spinner === true">
+    <div class="spin">
+        <mat-spinner class="example-margin" [diameter]="130"></mat-spinner>
+    </div>
+</div>
+
+<div class="container" *ngIf="spinner === false">
   <h3>Purchases</h3>
   <hr>
   <div class="row">
