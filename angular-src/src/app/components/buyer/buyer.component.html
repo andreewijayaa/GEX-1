@@ -90,15 +90,21 @@ Bryan Vu contributed most of this buyer portal page.
                     &nbsp;
                  </div>
                  &nbsp;
-                 <div>
-                   <h6>Offers for "{{element.title}}" Request:</h6>
+                 <div class="row justify-content-md" ng-cloak>
+                   <div class="col">
+                     <h6>Offers for "{{element.title}}" Request:</h6>
+                   </div>
+                   <div class="input-group col searchBox">
+                     <input type="text" class="form-control" placeholder="Search Offers" (keyup)="offerSearchFilter($event.target.value)">
+                   </div>
                  </div>
+                 &nbsp;
                  <div class="container">
                     <table mat-table
-                    [dataSource]="dataSourceOffers" multiTemplateDataRows
+                    [dataSource]="dataSourceOffers" multiTemplateDataRows matSort
                     class="mat-elevation-z8">
                       <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToGetOfferInfo">
-                        <th mat-header-cell *matHeaderCellDef style="text-align: center; font-size: 16px">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center; font-size: 16px">
                           <span *ngIf="column === 'title'">Title</span>
                           <span *ngIf="column === 'created_at'">Submission date</span>
                           <span *ngIf="column === 'shippingPrice'">Shipping Price</span>
