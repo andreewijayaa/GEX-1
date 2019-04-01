@@ -484,6 +484,7 @@ export class SubmitOfferDialogComponent implements OnInit {
   selectedFile: ImageSnippet;
   Image_Urls: [String] = [""];
   confirmImages: [String];
+  spinner: Boolean;
 
 // tslint:disable-next-line: max-line-length
   completionPlaceholder = 'If your offer is purchased, when can you complete & have it delivered by?';
@@ -498,6 +499,7 @@ export class SubmitOfferDialogComponent implements OnInit {
 
   ngOnInit() {
     this.submitOffer = false;
+    this.spinner = false;
 
     this.offerFormGroup = this.fb.group({
       title: ['', Validators.required],
@@ -524,31 +526,26 @@ export class SubmitOfferDialogComponent implements OnInit {
   }
 
   processFile(imageInput: any) {
+    this.spinner = true;
     //debugger;
     //console.log("Process file called in make request component");
     console.log(this.Image_Urls.length);
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
-    reader.addEventListener("load", (event: any) => {
+    reader.addEventListener('load', (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
-      //debugger;
       this.sellerService.addOfferImage(this.selectedFile.file).subscribe(
         (res) => {
-          //console.log("Image url " + res["imageUrl"]);
-          if (this.Image_Urls[0] == ""){
-            this.Image_Urls[0] = res["imageUrl"];
+          if (this.Image_Urls[0] === ''){
+            this.Image_Urls[0] = res['imageUrl'];
+          } else {
+            this.Image_Urls.push(res['imageUrl']);
           }
-          else {
-            this.Image_Urls.push(res["imageUrl"]);
-          }
-          //this.Image_Urls.length()
-          //console.log("There is no way this works inside the function " + this.Image_Urls)
-          //this.Image_Urls.push(res["imageUrl"]);
-          //console.log("The Image url is " + this.Image_Urls[0] );
+          this.spinner = false;
         },
         (err) => {
-          console.log("an error message");
+          console.log('an error message');
         })
     });
     reader.readAsDataURL(file);
