@@ -28,10 +28,11 @@ export class LoginComponent implements OnInit {
     private buyerComp: BuyerComponent) { this.notifier = notifierService; }
 
   ngOnInit() {
-    if (this.storeFetchService.buyerIsLoggedIn())
+    if (this.storeFetchService.buyerIsLoggedIn()) {
       this.router.navigate(['/buyer']);
-    else if (this.storeFetchService.sellerIsLoggedIn())
+    } else if (this.storeFetchService.sellerIsLoggedIn()) {
       this.router.navigate(['/seller']);
+    }
   }
 
   // Login request for buyer - Roni
