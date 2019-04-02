@@ -1286,7 +1286,7 @@ router.get("/getPurchasedOffers", (req, res) => {
      Order.find({'offersPurchased.sellerID': decoded.data._id }, (err2, sellerPurchasedOffersOrder) => {
       if(err2) return handleError(err2);
       if(sellerPurchasedOffersOrder == null || sellerPurchasedOffersOrder == undefined) return res.status(500).send({ success: false, message: "Error fetching order." });
-      var promise1 = sellerPurchasedOffersOrder.forEach(singleOrder => {
+      sellerPurchasedOffersOrder.forEach(singleOrder => {
         if(singleOrder.offersPurchased == null || singleOrder.offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
         
         singleOrder.offersPurchased.forEach(singleOffer => {
@@ -1313,11 +1313,14 @@ router.get("/getPurchasedOffers", (req, res) => {
   });
 });
 
+//Update the status of the offer
 router.post("/updatePurchasedOffers", (req, res) => {
   const io = req.app.get('io');
   var token = req.headers["x-access-token"];
+  const newFulfillmentStatus = req.body.newFulfillmentStatus;
+  const orderID = req.body.orderID;
+  const offerID = req.body.offerID;
 
-  
   //if they don't have a token
   if (!token)
     return res
@@ -1325,15 +1328,33 @@ router.post("/updatePurchasedOffers", (req, res) => {
       .send({ success: false, message: "No token provided." });
   //otherwise verify the token and return user data in a response
   jwt.verify(token, config.secret, function(err, decoded) {
-    if (err)
-      return res
-        .status(500)
-        .send({ success: false, message: "Failed to authenticate token." });
+    if (err) return res.status(500).send({ success: false, message: "Failed to authenticate token." });
   
-  
-  
-
-      });   
+    Order.findById(orderID, (err, foundOrder) =>{
+      if(err) return handleError(err);
+      var index = -1;
+      for(i = 0; i < foundOrder.offersPurchased.length; i++) {
+        if(foundOrder.offersPurchased[i].offerID == offerID) {
+          index = i;
+          break;
+        }
+      }
+      
+      if(index < 0) return res.status(500).send({ success: false, message: "Offer not found in the order." });
+      if(foundOrder.offersPurchased[index].sellerID != decoded.data._id) return res.status(500).send({ success: false, message: "Ownership of offer does not match." });
+          foundOrder.offersPurchased[index].offerFulfillmentStatus = newFulfillmentStatus;
+          if(newFulfillmentStatus == "Shipped") {
+            foundOrder.offersPurchased[index].trackingInfo.shippingCompany = req.body.shippingCompany;
+            foundOrder.offersPurchased[index].trackingInfo.trackingNumber = req.body.trackingNumber;
+          }
+          console.log(foundOrder);
+          foundOrder.save((err, updatedOrder) => {
+            if(err) return handleError(err);
+            io.emit('updatedOrderOfferStatus');
+            return res.status(200).send({ success: true, message: "Offer status updated Successfully." });
+          });
+    });
+  });   
 });
 
 module.exports = router;
