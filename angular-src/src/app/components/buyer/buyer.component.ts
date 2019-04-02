@@ -83,7 +83,12 @@ export class BuyerComponent implements OnInit {
     private requestService: RequestService,
     private notifierService: NotifierService,
     private sellerService: SellerService,
-    private dialog: MatDialog) { this.notifier = notifierService; this.socket = io(process.env.BASE_URL); }
+    private dialog: MatDialog) { this.notifier = notifierService; 
+      if (process.env.NODE_ENV === 'development') {
+        this.socket = io('http://localhost:3000');
+      } else {
+        this.socket = io();
+      } }
 
   // showing buyer info when buyer portal page loads - Bryan Vu
 

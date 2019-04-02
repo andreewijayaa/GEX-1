@@ -26,7 +26,12 @@ export class BuyerCartComponent implements OnInit {
     private route: ActivatedRoute,
     private notifierService: NotifierService,
     private buyerService: BuyerService,
-    private cd: ChangeDetectorRef) { this.notifier = notifierService; this.socket = io(process.env.BASE_URL); }
+    private cd: ChangeDetectorRef) { this.notifier = notifierService; 
+      if (process.env.NODE_ENV === 'development') {
+        this.socket = io('http://localhost:3000');
+      } else {
+        this.socket = io();
+      } }
 
   ngOnInit() {
     window.scrollTo(0, 0);
