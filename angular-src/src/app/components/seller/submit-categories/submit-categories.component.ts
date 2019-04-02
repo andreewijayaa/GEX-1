@@ -6,7 +6,7 @@ import { BP_PREFIX } from 'blocking-proxy/built/lib/blockingproxy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { forkJoin } from 'rxjs';
-const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png?token=AjGwr9AEAkdP2Vs8YyLNcgAMU2Q-WOocks5coW24wA%3D%3D";
+const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png?token=AjGwr2cyFYh-x8qdDTI3cEgC31Qfzi6eks5cq-l4wA%3D%3D";
 
 @Component({
   selector: 'app-submit-categories',
