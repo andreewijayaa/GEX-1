@@ -110,7 +110,7 @@ export class SellerComponent implements OnInit {
     private requestService: RequestService,
     private router: Router) {
     this.notifier = notifierService;
-    this.socket = io('http://localhost:3000');
+    this.socket = io(process.env.BASE_URL);
   }
 
   // On initialization process of the webpage

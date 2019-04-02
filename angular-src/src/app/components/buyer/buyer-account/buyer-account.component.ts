@@ -36,7 +36,7 @@ export class BuyerAccountComponent implements OnInit {
 
   constructor(private buyerService: BuyerService,
     private notifierService: NotifierService,
-    private route: ActivatedRoute) {this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
+    private route: ActivatedRoute) {this.notifier = notifierService; this.socket = io(process.env.BASE_URL); }
 
   // When the buyer account page loads, the logged in buyer's information will be fetched and displayed on the page.
   ngOnInit() {

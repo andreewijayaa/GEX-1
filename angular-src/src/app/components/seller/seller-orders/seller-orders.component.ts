@@ -55,7 +55,8 @@ export class SellerOrdersComponent implements OnInit {
   columnsToGetOfferInfo = ['title', 'created_at', 'shippingPrice', 'price'];
   expandedRequestElement: RequestElement | null;
   expandedOfferElement: OfferElement | null;
-
+  displayOfferColumns: any; // Added because of ng build --prod was giving error
+  searchRequestFilter: any;// Added because of ng build --prod was giving error
   @ViewChild(MatPaginator) offerPaginator: MatPaginator;
   @ViewChild(MatSort) offerSort: MatSort;
 
@@ -64,7 +65,7 @@ export class SellerOrdersComponent implements OnInit {
     private requestService: RequestService,
     private notifierService: NotifierService,
     private sellerService: SellerService,
-    private dialog: MatDialog) { this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
+    private dialog: MatDialog) { this.notifier = notifierService; this.socket = io(process.env.BASE_URL); }
 
   ngOnInit() {
     this.spinner = true;

@@ -38,7 +38,12 @@ export class BuyerCheckoutComponent
   error: string;
 
   private readonly notifier: NotifierService;
-
+  selectedOfferId: any;
+  offerList: Object;
+  request_Id: any;
+  orderFees: Number;
+  editable: Boolean = false;
+  sellerList = [];
   offerPrice: any;
   offerShipping: any;
   totalFees: any;
@@ -62,6 +67,10 @@ export class BuyerCheckoutComponent
   totalPriceDisplay: any;
   totalBeforeTaxDisplay: any;
   estimatedTaxDisplay = '----';
+
+
+
+
 
   states = [
     { label: 'AK' },

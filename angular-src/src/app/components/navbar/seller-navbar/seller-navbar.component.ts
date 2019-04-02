@@ -31,7 +31,7 @@ export class SellerNavbarComponent implements OnInit {
     private notifierService: NotifierService,
     private router: Router,
     private titleService: Title,
-    private route: ActivatedRoute) { this.notifier = notifierService; this.socket = io('http://localhost:3000'); }
+    private route: ActivatedRoute) { this.notifier = notifierService; this.socket = io(process.env.BASE_URL); }
 
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application seller related pages.

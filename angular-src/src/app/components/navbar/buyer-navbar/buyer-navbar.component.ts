@@ -32,7 +32,7 @@ export class BuyerNavbarComponent implements OnInit {
     private titleService: Title,
     private route: ActivatedRoute) {
       this.notifier = notifierService;
-      this.socket = io('http://localhost:3000');
+      this.socket = io(process.env.BASE_URL);
     }
 
   ngOnInit() {
