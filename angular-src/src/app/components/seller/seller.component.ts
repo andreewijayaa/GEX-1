@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, Input, ViewChild } from '@angular/core';
 import { SellerService } from '../../services/seller.service';
 import { RequestService } from '../../services/request.service';
+import { StoreFetchService } from '../../services/storeFetch.service';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
-import { Observable } from 'rxjs';
+import { Observable, interval, Subscription } from 'rxjs';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef, MatRadioModule, MatRadioButton, MatTableDataSource, MatTab, MatSort, MatPaginator } from '@angular/material';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
@@ -104,6 +105,7 @@ export class SellerComponent implements OnInit {
   @ViewChild(MatSort) archiveSort: MatSort;
 
   constructor(private sellerService: SellerService,
+    private storeFetchService: StoreFetchService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     notifierService: NotifierService,

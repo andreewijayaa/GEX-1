@@ -36,7 +36,7 @@ export class BuyerPurchasesComponent implements OnInit {
         if (data.purchases.length === 0 || data.purchases === undefined || data.purchases[0] === '') {
           this.spinner = false;
           this.router.navigate(['/buyer']);
-          this.notifier.notify('', 'No purchases have been made yet.');
+          this.notifier.notify('error', 'No purchases have been made yet.');
         }
         data.purchases.forEach(purchase => {
           this.buyerService.getOrderDetails(purchase).subscribe((data: any) => {

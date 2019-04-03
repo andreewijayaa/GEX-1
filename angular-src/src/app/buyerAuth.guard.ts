@@ -12,19 +12,19 @@ export class BuyerAuthGuard implements CanActivate {
   private readonly notifier: NotifierService;
 
   constructor(private storeFetch: StoreFetchService,
-  private myRoute: Router,
-  private notifierService: NotifierService) {
+    private myRoute: Router,
+    private notifierService: NotifierService) {
     this.notifier = notifierService;
-	}
+  }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const returnedAnswer = this.storeFetch.buyerIsLoggedIn();
-      if(returnedAnswer) {
+      if (returnedAnswer) {
         return returnedAnswer;
       } else {
-        console.log(this.myRoute.url);
+        // console.log(this.myRoute.url);
         this.notifier.notify('error', 'Please login first.');
         this.myRoute.navigate(['/login']);
         return returnedAnswer;

@@ -64,6 +64,7 @@ import { OrderConfirmComponent } from './components/buyer/order-confirm/order-co
 import { BuyerPurchasesComponent } from './components/buyer/buyer-purchases/buyer-purchases.component';
 import { SellerOrdersComponent } from './components/seller/seller-orders/seller-orders.component';
 import { BuyerPurchaseDetailsComponent } from './components/buyer/buyer-purchase-details/buyer-purchase-details.component';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},

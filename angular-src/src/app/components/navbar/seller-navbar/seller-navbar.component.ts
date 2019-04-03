@@ -31,7 +31,7 @@ export class SellerNavbarComponent implements OnInit {
     private notifierService: NotifierService,
     private router: Router,
     private titleService: Title,
-    private route: ActivatedRoute) { this.notifier = notifierService; 
+    private route: ActivatedRoute) { this.notifier = notifierService;
       if (process.env.NODE_ENV === 'development') {
         this.socket = io('http://localhost:3000');
       } else {
@@ -41,6 +41,7 @@ export class SellerNavbarComponent implements OnInit {
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application seller related pages.
     this.titleService.setTitle('Seller | Requiren');
+    this.storeFetchService.useJwtHelper(); // checks to see if token is expired or not.
     this.getSellerProfileInfo();
     this.socket.on('updatedSellerProfileInfo', ()  => {
       this.getSellerProfileInfo();
