@@ -42,6 +42,7 @@ export class BuyerNavbarComponent implements OnInit {
   ngOnInit() {
     // This line of code sets the browser tab title when a user is navigating through the GEX application buyer related pages.
     this.titleService.setTitle('Buyer | Requiren');
+    this.storeFetchService.useJwtHelper(); // checks to see if token is expired or not.
     this.buyer_cart = [];
     this.getBuyerProfile();
     this.socket.on('updatedBuyerProfileInfo', () => {

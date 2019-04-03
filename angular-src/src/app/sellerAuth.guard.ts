@@ -14,17 +14,17 @@ export class SellerAuthGuard implements CanActivate {
 
   constructor(private storeFetch: StoreFetchService,
     private location: Location,
-  private myRoute: Router,
-  private notifierService: NotifierService,
-  private route: ActivatedRoute) {
+    private myRoute: Router,
+    private notifierService: NotifierService,
+    private route: ActivatedRoute) {
     this.notifier = notifierService;
+  }
 
-	}
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const returnedAnswer = this.storeFetch.sellerIsLoggedIn();
-      if(returnedAnswer) {
+      if (returnedAnswer) {
         return returnedAnswer;
       } else {
         this.notifier.notify('error', 'Please login first.');
