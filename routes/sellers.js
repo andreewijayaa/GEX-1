@@ -1321,6 +1321,7 @@ router.post("/updatePurchasedOffers", (req, res) => {
   const orderID = req.body.orderID;
   const offerID = req.body.offerID;
 
+  if(newFulfillmentStatus == null || orderID == null || offerID == null ) return res.status(500).send({ success: false, message: "Please provide all required fields." });
   //if they don't have a token
   if (!token)
     return res
@@ -1344,14 +1345,16 @@ router.post("/updatePurchasedOffers", (req, res) => {
       if(foundOrder.offersPurchased[index].sellerID != decoded.data._id) return res.status(500).send({ success: false, message: "Ownership of offer does not match." });
           foundOrder.offersPurchased[index].offerFulfillmentStatus = newFulfillmentStatus;
           if(newFulfillmentStatus == "Shipped") {
+            if(req.body.shippingCompany == null || req.body.trackingNumber == null) return res.status(500).send({ success: false, message: "Please provide all required fields." });
             foundOrder.offersPurchased[index].trackingInfo.shippingCompany = req.body.shippingCompany;
             foundOrder.offersPurchased[index].trackingInfo.trackingNumber = req.body.trackingNumber;
           }
+          
           console.log(foundOrder);
           foundOrder.save((err, updatedOrder) => {
             if(err) return handleError(err);
             io.emit('updatedOrderOfferStatus');
-            return res.status(200).send({ success: true, message: "Offer status updated Successfully." });
+            return res.status(200).send({ success: true, updatedOrder });
           });
     });
   });   
