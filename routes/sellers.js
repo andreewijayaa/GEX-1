@@ -1263,9 +1263,13 @@ router.post("/deleteArchive", (req, res) => {
 
 /************************************ PURCHASED OFFERS - RONI *********************************** */
 
-router.get("/getPurchasedOffers", (req, res) => {
+
+
+
+router.get("/getPurchasedOffers", async (req, res, next) => {
   const io = req.app.get('io');
   var token = req.headers["x-access-token"];
+  
 
   var arrayOffer = [];
   //if they don't have a token
@@ -1274,43 +1278,47 @@ router.get("/getPurchasedOffers", (req, res) => {
       .status(401)
       .send({ success: false, message: "No token provided." });
   //otherwise verify the token and return user data in a response
-  jwt.verify(token, config.secret, function(err, decoded) {
-    if (err)
-      return res
-        .status(500)
-        .send({ success: false, message: "Failed to authenticate token." });
-    //console.log('deleting this request from archive: ' + req.body.request_ID);
+   const decoded = await jwt.verify(token, config.secret);
+  if (!decoded) return res.status(500).send({ success: false, message: "Failed to authenticate token." });
+  
 
+    try {
 
-
-     Order.find({'offersPurchased.sellerID': decoded.data._id }, (err2, sellerPurchasedOffersOrder) => {
-      if(err2) return handleError(err2);
-      if(sellerPurchasedOffersOrder == null || sellerPurchasedOffersOrder == undefined) return res.status(500).send({ success: false, message: "Error fetching order." });
-      sellerPurchasedOffersOrder.forEach(singleOrder => {
-        if(singleOrder.offersPurchased == null || singleOrder.offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
-        
-        singleOrder.offersPurchased.forEach(singleOffer => {
-          if(singleOffer.sellerID == decoded.data._id)
+      //The problem here is that const sellerPurchasedOffersOrder will have a weird schema 
+      // output, if you use the sellerPurchasedOffersOrder.exec(err, result)
+      // to excute the query plan.. You wont be able to have await inside that exec function 
+      // Try mongoose queries on sellerPurchasedOffersOrder to see if you can convert back to object
+      var sellerPurchasedOffersOrder = await Order.find({'offersPurchased.sellerID': decoded.data._id });
+      if(!sellerPurchasedOffersOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+      
+       for (i = 0; i < sellerPurchasedOffersOrder.length; i++) {
+        if(sellerPurchasedOffersOrder[i].offersPurchased == null || sellerPurchasedOffersOrder[i].offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
+        console.log(sellerPurchasedOffersOrder);
+        for (j = 0; j < sellerPurchasedOffersOrder[i].offersPurchased.length; j++) {
+          if(sellerPurchasedOffersOrder[i].offersPurchased[j].sellerID == decoded.data._id)
           {
-            Offer.findById(singleOffer.offerID, (errSeller, offerFromOrder)=>{
-              if(errSeller) return res.status(500).send({ success: false, message: "Error fetching order." });
-              Request.findById(offerFromOrder.request_ID, (errrequest, requestFromOrder)=>{
-                if(errrequest) return res.status(500).send({ success: false, message: "Error fetching order." });
-                let purchasedOfferWithOrder = {
-                  offer: offerFromOrder,
-                  order: singleOrder,
-                  request: requestFromOrder,
-                }
-                arrayOffer.push(purchasedOfferWithOrder);
-                console.log(arrayOffer); // <-- it has what we need
-            });
-            });
+            const offerFromOrder = await Offer.findById(sellerPurchasedOffersOrder[i].offersPurchased[j].offerID);
+            if(!offerFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+
+            const requestFromOrder = await Request.findById(offerFromOrder.request_ID);
+            if(!requestFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+            let purchasedOfferWithOrder = {
+              offer: offerFromOrder,
+              order: sellerPurchasedOffersOrder[i],
+              request: requestFromOrder,
+            }
+            console.log("MADE IT = " +  purchasedOfferWithOrder);
+            arrayOffer.push(purchasedOfferWithOrder);
           }
-        });
-      });
-    });
-    console.log(arrayOffer); // <-- it shows emtpy
-  });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      res.json({success: false, error: error.message});
+      next(error);
+    }
+
+    return res.json({success: true, arrayOffer});
 });
 
 //Update the status of the offer
