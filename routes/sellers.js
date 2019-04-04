@@ -1331,7 +1331,7 @@ router.post("/updatePurchasedOffers", (req, res) => {
   jwt.verify(token, config.secret, function(err, decoded) {
     if (err) return res.status(500).send({ success: false, message: "Failed to authenticate token." });
   
-    Order.findById(orderID, (err, foundOrder) =>{
+    Order.findById(orderID, (err, foundOrder) => {
       if(err) return handleError(err);
       var index = -1;
       for(i = 0; i < foundOrder.offersPurchased.length; i++) {
@@ -1351,6 +1351,7 @@ router.post("/updatePurchasedOffers", (req, res) => {
           }
           
           console.log(foundOrder);
+          foundOrder.markModified('offersPurchased');
           foundOrder.save((err, updatedOrder) => {
             if(err) return handleError(err);
             io.emit('updatedOrderOfferStatus');
