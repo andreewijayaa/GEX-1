@@ -164,11 +164,11 @@ export class BuyerAccountComponent implements OnInit {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.buyerService.setProfilePicture(this.selectedFile.file).subscribe(
         (res) => {
-          this.notifier.notify("success", "Your Image has uploaded! Login again to update");
+          this.notifier.notify("success", "Your image has been uploaded!");
           this.spinner = false;
         },
         (err) => {
-          this.notifier.notify("error", "Your Image has failed to upload :( ");
+          this.notifier.notify("error", "Your image has failed to upload :( ");
           this.spinner = false;
         });
     });
