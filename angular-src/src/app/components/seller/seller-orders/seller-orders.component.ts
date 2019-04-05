@@ -92,7 +92,7 @@ export class SellerOrdersComponent implements OnInit {
             this.objectList.push(data);
           }
         });
-        console.log(this.objectList);
+        // console.log(this.objectList);
       } else {
         console.log('Could not fetch offer purchase info');
       }
