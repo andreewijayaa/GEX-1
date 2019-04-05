@@ -16,6 +16,12 @@ const offerSchema = mongoose.Schema({
     type:String,
     required:true
   },
+  shippingCo:{
+    type:String,
+  },
+  trackingNumber:{
+    type:String,
+  },
   description:{
     type:String,
     required:true

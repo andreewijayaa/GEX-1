@@ -1283,7 +1283,6 @@ router.get("/getPurchasedOffers", async (req, res, next) => {
   
 
     try {
-
       //The problem here is that const sellerPurchasedOffersOrder will have a weird schema 
       // output, if you use the sellerPurchasedOffersOrder.exec(err, result)
       // to excute the query plan.. You wont be able to have await inside that exec function 

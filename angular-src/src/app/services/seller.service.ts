@@ -445,4 +445,36 @@ export class SellerService {
       .pipe(map(res => res));
     }
   }
+
+  getPurchasedOffers() {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.get('http://localhost:3000/sellers/getPurchasedOffers', httpOptions).pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+    return this.http.get('sellers/getPurchasedOffers', httpOptions).pipe(map(res => res));
+    }
+  }
+
+  updatePurchasedOffers(offerInfo) {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+        'Content-Type':  'application/json',
+        'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/updatePurchasedOffers', offerInfo, httpOptions).pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+    return this.http.post('sellers/updatePurchasedOffers', offerInfo, httpOptions).pipe(map(res => res));
+    }
+  }
 }

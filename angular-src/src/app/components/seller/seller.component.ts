@@ -215,6 +215,7 @@ export class SellerComponent implements OnInit {
               this.dataSourceOffers.paginator = this.offerPaginator;
               this.dataSourceOffers.sort = this.offerSort;
               // console.log(this.dataSourceOffers);
+              // console.log(this.dataSourceOffers);
             } else {
               console.log('Could not fetch offers');
             }

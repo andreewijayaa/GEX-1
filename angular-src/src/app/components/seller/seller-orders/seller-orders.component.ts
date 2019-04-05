@@ -2,20 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SellerService } from '../../../services/seller.service';
 import { NotifierService } from 'angular-notifier';
-import { MatDialog, MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatSort, MatPaginator, MatTab } from '@angular/material';
 import { RequestService } from '../../../services/request.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as io from 'socket.io-client';
-
-export interface RequestElement {
-  title: String;
-  status: String;
-  offerCount: String;
-  deadline: String;
-  description: String;
-  request_images: [String];
-  _id: String;
-}
 
 export interface OfferElement {
   title: String;
@@ -23,11 +13,14 @@ export interface OfferElement {
   price: String;
   shippingPrice: String;
   offerStatus: String;
-  created_at: String;
-  _id: String;
-  offerAccepted: Boolean;
+  offerAccepted: String;
+  created_at: Date;
+  request_ID: String;
   expected_completion: String;
+  list_of_sellers_submitted_offers: [String];
   offer_images: [String];
+  shippingCo: String;
+  trackingNumber: String;
 }
 
 @Component({
@@ -45,18 +38,13 @@ export interface OfferElement {
 export class SellerOrdersComponent implements OnInit {
   socket;
   private readonly notifier: NotifierService;
-  requestList = [];
   offerList = [];
+  objectList = [];
   spinner: Boolean;
 
-  dataSourceRequests = new MatTableDataSource(this.requestList);
   dataSourceOffers = new MatTableDataSource(this.offerList);
-  columnsToGetRequestInfo = ['title', 'status', 'offerCount', 'deadline'];
-  columnsToGetOfferInfo = ['title', 'created_at', 'shippingPrice', 'price'];
-  expandedRequestElement: RequestElement | null;
+  displayOfferColumns = ['title', 'created_at', 'offerStatus', 'shippingPrice', 'price'];
   expandedOfferElement: OfferElement | null;
-  displayOfferColumns: any; // Added because of ng build --prod was giving error
-  searchRequestFilter: any;// Added because of ng build --prod was giving error
   @ViewChild(MatPaginator) offerPaginator: MatPaginator;
   @ViewChild(MatSort) offerSort: MatSort;
 
@@ -65,7 +53,7 @@ export class SellerOrdersComponent implements OnInit {
     private requestService: RequestService,
     private notifierService: NotifierService,
     private sellerService: SellerService,
-    private dialog: MatDialog) { this.notifier = notifierService; 
+    private dialog: MatDialog) { this.notifier = notifierService;
       if (process.env.NODE_ENV === 'development') {
         this.socket = io('http://localhost:3000');
       } else {
@@ -74,14 +62,47 @@ export class SellerOrdersComponent implements OnInit {
 
   ngOnInit() {
     this.spinner = true;
-    this.getSeller();
+    this.getSellerPurchasedOffers();
     this.socket.on('updateSellerProfileInfo', () => {
-      this.getSeller();
+      this.getSellerPurchasedOffers();
     });
   }
 
-  getSeller() {
-
+  getSellerPurchasedOffers() {
+    this.sellerService.getPurchasedOffers().subscribe((data: any) => {
+      if (data.success) {
+        data.arrayOffer.forEach(item => {
+          if (item !== undefined) {
+            this.offerList.push(item.offer);
+          }
+        });
+        this.dataSourceOffers = new MatTableDataSource(this.offerList);
+      } else {
+        console.log('Could not fetch purchased offers');
+      }
+    });
   }
 
+  expandedOffer() {
+    this.objectList = [];
+    this.sellerService.getPurchasedOffers().subscribe((data: any) => {
+      if (data.success) {
+        data.arrayOffer.forEach(data => {
+          if (data !== undefined) {
+            this.objectList.push(data);
+          }
+        });
+        console.log(this.objectList);
+      } else {
+        console.log('Could not fetch offer purchase info');
+      }
+    });
+  }
+
+  searchPurchasedOfferFilter(filterValue: string) {
+    this.dataSourceOffers.filter = filterValue.trim().toLowerCase();
+    if (this.dataSourceOffers.paginator) {
+       this.dataSourceOffers.paginator.firstPage();
+     }
+  }
 }
