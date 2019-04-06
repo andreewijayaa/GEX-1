@@ -21,11 +21,10 @@ export class BuyerAuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const returnedAnswer = this.storeFetch.buyerIsLoggedIn();
+      // Reroute to login, if the user is not logged in as buyer
       if (returnedAnswer) {
         return returnedAnswer;
       } else {
-        // console.log(this.myRoute.url);
-        this.notifier.notify('error', 'Please login first.');
         this.myRoute.navigate(['/login']);
         return returnedAnswer;
       }

@@ -24,10 +24,10 @@ export class SellerAuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
       const returnedAnswer = this.storeFetch.sellerIsLoggedIn();
+      // Reroute to login, if the user is not logged in as seller
       if (returnedAnswer) {
         return returnedAnswer;
       } else {
-        this.notifier.notify('error', 'Please login first.');
         this.myRoute.navigate(['/seller-login']);
         return returnedAnswer;
       }
