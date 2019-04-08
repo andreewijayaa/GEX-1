@@ -71,9 +71,9 @@
                             &nbsp;
                             <h6 style="color: #757575; font-family: Roboto, 'Helvetica Neue', sans-serif; font-size: 16px; margin-left: -30px">Shipping Company</h6>
                             <hr style="margin-left: -30px">
-                            <input *ngIf="true" style="margin-left: -30px">
-                            <p *ngIf="false" style="margin-left: -30px">
-                              UPS
+                            <input *ngIf="element.shippingCo === '' || element.shippingCo === null" style="margin-left: -30px" id="shippingCoInput">
+                            <p *ngIf="element.shippingCo !== '' || element.shippingCo !== null" style="margin-left: -30px">
+                              {{element.shippingCo}}
                             </p>
                           </div>
                           <div class="col-md-4">
@@ -85,9 +85,9 @@
                             &nbsp;
                             <h6 style="color: #757575; font-family: Roboto, 'Helvetica Neue', sans-serif; font-size: 16px; margin-left: -30px">Tracking #</h6>
                             <hr style="margin-left: -30px">
-                            <input *ngIf="true" style="margin-left: -30px">
-                            <p *ngIf="false" style="margin-left: -30px">
-                              {{element.expected_completion}}
+                            <input *ngIf="element.trackingNumber === '' || element.trackingNumber === null" style="margin-left: -30px" id="trackingInput">
+                            <p *ngIf="element.trackingNumber !== '' || element.trackingNumber !== null" style="margin-left: -30px">
+                              {{element.trackingNumber}}
                             </p>
                           </div>
                           <div class="col-md-4">
@@ -100,7 +100,7 @@
                           </div>
                         </div>
                         <br>
-                        <button *ngIf="true" class="btn btn-primary" style="margin-left: -30px; background-color: rgb(56, 72, 177); color: white">Submit Shipping Details</button>
+                        <button *ngIf="element.shippingCo === '' && element.trackingNumber === ''" class="btn btn-primary" (click)="submitShippingDetails(element._id, element.title)" style="margin-left: -30px; background-color: rgb(56, 72, 177); color: white">Submit Shipping Details</button>
                       </div>
                     </div>
                     &nbsp;
@@ -112,7 +112,11 @@
                             <div class="col-md-4" *ngFor="let status of orderElement.order.offersPurchased">
                               <label>Order #: <span style="color: gray">{{orderElement.order.orderNumber}}</span></label>
                               <br>
-                              <label>Fulfillment Status: <span style="color: red">{{status.offerFulfillmentStatus}}</span></label>
+                              <label>
+                                Fulfillment Status for offer "{{element.title}}":
+                                <span *ngIf="status.offerFulfillmentStatus !== 'Shipped'" style="color: red">{{status.offerFulfillmentStatus}}</span>
+                                <span *ngIf="status.offerFulfillmentStatus === 'Shipped'" style="color: green">{{status.offerFulfillmentStatus}}</span>
+                              </label>
                               <br>
                               <label>Order Status: <span style="color: gray">{{orderElement.order.orderStatus}}</span></label>
                               <br>

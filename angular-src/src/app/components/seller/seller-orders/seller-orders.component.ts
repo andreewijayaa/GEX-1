@@ -21,6 +21,7 @@ export interface OfferElement {
   offer_images: [String];
   shippingCo: String;
   trackingNumber: String;
+  _id: String;
 }
 
 @Component({
@@ -41,6 +42,7 @@ export class SellerOrdersComponent implements OnInit {
   offerList = [];
   objectList = [];
   spinner: Boolean;
+  orderID: String;
 
   dataSourceOffers = new MatTableDataSource(this.offerList);
   displayOfferColumns = ['title', 'created_at', 'offerStatus', 'shippingPrice', 'price'];
@@ -63,13 +65,15 @@ export class SellerOrdersComponent implements OnInit {
   ngOnInit() {
     this.spinner = true;
     this.getSellerPurchasedOffers();
-    this.socket.on('updateSellerProfileInfo', () => {
+    this.socket.on('updatedOrderOfferStatus', () => {
       this.getSellerPurchasedOffers();
     });
   }
 
   getSellerPurchasedOffers() {
     this.sellerService.getPurchasedOffers().subscribe((data: any) => {
+      this.offerList = [];
+      this.dataSourceOffers = new MatTableDataSource(this.offerList);
       if (data.success) {
         data.arrayOffer.forEach(item => {
           if (item !== undefined) {
@@ -85,6 +89,7 @@ export class SellerOrdersComponent implements OnInit {
 
   expandedOffer() {
     this.objectList = [];
+    this.orderID = '';
     this.sellerService.getPurchasedOffers().subscribe((data: any) => {
       if (data.success) {
         data.arrayOffer.forEach(data => {
@@ -92,7 +97,8 @@ export class SellerOrdersComponent implements OnInit {
             this.objectList.push(data);
           }
         });
-        // console.log(this.objectList);
+        this.orderID = this.objectList[0].order._id;
+        console.log(this.objectList);
       } else {
         console.log('Could not fetch offer purchase info');
       }
@@ -104,5 +110,39 @@ export class SellerOrdersComponent implements OnInit {
     if (this.dataSourceOffers.paginator) {
        this.dataSourceOffers.paginator.firstPage();
      }
+  }
+
+  submitShippingDetails(offerId, title) {
+    const shippingCompany = (<HTMLInputElement>document.getElementById('shippingCoInput')).value;
+    const trackingNum = (<HTMLInputElement>document.getElementById('trackingInput')).value;
+
+    if (shippingCompany === '' || shippingCompany === undefined) {
+      this.notifier.notify('error', 'Please fill in the shipping company field');
+
+    } else if (trackingNum === '' || trackingNum === undefined) {
+      this.notifier.notify('error', 'Please fill in the tracking # field');
+    } else {
+      const shipUpdateInfo = {
+        shippingCompany: shippingCompany,
+        trackingNumber: trackingNum,
+        offerID: offerId,
+        orderID: this.orderID,
+        newFulfillmentStatus: 'Shipped'
+      };
+
+      this.sellerService.updateShippingInfoOffer(shipUpdateInfo).subscribe((data: any) => {
+        if (data.success) {
+          this.sellerService.updatePurchasedOffers(shipUpdateInfo).subscribe((update: any) => {
+            if (update.success) {
+              this.notifier.notify('success', 'The shipping info for offer \"' + title +  '\" was updated!');
+            } else {
+              this.notifier.notify('error', 'The shipping info for offer \"' + title +  '\" update failed. Please try again!');
+            }
+          });
+        } else {
+          this.notifier.notify('error', 'The shipping info for offer \"' + title +  '\" update failed. Please try again!');
+        }
+      });
+    }
   }
 }

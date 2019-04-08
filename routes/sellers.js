@@ -1288,7 +1288,7 @@ router.get("/getPurchasedOffers", async (req, res, next) => {
       // to excute the query plan.. You wont be able to have await inside that exec function 
       // Try mongoose queries on sellerPurchasedOffersOrder to see if you can convert back to object
       var sellerPurchasedOffersOrder = await Order.find({'offersPurchased.sellerID': decoded.data._id });
-      if(!sellerPurchasedOffersOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+      if (!sellerPurchasedOffersOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
       
        for (i = 0; i < sellerPurchasedOffersOrder.length; i++) {
         if(sellerPurchasedOffersOrder[i].offersPurchased == null || sellerPurchasedOffersOrder[i].offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
@@ -1348,24 +1348,63 @@ router.post("/updatePurchasedOffers", (req, res) => {
         }
       }
       
-      if(index < 0) return res.status(500).send({ success: false, message: "Offer not found in the order." });
-      if(foundOrder.offersPurchased[index].sellerID != decoded.data._id) return res.status(500).send({ success: false, message: "Ownership of offer does not match." });
+      if (index < 0) return res.status(500).send({ success: false, message: "Offer not found in the order." });
+      if (foundOrder.offersPurchased[index].sellerID != decoded.data._id) return res.status(500).send({ success: false, message: "Ownership of offer does not match." });
           foundOrder.offersPurchased[index].offerFulfillmentStatus = newFulfillmentStatus;
-          if(newFulfillmentStatus == "Shipped") {
+          if (newFulfillmentStatus == "Shipped") {
             if(req.body.shippingCompany == null || req.body.trackingNumber == null) return res.status(500).send({ success: false, message: "Please provide all required fields." });
             foundOrder.offersPurchased[index].trackingInfo.shippingCompany = req.body.shippingCompany;
             foundOrder.offersPurchased[index].trackingInfo.trackingNumber = req.body.trackingNumber;
           }
           
-          console.log(foundOrder);
+          // console.log(foundOrder);
+          foundOrder.orderStatus = "Offer(s) Shipped";
           foundOrder.markModified('offersPurchased');
-          foundOrder.save((err, updatedOrder) => {
-            if(err) return handleError(err);
+          // foundOrder.save((err, updatedOrder) => {
+          //   if(err) return handleError(err);
+          //   io.emit('updatedOrderOfferStatus');
+          //   return res.status(200).send({ success: true, updatedOrder });
+          // });
+          foundOrder.save().then(() => {
             io.emit('updatedOrderOfferStatus');
-            return res.status(200).send({ success: true, updatedOrder });
+            res.send({ success: true });
           });
     });
   });   
+});
+
+router.post('/updateOfferShippingInfo', (req, res) => {
+  const io = req.app.get('io');
+  var token = req.headers['x-access-token'];
+  const shipCo = req.body.shippingCompany;
+  const tracking = req.body.trackingNumber;
+  const offerID = req.body.offerID;
+
+  if (shipCo == null || tracking == null) 
+    return res.status(500).send({ success: false, message: "Please provide all requires fields."});
+
+  // if a token is not found
+  if (!token)
+    return res.status(401).send({ success: false, message: "No token provided." });
+
+  // if token is found
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ succes: false, message: "Failed to authenticate token." });
+
+    Offer.findById(offerID, (err, foundOffer) => {
+      if (err) return handleError(err);
+
+      if (foundOffer) {
+        foundOffer.shippingCo = shipCo;
+        foundOffer.trackingNumber = tracking;
+        foundOffer.offerStatus = "Shipped";
+        foundOffer.save((err, updatedOffer) => {
+          if(err) return handleError(err);
+          return res.status(200).send({ success: true, updatedOffer });
+        });
+      }
+    });
+  });
 });
 
 module.exports = router;
