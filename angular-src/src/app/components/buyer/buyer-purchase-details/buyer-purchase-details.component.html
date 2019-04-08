@@ -86,6 +86,21 @@
             <div class="row" *ngFor="let offer of element.offers">
               <div class="col-md-3">
                 <h6 style="font-weight: bold; color: blue">{{offer.title}}</h6>
+                <br>
+                <label>Offer Status:
+                  <span *ngIf="offer.offerStatus !== 'Shipped'" style="color: red">{{offer.offerStatus}}</span>
+                  <span *ngIf="offer.offerStatus === 'Shipped'" style="color: green">{{offer.offerStatus}}</span>
+                </label>
+                <br>
+                <label>Shipping Company Used:
+                  <span *ngIf="offer.shippigCo === ''" style="color: gray">Pending...</span>
+                  <span *ngIf="offer.shippingCo !== ''" style="color: rgb(108, 109, 108)">{{offer.shippingCo}}</span>
+                </label>
+                <br>
+                <label>Shipment Tracking #:
+                  <span *ngIf="offer.trackingNumber === ''" style="color: gray">Pending...</span>
+                  <span *ngIf="offer.trackingNumber !== ''" style="color: gray">{{offer.trackingNumber}}</span>
+                </label>
               </div>
               <div class="col-md-3">
                 <h6 style="font-weight: bold">description</h6>

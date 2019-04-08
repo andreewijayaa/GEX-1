@@ -348,7 +348,6 @@ export class SellerComponent implements OnInit {
           offerCompletion = data['completion'];
           offerImages = data['offerImages'];
           var offer;
-          console.log(offerImages);
           if (offerImages[0] != ''){
             offer = {
               title: offerTitle,

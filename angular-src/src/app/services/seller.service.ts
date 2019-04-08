@@ -477,4 +477,20 @@ export class SellerService {
     return this.http.post('sellers/updatePurchasedOffers', offerInfo, httpOptions).pipe(map(res => res));
     }
   }
+
+  updateShippingInfoOffer(offerInfo) {
+    this.loadToken();
+    const httpOptions = {
+      headers: new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'x-access-token': this.sellerToken
+      })
+    };
+    if (process.env.NODE_ENV === 'development') {
+      return this.http.post('http://localhost:3000/sellers/updateOfferShippingInfo', offerInfo, httpOptions).pipe(map(res => res));
+    } else {
+    // This will return json file fetched from database
+    return this.http.post('sellers/updateOfferShippingInfo', offerInfo, httpOptions).pipe(map(res => res));
+    }
+  }
 }
