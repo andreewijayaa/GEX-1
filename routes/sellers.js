@@ -1270,7 +1270,7 @@ router.get("/getPurchasedOffers", async (req, res, next) => {
   const io = req.app.get('io');
   var token = req.headers["x-access-token"];
   
-
+  var specificSellerOffers = [];
   var arrayOffer = [];
   //if they don't have a token
   if (!token)
@@ -1292,18 +1292,24 @@ router.get("/getPurchasedOffers", async (req, res, next) => {
       
        for (i = 0; i < sellerPurchasedOffersOrder.length; i++) {
         if(sellerPurchasedOffersOrder[i].offersPurchased == null || sellerPurchasedOffersOrder[i].offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
-        console.log(sellerPurchasedOffersOrder);
+        
         for (j = 0; j < sellerPurchasedOffersOrder[i].offersPurchased.length; j++) {
           if(sellerPurchasedOffersOrder[i].offersPurchased[j].sellerID == decoded.data._id)
           {
+            specificSellerOffers.push(sellerPurchasedOffersOrder[i].offersPurchased[j]);
+
             const offerFromOrder = await Offer.findById(sellerPurchasedOffersOrder[i].offersPurchased[j].offerID);
+            console.log(sellerPurchasedOffersOrder[i].offersPurchased[j].offerID);
             if(!offerFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
 
             const requestFromOrder = await Request.findById(offerFromOrder.request_ID);
             if(!requestFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+            var orderWithSpecificRequest = sellerPurchasedOffersOrder[i];
+
+            orderWithSpecificRequest.offersPurchased = specificSellerOffers
             let purchasedOfferWithOrder = {
               offer: offerFromOrder,
-              order: sellerPurchasedOffersOrder[i],
+              order: orderWithSpecificRequest,
               request: requestFromOrder,
             }
             console.log("MADE IT = " +  purchasedOfferWithOrder);
@@ -1319,6 +1325,7 @@ router.get("/getPurchasedOffers", async (req, res, next) => {
 
     return res.json({success: true, arrayOffer});
 });
+
 
 //Update the status of the offer
 router.post("/updatePurchasedOffers", (req, res) => {
