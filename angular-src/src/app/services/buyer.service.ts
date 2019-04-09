@@ -266,7 +266,7 @@ export class BuyerService {
 
   // upload images to request
   addRequestImage(requestPic: File): Observable<Object> {
-    console.log('Request Picture has been called in services');
+    // console.log('Request Picture has been called in services');
     this.loadToken();
     const httpOptions = {
       headers: new HttpHeaders ({

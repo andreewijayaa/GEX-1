@@ -93,12 +93,12 @@
                 </label>
                 <br>
                 <label>Shipping Company Used:
-                  <span *ngIf="offer.shippigCo === ''" style="color: gray">Pending...</span>
+                  <span *ngIf="offer.shippingCo === undefined" style="color: gray">Pending...</span>
                   <span *ngIf="offer.shippingCo !== ''" style="color: rgb(108, 109, 108)">{{offer.shippingCo}}</span>
                 </label>
                 <br>
                 <label>Shipment Tracking #:
-                  <span *ngIf="offer.trackingNumber === ''" style="color: gray">Pending...</span>
+                  <span *ngIf="offer.trackingNumber === undefined" style="color: gray">Pending...</span>
                   <span *ngIf="offer.trackingNumber !== ''" style="color: gray">{{offer.trackingNumber}}</span>
                 </label>
               </div>
