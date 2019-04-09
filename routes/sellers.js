@@ -1289,39 +1289,40 @@ router.get("/getPurchasedOffers", async (req, res, next) => {
       // Try mongoose queries on sellerPurchasedOffersOrder to see if you can convert back to object
       var sellerPurchasedOffersOrder = await Order.find({'offersPurchased.sellerID': decoded.data._id });
       if (!sellerPurchasedOffersOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
-      
        for (i = 0; i < sellerPurchasedOffersOrder.length; i++) {
-        if(sellerPurchasedOffersOrder[i].offersPurchased == null || sellerPurchasedOffersOrder[i].offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
-        
+        if (sellerPurchasedOffersOrder[i].offersPurchased == null || sellerPurchasedOffersOrder[i].offersPurchased == undefined ) return res.status(500).send({ success: false, message: "Error fetching order." });
         for (j = 0; j < sellerPurchasedOffersOrder[i].offersPurchased.length; j++) {
-          if(sellerPurchasedOffersOrder[i].offersPurchased[j].sellerID == decoded.data._id)
+          if (sellerPurchasedOffersOrder[i].offersPurchased[j].sellerID == decoded.data._id)
           {
             specificSellerOffers.push(sellerPurchasedOffersOrder[i].offersPurchased[j]);
-
             const offerFromOrder = await Offer.findById(sellerPurchasedOffersOrder[i].offersPurchased[j].offerID);
-            console.log(sellerPurchasedOffersOrder[i].offersPurchased[j].offerID);
-            if(!offerFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+
+            if (!offerFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
 
             const requestFromOrder = await Request.findById(offerFromOrder.request_ID);
-            if(!requestFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
-            var orderWithSpecificRequest = sellerPurchasedOffersOrder[i];
-
-            orderWithSpecificRequest.offersPurchased = specificSellerOffers
+            if (!requestFromOrder) return res.status(500).send({ success: false, message: "Error fetching order." });
+            var orderWithSpecificRequest = new Object;
+            orderWithSpecificRequest = sellerPurchasedOffersOrder[i];
+            orderWithSpecificRequest.offersPurchased = specificSellerOffers;
             let purchasedOfferWithOrder = {
               offer: offerFromOrder,
               order: orderWithSpecificRequest,
-              request: requestFromOrder,
-            }
-            console.log("MADE IT = " +  purchasedOfferWithOrder);
+              request: requestFromOrder
+            };
+            // console.log("MADE IT = " +  purchasedOfferWithOrder);
             arrayOffer.push(purchasedOfferWithOrder);
+            // console.log(arrayOffer);
           }
         }
+        specificSellerOffers = [];
       }
     } catch (error) {
       console.error(error);
       res.json({success: false, error: error.message});
       next(error);
     }
+
+
 
     return res.json({success: true, arrayOffer});
 });
@@ -1381,7 +1382,6 @@ router.post("/updatePurchasedOffers", (req, res) => {
 });
 
 router.post('/updateOfferShippingInfo', (req, res) => {
-  const io = req.app.get('io');
   var token = req.headers['x-access-token'];
   const shipCo = req.body.shippingCompany;
   const tracking = req.body.trackingNumber;

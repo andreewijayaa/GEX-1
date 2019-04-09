@@ -71,8 +71,8 @@
                             &nbsp;
                             <h6 style="color: #757575; font-family: Roboto, 'Helvetica Neue', sans-serif; font-size: 16px; margin-left: -30px">Shipping Company</h6>
                             <hr style="margin-left: -30px">
-                            <input *ngIf="element.shippingCo === '' || element.shippingCo === null" style="margin-left: -30px" id="shippingCoInput">
-                            <p *ngIf="element.shippingCo !== '' || element.shippingCo !== null" style="margin-left: -30px">
+                            <input *ngIf="element.shippingCo === '' || element.shippingCo === undefined" style="margin-left: -30px" id="shippingCoInput">
+                            <p *ngIf="element.shippingCo !== '' || element.shippingCo !== undefined" style="margin-left: -30px">
                               {{element.shippingCo}}
                             </p>
                           </div>
@@ -85,8 +85,8 @@
                             &nbsp;
                             <h6 style="color: #757575; font-family: Roboto, 'Helvetica Neue', sans-serif; font-size: 16px; margin-left: -30px">Tracking #</h6>
                             <hr style="margin-left: -30px">
-                            <input *ngIf="element.trackingNumber === '' || element.trackingNumber === null" style="margin-left: -30px" id="trackingInput">
-                            <p *ngIf="element.trackingNumber !== '' || element.trackingNumber !== null" style="margin-left: -30px">
+                            <input *ngIf="element.trackingNumber === '' || element.trackingNumber === undefined" style="margin-left: -30px" id="trackingInput">
+                            <p *ngIf="element.trackingNumber !== '' || element.trackingNumber !== undefined" style="margin-left: -30px">
                               {{element.trackingNumber}}
                             </p>
                           </div>
@@ -95,12 +95,14 @@
                             <hr style="margin-left: -30px">
                             <label *ngIf = "!element.offer_images[0]">No Images Submitted </label>
                             <img class="OfferImageDisplay" *ngIf = "element.offer_images[0]" src={{element.offer_images[0]}} alt="" width="120" height="120">
+                            &nbsp;
                             <img class="OfferImageDisplay" *ngIf = "element.offer_images[1]" src={{element.offer_images[1]}} alt="" width="120" height="120">
+                            &nbsp;
                             <img class="OfferImageDisplay" *ngIf = "element.offer_images[2]" src={{element.offer_images[2]}} alt="" width="120" height="120">
                           </div>
                         </div>
                         <br>
-                        <button *ngIf="element.shippingCo === '' && element.trackingNumber === ''" class="btn btn-primary" (click)="submitShippingDetails(element._id, element.title)" style="margin-left: -30px; background-color: rgb(56, 72, 177); color: white">Submit Shipping Details</button>
+                        <button *ngIf="element.shippingCo === undefined && element.trackingNumber === undefined" class="btn btn-primary" (click)="submitShippingDetails(element._id, element.title)" style="margin-left: -30px; background-color: rgb(56, 72, 177); color: white">Submit Shipping Details</button>
                       </div>
                     </div>
                     &nbsp;
@@ -175,7 +177,9 @@
                               <br>
                               <label *ngIf="!orderElement.request.request_images[0]">No Images Submitted</label>
                               <img *ngIf = "orderElement.request.request_images[0]" src={{orderElement.request.request_images[0]}} alt="" width="120" height="120">
+                              &nbsp;
                               <img *ngIf = "orderElement.request.request_images[1]" src={{orderElement.request.request_images[1]}} alt="" width="120" height="120">
+                              &nbsp;
                               <img *ngIf = "orderElement.request.request_images[2]" src={{orderElement.request.request_images[2]}} alt="" width="120" height="120">
                             </div>
                           </div>
@@ -189,7 +193,7 @@
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayOfferColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: displayOfferColumns;" (click)="expandedOffer()"
+          <tr mat-row *matRowDef="let element; columns: displayOfferColumns;" (click)="expandedOffer(element._id)"
             class="example-element-row"
             [class.example-expanded-row]="expandedOfferElement === element"
             (click)="expandedOfferElement = expandedOfferElement === element ? null : element">

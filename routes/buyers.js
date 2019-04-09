@@ -873,7 +873,7 @@ router.post("/charge", (req, res) => {
                   
                   let offerPurchased = {
                     id: result.id,
-                    offerID: offer.id,
+                    offerID: offer._id,
                     offerFulfillmentStatus: 'Ordered',
                     trackingInfo: {
                       shippingCompany: '',
@@ -969,8 +969,9 @@ router.post("/charge", (req, res) => {
               source_transaction: purchaseInfo.orderID
             }, function(err, result) { 
               if (err) return console.log(err);
-              if(result != null) {
-                if(result.paid) {
+              if (result != null) {
+                console.log(result);
+                if (result.paid) {
                   processTransaction(result.id);
                 }
               }
@@ -992,8 +993,9 @@ router.post("/charge", (req, res) => {
             customer: customer.id
           }, function(err, result) { 
             if (err) return console.log(err);
-            if(result != null) {
-              if(result.paid) {
+            if (result != null) {
+              if (result.paid) {
+                console.log(result);
                 processTransaction(result.id);
               }
             }

@@ -87,18 +87,18 @@ export class SellerOrdersComponent implements OnInit {
     });
   }
 
-  expandedOffer() {
+  expandedOffer(id) {
     this.objectList = [];
     this.orderID = '';
     this.sellerService.getPurchasedOffers().subscribe((data: any) => {
       if (data.success) {
         data.arrayOffer.forEach(data => {
-          if (data !== undefined) {
+          if (data !== undefined && id === data.offer._id) {
             this.objectList.push(data);
           }
         });
+        // console.log(this.objectList);
         this.orderID = this.objectList[0].order._id;
-        console.log(this.objectList);
       } else {
         console.log('Could not fetch offer purchase info');
       }

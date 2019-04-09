@@ -159,12 +159,10 @@ export class BuyerCheckoutComponent
         this.offerPrice = data.offerPriceTotal; // Total price of those offers
         this.offerShipping = data.offerShippingTotal; // Total shipping price for those offers
         this.totalPrice = data.orderTotal; // Offers price + shipping price
-        console.log(data.offersInCart);
         data.offersInCart.forEach(element => {
           if (this.requestsID.indexOf(element.request_ID) === -1) {
             this.requestsID.push(element.request_ID);
           }
-          console.log(this.requestsID);
         });
 
         // console.log(this.offersInCart);

@@ -184,7 +184,7 @@ export class MakeRequestComponent implements OnInit {
 
   // Request Submission
   onRequestSubmit() {
-    console.log(this.title);
+    // console.log(this.title);
     if (typeof this.title === "undefined") {
       window.scrollTo(1, 1);
       return this.notifier.notify("error", "Please input a title.");
@@ -239,7 +239,7 @@ export class MakeRequestComponent implements OnInit {
     this.spinner = true;
     //debugger;
     //console.log("Process file called in make request component");
-    console.log(this.Image_Urls.length);
+    // console.log(this.Image_Urls.length);
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
