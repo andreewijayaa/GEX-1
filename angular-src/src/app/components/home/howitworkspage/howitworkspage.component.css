@@ -19,18 +19,17 @@ li {
 
 .mainheader {
   display: flex;
-  background-image: url("../../../../../src/assets/aurora.jpg");
+  background-image: url("../../../../../src/assets/shutterstock_276674543.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   font-size: 30px;
-  color:rgb(192, 212, 228);
+  color:#5271ff;
   text-align:center;
   line-height:100px;
   justify-content: center;
   height: 400px;
   padding-top: 200px;
   overflow: hidden;
-
 }
 
 

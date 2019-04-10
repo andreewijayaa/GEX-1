@@ -55,7 +55,7 @@ h6 {
 .mainheader {
   font-size: 30px;
   font-family: "Palatino Linotype", "Book Antiqua", serif;
-  color: white;
+  color: #5271ff;
   text-align:center;
   display:inline;
 
@@ -64,7 +64,7 @@ h6 {
 
 header.masthead {
   position: relative;
-  background-image: url("../../../../src/assets/aurora.jpg");
+  background-image: url("../../../../src/assets/shutterstock_276674543.jpg");
   height: auto;
   background-size: cover;
   background-repeat:no-repeat;
@@ -90,7 +90,7 @@ header.masthead h1 {
 
 @media (min-width: 768px) {
   header.masthead {
-    padding-top: 12rem;
+    padding-top: 9rem;
     padding-bottom: 12rem;
   }
   header.masthead h1 {
