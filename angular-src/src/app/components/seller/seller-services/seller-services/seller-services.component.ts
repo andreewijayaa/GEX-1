@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SellerService } from '../../../../services/seller.service';
 import { NotifierService } from 'angular-notifier';
 import { Local } from 'protractor/built/driverProviders';
-const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png?token=AjGwr2cyFYh-x8qdDTI3cEgC31Qfzi6eks5cq-l4wA%3D%3D";
+
 @Component({
   selector: 'app-seller-services',
   templateUrl: './seller-services.component.html',
@@ -16,20 +16,20 @@ export class SellerServicesComponent implements OnInit {
 
   // Temp codes for MVP - Kurgan
 	codes = [
-    { code: 78965422, name: 'Jewelry', image: DefaultImageIcon, checked: false },
-    { code: 78965423, name: 'Necklaces (Jewelry)', image: DefaultImageIcon, checked: false },
-    { code: 78965424, name: 'Rings (Jewelry)', image: DefaultImageIcon, checked: false },
-    { code: 78965425, name: 'Earrings (Jewelry)', image: DefaultImageIcon, checked: false },
-    { code: 68977451, name: 'Dolls', image: DefaultImageIcon, checked: false },
-    { code: 67887941, name: 'Sculptures', image: DefaultImageIcon, checked: false },
-    { code: 62145331, name: 'Scarves', image: DefaultImageIcon, checked: false },
-    { code: 54887921, name: 'Blankets', image: DefaultImageIcon, checked: false },
-    { code: 52871151, name: 'Socks', image: DefaultImageIcon, checked: false },
-    { code: 50360051, name: 'Pencils', image: DefaultImageIcon, checked: false },
-    { code: 49605401, name: 'Painting', image: DefaultImageIcon, checked: false },
-    { code: 49605402, name: 'Oil (Painting)', image: DefaultImageIcon, checked: false },
-    { code: 49605403, name: 'Watercolor (Painting)', image: DefaultImageIcon, checked: false },
-    { code: 49605404, name: 'Acrlyic (Painting)', image: DefaultImageIcon, checked: false }
+    { code: 78965422, name: 'Jewelry', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 78965423, name: 'Necklaces (Jewelry)', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 78965424, name: 'Rings (Jewelry)', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 78965425, name: 'Earrings (Jewelry)', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 68977451, name: 'Dolls', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 67887941, name: 'Sculptures', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 62145331, name: 'Scarves', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 54887921, name: 'Blankets', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 52871151, name: 'Socks', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 50360051, name: 'Pencils', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 49605401, name: 'Painting', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 49605402, name: 'Oil (Painting)', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 49605403, name: 'Watercolor (Painting)', image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
+    { code: 49605404, name: 'Acrlyic (Painting)', image: '../../../../assets/shutterstock_276674543.jpg', checked: false }
   ];
   submitLabels: String[];
   codeArray: Number[];

@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { NotifierService } from "angular-notifier";
 import { BuyerService } from "../../../services/buyer.service";
 import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-const DefaultImageIcon = "https://raw.githubusercontent.com/ronjonsilver/GEX/master/angular-src/src/assets/images.png?token=AjGwr2cyFYh-x8qdDTI3cEgC31Qfzi6eks5cq-l4wA%3D%3D";
+
 class ImageSnippet {
   constructor(public src: string, public file: File) {}
 }
@@ -26,75 +26,75 @@ export class MakeRequestComponent implements OnInit {
     {
       code: 78965422,
       name: "Jewelry",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 78965423,
       name: "Necklaces (Jewelry)",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 78965424,
       name: "Rings (Jewelry)",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 78965425,
       name: "Earrings (Jewelry)",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
-    { code: 68977451, name: "Dolls", image: DefaultImageIcon, checked: false },
+    { code: 68977451, name: "Dolls", image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
     {
       code: 67887941,
       name: "Sculptures",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 62145331,
       name: "Scarves",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 54887921,
       name: "Blankets",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
-    { code: 52871151, name: "Socks", image: DefaultImageIcon, checked: false },
+    { code: 52871151, name: "Socks", image: '../../../../assets/shutterstock_276674543.jpg', checked: false },
     {
       code: 50360051,
       name: "Pencils",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 49605401,
       name: "Painting",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 49605402,
       name: "Oil (Painting)",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 49605403,
       name: "Watercolor (Painting)",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     },
     {
       code: 49605404,
       name: "Acrlyic (Painting)",
-      image: DefaultImageIcon,
+      image: '../../../../assets/shutterstock_276674543.jpg',
       checked: false
     }
   ];
