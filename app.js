@@ -66,8 +66,8 @@ const requests = require('./routes/requests');
   // Instruct the app
   // to use the forceSSL
   // middleware
-  app.use(forceSSL());
-}
+//   app.use(forceSSL());
+// }
 
 
 // Port Number 
