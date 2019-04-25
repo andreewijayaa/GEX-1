@@ -680,10 +680,6 @@ router.post("/addAddress", (req, res) => {
     company: req.body.company
   });
 
-  //const token = req.headers.origin['x-access-token'];
-  console.log(token);
-  console.log(req.headers);
-
   //if they don't have a token
   if (!token)
     return res

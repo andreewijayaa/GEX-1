@@ -252,12 +252,8 @@ export class SellerService {
     }
   }
 
-
-
   addSellerAddress(address) {
     this.loadToken();
-    console.log('Inside seller address add service');
-    console.log(this.sellerToken);
     // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -270,7 +266,7 @@ export class SellerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-      return this.http.post('sellers/addAddress', address)
+      return this.http.post('sellers/addAddress', address, httpOptions)
       .pipe(map(res => res));
     }
   }
