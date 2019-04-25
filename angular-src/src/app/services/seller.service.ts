@@ -267,6 +267,7 @@ export class SellerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
+    console.log(httpOptions);
       return this.http.post('sellers/addAddress', address, httpOptions)
       .pipe(map(res => res));
     }
