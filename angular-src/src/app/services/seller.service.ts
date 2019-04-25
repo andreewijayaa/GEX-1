@@ -258,9 +258,7 @@ export class SellerService {
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
-        'x-access-token': this.sellerToken,
-        'info': this.sellerToken,
-        'nothing': 'nothing'
+        'x-access-token': this.sellerToken
       })
     };
     if (process.env.NODE_ENV === 'development') {
