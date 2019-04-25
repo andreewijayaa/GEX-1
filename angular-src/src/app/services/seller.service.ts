@@ -235,7 +235,6 @@ export class SellerService {
   // Service to post a new description for seller
   setDescription(description) {
     this.loadToken();
-    console.log(this.sellerToken);
     // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
@@ -257,6 +256,7 @@ export class SellerService {
 
   addSellerAddress(address) {
     this.loadToken();
+    console.log(this.sellerToken);
     // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
