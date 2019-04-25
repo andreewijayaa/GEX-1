@@ -681,7 +681,7 @@ router.post("/addAddress", (req, res) => {
   });
 
   console.log(token);
-  console.log(req.headers);
+  console.log(req);
 
   //if they don't have a token
   if (!token)
