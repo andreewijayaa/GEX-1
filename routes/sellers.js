@@ -668,6 +668,7 @@ router.post("/offerpicture", function(req, res) {
 });
 
 router.post("/addAddress", (req, res) => {
+  var token = req.headers["x-access-token"];
   var newAddress = new Address ({
     sellerID: req.body.seller_id,
     country: req.body.country,
@@ -678,8 +679,6 @@ router.post("/addAddress", (req, res) => {
     street2: req.body.street_2,
     company: req.body.company
   });
-
-  var token = req.headers["x-access-token"];
 
   //if they don't have a token
   if (!token)
