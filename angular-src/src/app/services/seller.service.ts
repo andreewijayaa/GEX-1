@@ -254,12 +254,13 @@ export class SellerService {
 
   addSellerAddress(address) {
     this.loadToken();
-    address.push(this.sellerToken);
     // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
         'Content-Type':  'application/json',
-        'x-access-token': this.sellerToken
+        'x-access-token': this.sellerToken,
+        'info': this.sellerToken,
+        'nothing': 'nothing'
       })
     };
     if (process.env.NODE_ENV === 'development') {
@@ -267,7 +268,6 @@ export class SellerService {
       .pipe(map(res => res));
     } else {
     // This will return json file fetched from database
-    console.log(httpOptions);
       return this.http.post('sellers/addAddress', address, httpOptions)
       .pipe(map(res => res));
     }
