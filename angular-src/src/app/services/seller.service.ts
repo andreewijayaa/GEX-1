@@ -256,6 +256,7 @@ export class SellerService {
 
   addSellerAddress(address) {
     this.loadToken();
+    console.log('Inside seller address add service');
     console.log(this.sellerToken);
     // Tokens needed to fetch data from database
     const httpOptions = {

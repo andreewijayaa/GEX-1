@@ -668,6 +668,7 @@ router.post("/offerpicture", function(req, res) {
 });
 
 router.post("/addAddress", (req, res) => {
+  var token = req.headers["x-access-token"];
   var newAddress = new Address ({
     sellerID: req.body.seller_id,
     country: req.body.country,
@@ -679,7 +680,6 @@ router.post("/addAddress", (req, res) => {
     company: req.body.company
   });
 
-  var token = req.headers["x-access-token"];
   //const token = req.headers.origin['x-access-token'];
   console.log(token);
   console.log(req.headers);
