@@ -254,6 +254,7 @@ export class SellerService {
 
   addSellerAddress(address) {
     this.loadToken();
+    address.push(this.sellerToken);
     // Tokens needed to fetch data from database
     const httpOptions = {
       headers: new HttpHeaders ({
