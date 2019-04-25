@@ -680,8 +680,6 @@ router.post("/addAddress", (req, res) => {
     company: req.body.company
   });
 
-  console.log(token);
-
   //if they don't have a token
   if (!token)
     return res
