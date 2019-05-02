@@ -172,6 +172,20 @@ module.exports.orderConfirmation = function(buyer, order){
   });
 }
 
+//Function that will take in an order, and email buyer link to order confrimation
+module.exports.newEmailLandingPage = function(email){
+  const msg = {
+    to: email,
+    fromname: 'Requiren',
+    from: 'do_not_reply@requiren.com',
+    templateId: 'd-91c8926004eb4d019d901149c0b0be30',
+  };
+  sgMail.send(msg).then(() => {
+  }).catch((error) => {
+    console.log('error', error);
+  });
+}
+
 //Function that will take in a buyer, and request then email applicable buyer with a link to the request
 //Used Upon buyer submitting a new request
 module.exports.notifyBuyerNewOffer = function(buyer, request){

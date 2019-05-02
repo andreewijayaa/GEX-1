@@ -7,7 +7,7 @@ const Offer = require('../models/offer');
 const Request = require('../models/request');
 const Seller = require('../models/seller');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-
+const sendEmail = require('../models/sendEmail')
 // router.get('/:code', function (req, res, next) {
     
 //     var code = req.params.code;
@@ -83,8 +83,12 @@ router.post('/submitEmail', (req,res) => {
       xhr.addEventListener("readystatechange", function () {
       if (this.readyState === this.DONE) {
         var jsonResponse = JSON.parse(this.responseText);
-        if(jsonResponse.new_count == 0 || jsonResponse.new_count == 1) {
+        if(jsonResponse.new_count == 1) {
           console.log(jsonResponse);
+          //send email here
+          sendEmail.newEmailLandingPage(email);
+          return res.status(200).send({success: true}); 
+        } else if(jsonResponse.new_count == 0) {
           return res.status(200).send({success: true}); 
         } else if(jsonResponse.errors.length > 0) {
           return res.status(501).send({success: false});
@@ -96,11 +100,6 @@ router.post('/submitEmail', (req,res) => {
       xhr.setRequestHeader("content-type", "application/json");
 
       xhr.send(data);
-
-
-    
-  
-	
   } else {
     return res.status(501).send({success: false});
   }
