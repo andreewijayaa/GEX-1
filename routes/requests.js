@@ -65,8 +65,12 @@ const sendEmail = require('../models/sendEmail')
 // })
 
 router.post('/submitEmail', (req,res) => {
+  var data = JSON.stringify(req.body);
+  
+  
+ var splitBody = data.split('"');
+ var email = splitBody[3];
 
-  var email = req.body.email;
 
   if(validateEmail(email))
   {
@@ -79,7 +83,7 @@ router.post('/submitEmail', (req,res) => {
 
       var xhr = new XMLHttpRequest();
       xhr.withCredentials = false;
-
+      
       xhr.addEventListener("readystatechange", function () {
       if (this.readyState === this.DONE) {
         var jsonResponse = JSON.parse(this.responseText);
